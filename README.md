@@ -16,7 +16,6 @@
 	```
 	PORT=5000
 	REACT_APP_API_URL=http://localhost:3000/api
-	REACT_APP_TRACKING_SOURCE_URL=//localhost:3001/static/tracking.js
 	```
 
 - Start the server: `npm run start` or `yarn start`
