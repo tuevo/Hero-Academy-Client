@@ -1,4 +1,3 @@
-![Owner](https://blog.arkey.fr/img/hugo.png)
 # Hero Academy Client
 
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
