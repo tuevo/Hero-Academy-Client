@@ -1,4 +1,5 @@
-# ![Owner](https://cdn0.iconfinder.com/data/icons/leto-leadership/64/_charisma_charm_leader_hero-128.png) Hero Academy Client
+![Owner](https://blog.arkey.fr/img/hugo.png)
+# Hero Academy Client
 
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 
