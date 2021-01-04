@@ -1,14 +1,22 @@
-# React Material Dashboard
+# ![Owner](https://cdn0.iconfinder.com/data/icons/leto-leadership/64/_charisma_charm_leader_hero-128.png) Hero Academy Client
 
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 
-> Admin Dashboard made with [Material UI's](https://material-ui.com/?ref=devias-io) components, [React](https://reactjs.org/?ref=devias-io) and of course [create-react-app](https://facebook.github.io/create-react-app/?ref=devias-io) to boost your app development process!
+> Tracking System Dashboard  made with [Material UI's](https://material-ui.com/?ref=devias-io) components, [React](https://reactjs.org/?ref=devias-io) and of course [create-react-app](https://facebook.github.io/create-react-app/?ref=devias-io) to boost your app development process!
 
 ## Quick start
 
 - Make sure your NodeJS and npm versions are up to date for `React 16.8.6`
 
 - Install dependencies: `npm install` or `yarn`
+
+- Create `.env` file at `root` directory to setup environment variables:
+
+	```
+	PORT=5000
+	REACT_APP_API_URL=http://localhost:3000/api
+	REACT_APP_TRACKING_SOURCE_URL=//localhost:3001/static/tracking.js
+	```
 
 - Start the server: `npm run start` or `yarn start`
 
@@ -36,24 +44,16 @@ material-react-dashboard
 ├── public
 ├── docs
 └── src
+	├── api
 	├── assets
 	├── common
 	├── components
 	├── helpers
 	├── icons
 	├── layouts
+	├── redux
 	├── theme
 	├── views
-	│	├── Account
-	│	├── Dashboard
-	│	├── Icons
-	│	├── NotFound
-	│	├── ProductList
-	│	├── Settings
-	│	├── SignIn
-	│	├── SignUp
-	│	├── Typography
-	│	└── UserList
 	├── App.jsx
 	├── index.jsx
 	└── Routes.jsx
