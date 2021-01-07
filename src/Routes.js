@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Redirect } from 'react-router-dom';
 
 import { RouteWithLayout } from './components';
-import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
+import { Main as MainLayout, Main2 as Main2Layout, Minimal as MinimalLayout } from './layouts';
 
 import {
   Dashboard as DashboardView,
@@ -14,7 +14,8 @@ import {
   Settings as SettingsView,
   SignUp as SignUpView,
   SignIn as SignInView,
-  NotFound as NotFoundView
+  NotFound as NotFoundView,
+  Home as HomeView
 } from './views';
 
 import { availablePages } from 'constants/global.constant';
@@ -42,12 +43,20 @@ const Routes = () => {
   };
 
   return (
-    <GuardProvider guards={[requireLogin]} error={NotFoundView}>
+    // <GuardProvider guards={[requireLogin]} error={NotFoundView}>
+    <GuardProvider error={NotFoundView}>
       <Switch>
         <Redirect
           exact
           from="/"
-          to={availablePages.DASHBOARD.path}
+          to={availablePages.HOME.path}
+        />
+        <RouteWithLayout
+          component={HomeView}
+          exact
+          layout={Main2Layout}
+          path={availablePages.HOME.path}
+          title={availablePages.HOME.title}
         />
         <RouteWithLayout
           component={DashboardView}

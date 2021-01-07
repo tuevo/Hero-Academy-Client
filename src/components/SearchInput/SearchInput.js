@@ -7,11 +7,11 @@ import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    borderRadius: '4px',
+    borderRadius: 24,
     alignItems: 'center',
     padding: theme.spacing(1),
     display: 'flex',
-    flexBasis: 420
+    width: 450,
   },
   icon: {
     marginRight: theme.spacing(1),
@@ -42,6 +42,7 @@ const SearchInput = props => {
         className={classes.input}
         disableUnderline
         onChange={onChange}
+        placeholder="Tìm kiếm khóa học"
       />
     </Paper>
   );

@@ -3,7 +3,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { AppBar, Toolbar, Typography, Button, Box } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, Button, Box, Hidden, IconButton } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
 import { availablePages } from 'constants/global.constant';
 
 const useStyles = makeStyles(theme => ({
@@ -27,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Topbar = props => {
-  const { className, ...rest } = props;
+  const { className, onSidebarOpen, ...rest } = props;
 
   const classes = useStyles();
 
@@ -56,13 +57,23 @@ const Topbar = props => {
             <Button variant="contained" color="primary">ĐĂNG KÝ</Button>
           </RouterLink>
         </Box>
+
+        <Hidden lgUp>
+          <IconButton
+            color="inherit"
+            onClick={onSidebarOpen}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Hidden>
       </Toolbar>
     </AppBar>
   );
 };
 
 Topbar.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  onSidebarOpen: PropTypes.func
 };
 
 export default Topbar;

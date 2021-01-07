@@ -8,9 +8,9 @@ export default {
   white,
   primary: {
     contrastText: white,
-    dark: colors.indigo[900],
-    main: colors.indigo[500],
-    light: colors.indigo[100]
+    dark: colors.blue[700],
+    main: colors.blue[500],
+    light: colors.blue[100]
   },
   secondary: {
     contrastText: white,
@@ -50,6 +50,11 @@ export default {
   background: {
     default: '#F4F6F8',
     paper: white
+  },
+  card: {
+    backgroundColor: white,
+    boxShadow: '0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2)',
+    borderRadius: '0.625rem',
   },
   icon: colors.blueGrey[600],
   divider: colors.grey[200]
