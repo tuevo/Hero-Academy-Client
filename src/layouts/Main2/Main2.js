@@ -10,11 +10,10 @@ const useStyles = makeStyles(theme => ({
   root: {
   },
   shiftContent: {
-    paddingLeft: 240
+    paddingLeft: '15.9375rem'
   },
   content: {
-    height: '100%',
-    paddingBottom: theme.spacing(4)
+    height: '100%'
   }
 }));
 

@@ -7,9 +7,9 @@ import CategorySidebarNav from './CategorySidebarNav/CategorySidebarNav';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
-    width: 255,
+    width: '15.9375rem',
     [theme.breakpoints.up('lg')]: {
-      marginTop: 64,
+      marginTop: '4rem',
       height: 'calc(100% - 64px)'
     }
   },

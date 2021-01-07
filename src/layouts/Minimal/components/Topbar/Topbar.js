@@ -15,11 +15,12 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'space-between'
   },
   logoImage: {
-    width: 30
+    width: '1.875rem'
   },
   logoTitle: {
     color: theme.palette.primary.dark,
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
+    fontWeight: 'bold'
   },
   btnSignIn: {
     marginRight: theme.spacing(1)
@@ -45,7 +46,7 @@ const Topbar = props => {
               src="https://image.flaticon.com/icons/png/128/3050/3050298.png"
               className={classes.logoImage}
             />
-            <Typography variant="h6" className={classes.logoTitle}>Hero Academy</Typography>
+            <Typography variant="h5" className={classes.logoTitle}>Hero Academy</Typography>
           </Box>
         </RouterLink>
         <Box display="flex">

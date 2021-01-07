@@ -9,13 +9,13 @@ import './Course.style.scss';
 
 const useStyles = makeStyles((theme) => ({
   card__square: {
-    width: 250,
+    width: '15.625rem',
   },
   card__stretch: {
     width: '100%'
   },
   media__square: {
-    height: 125,
+    height: '7.8125rem',
   },
   media__stretch: {
     height: '100%'

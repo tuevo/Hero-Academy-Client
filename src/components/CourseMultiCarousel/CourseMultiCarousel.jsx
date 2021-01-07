@@ -1,7 +1,7 @@
+import { makeStyles } from '@material-ui/core/styles';
 import Course from 'components/Course/Course';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
+import React from 'react';
 import Carousel from "react-multi-carousel";
 import 'react-multi-carousel/lib/styles.css';
 
@@ -32,7 +32,6 @@ const useStyles = makeStyles(theme => ({
 const CourseMultiCarousel = (props) => {
   const classes = useStyles();
   const { courses } = props;
-  const [deviceType, setDeviceType] = useState('desktop');
 
   return (
     <div>
@@ -44,13 +43,13 @@ const CourseMultiCarousel = (props) => {
         responsive={responsive}
         containerClass="carousel-container"
         // removeArrowOnDeviceType={["tablet", "mobile"]}
-        deviceType={deviceType}
+        deviceType={'desktop'}
         // itemClass={classes.item}
         itemClass={`carousel-item-padding-40-px ${classes.item}`}
       >
         {courses.map(c => {
           return (
-            <Course key={c._id} data={c} style={'minimal'} />
+            <Course key={c._id} data={c} style={`minimal`} />
           );
         })}
       </Carousel>

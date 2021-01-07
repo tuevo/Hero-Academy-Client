@@ -78,7 +78,7 @@ const CategorySidebarNavItem = props => {
                 to={c.href}
               >
                 <Typography
-                  variant="body1"
+                  variant="body2"
                 >
                   {c.name}
                 </Typography>

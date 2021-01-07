@@ -1,6 +1,6 @@
 export const availablePages = {
   HOME: {
-    title: 'Trang chủ',
+    title: 'Home',
     path: '/home'
   },
   DASHBOARD: {

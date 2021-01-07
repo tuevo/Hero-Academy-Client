@@ -53,8 +53,9 @@ export default {
   },
   card: {
     backgroundColor: white,
-    boxShadow: '0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2)',
+    // boxShadow: '0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2)',
     borderRadius: '0.625rem',
+    border: '1px solid #eee'
   },
   icon: colors.blueGrey[600],
   divider: colors.grey[200]

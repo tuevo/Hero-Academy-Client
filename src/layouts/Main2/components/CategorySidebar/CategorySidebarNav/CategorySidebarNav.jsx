@@ -10,7 +10,7 @@ import CategorySidebarNavItem from './CategorySidebarNavItem/CategorySidebarNavI
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
-    maxWidth: 360,
+    maxWidth: '22.5rem',
     backgroundColor: theme.palette.background.paper,
   },
   nested: {
