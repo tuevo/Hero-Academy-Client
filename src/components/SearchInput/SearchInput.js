@@ -7,21 +7,23 @@ import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    borderRadius: 24,
+    borderRadius: '1.5rem',
     alignItems: 'center',
     padding: theme.spacing(1),
     display: 'flex',
-    width: 450,
+    width: '25rem',
+    background: 'rgba(255,255,255,0.2)'
   },
   icon: {
     marginRight: theme.spacing(1),
-    color: theme.palette.text.secondary
+    color: theme.palette.primary.contrastText
   },
   input: {
     flexGrow: 1,
     fontSize: '14px',
     lineHeight: '16px',
-    letterSpacing: '-0.05px'
+    letterSpacing: '-0.05px',
+    color: theme.palette.primary.contrastText
   }
 }));
 

@@ -86,7 +86,7 @@ const useStyles = makeStyles(theme => ({
   main: {
     position: 'absolute',
     zIndex: 10,
-    top: '55%',
+    top: '60%',
     left: '50%',
     transform: 'translate(-50%,0)',
     width: '85%',
@@ -145,13 +145,15 @@ const useStyles = makeStyles(theme => ({
   highestViewCourses: {
     ...theme.palette.card,
     // backgroundColor: theme.palette.primary.main,
-    "backgroundImage": "linear-gradient(to top, #4481eb 0%, #04befe 100%)",
+    // "backgroundImage": "linear-gradient(to top, #4481eb 0%, #04befe 100%)",
     padding: theme.spacing(4),
   },
   highestViewCourses__title: {
-    color: theme.palette.primary.contrastText,
+    // color: theme.palette.primary.contrastText,
+    // fontWeight: 'bold',
+    // textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
     fontWeight: 'bold',
-    textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
+    color: theme.palette.text.secondary
   },
   highestViewCoursesCarousel: {
     marginTop: theme.spacing(3)
@@ -461,7 +463,7 @@ const CourseDetails = () => {
                   {course.isFinished ? (
                     <span className={`${classes.label} ${classes.label__new}`} style={{ marginLeft: 9 }}>Đã hoàn thành</span>
                   ) : (<span className={`${classes.label} ${classes.label__unfinished}`} style={{ marginLeft: 9 }}>Chưa hoàn thành</span>)}
-                  <span style={{ marginLeft: 9 }}>{course.averageRating}</span>
+                  <span style={{ marginLeft: 9 }}>{`${Math.floor(course.averageRating)}.${(course.averageRating - Math.floor(course.averageRating)) * 10}`}</span>
                 </Typography>
                 <Rating name="read-only" value={course.averageRating} size="small" precision={0.5} readOnly />
                 <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginLeft: 3 }}>
@@ -509,7 +511,7 @@ const CourseDetails = () => {
               <Tab icon={<FormatListBulletedIcon />} label="Nội dung khóa học" {...a11yProps(0)} />
               <Tab icon={<VideoLibraryIcon />} label="Video khóa học" {...a11yProps(1)} />
               <Tab icon={<LibraryBooksIcon />} label="Đề cương khóa học" {...a11yProps(2)} />
-              <Tab icon={<SchoolIcon />} label="Phản hồi học viên" {...a11yProps(3)} />
+              <Tab icon={<SchoolIcon />} label="Phản hồi khóa học" {...a11yProps(3)} />
               <Tab icon={<AssignmentIndIcon />} label="Thông tin giảng viên" {...a11yProps(4)} />
             </Tabs>
           </AppBar>
@@ -530,7 +532,7 @@ const CourseDetails = () => {
           </TabPanel>
         </div>
         <div className={`${classes.section} ${classes.highestViewCourses}`}>
-          <Typography variant="h4" className={classes.highestViewCourses__title}>Khóa học liên quan</Typography>
+          <Typography variant="h5" className={classes.highestViewCourses__title}>Khóa học liên quan được đăng ký nhiều</Typography>
           <div className={classes.highestViewCoursesCarousel}>
             <CourseMultiCarousel courses={courses || []} />
           </div>

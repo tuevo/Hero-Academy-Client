@@ -9,8 +9,7 @@ import './Course.style.scss';
 
 const useStyles = makeStyles((theme) => ({
   card__square: {
-    width: '15.625rem',
-    boxShadow: '0.3125rem 0.75rem 1.25rem rgba(36, 37, 38, 0.13)'
+    width: '15.625rem'
   },
   card__stretch: {
     width: '100%'
@@ -44,7 +43,7 @@ const Course = ({ data, style }) => {
                 {data.title}
               </Typography>
               <Box display="flex" alignItems="center">
-                <Typography variant="body2" style={{ marginRight: 3 }}>{data.averageRating}</Typography>
+                <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</Typography>
                 <Rating name="read-only" value={data.averageRating} size="small" precision={0.5} readOnly />
               </Box>
               <Box display="flex" alignItems="center">
@@ -96,7 +95,7 @@ const Course = ({ data, style }) => {
                     {data.title}
                   </Typography>
                   <Box display="flex" alignItems="flex-end">
-                    <Typography variant="body2" style={{ marginRight: 3 }}>{data.averageRating}</Typography>
+                    <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</Typography>
                     <Rating name="read-only" value={data.averageRating} size="small" precision={0.5} readOnly />
                     <Typography variant="body2" style={{ marginLeft: 3 }}>
                       <span>(</span>
