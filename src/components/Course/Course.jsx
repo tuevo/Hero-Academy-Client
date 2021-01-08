@@ -58,8 +58,7 @@ const Course = ({ data, style }) => {
                 </Typography>
               </Box>
               <Typography variant="body2" color="textSecondary" component="p" className={classes.description}>
-                Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.
+                {data.description}
               </Typography>
               <Box display="flex" flexDirection="column" alignItems="flex-end">
                 <Typography variant="h5" className={`${classes.featuredCoursesCarouselItem__courseText} ${classes.featuredCoursesCarouselItem__price}`}>

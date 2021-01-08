@@ -3,6 +3,10 @@ export const availablePages = {
     title: 'Home',
     path: '/home'
   },
+  COURSE_DETAILS: {
+    title: 'Course Details',
+    path: '/courses'
+  },
   DASHBOARD: {
     title: 'Dashboard',
     path: '/dashboard'
@@ -32,11 +36,11 @@ export const availablePages = {
     path: '/settings'
   },
   SIGN_UP: {
-    title: 'Đăng ký',
+    title: 'Sign Up',
     path: '/sign-up'
   },
   SIGN_IN: {
-    title: 'Đăng nhập',
+    title: 'Sign In',
     path: '/sign-in'
   },
   NOT_FOUND: {

@@ -10,13 +10,13 @@ export default {
     contrastText: white,
     dark: colors.blue[700],
     main: colors.blue[500],
-    light: colors.blue[100]
+    light: colors.blue[50]
   },
   secondary: {
     contrastText: white,
-    dark: colors.blue[900],
-    main: colors.blue['A400'],
-    light: colors.blue['A400']
+    dark: colors.amber[900],
+    main: colors.amber['A400'],
+    light: colors.amber['A400']
   },
   success: {
     contrastText: white,

@@ -8,14 +8,14 @@ import { Sidebar, Topbar, Footer } from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    paddingTop: 56,
+    paddingTop: '3.5rem',
     height: '100%',
     [theme.breakpoints.up('sm')]: {
-      paddingTop: 64
+      paddingTop: '4rem'
     }
   },
   shiftContent: {
-    paddingLeft: 240
+    paddingLeft: '15rem'
   },
   content: {
     height: '100%'

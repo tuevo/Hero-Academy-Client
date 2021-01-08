@@ -15,7 +15,8 @@ import {
   SignUp as SignUpView,
   SignIn as SignInView,
   NotFound as NotFoundView,
-  Home as HomeView
+  Home as HomeView,
+  CourseDetails as CourseDetailsView
 } from './views';
 
 import { availablePages } from 'constants/global.constant';
@@ -57,6 +58,13 @@ const Routes = () => {
           layout={Main2Layout}
           path={availablePages.HOME.path}
           title={availablePages.HOME.title}
+        />
+        <RouteWithLayout
+          component={CourseDetailsView}
+          exact
+          layout={Main2Layout}
+          path={availablePages.COURSE_DETAILS.path}
+          title={availablePages.COURSE_DETAILS.title}
         />
         <RouteWithLayout
           component={DashboardView}

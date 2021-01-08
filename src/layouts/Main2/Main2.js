@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/styles';
 import { useMediaQuery } from '@material-ui/core';
-
+import { makeStyles, useTheme } from '@material-ui/styles';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import { CategorySidebar, Topbar } from './components';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
+    paddingTop: '3.5rem',
+    height: '100%',
+    [theme.breakpoints.up('sm')]: {
+      paddingTop: '4rem'
+    }
   },
   shiftContent: {
-    paddingLeft: '15.9375rem'
+    paddingLeft: '15.9375rem',
   },
   content: {
-    height: '100%'
+    height: '500vh'
   }
 }));
 
