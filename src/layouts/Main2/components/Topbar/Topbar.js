@@ -44,7 +44,7 @@ const Topbar = props => {
           <Box display="flex" justifyContent="center" alignItems="center">
             <img
               alt="Logo"
-              src="https://image.flaticon.com/icons/png/128/3050/3050298.png"
+              src="/images/logos/logo.png"
               className={classes.logoImage}
             />
             <Typography variant="h5" className={classes.logoTitle}>Hero Academy</Typography>

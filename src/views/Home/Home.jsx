@@ -461,7 +461,7 @@ const Home = () => {
           <Box display="flex" justifyContent="center" alignItems="center">
             <img
               alt="Logo"
-              src="https://image.flaticon.com/icons/png/128/3050/3050298.png"
+              src="/images/logos/logo.png"
               className={classes.logoImage}
             />
             <Typography className={classes.bannerText} variant="h1">Hero Academy</Typography>
