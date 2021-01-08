@@ -74,7 +74,7 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '1.875rem'
   },
   featuredCoursesCarouselItem: {
-    height: '21.875rem',
+    height: '30rem',
     position: 'relative'
   },
   featuredCoursesCarouselItemLegend: {
