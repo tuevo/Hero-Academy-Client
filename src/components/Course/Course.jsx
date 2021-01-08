@@ -10,6 +10,7 @@ import './Course.style.scss';
 const useStyles = makeStyles((theme) => ({
   card__square: {
     width: '15.625rem',
+    boxShadow: '0.3125rem 0.75rem 1.25rem rgba(36, 37, 38, 0.13)'
   },
   card__stretch: {
     width: '100%'
