@@ -83,7 +83,8 @@ const useStyles = makeStyles(theme => ({
     background: 'none !important'
   },
   featuredCoursesCarouselItem__courseThumbnail: {
-    width: '100%'
+    width: '100%',
+    height: '100%'
   },
   featuredCoursesCarouselItem__courseThumbnailCover: {
     position: 'absolute',
