@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
     display: 'flex',
     width: '25rem',
-    background: 'rgba(255,255,255,0.2)',
+    background: 'rgba(255,255,255,0.25)',
     boxShadow: 'none'
   },
   icon: {
