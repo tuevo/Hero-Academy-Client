@@ -47,17 +47,17 @@ const AddChapter = props => {
         <CardContent className={classes.cardContent}>
           <Box display="flex">
             <TextField
-              label="Tên chương"
+              label="Tiêu đề chương"
               name="name"
               onChange={handleChange}
               value={values.name}
-              variant="outlined"
-              style={{ width: '18.75rem' }}
+              variant="standard"
+              fullWidth
             />
             <Button
               color="primary"
               variant="contained"
-              style={{ marginLeft: 5 }}
+              style={{ minWidth: '6.25rem', marginLeft: 5 }}
             >
               <AddIcon />
               <span>Thêm</span>

@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Card, CardActionArea, CardContent, CardMedia, colors, Fab, Grid, Tab, Tabs, Typography, Tooltip } from '@material-ui/core';
+import { AppBar, Box, Button, Card, CardActionArea, CardContent, CardMedia, colors, Fab, Grid, Tab, Tabs, Tooltip, Typography, Avatar } from '@material-ui/core';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -6,7 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
+import FeedbackIcon from '@material-ui/icons/Feedback';
 import HistoryIcon from '@material-ui/icons/History';
 import SchoolIcon from '@material-ui/icons/School';
 import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
@@ -20,26 +20,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import ReactPlayer from 'react-player';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { AddChapter } from './components';
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
+import AddFeedback from './components/AddFeedback/AddFeedback';
 
 function a11yProps(index) {
   return {
@@ -54,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   },
   banner: {
     position: 'relative',
-    height: '250px',
+    height: '92vh',
     "backgroundAttachment": "fixed",
     "backgroundSize": "cover"
   },
@@ -65,12 +46,12 @@ const useStyles = makeStyles(theme => ({
     zIndex: 5,
     width: '100%',
     height: '100%',
-    boxShadow: 'inset 0 14rem 6.25rem rgba(0,0,0,0.6)'
+    boxShadow: 'inset 0 18.75rem 9.375rem rgba(0,0,0,0.6)'
   },
   bannerContent: {
     position: 'absolute',
     zIndex: 6,
-    top: '15%',
+    top: '10%',
     left: '50%',
     transform: 'translate(-50%,0)',
     width: '85%',
@@ -92,10 +73,10 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(4)
   },
   main: {
-    // position: 'absolute',
-    position: 'relative',
+    position: 'absolute',
+    // position: 'relative',
     zIndex: 10,
-    // top: '60%',
+    top: '35%',
     left: '50%',
     transform: 'translate(-50%,0)',
     width: '85%',
@@ -241,21 +222,18 @@ const useStyles = makeStyles(theme => ({
   chapters: {
     width: '100%',
   },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: theme.typography.fontWeightRegular,
-  },
   videoPlayer: {
     ...theme.palette.card,
     padding: theme.spacing(2),
     border: '1px solid #d9d9d9',
     width: '100%',
-    height: '100%',
     overflow: 'hidden',
     boxShadow: '0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15)',
   },
   videoPlayer__video: {
-    width: '100% !important'
+    width: '100% !important',
+    height: '22.5rem !important',
+    marginBottom: theme.spacing(2)
   },
   videoListItem: {
     width: '100%',
@@ -313,6 +291,27 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       backgroundColor: theme.palette.primary.light1,
     }
+  },
+  feedbackList: {
+    height: '18.75rem',
+    overflow: 'scroll'
+  },
+  feedbackItem: {
+    marginTop: theme.spacing(2),
+    width: '100%'
+  },
+  feedbackItem__avatar: {
+    marginRight: theme.spacing(1)
+  },
+  feedbackItem__comment: {
+    width: '100%',
+    padding: theme.spacing(1, 2),
+    backgroundColor: '#f8f8f8',
+    borderRadius: '0.625rem'
+  },
+  secondaryText: {
+    color: theme.palette.text.secondary,
+    fontWeight: 'bold'
   }
 }));
 
@@ -713,12 +712,70 @@ const CourseDetails = () => {
   for (let c of courses)
     c['href'] = '/courses';
 
+  const feedbacks = [
+    {
+      _id: 1,
+      user: {
+        _id: 1,
+        name: 'Lana',
+        avatarUrl: 'images/avatars/avatar_6.png'
+      },
+      rating: 4,
+      comment: 'Nice course! I am looking forward to a new course.',
+      createdAt: new Date()
+    },
+    {
+      _id: 2,
+      user: {
+        _id: 1,
+        name: 'Lee Wei Shuan',
+        avatarUrl: 'images/avatars/avatar_5.png'
+      },
+      rating: 5,
+      comment: 'Nice course! I am looking forward to a new course.',
+      createdAt: new Date()
+    },
+    {
+      _id: 3,
+      user: {
+        _id: 1,
+        name: 'Steve Jonathan',
+        avatarUrl: 'images/avatars/avatar_4.png'
+      },
+      rating: 3,
+      comment: 'Not bad! I still found something that needed for me from this course.',
+      createdAt: new Date()
+    },
+    {
+      _id: 4,
+      user: {
+        _id: 1,
+        name: 'Steve Jonathan',
+        avatarUrl: 'images/avatars/avatar_4.png'
+      },
+      rating: 3,
+      comment: 'Not bad! I still found something that needed for me from this course.',
+      createdAt: new Date()
+    },
+    {
+      _id: 5,
+      user: {
+        _id: 1,
+        name: 'Steve Jonathan',
+        avatarUrl: 'images/avatars/avatar_4.png'
+      },
+      rating: 3,
+      comment: 'Not bad! I still found something that needed for me from this course.',
+      createdAt: new Date()
+    }
+  ]
+
   return (
     <div className={classes.root}>
       <div className={classes.banner} style={{ backgroundImage: `url(${course.thumbnail})` }}>
         <div className={classes.bannerCover}></div>
         <Box display="flex" flexDirection="column" className={`${classes.bannerContent} animate__animated animate__fadeIn`}>
-          <Grid container alignItems="flex-end">
+          <Grid container alignItems="center">
             <Grid item xs={6}>
               <Box display="flex" alignItems="center" style={{ marginBottom: 9 }}>
                 <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} >
@@ -783,84 +840,126 @@ const CourseDetails = () => {
       <main className={classes.main}>
         <div className={`${classes.panel} animate__animated animate__slideInUp`}>
           <AppBar position="static" style={{ boxShadow: 'none' }} color="primary">
-            <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-              <Tab icon={<FormatListBulletedIcon />} label="Nội dung khóa học" {...a11yProps(0)} />
+            <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" centered>
+              <Tab icon={<SchoolIcon />} label="Nội dung khóa học" {...a11yProps(0)} />
               <Tab icon={<VideoLibraryIcon />} label="Video khóa học" {...a11yProps(1)} />
-              <Tab icon={<SchoolIcon />} label="Phản hồi khóa học" {...a11yProps(2)} />
+              <Tab icon={<FeedbackIcon />} label="Phản hồi khóa học" {...a11yProps(2)} />
               <Tab icon={<AssignmentIndIcon />} label="Thông tin giảng viên" {...a11yProps(3)} />
             </Tabs>
           </AppBar>
-          <TabPanel value={value} index={0}>
-            <span dangerouslySetInnerHTML={{ __html: course.content }} />
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <AddChapter />
-            {chapters.map(chapter => (
-              <Accordion key={chapter._id}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography className={classes.heading}>{`Chương ${chapter.index}: ${chapter.title}`}</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Grid container spacing={2}>
-                    <Grid item xs={8}>
-                      <div className={classes.videoPlayer}>
-                        <ReactPlayer url='https://www.youtube.com/watch?v=MOms7uWpmT0' className={classes.videoPlayer__video} />
-                      </div>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <div className={classes.videoListContainer}>
-                        <Tooltip title="Đăng tải video">
-                          <Fab size="medium" color="primary" aria-label="add" className={classes.btnAddVideo}>
-                            <AddIcon />
-                          </Fab>
-                        </Tooltip>
-                        <Typography gutterBottom variant="body1" className={classes.videoList__title}>Danh sách video khóa học</Typography>
-                        <PerfectScrollbar className={classes.videoList}>
-                          {chapter.videos.map(video => (
-                            <Card key={video._id} className={classes.videoListItem}>
-                              <CardActionArea>
-                                <Grid container>
-                                  <Grid item xs={5}>
-                                    <div className={classes.videoListItem__thumbnailContainer}>
-                                      <CardMedia
-                                        className={classes.videoListItem__thumbnail}
-                                        image={video.thumbnailUrl}
-                                        title="Contemplative Reptile"
-                                      />
-                                      <Typography variant="body2" className={classes.videoListItem__duration}>
-                                        {moment.utc(video.duration).format('mm:ss')}
-                                      </Typography>
-                                    </div>
+
+          {value === 0 && (
+            <Box p={6}>
+              <Typography variant="body1">
+                <span dangerouslySetInnerHTML={{ __html: course.content }} />
+              </Typography>
+            </Box>
+          )}
+
+          {value === 1 && (
+            <Box p={6}>
+              <AddChapter />
+              {chapters.map(chapter => (
+                <Accordion key={chapter._id}>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Box display="flex" flexDirection="column">
+                      <Typography variant="h5" gutterBottom>{chapter.title}</Typography>
+                      <Typography variant="body1">
+                        <NumberFormat value={chapter.videos.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' video'} />
+                      </Typography>
+                    </Box>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Grid container spacing={2}>
+                      <Grid item xs={8}>
+                        <div className={classes.videoPlayer}>
+                          <ReactPlayer url='https://www.youtube.com/watch?v=MOms7uWpmT0' className={classes.videoPlayer__video} />
+                          <Typography variant="h4" gutterBottom>{chapter.videos[0].title}</Typography>
+                          <Typography variant="body2" gutterBottom>
+                            <span>Đăng lúc {moment(chapter.videos[0].updatedAt).format('DD/MM HH:mm')} </span>
+                          </Typography>
+                        </div>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <div className={classes.videoListContainer}>
+                          <Tooltip title="Đăng tải video">
+                            <Fab size="medium" color="primary" aria-label="add" className={classes.btnAddVideo}>
+                              <AddIcon />
+                            </Fab>
+                          </Tooltip>
+                          <Typography gutterBottom variant="body1" className={classes.videoList__title}>Danh sách video khóa học</Typography>
+                          <PerfectScrollbar className={classes.videoList}>
+                            {chapter.videos.map(video => (
+                              <Card key={video._id} className={classes.videoListItem}>
+                                <CardActionArea>
+                                  <Grid container>
+                                    <Grid item xs={5}>
+                                      <div className={classes.videoListItem__thumbnailContainer}>
+                                        <CardMedia
+                                          className={classes.videoListItem__thumbnail}
+                                          image={video.thumbnailUrl}
+                                          title="Contemplative Reptile"
+                                        />
+                                        <Typography variant="body2" className={classes.videoListItem__duration}>
+                                          {moment.utc(video.duration).format('mm:ss')}
+                                        </Typography>
+                                      </div>
+                                    </Grid>
+                                    <Grid item xs={7}>
+                                      <CardContent className={classes.videoListItem__details}>
+                                        <Typography gutterBottom variant="h6">{video.title}</Typography>
+                                        <Typography variant="body2">{`Đăng lúc ${moment(video.updatedAt).format('DD/MM HH:mm')}`}</Typography>
+                                      </CardContent>
+                                    </Grid>
                                   </Grid>
-                                  <Grid item xs={7}>
-                                    <CardContent className={classes.videoListItem__details}>
-                                      <Typography gutterBottom variant="h6">{video.title}</Typography>
-                                      <Typography variant="body2">{`Đăng lúc ${moment(video.updatedAt).format('DD/MM HH:mm')}`}</Typography>
-                                    </CardContent>
-                                  </Grid>
-                                </Grid>
-                              </CardActionArea>
-                            </Card>
-                          ))}
-                        </PerfectScrollbar>
-                        <Button className={classes.btnOpenWatchHistory}><HistoryIcon /><span style={{ marginLeft: 5 }}>Lịch sử theo dõi video</span></Button>
-                      </div>
+                                </CardActionArea>
+                              </Card>
+                            ))}
+                          </PerfectScrollbar>
+                          <Button className={classes.btnOpenWatchHistory}><HistoryIcon /><span style={{ marginLeft: 5 }}>Lịch sử theo dõi video</span></Button>
+                        </div>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </AccordionDetails>
-              </Accordion>
-            ))}
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            Item Three
-          </TabPanel>
-          <TabPanel value={value} index={3}>
-            Item Three
-          </TabPanel>
+                  </AccordionDetails>
+                </Accordion>
+              ))}
+            </Box>
+          )}
+
+          {value === 2 && (
+            <Box p={6}>
+              <AddFeedback />
+              <Card>
+                <CardContent>
+                  <Typography variant="h5" className={classes.secondaryText} gutterBottom>
+                    <NumberFormat value={2500} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' bình luận'} />
+                  </Typography>
+                  <PerfectScrollbar className={classes.feedbackList}>
+                    {feedbacks.map(f => (
+                      <Box key={f._id} display="flex" className={classes.feedbackItem}>
+                        <Avatar alt={f.user.name} src={f.user.avatarUrl} className={classes.feedbackItem__avatar} />
+                        <Box display="flex" flexDirection="column" className={classes.feedbackItem__comment}>
+                          <Box display="flex" alignItems="flex-end">
+                            <Typography variant="body1" className={classes.secondaryText}>{f.user.name}</Typography>
+                            <Typography variant="body2" style={{ marginLeft: 5 }}>{`• ${moment(f.createdAt).format('DD/MM HH:mm')}`}</Typography>
+                          </Box>
+                          <Rating name="read-only" value={f.rating} size="small" precision={0.5} readOnly />
+                          <Box pt={1}>
+                            <Typography variant="body2">{f.comment}</Typography>
+                          </Box>
+                        </Box>
+                      </Box>
+                    ))}
+                  </PerfectScrollbar>
+                </CardContent>
+              </Card>
+            </Box>
+          )}
+
         </div>
         <div className={`${classes.section} ${classes.highestViewCourses}`}>
           <Typography variant="h5" className={classes.highestViewCourses__title}>Khóa học liên quan được đăng ký nhiều</Typography>
