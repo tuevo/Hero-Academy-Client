@@ -225,7 +225,6 @@ const useStyles = makeStyles(theme => ({
   videoPlayer: {
     ...theme.palette.card,
     padding: theme.spacing(2),
-    border: '1px solid #d9d9d9',
     width: '100%',
     overflow: 'hidden',
     boxShadow: '0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15)',
@@ -268,14 +267,14 @@ const useStyles = makeStyles(theme => ({
     boxShadow: '0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15)',
     borderRadius: theme.palette.card.borderRadius
   },
+  videoList: {
+    height: '21.5rem',
+    overflow: 'scroll',
+    marginTop: theme.spacing(2)
+  },
   videoList__title: {
     color: theme.palette.text.secondary,
     fontWeight: 'bold'
-  },
-  videoList: {
-    height: '21.875rem',
-    overflow: 'scroll',
-    margin: theme.spacing(1, 0)
   },
   btnAddVideo: {
     position: 'absolute',
@@ -294,7 +293,8 @@ const useStyles = makeStyles(theme => ({
   },
   feedbackList: {
     height: '18.75rem',
-    overflow: 'scroll'
+    overflow: 'scroll',
+    marginTop: theme.spacing(2)
   },
   feedbackItem: {
     marginTop: theme.spacing(2),
@@ -308,6 +308,11 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1, 2),
     backgroundColor: '#f8f8f8',
     borderRadius: '0.625rem'
+  },
+  lecturer__avatar: {
+    width: '4.25rem',
+    height: '4.25rem',
+    marginRight: theme.spacing(2)
   },
   secondaryText: {
     color: theme.palette.text.secondary,
@@ -330,7 +335,7 @@ const CourseDetails = () => {
     description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                 across all continents except Antarctica.`,
     content: `<p>
-    <span style="font-size: large;">Chương 1: Giới thiệu tổng quan</span>
+    <span style="font-size: large;">Giới thiệu tổng quan</span>
 </p>
 <p>
     <br>
@@ -352,7 +357,7 @@ const CourseDetails = () => {
     <br>
 </p>
 <p>
-    <span style="font-size: large;">Chương 2: Component, Prop, State</span>
+    <span style="font-size: large;">Component, Prop, State</span>
 </p>
 <p>
     <br>
@@ -374,7 +379,7 @@ const CourseDetails = () => {
     <br>
 </p>
 <p>
-    <span style="font-size: large;">Chương 3: React Hooks</span>
+    <span style="font-size: large;">React Hooks</span>
 </p>
 <p>
     <br>
@@ -768,7 +773,17 @@ const CourseDetails = () => {
       comment: 'Not bad! I still found something that needed for me from this course.',
       createdAt: new Date()
     }
-  ]
+  ];
+
+  const lecturer = {
+    _id: 1,
+    name: 'Tue Vo',
+    avatarUrl: 'images/avatars/tuevo.jpg',
+    averageRating: 4.5,
+    numberOfRatings: 1200,
+    numberOfCourses: 10,
+    introduction: 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.'
+  }
 
   return (
     <div className={classes.root}>
@@ -957,6 +972,34 @@ const CourseDetails = () => {
                   </PerfectScrollbar>
                 </CardContent>
               </Card>
+            </Box>
+          )}
+
+          {value === 3 && (
+            <Box p={6}>
+              <Box display="flex">
+                <Avatar alt={lecturer.name} src={lecturer.avatarUrl} className={classes.lecturer__avatar} />
+                <Box display="flex" flexDirection="column" pt={1}>
+                  <Typography variant="h4" className={classes.secondaryText} gutterBottom>{lecturer.name}</Typography>
+                  <Box display="flex">
+                    <Typography variant="body1" style={{ marginRight: 3 }}>
+                      {`${Math.floor(lecturer.averageRating)}.${(lecturer.averageRating - Math.floor(lecturer.averageRating)) * 10}`}
+                    </Typography>
+                    <Rating name="read-only" value={lecturer.averageRating} size="small" precision={0.5} readOnly />
+                    <Typography variant="body1" style={{ marginLeft: 3 }}>
+                      <span>(</span>
+                      <NumberFormat value={lecturer.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
+                      <span>)</span>
+                    </Typography>
+                    <Typography variant="body1" style={{ marginLeft: 9 }}>
+                      <NumberFormat value={lecturer.numberOfCourses} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' khóa học'} />
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+              <Box pt={2}>
+                <Typography variant="body1">{lecturer.introduction}</Typography>
+              </Box>
             </Box>
           )}
 
