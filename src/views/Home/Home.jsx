@@ -52,12 +52,14 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(4)
   },
   main: {
-    position: 'absolute',
+    // position: 'absolute',
+    position: 'relative',
     zIndex: 10,
-    top: '80%',
+    // top: '80%',
     left: '50%',
     transform: 'translate(-50%,0)',
     width: '85%',
+    margin: theme.spacing(5, 0)
   },
   featuredCourses: {
     padding: theme.spacing(4),
