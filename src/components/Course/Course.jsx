@@ -8,6 +8,10 @@ import * as moment from 'moment';
 import './Course.style.scss';
 
 const useStyles = makeStyles((theme) => ({
+  card: {
+    boxShadow: 'none',
+    background: '#f8f8f8'
+  },
   card__square: {
     width: '15.625rem'
   },
@@ -31,7 +35,7 @@ const Course = ({ data, style }) => {
   return (
     <RouterLink to={data.href}>
       {style === 'minimal' && (
-        <Card className={classes.card__square}>
+        <Card className={`${classes.card} ${classes.card__square} animate__animated animate_fadeIn`}>
           <CardActionArea>
             <CardMedia
               className={classes.media__square}
@@ -79,7 +83,7 @@ const Course = ({ data, style }) => {
       )}
 
       {style === 'stretch' && (
-        <Card className={classes.card__stretch}>
+        <Card className={`${classes.card} ${classes.card__stretch} animate__animated animate_fadeIn`}>
           <CardActionArea>
             <Grid container>
               <Grid item xs={5}>

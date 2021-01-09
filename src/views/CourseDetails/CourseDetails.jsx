@@ -1,17 +1,25 @@
-import { Box, Button, colors, Grid, Typography, AppBar, Tabs, Tab } from '@material-ui/core';
+import { AppBar, Box, Button, Card, CardActionArea, CardContent, CardMedia, colors, Fab, Grid, Tab, Tabs, Typography, Tooltip } from '@material-ui/core';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AddIcon from '@material-ui/icons/Add';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
+import HistoryIcon from '@material-ui/icons/History';
+import SchoolIcon from '@material-ui/icons/School';
+import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/styles';
 import CourseMultiCarousel from 'components/CourseMultiCarousel/CourseMultiCarousel';
 import * as moment from 'moment';
 import React from 'react';
 import NumberFormat from 'react-number-format';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import ReactPlayer from 'react-player';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
-import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
-import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
-import SchoolIcon from '@material-ui/icons/School';
-import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import { AddChapter } from './components';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -46,7 +54,7 @@ const useStyles = makeStyles(theme => ({
   },
   banner: {
     position: 'relative',
-    height: '28.125rem',
+    height: '250px',
     "backgroundAttachment": "fixed",
     "backgroundSize": "cover"
   },
@@ -62,7 +70,7 @@ const useStyles = makeStyles(theme => ({
   bannerContent: {
     position: 'absolute',
     zIndex: 6,
-    top: '10%',
+    top: '15%',
     left: '50%',
     transform: 'translate(-50%,0)',
     width: '85%',
@@ -84,12 +92,14 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(4)
   },
   main: {
-    position: 'absolute',
+    // position: 'absolute',
+    position: 'relative',
     zIndex: 10,
-    top: '60%',
+    // top: '60%',
     left: '50%',
     transform: 'translate(-50%,0)',
     width: '85%',
+    margin: theme.spacing(5, 0)
   },
   featuredCourses: {
     padding: theme.spacing(4),
@@ -200,7 +210,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: 'crimson',
   },
   label__new: {
-    backgroundColor: '#44b543',
+    backgroundColor: theme.palette.success.main,
   },
   label__saleOff: {
     backgroundColor: 'crimson',
@@ -222,7 +232,87 @@ const useStyles = makeStyles(theme => ({
   },
   btnRegister: {
     minWidth: '12.5rem',
-    marginTop: theme.spacing(4)
+    marginTop: theme.spacing(4),
+    backgroundColor: theme.palette.success.main,
+    '&:hover': {
+      backgroundColor: theme.palette.success.main
+    }
+  },
+  chapters: {
+    width: '100%',
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular,
+  },
+  videoPlayer: {
+    ...theme.palette.card,
+    padding: theme.spacing(2),
+    border: '1px solid #d9d9d9',
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+    boxShadow: '0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15)',
+  },
+  videoPlayer__video: {
+    width: '100% !important'
+  },
+  videoListItem: {
+    width: '100%',
+    marginBottom: theme.spacing(1),
+    boxShadow: 'none',
+    backgroundColor: '#f8f8f8'
+  },
+  videoListItem__thumbnailContainer: {
+    position: 'relative',
+    height: '5.625rem',
+  },
+  videoListItem__thumbnail: {
+    height: '100%'
+  },
+  videoListItem__duration: {
+    position: 'absolute',
+    bottom: '5%',
+    right: '3%',
+    padding: theme.spacing(0.25, 0.5),
+    color: '#fff',
+    backgroundColor: '#1d1d1d',
+    fontWeight: 'bold',
+    borderRadius: '0.25rem',
+    fontSize: '0.6875rem'
+  },
+  videoListItem__details: {
+    padding: theme.spacing(1)
+  },
+  videoListContainer: {
+    position: 'relative',
+    padding: theme.spacing(2),
+    boxShadow: '0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15)',
+    borderRadius: theme.palette.card.borderRadius
+  },
+  videoList__title: {
+    color: theme.palette.text.secondary,
+    fontWeight: 'bold'
+  },
+  videoList: {
+    height: '21.875rem',
+    overflow: 'scroll',
+    margin: theme.spacing(1, 0)
+  },
+  btnAddVideo: {
+    position: 'absolute',
+    right: '7%',
+    top: '-5%',
+  },
+  btnOpenWatchHistory: {
+    width: '100%',
+    marginTop: theme.spacing(2),
+    backgroundColor: theme.palette.primary.light,
+    color: theme.palette.primary.main,
+    fontWeight: 'bold',
+    '&:hover': {
+      backgroundColor: theme.palette.primary.light1,
+    }
   }
 }));
 
@@ -241,7 +331,7 @@ const CourseDetails = () => {
     description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                 across all continents except Antarctica.`,
     content: `<p>
-    <span style="font-size: large;">Chương 1: Khái niệm Single Page Application</span>
+    <span style="font-size: large;">Chương 1: Giới thiệu tổng quan</span>
 </p>
 <p>
     <br>
@@ -320,6 +410,192 @@ const CourseDetails = () => {
     updatedAt: new Date(),
     isFinished: true
   };
+
+  const chapters = [
+    {
+      _id: 1,
+      index: 1,
+      title: 'Giới thiệu tổng quan',
+      videos: [
+        {
+          _id: 1,
+          title: 'Khái niệm Single Page Application',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        },
+        {
+          _id: 2,
+          title: 'Khái niệm Single Page Application',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        },
+        {
+          _id: 3,
+          title: 'Khái niệm Single Page Application',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        },
+        {
+          _id: 4,
+          title: 'Khái niệm Single Page Application',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        },
+        {
+          _id: 5,
+          title: 'Khái niệm Single Page Application',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        },
+        {
+          _id: 6,
+          title: 'Khái niệm Single Page Application',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        },
+        {
+          _id: 7,
+          title: 'Khái niệm Single Page Application',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        },
+        {
+          _id: 8,
+          title: 'Khái niệm Single Page Application',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        },
+        {
+          _id: 9,
+          title: 'Khái niệm Single Page Application',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        },
+        {
+          _id: 10,
+          title: 'Khái niệm Single Page Application',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        },
+        {
+          _id: 11,
+          title: 'Khái niệm Single Page Application',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        },
+        {
+          _id: 12,
+          title: 'Khái niệm Single Page Application',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        }
+      ]
+    },
+    {
+      _id: 2,
+      index: 2,
+      title: 'Component, Prop, State',
+      videos: [
+        {
+          _id: 1,
+          title: 'Khái niệm Single Page Application',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        },
+        {
+          _id: 2,
+          title: 'Title',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        },
+        {
+          _id: 3,
+          title: 'Title',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        }
+      ]
+    },
+    {
+      _id: 3,
+      index: 3,
+      title: 'React Hooks',
+      videos: [
+        {
+          _id: 1,
+          title: 'Title',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        },
+        {
+          _id: 2,
+          title: 'Title',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        },
+        {
+          _id: 3,
+          title: 'Title',
+          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
+          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          updatedAt: new Date(),
+          numberOfView: 1500,
+          duration: 1000 * 60 * 5 + 1000 * 30
+        }
+      ]
+    }
+  ]
 
   const courses = [
     {
@@ -441,7 +717,7 @@ const CourseDetails = () => {
     <div className={classes.root}>
       <div className={classes.banner} style={{ backgroundImage: `url(${course.thumbnail})` }}>
         <div className={classes.bannerCover}></div>
-        <Box display="flex" flexDirection="column" className={classes.bannerContent}>
+        <Box display="flex" flexDirection="column" className={`${classes.bannerContent} animate__animated animate__fadeIn`}>
           <Grid container alignItems="flex-end">
             <Grid item xs={6}>
               <Box display="flex" alignItems="center" style={{ marginBottom: 9 }}>
@@ -505,29 +781,84 @@ const CourseDetails = () => {
       </div>
 
       <main className={classes.main}>
-        <div className={classes.panel}>
+        <div className={`${classes.panel} animate__animated animate__slideInUp`}>
           <AppBar position="static" style={{ boxShadow: 'none' }} color="primary">
             <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
               <Tab icon={<FormatListBulletedIcon />} label="Nội dung khóa học" {...a11yProps(0)} />
               <Tab icon={<VideoLibraryIcon />} label="Video khóa học" {...a11yProps(1)} />
-              <Tab icon={<LibraryBooksIcon />} label="Đề cương khóa học" {...a11yProps(2)} />
-              <Tab icon={<SchoolIcon />} label="Phản hồi khóa học" {...a11yProps(3)} />
-              <Tab icon={<AssignmentIndIcon />} label="Thông tin giảng viên" {...a11yProps(4)} />
+              <Tab icon={<SchoolIcon />} label="Phản hồi khóa học" {...a11yProps(2)} />
+              <Tab icon={<AssignmentIndIcon />} label="Thông tin giảng viên" {...a11yProps(3)} />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
             <span dangerouslySetInnerHTML={{ __html: course.content }} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            Item Two
+            <AddChapter />
+            {chapters.map(chapter => (
+              <Accordion key={chapter._id}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography className={classes.heading}>{`Chương ${chapter.index}: ${chapter.title}`}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container spacing={2}>
+                    <Grid item xs={8}>
+                      <div className={classes.videoPlayer}>
+                        <ReactPlayer url='https://www.youtube.com/watch?v=MOms7uWpmT0' className={classes.videoPlayer__video} />
+                      </div>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <div className={classes.videoListContainer}>
+                        <Tooltip title="Đăng tải video">
+                          <Fab size="medium" color="primary" aria-label="add" className={classes.btnAddVideo}>
+                            <AddIcon />
+                          </Fab>
+                        </Tooltip>
+                        <Typography gutterBottom variant="body1" className={classes.videoList__title}>Danh sách video khóa học</Typography>
+                        <PerfectScrollbar className={classes.videoList}>
+                          {chapter.videos.map(video => (
+                            <Card key={video._id} className={classes.videoListItem}>
+                              <CardActionArea>
+                                <Grid container>
+                                  <Grid item xs={5}>
+                                    <div className={classes.videoListItem__thumbnailContainer}>
+                                      <CardMedia
+                                        className={classes.videoListItem__thumbnail}
+                                        image={video.thumbnailUrl}
+                                        title="Contemplative Reptile"
+                                      />
+                                      <Typography variant="body2" className={classes.videoListItem__duration}>
+                                        {moment.utc(video.duration).format('mm:ss')}
+                                      </Typography>
+                                    </div>
+                                  </Grid>
+                                  <Grid item xs={7}>
+                                    <CardContent className={classes.videoListItem__details}>
+                                      <Typography gutterBottom variant="h6">{video.title}</Typography>
+                                      <Typography variant="body2">{`Đăng lúc ${moment(video.updatedAt).format('DD/MM HH:mm')}`}</Typography>
+                                    </CardContent>
+                                  </Grid>
+                                </Grid>
+                              </CardActionArea>
+                            </Card>
+                          ))}
+                        </PerfectScrollbar>
+                        <Button className={classes.btnOpenWatchHistory}><HistoryIcon /><span style={{ marginLeft: 5 }}>Lịch sử theo dõi video</span></Button>
+                      </div>
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            ))}
           </TabPanel>
           <TabPanel value={value} index={2}>
             Item Three
           </TabPanel>
           <TabPanel value={value} index={3}>
-            Item Three
-          </TabPanel>
-          <TabPanel value={value} index={4}>
             Item Three
           </TabPanel>
         </div>

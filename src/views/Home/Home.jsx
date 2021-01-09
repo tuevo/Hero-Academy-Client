@@ -44,8 +44,8 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2)
   },
   logoImage: {
-    width: '2.8125rem',
-    marginRight: theme.spacing(1.5),
+    width: '60px',
+    marginRight: theme.spacing(1),
     filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.2))'
   },
   searchInputContainer: {
@@ -111,7 +111,7 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(2, 0, 2, 0)
   },
   featuredCoursesCarouselItem__price: {
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(2),
     fontWeight: 'bold'
   },
   section: {
@@ -179,7 +179,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: 'crimson',
   },
   label__new: {
-    backgroundColor: '#44b543',
+    backgroundColor: theme.palette.success.main,
   },
   label__saleOff: {
     backgroundColor: 'crimson',
@@ -485,15 +485,15 @@ const Home = () => {
     <div className={classes.root}>
       <div className={classes.banner}>
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" className={classes.bannerCover}>
-          <Box display="flex" justifyContent="center" alignItems="center">
+          <Box display="flex" justifyContent="center" alignItems="center" className={`animate__animated animate__fadeInRight`}>
             <img
               alt="Logo"
-              src="/images/logos/logo.png"
+              src="https://icons-for-free.com/iconfiles/png/128/hero+marvel+character+super+hero+icon-1320166754459520952.png"
               className={classes.logoImage}
             />
             <Typography className={classes.bannerText} variant="h1">Hero Academy</Typography>
           </Box>
-          <Typography className={`${classes.bannerText} ${classes.bannerSubTitle}`} variant="h5">Nơi cung cấp khóa học online chất lượng cao</Typography>
+          <Typography className={`${classes.bannerText} ${classes.bannerSubTitle} animate__animated animate__fadeInLeft`} variant="h5">Nơi cung cấp khóa học online chất lượng cao</Typography>
           <div className={classes.searchInputContainer}>
             <SearchInput />
           </div>

@@ -1,3 +1,4 @@
+![logo](https://icons-for-free.com/iconfiles/png/128/hero+marvel+character+super+hero+icon-1320166754459520952.png)
 # Hero Academy Client
 
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)

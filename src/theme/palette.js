@@ -8,9 +8,10 @@ export default {
   white,
   primary: {
     contrastText: white,
-    dark: colors.blue[700],
-    main: colors.blue[500],
-    light: colors.blue[50]
+    dark: colors.purple[800],
+    main: colors.purple[700],
+    light: 'rgba(123, 31, 162, 0.1)',
+    light1: 'rgba(123, 31, 162, 0.15)'
   },
   secondary: {
     contrastText: white,
@@ -53,7 +54,7 @@ export default {
   },
   card: {
     backgroundColor: white,
-    boxShadow: '0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2)',
+    boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
     borderRadius: '0.625rem',
   },
   icon: colors.blueGrey[600],

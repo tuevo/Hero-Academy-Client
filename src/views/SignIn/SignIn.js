@@ -1,25 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Link as RouterLink, withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import validate from 'validate.js';
-import { makeStyles } from '@material-ui/styles';
 import {
-  Grid,
-  Button,
-  // IconButton,
-  TextField,
-  Link,
+  Button, Grid,
+
+
+
+  Link, TextField,
+
   Typography
 } from '@material-ui/core';
-// import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-
-import { Facebook as FacebookIcon, Google as GoogleIcon } from 'icons';
-
-import { useDispatch } from 'react-redux';
-import { signIn } from '../../redux/actions/user.action';
-import { localStorageItems } from '../../constants/local-storage.constant';
+import { makeStyles } from '@material-ui/styles';
 import userApi from 'api/user.api';
-import { showNotification, setLoading } from 'redux/actions/app.action';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link as RouterLink, withRouter } from 'react-router-dom';
+import { setLoading, showNotification } from 'redux/actions/app.action';
+import validate from 'validate.js';
+import { localStorageItems } from '../../constants/local-storage.constant';
+import { signIn } from '../../redux/actions/user.action';
+
+
 
 const schema = {
   email: {
@@ -40,8 +39,8 @@ const schema = {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: theme.palette.background.default,
-    height: '100%'
+    height: '100%',
+    backgroundColor: theme.palette.white
   },
   grid: {
     height: '100%'
@@ -52,19 +51,15 @@ const useStyles = makeStyles(theme => ({
     }
   },
   quote: {
-    backgroundColor: theme.palette.neutral,
+    // "backgroundImage": "linear-gradient(to top, #cc208e 0%, #6713d2 100%)",
     height: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundImage: 'url(/images/auth.jpg)',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center'
   },
   quoteInner: {
     textAlign: 'center',
-    flexBasis: '600px'
+    flexBasis: '37.5rem'
   },
   quoteText: {
     color: theme.palette.white,
@@ -89,7 +84,7 @@ const useStyles = makeStyles(theme => ({
     paddingTop: theme.spacing(5),
     paddingBototm: theme.spacing(2),
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2)
+    paddingRight: theme.spacing(2),
   },
   logoImage: {
     marginLeft: theme.spacing(4)
@@ -103,10 +98,9 @@ const useStyles = makeStyles(theme => ({
     }
   },
   form: {
-    paddingLeft: 100,
-    paddingRight: 100,
+    paddingRight: 200,
     paddingBottom: 125,
-    flexBasis: 700,
+    flexBasis: 600,
     [theme.breakpoints.down('sm')]: {
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(2)
@@ -129,6 +123,9 @@ const useStyles = makeStyles(theme => ({
   },
   signInButton: {
     margin: theme.spacing(2, 0)
+  },
+  cover: {
+    width: '28rem'
   }
 }));
 
@@ -154,10 +151,6 @@ const SignIn = props => {
       errors: errors || {}
     }));
   }, [formState.values]);
-
-  // const handleBack = () => {
-  //   history.goBack();
-  // };
 
   const handleChange = event => {
     event.persist();
@@ -227,29 +220,7 @@ const SignIn = props => {
           lg={5}
         >
           <div className={classes.quote}>
-            <div className={classes.quoteInner}>
-              <Typography
-                className={classes.quoteText}
-                variant="h1"
-              >
-                Hella narwhal Cosby sweater McSweeney's, salvia kitsch before
-                they sold out High Life.
-              </Typography>
-              <div className={classes.person}>
-                <Typography
-                  className={classes.name}
-                  variant="body1"
-                >
-                  Takamaru Ayako
-                </Typography>
-                <Typography
-                  className={classes.bio}
-                  variant="body2"
-                >
-                  Manager at inVision
-                </Typography>
-              </div>
-            </div>
+            <img className={classes.cover} src="https://image.freepik.com/free-vector/lock-security-by-password-key-computer-web-internet-protection-information-safety-illustration-online-data-secure-technology-concept-digital-network-system-access_109722-2433.jpg" alt="" />
           </div>
         </Grid>
         <Grid
@@ -260,23 +231,21 @@ const SignIn = props => {
         >
           <div className={classes.content}>
             <div className={classes.contentHeader}>
-              {/* <IconButton onClick={handleBack}>
-                <ArrowBackIcon />
-              </IconButton> */}
             </div>
             <div className={classes.contentBody}>
               <form
-                className={classes.form}
+                className={`${classes.form} animate__animated animate__fadeInRight`}
                 onSubmit={handleSignIn}
               >
                 <Typography
                   className={classes.title}
                   variant="h2"
+                  gutterBottom
                 >
-                  Sign in
+                  Đăng nhập tài khoản
                 </Typography>
-                <Typography
-                  color="textSecondary"
+                {/* <Typography
+                  className={classes.constrastText}
                   gutterBottom
                 >
                   Sign in with social media
@@ -292,6 +261,7 @@ const SignIn = props => {
                       onClick={handleSignIn}
                       size="large"
                       variant="contained"
+                      style={{ backgroundColor: '#2957f3' }}
                     >
                       <FacebookIcon className={classes.socialIcon} />
                       Login with Facebook
@@ -310,12 +280,12 @@ const SignIn = props => {
                 </Grid>
                 <Typography
                   align="center"
-                  className={classes.sugestion}
+                  className={`${classes.sugestion} ${classes.constrastText}`}
                   color="textSecondary"
                   variant="body1"
                 >
                   or login with email address
-                </Typography>
+                </Typography> */}
                 <TextField
                   className={classes.textField}
                   error={hasError('email')}
@@ -323,7 +293,7 @@ const SignIn = props => {
                   helperText={
                     hasError('email') ? formState.errors.email[0] : null
                   }
-                  label="Email address"
+                  label="Địa chỉ email"
                   name="email"
                   onChange={handleChange}
                   type="text"
@@ -337,7 +307,7 @@ const SignIn = props => {
                   helperText={
                     hasError('password') ? formState.errors.password[0] : null
                   }
-                  label="Password"
+                  label="Mật khẩu"
                   name="password"
                   onChange={handleChange}
                   type="password"
@@ -353,19 +323,19 @@ const SignIn = props => {
                   type="submit"
                   variant="contained"
                 >
-                  Sign in now
+                  Đăng nhập
                 </Button>
                 <Typography
                   color="textSecondary"
                   variant="body1"
                 >
-                  Don't have an account?{' '}
+                  Chưa có tài khoản?{' '}
                   <Link
                     component={RouterLink}
                     to="/sign-up"
                     variant="h6"
                   >
-                    Sign up
+                    Đăng ký
                   </Link>
                 </Typography>
               </form>

@@ -47,6 +47,7 @@
     "react-multi-carousel": "^2.6.1",
     "react-number-format": "^4.4.4",
     "react-perfect-scrollbar": "^1.5.3",
+    "react-player": "^2.7.2",
     "react-redux": "^7.2.1",
     "react-responsive-carousel": "^3.2.11",
     "react-router-dom": "^5.0.1",
