@@ -223,9 +223,14 @@ const CourseSearching = () => {
     <div className={classes.root}>
       <Box p={4} className={`${classes.courses} animate__animated animate__slideInUp`}>
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h4" className={classes.sencondaryText}>
-            Có <NumberFormat value={courses.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' khóa học'} /> cho "lập trình web"
-          </Typography>
+          <Box>
+            <Typography variant="h4" className={classes.sencondaryText} gutterBottom>
+              Từ khóa "lập trình web"
+            </Typography>
+            <Typography variant="body1">
+              Tìm thấy <b><NumberFormat value={courses.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học có liên quan
+            </Typography>
+          </Box>
           <FormControl className={classes.formControl}>
             <InputLabel id="demo-simple-select-label">Lọc khóa học theo</InputLabel>
             <Select
