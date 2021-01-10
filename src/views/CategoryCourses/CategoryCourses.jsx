@@ -15,7 +15,8 @@ const useStyles = makeStyles(theme => ({
   },
   courses: {
     ...theme.palette.card,
-    borderRadius: '2.5rem'
+    borderRadius: '2.5rem',
+    "boxShadow": "rgba(0, 0, 0, 0.4) 0px 1.875rem 5.625rem"
   },
   btnLoadMoreCourse: {
     marginTop: theme.spacing(2)
