@@ -81,7 +81,7 @@ const useStyles = makeStyles(theme => ({
     left: '50%',
     transform: 'translate(-50%,0)',
     width: '85%',
-    margin: theme.spacing(5, 0)
+    padding: theme.spacing(5, 0)
   },
   featuredCourses: {
     padding: theme.spacing(4),

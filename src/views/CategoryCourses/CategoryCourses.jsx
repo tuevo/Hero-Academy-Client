@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { Box, Typography, GridList, GridListTile } from '@material-ui/core';
+import { Box, Typography, GridList, GridListTile, Divider, Button } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import Course from 'components/Course/Course';
 import NumberFormat from 'react-number-format';
@@ -8,13 +8,20 @@ import NumberFormat from 'react-number-format';
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(4),
-    "backgroundColor": "#000000",
-    "backgroundImage": "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 800 800'%3E%3Cg %3E%3Ccircle fill='%23000000' cx='400' cy='400' r='600'/%3E%3Ccircle fill='%23180d1c' cx='400' cy='400' r='500'/%3E%3Ccircle fill='%23261431' cx='400' cy='400' r='400'/%3E%3Ccircle fill='%23351947' cx='400' cy='400' r='300'/%3E%3Ccircle fill='%23451e5e' cx='400' cy='400' r='200'/%3E%3Ccircle fill='%23552277' cx='400' cy='400' r='100'/%3E%3C/g%3E%3C/svg%3E\")",
+    "backgroundColor": "#ff0000",
+    "backgroundImage": "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1200 800'%3E%3Cdefs%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='600' y1='25' x2='600' y2='777'%3E%3Cstop offset='0' stop-color='%23ff0000'/%3E%3Cstop offset='1' stop-color='%23E0F'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='650' y1='25' x2='650' y2='777'%3E%3Cstop offset='0' stop-color='%23ff0019'/%3E%3Cstop offset='1' stop-color='%23ce00f3'/%3E%3C/linearGradient%3E%3ClinearGradient id='c' gradientUnits='userSpaceOnUse' x1='700' y1='25' x2='700' y2='777'%3E%3Cstop offset='0' stop-color='%23ff0031'/%3E%3Cstop offset='1' stop-color='%23b000e6'/%3E%3C/linearGradient%3E%3ClinearGradient id='d' gradientUnits='userSpaceOnUse' x1='750' y1='25' x2='750' y2='777'%3E%3Cstop offset='0' stop-color='%23ff004a'/%3E%3Cstop offset='1' stop-color='%239400da'/%3E%3C/linearGradient%3E%3ClinearGradient id='e' gradientUnits='userSpaceOnUse' x1='800' y1='25' x2='800' y2='777'%3E%3Cstop offset='0' stop-color='%23ff0063'/%3E%3Cstop offset='1' stop-color='%237a00ce'/%3E%3C/linearGradient%3E%3ClinearGradient id='f' gradientUnits='userSpaceOnUse' x1='850' y1='25' x2='850' y2='777'%3E%3Cstop offset='0' stop-color='%23ff007c'/%3E%3Cstop offset='1' stop-color='%236200c1'/%3E%3C/linearGradient%3E%3ClinearGradient id='g' gradientUnits='userSpaceOnUse' x1='900' y1='25' x2='900' y2='777'%3E%3Cstop offset='0' stop-color='%23ff0094'/%3E%3Cstop offset='1' stop-color='%234d00b5'/%3E%3C/linearGradient%3E%3ClinearGradient id='h' gradientUnits='userSpaceOnUse' x1='950' y1='25' x2='950' y2='777'%3E%3Cstop offset='0' stop-color='%23ff00ad'/%3E%3Cstop offset='1' stop-color='%233900a8'/%3E%3C/linearGradient%3E%3ClinearGradient id='i' gradientUnits='userSpaceOnUse' x1='1000' y1='25' x2='1000' y2='777'%3E%3Cstop offset='0' stop-color='%23ff00c6'/%3E%3Cstop offset='1' stop-color='%2328009c'/%3E%3C/linearGradient%3E%3ClinearGradient id='j' gradientUnits='userSpaceOnUse' x1='1050' y1='25' x2='1050' y2='777'%3E%3Cstop offset='0' stop-color='%23ff00df'/%3E%3Cstop offset='1' stop-color='%23180090'/%3E%3C/linearGradient%3E%3ClinearGradient id='k' gradientUnits='userSpaceOnUse' x1='1100' y1='25' x2='1100' y2='777'%3E%3Cstop offset='0' stop-color='%23ff00f7'/%3E%3Cstop offset='1' stop-color='%230b0083'/%3E%3C/linearGradient%3E%3ClinearGradient id='l' gradientUnits='userSpaceOnUse' x1='1150' y1='25' x2='1150' y2='777'%3E%3Cstop offset='0' stop-color='%23E0F'/%3E%3Cstop offset='1' stop-color='%23007'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg %3E%3Crect fill='url(%23a)' width='1200' height='800'/%3E%3Crect fill='url(%23b)' x='100' width='1100' height='800'/%3E%3Crect fill='url(%23c)' x='200' width='1000' height='800'/%3E%3Crect fill='url(%23d)' x='300' width='900' height='800'/%3E%3Crect fill='url(%23e)' x='400' width='800' height='800'/%3E%3Crect fill='url(%23f)' x='500' width='700' height='800'/%3E%3Crect fill='url(%23g)' x='600' width='600' height='800'/%3E%3Crect fill='url(%23h)' x='700' width='500' height='800'/%3E%3Crect fill='url(%23i)' x='800' width='400' height='800'/%3E%3Crect fill='url(%23j)' x='900' width='300' height='800'/%3E%3Crect fill='url(%23k)' x='1000' width='200' height='800'/%3E%3Crect fill='url(%23l)' x='1100' width='100' height='800'/%3E%3C/g%3E%3C/svg%3E\")",
     "backgroundAttachment": "fixed",
     "backgroundSize": "cover"
   },
-  contrastText: {
-    color: theme.palette.primary.contrastText
+  courses: {
+    ...theme.palette.card,
+    borderRadius: '2.5rem'
+  },
+  btnLoadMoreCourse: {
+    marginTop: theme.spacing(2)
+  },
+  sencondaryText: {
+    color: theme.palette.text.secondary
   }
 }));
 
@@ -207,50 +214,6 @@ const CategoryCourses = () => {
       discountPercent: 0.5,
       updatedAt: new Date(),
     },
-    {
-      _id: 9,
-      thumbnail: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 10,
-      thumbnail: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
   ]
 
   for (let c of courses)
@@ -258,26 +221,33 @@ const CategoryCourses = () => {
 
   return (
     <div className={classes.root}>
-      <Box display="flex" alignItems="center">
-        <Typography variant="h4" className={classes.contrastText}>{category.categoryCluster.name}</Typography>
-        <ArrowRightIcon className={classes.contrastText} />
-        <Typography variant="h4" className={classes.contrastText}>{category.name}</Typography>
-        <Typography variant="h4" className={classes.contrastText} style={{ marginLeft: 9 }}>
-          <span>(</span>
-          <NumberFormat value={courses.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' khóa học'} />
-          <span>)</span>
-        </Typography>
+      <Box p={4} className={`${classes.courses} animate__animated animate__slideInUp`}>
+        <Box display="flex" alignItems="center">
+          <Typography variant="h4" className={classes.sencondaryText}>{category.categoryCluster.name}</Typography>
+          <ArrowRightIcon className={classes.sencondaryText} />
+          <Typography variant="h4" className={classes.sencondaryText} >{category.name}</Typography>
+          <Typography variant="h4" className={classes.sencondaryText} style={{ marginLeft: 9 }}>
+            <span>(</span>
+            <NumberFormat value={courses.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' khóa học'} />
+            <span>)</span>
+          </Typography>
+        </Box>
+        <Box my={2} >
+          <Divider />
+        </Box>
+        <Box ml={-2}>
+          <GridList cellHeight="auto" cols={4}>
+            {courses.map((c, i) => (
+              <GridListTile key={c._id}>
+                <Box p={2} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.2 * i}s` }}>
+                  <Course data={c} type="minimal" />
+                </Box>
+              </GridListTile>
+            ))}
+          </GridList>
+        </Box>
+        <Button fullWidth className={classes.btnLoadMoreCourse} variant="contained" color="primary">Xem thêm khóa học</Button>
       </Box>
-
-      <GridList cellHeight="auto" cols={4}>
-        {courses.map((c, i) => (
-          <GridListTile key={c._id}>
-            <Box pt={4} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
-              <Course data={c} type="minimal" />
-            </Box>
-          </GridListTile>
-        ))}
-      </GridList>
     </div>
   );
 };
