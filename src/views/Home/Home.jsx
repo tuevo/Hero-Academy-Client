@@ -484,7 +484,7 @@ const Home = () => {
             />
             <Typography className={`${classes.bannerText} ${classes.bannerTitle}`} variant="h1">Hero Academy</Typography>
           </Box>
-          <Typography className={`${classes.bannerText} ${classes.bannerSubTitle} animate__animated animate__fadeInLeft`} variant="h5">Nơi cung cấp khóa học online chất lượng cao</Typography>
+          <Typography className={`${classes.bannerText} ${classes.bannerSubTitle} animate__animated animate__fadeInLeft`} variant="h4">Cung cấp khóa học online chất lượng cao</Typography>
         </Box>
       </div>
 
