@@ -21,6 +21,7 @@ import ReactPlayer from 'react-player';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { AddChapter } from './components';
 import AddFeedback from './components/AddFeedback/AddFeedback';
+import { format } from 'timeago.js';
 
 function a11yProps(index) {
   return {
@@ -140,10 +141,6 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(4),
   },
   highestViewCourses__title: {
-    // color: theme.palette.primary.contrastText,
-    // fontWeight: 'bold',
-    // textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
-    fontWeight: 'bold',
     color: theme.palette.text.secondary
   },
   highestViewCoursesCarousel: {
@@ -236,20 +233,21 @@ const useStyles = makeStyles(theme => ({
   },
   videoListItem: {
     width: '100%',
+    height: '5.625rem',
     marginBottom: theme.spacing(1),
     boxShadow: 'none',
     backgroundColor: '#f8f8f8'
   },
   videoListItem__thumbnailContainer: {
     position: 'relative',
-    height: '5.625rem',
+    height: '100%'
   },
   videoListItem__thumbnail: {
     height: '100%'
   },
   videoListItem__duration: {
     position: 'absolute',
-    bottom: '5%',
+    bottom: '15%',
     right: '3%',
     padding: theme.spacing(0.25, 0.5),
     color: '#fff',
@@ -273,8 +271,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2)
   },
   videoList__title: {
-    color: theme.palette.text.secondary,
-    fontWeight: 'bold'
+    color: theme.palette.text.secondary
   },
   btnAddVideo: {
     position: 'absolute',
@@ -286,13 +283,12 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
     backgroundColor: theme.palette.primary.light,
     color: theme.palette.primary.main,
-    fontWeight: 'bold',
     '&:hover': {
       backgroundColor: theme.palette.primary.light1,
     }
   },
   feedbackList: {
-    height: '18.75rem',
+    height: '25rem',
     overflow: 'scroll',
     marginTop: theme.spacing(2)
   },
@@ -315,8 +311,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(2)
   },
   secondaryText: {
-    color: theme.palette.text.secondary,
-    fontWeight: 'bold'
+    color: theme.palette.text.secondary
   }
 }));
 
@@ -411,7 +406,7 @@ const CourseDetails = () => {
     },
     tuition: 350000,
     discountPercent: 0.5,
-    updatedAt: new Date(),
+    updatedAt: new Date('2021-01-09T16:59:58.031Z'),
     isFinished: true
   };
 
@@ -426,7 +421,7 @@ const CourseDetails = () => {
           title: 'Khái niệm Single Page Application',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         },
@@ -435,7 +430,7 @@ const CourseDetails = () => {
           title: 'Khái niệm Single Page Application',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         },
@@ -444,7 +439,7 @@ const CourseDetails = () => {
           title: 'Khái niệm Single Page Application',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         },
@@ -453,7 +448,7 @@ const CourseDetails = () => {
           title: 'Khái niệm Single Page Application',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         },
@@ -462,7 +457,7 @@ const CourseDetails = () => {
           title: 'Khái niệm Single Page Application',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         },
@@ -471,7 +466,7 @@ const CourseDetails = () => {
           title: 'Khái niệm Single Page Application',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         },
@@ -480,7 +475,7 @@ const CourseDetails = () => {
           title: 'Khái niệm Single Page Application',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         },
@@ -489,7 +484,7 @@ const CourseDetails = () => {
           title: 'Khái niệm Single Page Application',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         },
@@ -498,7 +493,7 @@ const CourseDetails = () => {
           title: 'Khái niệm Single Page Application',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         },
@@ -507,7 +502,7 @@ const CourseDetails = () => {
           title: 'Khái niệm Single Page Application',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         },
@@ -516,7 +511,7 @@ const CourseDetails = () => {
           title: 'Khái niệm Single Page Application',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         },
@@ -525,7 +520,7 @@ const CourseDetails = () => {
           title: 'Khái niệm Single Page Application',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         }
@@ -541,7 +536,7 @@ const CourseDetails = () => {
           title: 'Khái niệm Single Page Application',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         },
@@ -550,7 +545,7 @@ const CourseDetails = () => {
           title: 'Title',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         },
@@ -559,7 +554,7 @@ const CourseDetails = () => {
           title: 'Title',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         }
@@ -575,7 +570,7 @@ const CourseDetails = () => {
           title: 'Title',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         },
@@ -584,7 +579,7 @@ const CourseDetails = () => {
           title: 'Title',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         },
@@ -593,7 +588,7 @@ const CourseDetails = () => {
           title: 'Title',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date(),
+          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
         }
@@ -622,7 +617,7 @@ const CourseDetails = () => {
       },
       tuition: 650000,
       discountPercent: 0.3,
-      updatedAt: new Date()
+      updatedAt: new Date('2021-01-09T16:59:58.031Z')
     },
     {
       _id: 2,
@@ -644,7 +639,7 @@ const CourseDetails = () => {
       },
       tuition: 350000,
       discountPercent: 0.5,
-      updatedAt: new Date(),
+      updatedAt: new Date('2021-01-09T16:59:58.031Z'),
     },
     {
       _id: 3,
@@ -666,7 +661,7 @@ const CourseDetails = () => {
       },
       tuition: 350000,
       discountPercent: 0.5,
-      updatedAt: new Date(),
+      updatedAt: new Date('2021-01-09T16:59:58.031Z'),
     },
     {
       _id: 4,
@@ -688,7 +683,7 @@ const CourseDetails = () => {
       },
       tuition: 350000,
       discountPercent: 0.5,
-      updatedAt: new Date(),
+      updatedAt: new Date('2021-01-09T16:59:58.031Z'),
     },
     {
       _id: 5,
@@ -710,7 +705,7 @@ const CourseDetails = () => {
       },
       tuition: 350000,
       discountPercent: 0.5,
-      updatedAt: new Date(),
+      updatedAt: new Date('2021-01-09T16:59:58.031Z'),
     },
   ];
 
@@ -727,7 +722,7 @@ const CourseDetails = () => {
       },
       rating: 4,
       comment: 'Nice course! I am looking forward to a new course.',
-      createdAt: new Date()
+      createdAt: new Date('2021-01-09T16:59:58.031Z')
     },
     {
       _id: 2,
@@ -738,7 +733,7 @@ const CourseDetails = () => {
       },
       rating: 5,
       comment: 'Nice course! I am looking forward to a new course.',
-      createdAt: new Date()
+      createdAt: new Date('2021-01-09T16:59:58.031Z')
     },
     {
       _id: 3,
@@ -749,7 +744,7 @@ const CourseDetails = () => {
       },
       rating: 3,
       comment: 'Not bad! I still found something that needed for me from this course.',
-      createdAt: new Date()
+      createdAt: new Date('2021-01-09T16:59:58.031Z')
     },
     {
       _id: 4,
@@ -760,7 +755,7 @@ const CourseDetails = () => {
       },
       rating: 3,
       comment: 'Not bad! I still found something that needed for me from this course.',
-      createdAt: new Date()
+      createdAt: new Date('2021-01-09T16:59:58.031Z')
     },
     {
       _id: 5,
@@ -771,7 +766,7 @@ const CourseDetails = () => {
       },
       rating: 3,
       comment: 'Not bad! I still found something that needed for me from this course.',
-      createdAt: new Date()
+      createdAt: new Date('2021-01-09T16:59:58.031Z')
     }
   ];
 
@@ -958,13 +953,13 @@ const CourseDetails = () => {
                       <Box key={f._id} display="flex" className={classes.feedbackItem}>
                         <Avatar alt={f.user.name} src={f.user.avatarUrl} className={classes.feedbackItem__avatar} />
                         <Box display="flex" flexDirection="column" className={classes.feedbackItem__comment}>
-                          <Box display="flex" alignItems="flex-end">
-                            <Typography variant="body1" className={classes.secondaryText}>{f.user.name}</Typography>
-                            <Typography variant="body2" style={{ marginLeft: 5 }}>{`• ${moment(f.createdAt).format('DD/MM HH:mm')}`}</Typography>
+                          <Box display="flex" alignItems="center">
+                            <Typography variant="body1"><b>{f.user.name}</b></Typography>
+                            <Typography variant="body2" style={{ marginLeft: 9 }}>{format(f.createdAt, 'vi')}</Typography>
                           </Box>
                           <Rating name="read-only" value={f.rating} size="small" precision={0.5} readOnly />
                           <Box pt={1}>
-                            <Typography variant="body2">{f.comment}</Typography>
+                            <Typography variant="body1">{f.comment}</Typography>
                           </Box>
                         </Box>
                       </Box>

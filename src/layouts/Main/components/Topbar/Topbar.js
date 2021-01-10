@@ -26,7 +26,8 @@ const useStyles = makeStyles(theme => ({
   logoTitle: {
     color: theme.palette.primary.dark,
     marginLeft: theme.spacing(0.5),
-    fontWeight: 'bold'
+    fontFamily: "'Share Tech Mono', monospace",
+    fontWeight: 'bold',
   },
   signOutButton: {
     marginLeft: theme.spacing(1)
