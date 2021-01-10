@@ -420,58 +420,58 @@ const Home = () => {
   ];
 
   for (let c of courses)
-    c['href'] = '/courses';
+    c['href'] = '/course-details';
 
   const categories = [
     {
       _id: 1,
       name: 'Lập trình web',
-      href: '/dashboard'
+      href: '/category-courses'
     },
     {
       _id: 2,
       name: 'Lập trình di động',
-      href: '/dashboard'
+      href: '/category-courses'
     },
     {
       _id: 3,
       name: 'Lập trình game',
-      href: '/dashboard'
+      href: '/category-courses'
     },
     {
       _id: 4,
       name: 'Đồ họa',
-      href: '/dashboard'
+      href: '/category-courses'
     },
     {
       _id: 5,
       name: 'Nội thất',
-      href: '/dashboard'
+      href: '/category-courses'
     },
     {
       _id: 6,
       name: 'Thời trang',
-      href: '/dashboard'
+      href: '/category-courses'
     },
     {
       _id: 7,
       name: 'Tiếng Anh',
-      href: '/dashboard'
+      href: '/category-courses'
     },
     {
       _id: 8,
       name: 'Tiếng Trung',
-      href: '/dashboard'
+      href: '/category-courses'
     },
     {
       _id: 9,
       name: 'Tiếng Nhật',
-      href: '/dashboard'
+      href: '/category-courses'
     },
     {
       _id: 10,
       name: 'Tiếng Pháp',
-      href: '/dashboard'
+      href: '/category-courses'
     }
   ]
 
@@ -576,7 +576,7 @@ const Home = () => {
                 <Typography variant="h4" className={classes.newCourses__title}>Khóa học mới <span className={`${classes.label} ${classes.label__new}`}>NEW</span></Typography>
                 {(courses || []).map(c => (
                   <div key={c._id} className={classes.newCourses__item}>
-                    <Course data={c} style={`stretch`} />
+                    <Course data={c} type="stretch" />
                   </div>
                 ))}
               </div>

@@ -5,7 +5,11 @@ export const availablePages = {
   },
   COURSE_DETAILS: {
     title: 'Chi tiết khóa học',
-    path: '/courses'
+    path: '/course-details'
+  },
+  CATEGORY_COURSES: {
+    title: 'Danh sách khóa học',
+    path: '/category-courses'
   },
   DASHBOARD: {
     title: 'Dashboard',

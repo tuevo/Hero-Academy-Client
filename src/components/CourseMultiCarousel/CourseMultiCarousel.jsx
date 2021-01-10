@@ -49,7 +49,7 @@ const CourseMultiCarousel = (props) => {
       >
         {courses.map(c => {
           return (
-            <Course key={c._id} data={c} style={`minimal`} />
+            <Course key={c._id} data={c} type="minimal" />
           );
         })}
       </Carousel>

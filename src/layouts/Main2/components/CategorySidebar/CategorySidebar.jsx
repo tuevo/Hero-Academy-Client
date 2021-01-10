@@ -39,17 +39,17 @@ const CategorySidebar = props => {
         {
           _id: 1,
           name: 'Lập trình web',
-          href: '/dashboard'
+          href: '/category-courses'
         },
         {
           _id: 2,
           name: 'Lập trình di động',
-          href: '/dashboard'
+          href: '/category-courses'
         },
         {
           _id: 3,
           name: 'Lập trình game',
-          href: '/dashboard'
+          href: '/category-courses'
         }
       ]
     },
@@ -60,17 +60,17 @@ const CategorySidebar = props => {
         {
           _id: 1,
           name: 'Đồ họa',
-          href: '/dashboard'
+          href: '/category-courses'
         },
         {
           _id: 2,
           name: 'Nội thất',
-          href: '/dashboard'
+          href: '/category-courses'
         },
         {
           _id: 3,
           name: 'Thời trang',
-          href: '/dashboard'
+          href: '/category-courses'
         }
       ]
     },
@@ -81,17 +81,17 @@ const CategorySidebar = props => {
         {
           _id: 1,
           name: 'Lập trình web',
-          href: '/dashboard'
+          href: '/category-courses'
         },
         {
           _id: 2,
           name: 'Lập trình di động',
-          href: '/dashboard'
+          href: '/category-courses'
         },
         {
           _id: 3,
           name: 'Lập trình game',
-          href: '/dashboard'
+          href: '/category-courses'
         }
       ]
     },
@@ -102,17 +102,17 @@ const CategorySidebar = props => {
         {
           _id: 1,
           name: 'Lập trình web',
-          href: '/dashboard'
+          href: '/category-courses'
         },
         {
           _id: 2,
           name: 'Lập trình di động',
-          href: '/dashboard'
+          href: '/category-courses'
         },
         {
           _id: 3,
           name: 'Lập trình game',
-          href: '/dashboard'
+          href: '/category-courses'
         }
       ]
     },
@@ -123,22 +123,22 @@ const CategorySidebar = props => {
         {
           _id: 1,
           name: 'Tiếng Anh',
-          href: '/dashboard'
+          href: '/category-courses'
         },
         {
           _id: 2,
           name: 'Tiếng Trung',
-          href: '/dashboard'
+          href: '/category-courses'
         },
         {
           _id: 3,
           name: 'Tiếng Nhật',
-          href: '/dashboard'
+          href: '/category-courses'
         },
         {
           _id: 3,
           name: 'Tiếng Pháp',
-          href: '/dashboard'
+          href: '/category-courses'
         }
       ]
     },

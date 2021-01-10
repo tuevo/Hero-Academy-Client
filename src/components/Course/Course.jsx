@@ -12,13 +12,13 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: 'none',
     background: '#f8f8f8'
   },
-  card__square: {
+  card__minimal: {
     width: '15.625rem'
   },
   card__stretch: {
     width: '100%'
   },
-  media__square: {
+  media__minimal: {
     height: '7.8125rem',
   },
   media__stretch: {
@@ -29,16 +29,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Course = ({ data, style }) => {
+const Course = ({ data, type }) => {
   const classes = useStyles();
 
   return (
     <RouterLink to={data.href}>
-      {style === 'minimal' && (
-        <Card className={`${classes.card} ${classes.card__square} animate__animated animate_fadeIn`}>
+      {type === 'minimal' && (
+        <Card className={`${classes.card} ${classes.card__minimal}`}>
           <CardActionArea>
             <CardMedia
-              className={classes.media__square}
+              className={classes.media__minimal}
               image={data.thumbnail}
               title="Contemplative Reptile"
             />
@@ -82,7 +82,7 @@ const Course = ({ data, style }) => {
         </Card>
       )}
 
-      {style === 'stretch' && (
+      {type === 'stretch' && (
         <Card className={`${classes.card} ${classes.card__stretch} animate__animated animate_fadeIn`}>
           <CardActionArea>
             <Grid container>

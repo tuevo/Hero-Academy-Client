@@ -710,7 +710,7 @@ const CourseDetails = () => {
   ];
 
   for (let c of courses)
-    c['href'] = '/courses';
+    c['href'] = '/course-details';
 
   const feedbacks = [
     {
