@@ -220,7 +220,7 @@ const SignIn = props => {
           lg={5}
         >
           <div className={classes.quote}>
-            <img className={`${classes.cover} animate__animated animate__fadeIn`} src="https://image.freepik.com/free-vector/lock-security-by-password-key-computer-web-internet-protection-information-safety-illustration-online-data-secure-technology-concept-digital-network-system-access_109722-2433.jpg" alt="" />
+            <img className={`${classes.cover} animate__animated animate__fadeInLeft`} src="https://image.freepik.com/free-vector/lock-security-by-password-key-computer-web-internet-protection-information-safety-illustration-online-data-secure-technology-concept-digital-network-system-access_109722-2433.jpg" alt="" />
           </div>
         </Grid>
         <Grid
