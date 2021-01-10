@@ -227,10 +227,10 @@ const CategoryCourses = () => {
           <Typography variant="h4" className={classes.sencondaryText}>{category.categoryCluster.name}</Typography>
           <ArrowRightIcon className={classes.sencondaryText} />
           <Typography variant="h4" className={classes.sencondaryText} >{category.name}</Typography>
-          <Typography variant="h4" className={classes.sencondaryText} style={{ marginLeft: 9 }}>
-            <span>(</span>
-            <NumberFormat value={courses.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' khóa học'} />
-            <span>)</span>
+        </Box>
+        <Box mt={1}>
+          <Typography variant="body1">
+            <b><NumberFormat value={courses.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học
           </Typography>
         </Box>
         <Box mt={3} mb={2} >

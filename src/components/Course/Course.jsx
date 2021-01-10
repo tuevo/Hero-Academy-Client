@@ -25,7 +25,15 @@ const useStyles = makeStyles((theme) => ({
     height: '100%'
   },
   description: {
-    margin: theme.spacing(1, 0)
+    margin: theme.spacing(1, 0),
+    "display": "-webkit-box",
+    "maxWidth": "100%",
+    "WebkitLineClamp": "2",
+    "WebkitBoxOrient": "vertical",
+    "overflow": "hidden"
+  },
+  cardContent: {
+    padding: '1rem !important'
   }
 }));
 
@@ -42,7 +50,7 @@ const Course = ({ data, type }) => {
               image={data.thumbnail}
               title="Contemplative Reptile"
             />
-            <CardContent>
+            <CardContent className={classes.cardContent}>
               <Typography gutterBottom variant="h5" component="h2">
                 {data.title}
               </Typography>
@@ -94,7 +102,7 @@ const Course = ({ data, type }) => {
                 />
               </Grid>
               <Grid item xs={7}>
-                <CardContent>
+                <CardContent className={classes.cardContent}>
                   <Typography gutterBottom variant="h4" component="h2">
                     {data.title}
                   </Typography>
@@ -119,7 +127,7 @@ const Course = ({ data, type }) => {
                     Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                     across all continents except Antarctica.
                   </Typography>
-                  <Box display="flex" flexDirection="column" alignItems="flex-end">
+                  <Box display="flex" flexDirection="column" alignItems="flex-end" justifyContent="flex-end">
                     <Typography variant="h5" className={`${classes.featuredCoursesCarouselItem__courseText} ${classes.featuredCoursesCarouselItem__price}`}>
                       <NumberFormat value={data.tuition - data.tuition * data.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={data.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} />
                     </Typography>

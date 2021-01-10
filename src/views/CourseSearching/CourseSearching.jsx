@@ -228,7 +228,7 @@ const CourseSearching = () => {
               Từ khóa "lập trình web"
             </Typography>
             <Typography variant="body1">
-              Tìm thấy <b><NumberFormat value={courses.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học có liên quan
+              Tìm thấy <b><NumberFormat value={courses.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học liên quan
             </Typography>
           </Box>
           <FormControl className={classes.formControl}>
