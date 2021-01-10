@@ -203,7 +203,7 @@ const SignUp = props => {
           lg={5}
         >
           <div className={classes.quote}>
-            <img className={classes.cover} src="https://image.freepik.com/free-vector/online-tutorials-illustration-concept_23-2148525396.jpg" alt="" />
+            <img className={`${classes.cover} animate__animated animate__fadeIn`} src="https://image.freepik.com/free-vector/online-tutorials-illustration-concept_23-2148525396.jpg" alt="" />
           </div>
         </Grid>
         <Grid
