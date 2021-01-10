@@ -8,8 +8,8 @@ export default {
   white,
   primary: {
     contrastText: white,
-    dark: colors.purple[800],
-    main: colors.purple[700],
+    dark: colors.purple[900],
+    main: colors.purple[800],
     light: 'rgba(123, 31, 162, 0.1)',
     light1: 'rgba(123, 31, 162, 0.15)'
   },
