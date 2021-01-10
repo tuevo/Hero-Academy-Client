@@ -11,6 +11,10 @@ export const availablePages = {
     title: 'Danh sách khóa học',
     path: '/category-courses'
   },
+  COURSE_SEARCHING: {
+    title: 'Tìm kiếm khóa học',
+    path: '/course-searching'
+  },
   DASHBOARD: {
     title: 'Dashboard',
     path: '/dashboard'

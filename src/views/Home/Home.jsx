@@ -476,7 +476,7 @@ const Home = () => {
     <div className={classes.root}>
       <div className={classes.banner}>
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" className={classes.bannerCover}>
-          <Box ml={-3} display="flex" justifyContent="center" alignItems="center" className={`animate__animated animate__fadeInRight`}>
+          <Box ml={-2} display="flex" justifyContent="center" alignItems="center" className={`animate__animated animate__fadeInRight`}>
             <img
               alt="Logo"
               src="https://icons-for-free.com/iconfiles/png/128/hero+marvel+character+super+hero+icon-1320166754459520952.png"

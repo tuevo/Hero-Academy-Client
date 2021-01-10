@@ -7,6 +7,8 @@ import { AppBar, Toolbar, Typography, Button, Box, Hidden, IconButton } from '@m
 import MenuIcon from '@material-ui/icons/Menu';
 import { availablePages } from 'constants/global.constant';
 import { SearchInput } from 'components';
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,8 +37,20 @@ const useStyles = makeStyles(theme => ({
 
 const Topbar = props => {
   const { className, onSidebarOpen, ...rest } = props;
+  const history = useHistory();
+  const [searchTerm, setSearchTerm] = useState('');
 
   const classes = useStyles();
+
+  const handleSearchInput_Change = (e) => {
+    setSearchTerm(e.target.value);
+  }
+
+  const handleSearchInput_KeyUp = (e) => {
+    if (e.keyCode === 13 && searchTerm) {
+      history.push(availablePages.COURSE_SEARCHING.path);
+    }
+  }
 
   return (
     <AppBar
@@ -57,7 +71,10 @@ const Topbar = props => {
         </RouterLink>
         <Box display="flex" alignItems="center">
           <div className={classes.searchInput}>
-            <SearchInput />
+            <SearchInput
+              onChange={handleSearchInput_Change}
+              onKeyUp={handleSearchInput_KeyUp}
+            />
           </div>
           <RouterLink to={availablePages.SIGN_IN.path} className={classes.btnSignIn}>
             <Button variant="outlined" color="primary">ĐĂNG NHẬP</Button>

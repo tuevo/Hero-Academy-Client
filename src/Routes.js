@@ -17,7 +17,8 @@ import {
   NotFound as NotFoundView,
   Home as HomeView,
   CourseDetails as CourseDetailsView,
-  CategoryCourses as CategoryCoursesView
+  CategoryCourses as CategoryCoursesView,
+  CourseSearching as CourseSearchingView
 } from './views';
 
 import { availablePages } from 'constants/global.constant';
@@ -73,6 +74,13 @@ const Routes = () => {
           layout={Main2Layout}
           path={availablePages.CATEGORY_COURSES.path}
           title={availablePages.CATEGORY_COURSES.title}
+        />
+        <RouteWithLayout
+          component={CourseSearchingView}
+          exact
+          layout={Main2Layout}
+          path={availablePages.COURSE_SEARCHING.path}
+          title={availablePages.COURSE_SEARCHING.title}
         />
         <RouteWithLayout
           component={DashboardView}

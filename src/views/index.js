@@ -11,3 +11,4 @@ export { default as UserList } from './UserList';
 export { default as Home } from './Home';
 export { default as CourseDetails } from './CourseDetails';
 export { default as CategoryCourses } from './CategoryCourses';
+export { default as CourseSearching } from './CourseSearching';

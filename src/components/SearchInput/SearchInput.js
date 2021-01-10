@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SearchInput = props => {
-  const { className, onChange, style, ...rest } = props;
+  const { className, onChange, onKeyUp, style, ...rest } = props;
 
   const classes = useStyles();
 
@@ -41,6 +41,7 @@ const SearchInput = props => {
         className={classes.input}
         disableUnderline
         onChange={onChange}
+        onKeyUp={onKeyUp}
         placeholder="Tìm kiếm khóa học"
       />
     </Paper>
@@ -50,6 +51,7 @@ const SearchInput = props => {
 SearchInput.propTypes = {
   className: PropTypes.string,
   onChange: PropTypes.func,
+  onKeyUp: PropTypes.func,
   style: PropTypes.object
 };
 
