@@ -232,7 +232,7 @@ const CategoryCourses = () => {
             <span>)</span>
           </Typography>
         </Box>
-        <Box my={2} >
+        <Box mt={3} mb={2} >
           <Divider />
         </Box>
         <Box ml={-2}>
@@ -248,7 +248,7 @@ const CategoryCourses = () => {
         </Box>
         <Button fullWidth className={classes.btnLoadMoreCourse} variant="contained" color="primary">Xem thêm khóa học</Button>
       </Box>
-    </div>
+    </div >
   );
 };
 
