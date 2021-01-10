@@ -28,12 +28,9 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     marginRight: theme.spacing(2),
-    width: '3.4375rem',
-    height: '3.4375rem'
   },
   secondaryText: {
     color: theme.palette.text.secondary,
-    fontWeight: 'bold'
   }
 }));
 

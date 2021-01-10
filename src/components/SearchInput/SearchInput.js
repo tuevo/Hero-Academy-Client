@@ -11,20 +11,16 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     padding: theme.spacing(1),
     display: 'flex',
-    width: '25rem',
-    background: 'rgba(255,255,255,0.3)',
-    boxShadow: 'none',
+    width: '25rem'
   },
   icon: {
     marginRight: theme.spacing(1),
-    color: theme.palette.primary.contrastText
   },
   input: {
     flexGrow: 1,
-    fontSize: '14px',
-    lineHeight: '16px',
-    letterSpacing: '-0.05px',
-    color: theme.palette.primary.contrastText
+    fontSize: '0.875rem',
+    lineHeight: '1rem',
+    letterSpacing: '-0.05px'
   }
 }));
 

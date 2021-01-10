@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { AppBar, Toolbar, Typography, Button, Box } from '@material-ui/core';
 import { availablePages } from 'constants/global.constant';
+import { SearchInput } from 'components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,6 +26,9 @@ const useStyles = makeStyles(theme => ({
   },
   btnSignIn: {
     marginRight: theme.spacing(1)
+  },
+  searchInput: {
+    marginRight: theme.spacing(4)
   }
 }));
 
@@ -50,7 +54,10 @@ const Topbar = props => {
             <Typography variant="h5" className={classes.logoTitle}>Hero Academy</Typography>
           </Box>
         </RouterLink>
-        <Box display="flex">
+        <Box display="flex" alignItems="center">
+          <div className={classes.searchInput}>
+            <SearchInput />
+          </div>
           <RouterLink to={availablePages.SIGN_IN.path} className={classes.btnSignIn}>
             <Button variant="outlined" color="primary">ĐĂNG NHẬP</Button>
           </RouterLink>

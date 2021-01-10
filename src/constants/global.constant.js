@@ -1,10 +1,10 @@
 export const availablePages = {
   HOME: {
-    title: 'Home',
+    title: 'Trang chủ',
     path: '/home'
   },
   COURSE_DETAILS: {
-    title: 'Course Details',
+    title: 'Chi tiết khóa học',
     path: '/courses'
   },
   DASHBOARD: {
@@ -36,11 +36,11 @@ export const availablePages = {
     path: '/settings'
   },
   SIGN_UP: {
-    title: 'Sign Up',
+    title: 'Đăng ký tài khoản học viên',
     path: '/sign-up'
   },
   SIGN_IN: {
-    title: 'Sign In',
+    title: 'Đăng nhập tài khoản',
     path: '/sign-in'
   },
   NOT_FOUND: {
