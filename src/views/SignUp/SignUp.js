@@ -170,11 +170,7 @@ const SignUp = props => {
     setFormState(formState => ({
       ...formState,
       values: {
-        ...formState.values,
-        [event.target.name]:
-          event.target.type === 'checkbox'
-            ? event.target.checked
-            : event.target.value
+        ...formState.values
       },
       touched: {
         ...formState.touched,
@@ -245,7 +241,7 @@ const SignUp = props => {
                   onChange={handleChange}
                   type="text"
                   value={formState.values.firstName || ''}
-                  variant="outlined"
+                  variant="standard"
                 />
                 <TextField
                   className={classes.textField}
@@ -259,7 +255,7 @@ const SignUp = props => {
                   onChange={handleChange}
                   type="text"
                   value={formState.values.email || ''}
-                  variant="outlined"
+                  variant="standard"
                 />
                 <TextField
                   className={classes.textField}
@@ -273,7 +269,7 @@ const SignUp = props => {
                   onChange={handleChange}
                   type="password"
                   value={formState.values.password || ''}
-                  variant="outlined"
+                  variant="standard"
                 />
                 <TextField
                   className={classes.textField}
@@ -287,7 +283,7 @@ const SignUp = props => {
                   onChange={handleChange}
                   type="password"
                   value={formState.values.confirmPassword || ''}
-                  variant="outlined"
+                  variant="standard"
                 />
                 <Button
                   className={classes.signUpButton}

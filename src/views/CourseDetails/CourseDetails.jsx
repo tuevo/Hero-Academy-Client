@@ -24,6 +24,10 @@ import AddFeedback from './components/AddFeedback/AddFeedback';
 import { format } from 'timeago.js';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { useHistory } from 'react-router-dom';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import { useState } from 'react';
+import UpdateCourse from './components/UpdateCourse/UpdateCourse';
 
 function a11yProps(index) {
   return {
@@ -54,7 +58,7 @@ const useStyles = makeStyles(theme => ({
   bannerContent: {
     position: 'absolute',
     zIndex: 6,
-    top: '3%',
+    top: '4%',
     left: '50%',
     transform: 'translate(-50%,0)',
     width: '85%',
@@ -122,7 +126,7 @@ const useStyles = makeStyles(theme => ({
     height: '100%',
     boxShadow: 'inset 0 -14rem 6.25rem rgba(3, 155, 229, 0.7)'
   },
-  featuredCoursesCarouselItem__courseText: {
+  contrastText: {
     color: '#fff',
     textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
   },
@@ -211,7 +215,6 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1, 0)
   },
   btnRegister: {
-    minWidth: '12.5rem',
     marginTop: theme.spacing(4),
     backgroundColor: theme.palette.success.main,
     '&:hover': {
@@ -320,7 +323,8 @@ const useStyles = makeStyles(theme => ({
 const CourseDetails = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const handleBack = () => {
     history.goBack();
@@ -330,12 +334,15 @@ const CourseDetails = () => {
     setValue(newValue);
   };
 
+  const handleBtnFavorite_Click = () => {
+    setIsFavorite(!isFavorite);
+  }
+
   const course = {
     _id: 2,
     thumbnail: 'https://damminhtien.com/assets/images/reactjs.png',
     title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-    description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
+    description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica.`,
     content: `<p>
     <span style="font-size: large;">Giới thiệu tổng quan</span>
 </p>
@@ -406,10 +413,12 @@ const CourseDetails = () => {
       name: 'Tue Vo'
     },
     categoryCluster: {
+      _id: 1,
       name: 'Công nghệ thông tin',
-      categories: [{
+      category: {
+        _id: 1,
         name: 'Lập trình web'
-      }]
+      }
     },
     tuition: 350000,
     discountPercent: 0.5,
@@ -792,28 +801,42 @@ const CourseDetails = () => {
       <div className={classes.banner} style={{ backgroundImage: `url(${course.thumbnail})` }}>
         <div className={classes.bannerCover}></div>
         <Box display="flex" flexDirection="column" className={`${classes.bannerContent} animate__animated animate__fadeIn`}>
-          <Box ml={-2} mb={1} display="flex" alignItems="center">
+          <Box ml={-2} mb={1} display="flex" justifyContent="space-between" alignItems="center">
             <IconButton onClick={handleBack}>
-              <ArrowBackIcon style={{ color: '#fff' }} />
+              <ArrowBackIcon className={classes.contrastText} />
             </IconButton>
+            <Box display="flex" className={classes.contrastText}>
+              <Button
+                startIcon={isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                variant={isFavorite ? 'contained' : 'outlined'}
+                color={isFavorite ? 'secondary' : 'inherit'}
+                onClick={handleBtnFavorite_Click}
+                size="small"
+              >
+                Yêu thích
+              </Button>
+              <Box ml={1}>
+                <UpdateCourse course={course} />
+              </Box>
+            </Box>
           </Box>
           <Grid container alignItems="center">
             <Grid item xs={6}>
               <Box display="flex" alignItems="center" style={{ marginBottom: 9 }}>
-                <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} >
+                <Typography variant="body2" className={classes.contrastText} >
                   {course.categoryCluster.name.toUpperCase()}
                 </Typography>
-                <ArrowRightIcon className={classes.featuredCoursesCarouselItem__courseText} />
-                <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText}>
-                  {course.categoryCluster.categories[0].name.toUpperCase()}
+                <ArrowRightIcon className={classes.contrastText} />
+                <Typography variant="body2" className={classes.contrastText}>
+                  {course.categoryCluster.category.name.toUpperCase()}
                 </Typography>
               </Box>
 
-              <Typography variant="h3" className={classes.featuredCoursesCarouselItem__courseText}><b>{course.title}</b></Typography>
-              <Typography variant="body1" className={`${classes.featuredCoursesCarouselItem__courseText} ${classes.description}`}>{course.description}</Typography>
+              <Typography variant="h3" className={classes.contrastText}><b>{course.title}</b></Typography>
+              <Typography variant="body1" className={`${classes.contrastText} ${classes.description}`}>{course.description}</Typography>
 
               <Box display="flex" alignItems="flex-end" className={classes.featuredCoursesCarouselItem__ratingDetails}>
-                <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginRight: 3 }}>
+                <Typography variant="body2" className={classes.contrastText} style={{ marginRight: 3 }}>
                   <span className={`${classes.label} ${classes.label__bestSeller}`} style={{ marginLeft: 0 }}>Best Seller</span>
                   {course.isFinished ? (
                     <span className={`${classes.label} ${classes.label__new}`} style={{ marginLeft: 9 }}>Đã hoàn thành</span>
@@ -821,30 +844,30 @@ const CourseDetails = () => {
                   <span style={{ marginLeft: 9 }}>{`${Math.floor(course.averageRating)}.${(course.averageRating - Math.floor(course.averageRating)) * 10}`}</span>
                 </Typography>
                 <Rating name="read-only" value={course.averageRating} size="small" precision={0.5} readOnly />
-                <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginLeft: 3 }}>
+                <Typography variant="body2" className={classes.contrastText} style={{ marginLeft: 3 }}>
                   <span>(</span>
                   <NumberFormat value={course.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
                   <span>)</span>
                 </Typography>
-                <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginLeft: 9 }}>
+                <Typography variant="body2" className={classes.contrastText} style={{ marginLeft: 9 }}>
                   <NumberFormat value={course.numberOfStudents} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
                 </Typography>
               </Box>
 
               <Box display="flex" alignItems="center">
-                <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText}>Giảng viên: <b>{course.lecturer.name}</b></Typography>
-                <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginLeft: 9 }}>Cập nhật lần cuối: {moment(course.updatedAt).format('DD/MM HH:mm')}</Typography>
+                <Typography variant="body2" className={classes.contrastText}>Giảng viên: <b>{course.lecturer.name}</b></Typography>
+                <Typography variant="body2" className={classes.contrastText} style={{ marginLeft: 9 }}>Cập nhật lần cuối: {moment(course.updatedAt).format('DD/MM HH:mm')}</Typography>
               </Box>
             </Grid>
             <Grid item xs={6}>
               <Box display="flex" flexDirection="column" alignItems="flex-end">
-                <Typography variant="h3" className={`${classes.featuredCoursesCarouselItem__courseText} ${classes.featuredCoursesCarouselItem__price}`}>
+                <Typography variant="h3" className={`${classes.contrastText} ${classes.featuredCoursesCarouselItem__price}`}>
                   <NumberFormat value={course.tuition - course.tuition * course.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={course.discountPercent > 0 ? 'Chỉ còn ' : `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                 across all continents except Antarctica.`} suffix={'đ'} />
                 </Typography>
 
                 {course.discountPercent > 0 && (
-                  <Typography variant="h4" className={classes.featuredCoursesCarouselItem__courseText}>
+                  <Typography variant="h4" className={classes.contrastText}>
                     <strike>
                       <NumberFormat value={course.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
                     </strike>
@@ -852,7 +875,7 @@ const CourseDetails = () => {
                   </Typography>
                 )}
 
-                <Button variant="contained" className={classes.btnRegister} color="primary">ĐĂNG KÝ KHÓA HỌC</Button>
+                <Button variant="contained" className={classes.btnRegister} color="primary" size="large">ĐĂNG KÝ KHÓA HỌC</Button>
               </Box>
             </Grid>
           </Grid>

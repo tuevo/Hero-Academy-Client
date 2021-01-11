@@ -16,7 +16,7 @@ export default {
   secondary: {
     contrastText: white,
     dark: colors.amber[900],
-    main: colors.amber['A400'],
+    main: colors.amber[800],
     light: colors.amber['A400']
   },
   success: {

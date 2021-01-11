@@ -55,12 +55,12 @@ const AddChapter = props => {
               fullWidth
             />
             <Button
+              startIcon={<AddIcon />}
               color="primary"
               variant="contained"
               style={{ minWidth: '6.25rem', marginLeft: 5 }}
             >
-              <AddIcon />
-              <span>Thêm</span>
+              Thêm
             </Button>
           </Box>
         </CardContent>

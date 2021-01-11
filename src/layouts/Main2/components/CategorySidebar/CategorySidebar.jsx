@@ -75,7 +75,7 @@ const CategorySidebar = props => {
       ]
     },
     {
-      _id: 4,
+      _id: 3,
       name: 'Quản trị kinh doanh',
       categories: [
         {
@@ -96,7 +96,7 @@ const CategorySidebar = props => {
       ]
     },
     {
-      _id: 5,
+      _id: 4,
       name: 'Digital Marketing',
       categories: [
         {
@@ -117,7 +117,7 @@ const CategorySidebar = props => {
       ]
     },
     {
-      _id: 3,
+      _id: 5,
       name: 'Ngoại ngữ',
       categories: [
         {
@@ -136,7 +136,7 @@ const CategorySidebar = props => {
           href: '/category-courses'
         },
         {
-          _id: 3,
+          _id: 4,
           name: 'Tiếng Pháp',
           href: '/category-courses'
         }
