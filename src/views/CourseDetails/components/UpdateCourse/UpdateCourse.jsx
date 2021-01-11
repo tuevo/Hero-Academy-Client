@@ -24,19 +24,26 @@ export default function UpdateCourse({ course }) {
     bottom: false,
     right: false,
   });
+
+  const originalFormData = {
+    title: course.title,
+    categoryId: course.categoryCluster.category._id,
+    tuition: course.tuition,
+    discountPercent: course.discountPercent * 100,
+    isFinished: course.isFinished,
+    description: course.description,
+    content: course.content
+  }
   const [formState, setFormState] = useState({
     isValid: false,
     values: {
-      title: course.title,
-      categoryId: course.categoryCluster.category._id,
-      tuition: course.tuition,
-      discountPercent: course.discountPercent * 100,
-      isFinished: course.isFinished,
-      description: course.description
+      ...originalFormData
     },
     touched: {},
     errors: {}
   });
+
+  const [thumbnail, setThumbnail] = useState(course.thumbnail);
 
   const categoryClusters = [
     {
@@ -187,15 +194,47 @@ export default function UpdateCourse({ course }) {
       return;
     }
 
+    if (open) {
+      setThumbnail(course.thumbnail);
+      setFormState({ ...formState, values: { ...originalFormData } });
+    }
+
     setState({ ...state, [anchor]: open });
   };
 
   const handleImageChange = (image) => {
-    console.log(image);
+    const name = 'thumbnail', value = image;
+    setFormState(formState => ({
+      ...formState,
+      values: {
+        ...formState.values,
+        [name]: value
+      },
+      touched: {
+        ...formState.touched,
+        [name]: true
+      }
+    }));
   }
 
   const handleTextEditorChange = (text) => {
-    console.log(text);
+    const name = 'content', value = text;
+    setFormState(formState => ({
+      ...formState,
+      values: {
+        ...formState.values,
+        [name]: value
+      },
+      touched: {
+        ...formState.touched,
+        [name]: true
+      }
+    }));
+  }
+
+  const hanldeBtnUpdateClick = (e) => {
+    const data = { ...formState.values };
+    console.log(data);
   }
 
   const content = (anchor) => (
@@ -204,7 +243,7 @@ export default function UpdateCourse({ course }) {
       role="presentation"
     >
       <div className={classes.formControl}>
-        <ImageUploading initImageUrl={course.thumbnail} onImageChange={handleImageChange} />
+        <ImageUploading initImageUrl={thumbnail} onImageChange={handleImageChange} />
       </div>
 
       <form>
@@ -304,7 +343,7 @@ export default function UpdateCourse({ course }) {
         <FormControl className={classes.formControl} fullWidth>
           <FormLabel component="legend">Nội dung khóa học</FormLabel>
           <Box mt={2} style={{ height: '25rem' }}>
-            <TextEditor height={'89.5%'} onChange={handleTextEditorChange} />
+            <TextEditor height={'89.5%'} defaultValue={formState.values.content} onChange={handleTextEditorChange} />
           </Box>
         </FormControl>
 
@@ -312,10 +351,10 @@ export default function UpdateCourse({ course }) {
           <Button
             color="primary"
             fullWidth
-            size="large"
             variant="contained"
+            onClick={hanldeBtnUpdateClick}
           >
-            Cập nhật khóa học
+            Cập nhật thông tin khóa học
           </Button>
         </Box>
       </form>
