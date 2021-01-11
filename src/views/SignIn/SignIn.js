@@ -23,8 +23,7 @@ import { signIn } from '../../redux/actions/user.action';
 const schema = {
   email: {
     presence: { allowEmpty: false, message: 'is required' },
-    // email: true,
-    email: false,
+    email: true,
     length: {
       maximum: 64
     }
@@ -32,7 +31,7 @@ const schema = {
   password: {
     presence: { allowEmpty: false, message: 'is required' },
     length: {
-      maximum: 128
+      maximum: 32
     }
   }
 };
@@ -158,10 +157,7 @@ const SignIn = props => {
       ...formState,
       values: {
         ...formState.values,
-        [event.target.name]:
-          event.target.type === 'checkbox'
-            ? event.target.checked
-            : event.target.value
+        [event.target.name]: event.target.value
       },
       touched: {
         ...formState.touched,

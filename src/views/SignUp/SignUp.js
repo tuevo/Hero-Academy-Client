@@ -16,17 +16,8 @@ import { Link as RouterLink, withRouter } from 'react-router-dom';
 import validate from 'validate.js';
 
 const schema = {
-  firstName: {
+  fullName: {
     presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      maximum: 32
-    }
-  },
-  lastName: {
-    presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      maximum: 32
-    }
   },
   email: {
     presence: { allowEmpty: false, message: 'is required' },
@@ -38,12 +29,14 @@ const schema = {
   password: {
     presence: { allowEmpty: false, message: 'is required' },
     length: {
-      maximum: 128
+      maximum: 32
     }
   },
-  policy: {
+  confirmPassword: {
     presence: { allowEmpty: false, message: 'is required' },
-    checked: true
+    length: {
+      maximum: 32
+    }
   }
 };
 
@@ -170,7 +163,8 @@ const SignUp = props => {
     setFormState(formState => ({
       ...formState,
       values: {
-        ...formState.values
+        ...formState.values,
+        [event.target.name]: event.target.value
       },
       touched: {
         ...formState.touched,
@@ -231,16 +225,16 @@ const SignUp = props => {
                 </Typography>
                 <TextField
                   className={classes.textField}
-                  error={hasError('firstName')}
+                  error={hasError('fullName')}
                   fullWidth
                   helperText={
-                    hasError('firstName') ? formState.errors.firstName[0] : null
+                    hasError('fullName') ? formState.errors.fullName[0] : null
                   }
                   label="Họ và tên"
-                  name="name"
+                  name="fullName"
                   onChange={handleChange}
                   type="text"
-                  value={formState.values.firstName || ''}
+                  value={formState.values.fullName || ''}
                   variant="standard"
                 />
                 <TextField
