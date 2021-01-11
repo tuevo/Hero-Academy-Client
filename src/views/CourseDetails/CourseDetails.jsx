@@ -792,7 +792,7 @@ const CourseDetails = () => {
       <div className={classes.banner} style={{ backgroundImage: `url(${course.thumbnail})` }}>
         <div className={classes.bannerCover}></div>
         <Box display="flex" flexDirection="column" className={`${classes.bannerContent} animate__animated animate__fadeIn`}>
-          <Box pb={1} display="flex" alignItems="center">
+          <Box ml={-2} mb={1} display="flex" alignItems="center">
             <IconButton onClick={handleBack}>
               <ArrowBackIcon style={{ color: '#fff' }} />
             </IconButton>
