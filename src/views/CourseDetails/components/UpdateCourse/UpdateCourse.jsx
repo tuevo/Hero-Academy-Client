@@ -2,6 +2,8 @@ import { Button, Drawer, FormControl, Grid, Input, InputAdornment, InputLabel, S
 import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import React, { useState } from 'react';
+import ImageUploading from 'components/ImageUploading/ImageUploading';
+import { useEffect } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -25,9 +27,9 @@ export default function UpdateCourse({ course }) {
     isValid: false,
     values: {
       title: course.title,
-      catgegoryId: course.categoryCluster.category._id,
+      categoryId: course.categoryCluster.category._id,
       tuition: course.tuition,
-      discountPercent: course.discountPercent,
+      discountPercent: course.discountPercent * 100,
       isFinished: course.isFinished,
       description: course.description
     },
@@ -37,110 +39,110 @@ export default function UpdateCourse({ course }) {
 
   const categoryClusters = [
     {
-      _id: 1,
+      _id: '1',
       name: 'Công nghệ thông tin',
       categories: [
         {
-          _id: 1,
+          _id: '1.1',
           name: 'Lập trình web',
           href: '/category-courses'
         },
         {
-          _id: 2,
+          _id: '1.2',
           name: 'Lập trình di động',
           href: '/category-courses'
         },
         {
-          _id: 3,
+          _id: '1.3',
           name: 'Lập trình game',
           href: '/category-courses'
         }
       ]
     },
     {
-      _id: 2,
+      _id: '2',
       name: 'Thiết kế',
       categories: [
         {
-          _id: 1,
+          _id: '2.1',
           name: 'Đồ họa',
           href: '/category-courses'
         },
         {
-          _id: 2,
+          _id: '2.2',
           name: 'Nội thất',
           href: '/category-courses'
         },
         {
-          _id: 3,
+          _id: '2.3',
           name: 'Thời trang',
           href: '/category-courses'
         }
       ]
     },
     {
-      _id: 3,
+      _id: '3',
       name: 'Quản trị kinh doanh',
       categories: [
         {
-          _id: 1,
+          _id: '3.1',
           name: 'Lập trình web',
           href: '/category-courses'
         },
         {
-          _id: 2,
+          _id: '3.2',
           name: 'Lập trình di động',
           href: '/category-courses'
         },
         {
-          _id: 3,
+          _id: '3.3',
           name: 'Lập trình game',
           href: '/category-courses'
         }
       ]
     },
     {
-      _id: 4,
+      _id: '4',
       name: 'Digital Marketing',
       categories: [
         {
-          _id: 1,
+          _id: '4.1',
           name: 'Lập trình web',
           href: '/category-courses'
         },
         {
-          _id: 2,
+          _id: '4.2',
           name: 'Lập trình di động',
           href: '/category-courses'
         },
         {
-          _id: 3,
+          _id: '4.3',
           name: 'Lập trình game',
           href: '/category-courses'
         }
       ]
     },
     {
-      _id: 5,
+      _id: '5',
       name: 'Ngoại ngữ',
       categories: [
         {
-          _id: 1,
+          _id: '5.1',
           name: 'Tiếng Anh',
           href: '/category-courses'
         },
         {
-          _id: 2,
+          _id: '5.2',
           name: 'Tiếng Trung',
           href: '/category-courses'
         },
         {
-          _id: 3,
+          _id: '5.3',
           name: 'Tiếng Nhật',
           href: '/category-courses'
         },
         {
-          _id: 4,
+          _id: '5.4',
           name: 'Tiếng Pháp',
           href: '/category-courses'
         }
@@ -151,17 +153,30 @@ export default function UpdateCourse({ course }) {
   const handleChange = event => {
     event.persist();
 
+    const { name } = event.target;
+    let { value } = event.target;
+
+    if (value === 'true')
+      value = true;
+    if (value === 'false')
+      value = false;
+
     setFormState(formState => ({
       ...formState,
       values: {
-        ...formState.values
+        ...formState.values,
+        [name]: value
       },
       touched: {
         ...formState.touched,
-        [event.target.name]: true
+        [name]: true
       }
     }));
   };
+
+  useEffect(() => {
+    console.log(formState);
+  }, [formState]);
 
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
@@ -174,11 +189,19 @@ export default function UpdateCourse({ course }) {
     setState({ ...state, [anchor]: open });
   };
 
+  const handleImageChange = (image) => {
+    console.log(image);
+  }
+
   const content = (anchor) => (
     <div
       className={classes.content}
       role="presentation"
     >
+      <div className={classes.formControl}>
+        <ImageUploading initImageUrl={course.thumbnail} onImageChange={handleImageChange} />
+      </div>
+
       <form>
         <FormControl className={classes.formControl} fullWidth>
           <TextField
@@ -197,7 +220,7 @@ export default function UpdateCourse({ course }) {
 
         <FormControl className={classes.formControl} fullWidth>
           <InputLabel htmlFor="grouped-native-select">Lĩnh vực</InputLabel>
-          <Select native defaultValue={formState.values.catgegoryId}>
+          <Select name="categoryId" native value={formState.values.categoryId} onChange={handleChange}>
             {categoryClusters.map(cc => (
               <optgroup key={cc._id} label={cc.name}>
                 {cc.categories.map(c => (
@@ -233,7 +256,7 @@ export default function UpdateCourse({ course }) {
                 name="discountPercent"
                 onChange={handleChange}
                 type="number"
-                value={formState.values.discountPercent * 100 || ''}
+                value={formState.values.discountPercent || ''}
                 variant="standard"
                 endAdornment={<InputAdornment position="end">%</InputAdornment>}
                 inputProps={{ min: 0, max: 100 }}
@@ -248,9 +271,9 @@ export default function UpdateCourse({ course }) {
             <Box mr={4}>
               <FormLabel component="legend">Trạng thái khóa học</FormLabel>
             </Box>
-            <RadioGroup row aria-label="position" name="position" defaultValue={+formState.values.isFinished}>
-              <FormControlLabel value={+true} control={<Radio color="primary" />} label="Đã hoàn thành" />
-              <FormControlLabel value={+false} control={<Radio color="primary" />} label="Chưa hoàn thành" />
+            <RadioGroup row name="isFinished" value={formState.values.isFinished} onChange={handleChange}>
+              <FormControlLabel value={true} control={<Radio color="primary" />} label="Đã hoàn thành" />
+              <FormControlLabel value={false} control={<Radio color="primary" />} label="Chưa hoàn thành" />
             </RadioGroup>
           </Box>
         </FormControl>

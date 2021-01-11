@@ -33,110 +33,110 @@ const CategorySidebar = props => {
 
   const categoryClusters = [
     {
-      _id: 1,
+      _id: '1',
       name: 'Công nghệ thông tin',
       categories: [
         {
-          _id: 1,
+          _id: '1.1',
           name: 'Lập trình web',
           href: '/category-courses'
         },
         {
-          _id: 2,
+          _id: '1.2',
           name: 'Lập trình di động',
           href: '/category-courses'
         },
         {
-          _id: 3,
+          _id: '1.3',
           name: 'Lập trình game',
           href: '/category-courses'
         }
       ]
     },
     {
-      _id: 2,
+      _id: '2',
       name: 'Thiết kế',
       categories: [
         {
-          _id: 1,
+          _id: '2.1',
           name: 'Đồ họa',
           href: '/category-courses'
         },
         {
-          _id: 2,
+          _id: '2.2',
           name: 'Nội thất',
           href: '/category-courses'
         },
         {
-          _id: 3,
+          _id: '2.3',
           name: 'Thời trang',
           href: '/category-courses'
         }
       ]
     },
     {
-      _id: 3,
+      _id: '3',
       name: 'Quản trị kinh doanh',
       categories: [
         {
-          _id: 1,
+          _id: '3.1',
           name: 'Lập trình web',
           href: '/category-courses'
         },
         {
-          _id: 2,
+          _id: '3.2',
           name: 'Lập trình di động',
           href: '/category-courses'
         },
         {
-          _id: 3,
+          _id: '3.3',
           name: 'Lập trình game',
           href: '/category-courses'
         }
       ]
     },
     {
-      _id: 4,
+      _id: '4',
       name: 'Digital Marketing',
       categories: [
         {
-          _id: 1,
+          _id: '4.1',
           name: 'Lập trình web',
           href: '/category-courses'
         },
         {
-          _id: 2,
+          _id: '4.2',
           name: 'Lập trình di động',
           href: '/category-courses'
         },
         {
-          _id: 3,
+          _id: '4.3',
           name: 'Lập trình game',
           href: '/category-courses'
         }
       ]
     },
     {
-      _id: 5,
+      _id: '5',
       name: 'Ngoại ngữ',
       categories: [
         {
-          _id: 1,
+          _id: '5.1',
           name: 'Tiếng Anh',
           href: '/category-courses'
         },
         {
-          _id: 2,
+          _id: '5.2',
           name: 'Tiếng Trung',
           href: '/category-courses'
         },
         {
-          _id: 3,
+          _id: '5.3',
           name: 'Tiếng Nhật',
           href: '/category-courses'
         },
         {
-          _id: 4,
+          _id: '5.4',
           name: 'Tiếng Pháp',
           href: '/category-courses'
         }

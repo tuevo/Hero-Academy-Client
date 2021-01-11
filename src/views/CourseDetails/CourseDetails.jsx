@@ -413,10 +413,10 @@ const CourseDetails = () => {
       name: 'Tue Vo'
     },
     categoryCluster: {
-      _id: 1,
+      _id: '1',
       name: 'Công nghệ thông tin',
       category: {
-        _id: 1,
+        _id: '1.1',
         name: 'Lập trình web'
       }
     },
