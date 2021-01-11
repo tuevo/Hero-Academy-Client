@@ -4,6 +4,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import React, { useState } from 'react';
 import ImageUploading from 'components/ImageUploading/ImageUploading';
 import { useEffect } from 'react';
+import TextEditor from 'components/TextEditor/TextEditor';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -193,6 +194,10 @@ export default function UpdateCourse({ course }) {
     console.log(image);
   }
 
+  const handleTextEditorChange = (text) => {
+    console.log(text);
+  }
+
   const content = (anchor) => (
     <div
       className={classes.content}
@@ -296,14 +301,23 @@ export default function UpdateCourse({ course }) {
           />
         </FormControl>
 
-        <Button
-          color="primary"
-          fullWidth
-          size="large"
-          variant="contained"
-        >
-          Cập nhật
-        </Button>
+        <FormControl className={classes.formControl} fullWidth>
+          <FormLabel component="legend">Nội dung khóa học</FormLabel>
+          <Box mt={2} style={{ height: '25rem' }}>
+            <TextEditor height={'89.5%'} onChange={handleTextEditorChange} />
+          </Box>
+        </FormControl>
+
+        <Box mt={2}>
+          <Button
+            color="primary"
+            fullWidth
+            size="large"
+            variant="contained"
+          >
+            Cập nhật khóa học
+          </Button>
+        </Box>
       </form>
     </div>
   );
