@@ -83,6 +83,7 @@ const AddFeedback = props => {
               value={values.comment}
               variant="standard"
               fullWidth
+              multiline
             />
             <IconButton children={<SendIcon />} color="primary" style={{ marginLeft: 5 }} />
           </Box>
