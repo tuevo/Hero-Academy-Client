@@ -51,7 +51,6 @@ const useStyles = makeStyles(theme => ({
     }
   },
   quote: {
-    // "backgroundImage": "linear-gradient(to top, #cc208e 0%, #6713d2 100%)",
     height: '100%',
     display: 'flex',
     justifyContent: 'center',

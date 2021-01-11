@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Card, CardActionArea, CardContent, CardMedia, colors, Fab, Grid, Tab, Tabs, Tooltip, Typography, Avatar } from '@material-ui/core';
+import { AppBar, Box, Button, IconButton, Card, CardActionArea, CardContent, CardMedia, colors, Fab, Grid, Tab, Tabs, Tooltip, Typography, Avatar } from '@material-ui/core';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -22,6 +22,8 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { AddChapter } from './components';
 import AddFeedback from './components/AddFeedback/AddFeedback';
 import { format } from 'timeago.js';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { useHistory } from 'react-router-dom';
 
 function a11yProps(index) {
   return {
@@ -52,7 +54,7 @@ const useStyles = makeStyles(theme => ({
   bannerContent: {
     position: 'absolute',
     zIndex: 6,
-    top: '10%',
+    top: '3%',
     left: '50%',
     transform: 'translate(-50%,0)',
     width: '85%',
@@ -77,7 +79,7 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     // position: 'relative',
     zIndex: 10,
-    top: '35%',
+    top: '38%',
     left: '50%',
     transform: 'translate(-50%,0)',
     width: '85%',
@@ -317,7 +319,12 @@ const useStyles = makeStyles(theme => ({
 
 const CourseDetails = () => {
   const classes = useStyles();
+  const history = useHistory();
   const [value, setValue] = React.useState(0);
+
+  const handleBack = () => {
+    history.goBack();
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -785,6 +792,11 @@ const CourseDetails = () => {
       <div className={classes.banner} style={{ backgroundImage: `url(${course.thumbnail})` }}>
         <div className={classes.bannerCover}></div>
         <Box display="flex" flexDirection="column" className={`${classes.bannerContent} animate__animated animate__fadeIn`}>
+          <Box pb={1} display="flex" alignItems="center">
+            <IconButton onClick={handleBack}>
+              <ArrowBackIcon style={{ color: '#fff' }} />
+            </IconButton>
+          </Box>
           <Grid container alignItems="center">
             <Grid item xs={6}>
               <Box display="flex" alignItems="center" style={{ marginBottom: 9 }}>
