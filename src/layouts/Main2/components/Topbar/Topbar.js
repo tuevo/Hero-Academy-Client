@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -7,7 +7,6 @@ import { AppBar, Toolbar, Typography, Button, Box, Hidden, IconButton } from '@m
 import MenuIcon from '@material-ui/icons/Menu';
 import { availablePages } from 'constants/global.constant';
 import { SearchInput } from 'components';
-import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
@@ -37,16 +36,16 @@ const useStyles = makeStyles(theme => ({
 
 const Topbar = props => {
   const { className, onSidebarOpen, ...rest } = props;
+  const classes = useStyles();
+
   const history = useHistory();
   const [searchTerm, setSearchTerm] = useState('');
 
-  const classes = useStyles();
-
-  const handleSearchInput_Change = (e) => {
+  const handleSearchInputChange = (e) => {
     setSearchTerm(e.target.value);
   }
 
-  const handleSearchInput_KeyUp = (e) => {
+  const handleSearchInputKeyUp = (e) => {
     if (e.keyCode === 13 && searchTerm) {
       history.push(availablePages.COURSE_SEARCHING.path);
     }
@@ -72,8 +71,8 @@ const Topbar = props => {
         <Box display="flex" alignItems="center">
           <div className={classes.searchInput}>
             <SearchInput
-              onChange={handleSearchInput_Change}
-              onKeyUp={handleSearchInput_KeyUp}
+              onChange={handleSearchInputChange}
+              onKeyUp={handleSearchInputKeyUp}
             />
           </div>
           <RouterLink to={availablePages.SIGN_IN.path} className={classes.btnSignIn}>

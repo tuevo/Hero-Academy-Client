@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/styles';
 import { AppBar, Toolbar, Typography, Button, Box } from '@material-ui/core';
 import { availablePages } from 'constants/global.constant';
 import { SearchInput } from 'components';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,8 +35,20 @@ const useStyles = makeStyles(theme => ({
 
 const Topbar = props => {
   const { className, ...rest } = props;
-
   const classes = useStyles();
+
+  const history = useHistory();
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchInputChange = (e) => {
+    setSearchTerm(e.target.value);
+  }
+
+  const handleSearchInputKeyUp = (e) => {
+    if (e.keyCode === 13 && searchTerm) {
+      history.push(availablePages.COURSE_SEARCHING.path);
+    }
+  }
 
   return (
     <AppBar
@@ -56,7 +69,10 @@ const Topbar = props => {
         </RouterLink>
         <Box display="flex" alignItems="center">
           <div className={classes.searchInput}>
-            <SearchInput />
+            <SearchInput
+              onChange={handleSearchInputChange}
+              onKeyUp={handleSearchInputKeyUp}
+            />
           </div>
           <RouterLink to={availablePages.SIGN_IN.path} className={classes.btnSignIn}>
             <Button variant="outlined" color="primary">ĐĂNG NHẬP</Button>
