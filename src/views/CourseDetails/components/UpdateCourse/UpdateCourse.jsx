@@ -1,15 +1,17 @@
-import { Button, Drawer, FormControl, Grid, Input, InputAdornment, InputLabel, Select, TextField, FormHelperText, FormLabel, RadioGroup, FormControlLabel, Radio, Box } from '@material-ui/core';
+import { Button, Fab, Drawer, FormControl, Grid, Input, InputAdornment, InputLabel, Select, TextField, FormHelperText, FormLabel, RadioGroup, FormControlLabel, Radio, Box, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import React, { useState } from 'react';
 import ImageUploading from 'components/ImageUploading/ImageUploading';
 import { useEffect } from 'react';
 import TextEditor from 'components/TextEditor/TextEditor';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme) => ({
   content: {
     width: '37.5rem',
-    padding: theme.spacing(4)
+    padding: theme.spacing(4),
+    paddingTop: theme.spacing(0)
   },
   formControl: {
     marginBottom: theme.spacing(2)
@@ -190,6 +192,7 @@ export default function UpdateCourse({ course }) {
     formState.touched[field] && formState.errors[field] ? true : false;
 
   const toggleDrawer = (anchor, open) => (event) => {
+    console.log('click');
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
@@ -242,6 +245,12 @@ export default function UpdateCourse({ course }) {
       className={classes.content}
       role="presentation"
     >
+      <Box my={2}>
+        <Fab size="small" style={{ boxShadow: 'none' }} onClick={() => setState({ ...state, [anchor]: false })} >
+          <CloseIcon />
+        </Fab>
+      </Box>
+
       <div className={classes.formControl}>
         <ImageUploading initImageUrl={thumbnail} onImageChange={handleImageChange} />
       </div>
@@ -358,7 +367,7 @@ export default function UpdateCourse({ course }) {
           </Button>
         </Box>
       </form>
-    </div>
+    </div >
   );
 
   return (
