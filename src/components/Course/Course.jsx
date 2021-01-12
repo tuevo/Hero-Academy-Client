@@ -56,7 +56,9 @@ const Course = ({ data, type }) => {
               </Typography>
               <Box display="flex" alignItems="center">
                 <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</Typography>
-                <Rating name="read-only" value={data.averageRating} size="small" precision={0.5} readOnly />
+                <Box style={{ marginBottom: 1 }}>
+                  <Rating name="read-only" value={data.averageRating} size="small" precision={0.5} readOnly />
+                </Box>
               </Box>
               <Box display="flex" alignItems="center">
                 <Typography variant="body2" style={{ marginLeft: 3 }}>
@@ -108,7 +110,9 @@ const Course = ({ data, type }) => {
                   </Typography>
                   <Box display="flex" alignItems="flex-end">
                     <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</Typography>
-                    <Rating name="read-only" value={data.averageRating} size="small" precision={0.5} readOnly />
+                    <Box style={{ marginBottom: -2 }}>
+                      <Rating name="read-only" value={data.averageRating} size="small" precision={0.5} readOnly />
+                    </Box>
                     <Typography variant="body2" style={{ marginLeft: 3 }}>
                       <span>(</span>
                       <NumberFormat value={data.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />

@@ -1,60 +1,56 @@
+import SchoolIcon from '@material-ui/icons/School';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+
 export const availablePages = {
   HOME: {
     title: 'Trang chủ',
-    path: '/home'
+    path: '/home',
+    auth: false
   },
   COURSE_DETAILS: {
     title: 'Chi tiết khóa học',
-    path: '/course-details'
+    path: '/course-details',
+    auth: false
   },
   CATEGORY_COURSES: {
     title: 'Danh sách khóa học',
-    path: '/category-courses'
+    path: '/category-courses',
+    auth: false
   },
   COURSE_SEARCHING: {
     title: 'Tìm kiếm khóa học',
-    path: '/course-searching'
-  },
-  DASHBOARD: {
-    title: 'Dashboard',
-    path: '/dashboard'
-  },
-  USERS: {
-    title: 'Users',
-    path: '/users'
-  },
-  PRODUCTS: {
-    title: 'Products',
-    path: '/products'
-  },
-  TYPOGRAPHY: {
-    title: 'Typography',
-    path: '/typography'
-  },
-  ICONS: {
-    title: 'Icons',
-    path: '/icons'
-  },
-  ACCOUNT: {
-    title: 'Account',
-    path: '/account'
-  },
-  SETTINGS: {
-    title: 'Settings',
-    path: '/settings'
+    path: '/course-searching',
+    auth: false
   },
   SIGN_UP: {
     title: 'Đăng ký tài khoản học viên',
-    path: '/sign-up'
+    path: '/sign-up',
+    auth: false
   },
   SIGN_IN: {
     title: 'Đăng nhập tài khoản',
-    path: '/sign-in'
+    path: '/sign-in',
+    auth: false
   },
   NOT_FOUND: {
     title: 'Not Found',
-    path: '/not-found'
+    path: '/not-found',
+    auth: false
   },
+  IN_CHARGE_COURSE: {
+    title: 'Khóa học phụ trách',
+    path: '/in-charge-courses',
+    auth: true,
+    role: 3,
+    icon: SchoolIcon
+  },
+  PROFILE: {
+    title: 'Hồ sơ cá nhân',
+    path: '/profile',
+    auth: true,
+    role: 0,
+    icon: AccountCircleIcon
+  }
 };
 
 export const APP_NAME = 'Hero Academy';

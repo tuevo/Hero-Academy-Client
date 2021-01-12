@@ -1,17 +1,9 @@
-import React from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
 import { Divider, Drawer } from '@material-ui/core';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import PeopleIcon from '@material-ui/icons/People';
-import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
-import TextFieldsIcon from '@material-ui/icons/TextFields';
-import ImageIcon from '@material-ui/icons/Image';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import SettingsIcon from '@material-ui/icons/Settings';
-// import LockOpenIcon from '@material-ui/icons/LockOpen';
-
+import { makeStyles } from '@material-ui/styles';
+import clsx from 'clsx';
+import { availablePages } from 'constants/global.constant';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Profile, SidebarNav } from './components';
 
 const useStyles = makeStyles(theme => ({
@@ -39,51 +31,16 @@ const useStyles = makeStyles(theme => ({
 
 const Sidebar = props => {
   const { open, variant, onClose, className, ...rest } = props;
+  const role = 3;
 
   const classes = useStyles();
 
-  const pages = [
-    {
-      title: 'Dashboard',
-      href: '/dashboard',
-      icon: <DashboardIcon />
-    },
-    {
-      title: 'Users',
-      href: '/users',
-      icon: <PeopleIcon />
-    },
-    {
-      title: 'Products',
-      href: '/products',
-      icon: <ShoppingBasketIcon />
-    },
-    // {
-    //   title: 'Authentication',
-    //   href: '/sign-in',
-    //   icon: <LockOpenIcon />
-    // },
-    {
-      title: 'Typography',
-      href: '/typography',
-      icon: <TextFieldsIcon />
-    },
-    {
-      title: 'Icons',
-      href: '/icons',
-      icon: <ImageIcon />
-    },
-    {
-      title: 'Account',
-      href: '/account',
-      icon: <AccountBoxIcon />
-    },
-    {
-      title: 'Settings',
-      href: '/settings',
-      icon: <SettingsIcon />
-    }
-  ];
+  const pages = Object.keys(availablePages).map(key => ({
+    ...availablePages[key],
+    href: availablePages[key].path
+  })).filter(page => page.auth && (page.role === 0 || page.role === role));
+
+  console.log(pages);
 
   return (
     <Drawer
@@ -103,7 +60,6 @@ const Sidebar = props => {
           className={classes.nav}
           pages={pages}
         />
-        {/* <UpgradePlan /> */}
       </div>
     </Drawer>
   );
