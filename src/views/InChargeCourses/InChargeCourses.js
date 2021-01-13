@@ -7,7 +7,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const InChargeCourse = () => {
+const InChargeCourses = () => {
   const classes = useStyles();
 
   return (
@@ -17,4 +17,4 @@ const InChargeCourse = () => {
   );
 };
 
-export default InChargeCourse;
+export default InChargeCourses;

@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import { Link as RouterLink, withRouter } from 'react-router-dom';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
-import { AppBar, Toolbar, Badge, Hidden, IconButton, Box, Typography } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
+import { AppBar, Box, Hidden, IconButton, Toolbar, Typography } from '@material-ui/core';
 import InputIcon from '@material-ui/icons/Input';
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
+import MenuIcon from '@material-ui/icons/Menu';
+import { makeStyles } from '@material-ui/styles';
+import clsx from 'clsx';
 import { availablePages } from 'constants/global.constant';
 import { localStorageItems } from 'constants/local-storage.constant';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { Link as RouterLink, withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -39,8 +38,6 @@ const Topbar = props => {
 
   const classes = useStyles();
 
-  const [notifications] = useState([]);
-
   const handleSignOut = () => {
     localStorage.removeItem(localStorageItems.ACCESS_TOKEN.name);
     history.length = 0;
@@ -66,15 +63,6 @@ const Topbar = props => {
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden mdDown>
-          <IconButton color="inherit">
-            <Badge
-              badgeContent={notifications.length}
-              color="primary"
-              variant="dot"
-            >
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
           <IconButton
             className={classes.signOutButton}
             color="inherit"

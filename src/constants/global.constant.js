@@ -37,7 +37,7 @@ export const availablePages = {
     path: '/not-found',
     auth: false
   },
-  IN_CHARGE_COURSE: {
+  IN_CHARGE_COURSES: {
     title: 'Khóa học phụ trách',
     path: '/in-charge-courses',
     auth: true,

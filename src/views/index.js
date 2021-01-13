@@ -1,10 +1,9 @@
 export { default as NotFound } from './NotFound';
-export { default as ProductList } from './ProductList';
-export { default as Settings } from './Settings';
 export { default as SignIn } from './SignIn';
 export { default as SignUp } from './SignUp';
 export { default as Home } from './Home';
 export { default as CourseDetails } from './CourseDetails';
 export { default as CategoryCourses } from './CategoryCourses';
 export { default as CourseSearching } from './CourseSearching';
-export { default as InChargeCourse } from './InChargeCourse';
+export { default as InChargeCourses } from './InChargeCourses';
+export { default as Profile } from './Profile';
