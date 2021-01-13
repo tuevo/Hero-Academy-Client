@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { CategorySidebar, Topbar } from './components';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 
 const useStyles = makeStyles(theme => ({
@@ -12,10 +13,11 @@ const useStyles = makeStyles(theme => ({
     height: '100%',
     [theme.breakpoints.up('sm')]: {
       paddingTop: '4rem'
-    }
+    },
+    backgroundColor: theme.palette.background.default
   },
   shiftContent: {
-    paddingLeft: '15.9375rem',
+    paddingLeft: '15rem',
   },
   content: {
     height: '100%'
@@ -56,9 +58,9 @@ const Main2 = props => {
         open={shouldOpenSidebar}
         variant={isDesktop ? 'persistent' : 'temporary'}
       />
-      <main className={classes.content}>
+      <PerfectScrollbar className={classes.content}>
         {children}
-      </main>
+      </PerfectScrollbar>
     </div>
   );
 };
