@@ -52,7 +52,7 @@ const Course = ({ data, type }) => {
             />
             <CardContent className={classes.cardContent}>
               <Typography gutterBottom variant="h5" component="h2">
-                {data.title}
+                <b>{data.title}</b>
               </Typography>
               <Box display="flex" alignItems="center">
                 <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</Typography>
@@ -106,7 +106,7 @@ const Course = ({ data, type }) => {
               <Grid item xs={7}>
                 <CardContent className={classes.cardContent}>
                   <Typography gutterBottom variant="h4" component="h2">
-                    {data.title}
+                    <b>{data.title}</b>
                   </Typography>
                   <Box display="flex" alignItems="flex-end">
                     <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</Typography>

@@ -4,7 +4,7 @@ const initialStates = {
   authUser: {
     fullName: 'Tue Vo',
     avatarUrl: 'images/avatars/tuevo.jpg',
-    role: 2
+    role: 4
   }
 }
 
