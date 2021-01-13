@@ -9,9 +9,11 @@ const useStyles = makeStyles(theme => ({
   root: {
     borderRadius: '1.5rem',
     alignItems: 'center',
-    padding: theme.spacing(1),
+    padding: theme.spacing(0.5),
     display: 'flex',
-    width: '25rem'
+    width: '18.75rem',
+    boxShadow: 'none',
+    border: '1px solid #d9d9d9'
   },
   icon: {
     marginRight: theme.spacing(1),

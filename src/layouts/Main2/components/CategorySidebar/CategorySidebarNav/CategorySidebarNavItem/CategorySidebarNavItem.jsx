@@ -1,7 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable react/display-name */
 import { ButtonBase, Collapse, colors, Grid, List, ListItem, Typography } from '@material-ui/core';
-import ExpandLess from '@material-ui/icons/ExpandLess';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
@@ -56,10 +56,10 @@ const CategorySidebarNavItem = props => {
       <ListItem button onClick={handleClick}>
         <Grid container alignItems="center">
           <Grid item xs={10}>
-            <Typography variant="h5">{data.name}</Typography>
+            <Typography variant="body1">{data.name}</Typography>
           </Grid>
           <Grid item xs={2}>
-            {open ? <ExpandLess /> : <ExpandMore />}
+            {open ? <ExpandMore fontSize="small" /> : <ChevronRightIcon fontSize="small" />}
           </Grid>
         </Grid>
       </ListItem>

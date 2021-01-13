@@ -1,4 +1,4 @@
-import { Drawer } from '@material-ui/core';
+import { Drawer, Typography, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
     width: '15.9375rem',
     [theme.breakpoints.up('lg')]: {
       marginTop: '4rem',
-      height: 'calc(100% - 64px)'
+      height: 'calc(100% - 4rem)'
     }
   },
   root: {
@@ -23,7 +23,10 @@ const useStyles = makeStyles(theme => ({
   },
   nav: {
     marginBottom: theme.spacing(2)
-  }
+  },
+  title: {
+    color: theme.palette.text.secondary
+  },
 }));
 
 const CategorySidebar = props => {
@@ -156,12 +159,15 @@ const CategorySidebar = props => {
         {...rest}
         className={clsx(classes.root, className)}
       >
+        <Box ml={2} mt={2} mb={1}>
+          <Typography variant="h5" className={classes.title}>Nhóm lĩnh vực</Typography>
+        </Box>
         <CategorySidebarNav
           className={classes.nav}
           categoryClusters={categoryClusters}
         />
       </div>
-    </Drawer>
+    </Drawer >
   );
 };
 
