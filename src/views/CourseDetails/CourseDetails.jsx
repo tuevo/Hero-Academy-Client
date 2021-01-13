@@ -28,6 +28,8 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { useState } from 'react';
 import UpdateCourse from './components/UpdateCourse/UpdateCourse';
+import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 function a11yProps(index) {
   return {
@@ -44,7 +46,8 @@ const useStyles = makeStyles(theme => ({
     position: 'relative',
     height: '92vh',
     "backgroundAttachment": "fixed",
-    "backgroundSize": "cover"
+    "backgroundSize": "cover",
+    color: theme.palette.primary.contrastText
   },
   bannerCover: {
     position: 'absolute',
@@ -325,6 +328,7 @@ const CourseDetails = () => {
   const history = useHistory();
   const [value, setValue] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [openRemovingCourseConfirmDialog, setOpenRemovingCourseConfirmDialog] = useState(false);
 
   const handleBack = () => {
     history.goBack();
@@ -334,8 +338,17 @@ const CourseDetails = () => {
     setValue(newValue);
   };
 
-  const handleBtnFavorite_Click = () => {
+  const handleBtnFavoriteClick = () => {
     setIsFavorite(!isFavorite);
+  }
+
+  const handleBtnOpenRemovingCourseDialogClick = () => {
+    setOpenRemovingCourseConfirmDialog(true);
+  }
+
+  const handleRemovingCourseDialogClose = isAccepted => {
+    console.log(isAccepted);
+    setOpenRemovingCourseConfirmDialog(false);
   }
 
   const course = {
@@ -802,21 +815,38 @@ const CourseDetails = () => {
         <div className={classes.bannerCover}></div>
         <Box display="flex" flexDirection="column" className={`${classes.bannerContent} animate__animated animate__fadeIn`}>
           <Box ml={-2} mb={1} display="flex" justifyContent="space-between" alignItems="center">
-            <IconButton onClick={handleBack}>
-              <ArrowBackIcon className={classes.contrastText} />
+            <IconButton onClick={handleBack} color="inherit">
+              <ArrowBackIcon />
             </IconButton>
             <Box display="flex" className={classes.contrastText}>
               <Button
                 startIcon={isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
                 variant={isFavorite ? 'contained' : 'outlined'}
                 color={isFavorite ? 'secondary' : 'inherit'}
-                onClick={handleBtnFavorite_Click}
+                onClick={handleBtnFavoriteClick}
                 size="small"
               >
                 Yêu thích
               </Button>
               <Box ml={1}>
                 <UpdateCourse course={course} />
+              </Box>
+              <Box ml={1}>
+                <Button
+                  startIcon={<DeleteIcon />}
+                  variant={isFavorite ? 'contained' : 'outlined'}
+                  color={isFavorite ? 'secondary' : 'inherit'}
+                  onClick={handleBtnOpenRemovingCourseDialogClick}
+                  size="small"
+                >
+                  Gỡ khóa học
+                </Button>
+                <ConfirmDialog
+                  title="Xác nhận"
+                  content="Bạn thật sự muốn gỡ bỏ khóa học này?"
+                  open={openRemovingCourseConfirmDialog}
+                  onClose={isAccepted => handleRemovingCourseDialogClose(isAccepted)}
+                />
               </Box>
             </Box>
           </Box>
