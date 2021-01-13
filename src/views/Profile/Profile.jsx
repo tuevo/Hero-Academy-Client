@@ -5,6 +5,7 @@ import { AppBar, Tabs, Tab, Box } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import LockIcon from '@material-ui/icons/Lock';
 import Info from './components/Info/Info';
+import Password from './components/Password/Password';
 
 function a11yProps(index) {
   return {
@@ -46,6 +47,13 @@ const Profile = () => {
           <Info />
         </Box>
       )}
+
+      {tabValue === 1 && (
+        <Box p={6}>
+          <Password />
+        </Box>
+      )}
+
     </div>
   );
 };

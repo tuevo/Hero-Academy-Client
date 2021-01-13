@@ -210,7 +210,7 @@ export default function Info() {
                 fullWidth
                 label="Tự giới thiệu"
                 type="text"
-                value={userState.authUser.introduction}
+                value={formState.values.introduction}
                 variant="standard"
                 multiline
               />
