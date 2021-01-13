@@ -834,8 +834,8 @@ const CourseDetails = () => {
               <Box ml={1}>
                 <Button
                   startIcon={<DeleteIcon />}
-                  variant={isFavorite ? 'contained' : 'outlined'}
-                  color={isFavorite ? 'secondary' : 'inherit'}
+                  variant="outlined"
+                  color="inherit"
                   onClick={handleBtnOpenRemovingCourseDialogClick}
                   size="small"
                 >
