@@ -67,7 +67,6 @@ export default function ImageUploading({ initImageUrl, onImageChange }) {
       >
         <input
           accept="image/*"
-          className={classes.input}
           id="contained-button-file"
           type="file"
           onChange={handleImageChange}

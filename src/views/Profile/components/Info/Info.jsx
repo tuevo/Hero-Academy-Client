@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { Avatar, Box, Button, Grid, TextField, Typography, ButtonBase } from '@material-ui/core';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/styles';
-import { Grid, Avatar, TextField, Button, Box, Typography } from '@material-ui/core';
+import { userRoles } from 'constants/user-roles.constant';
+import React, { useEffect, useState } from 'react';
+import NumberFormat from 'react-number-format';
 import { useSelector } from 'react-redux';
 import validate from 'validate.js';
-import { userRoles } from 'constants/user-roles.constant';
-import Rating from '@material-ui/lab/Rating';
-import NumberFormat from 'react-number-format';
+import theme from 'theme';
 
 const schema = {
   fullName: {
@@ -22,6 +24,22 @@ const useStyles = makeStyles(() => ({
   btnUpdate: {
     "backgroundColor": "#a4508b",
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+  },
+  avatarContainer: {
+    position: 'relative',
+    borderRadius: '50%'
+  },
+  avatarUploading: {
+    position: 'absolute',
+    zIndex: 5,
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    color: theme.palette.primary.contrastText,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    borderRadius: '50%',
+    cursor: 'pointer'
   }
 }));
 
@@ -41,6 +59,10 @@ export default function Info() {
     touched: {},
     errors: {}
   });
+
+  const [showUploadingAvatar, setShowUploadingAvatar] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState(userState.authUser.avatarUrl);
+  const [uploadedAvatar, setUploadedAvatar] = useState(null);
 
   useEffect(() => {
     const errors = validate(formState.values, schema);
@@ -68,6 +90,42 @@ export default function Info() {
     }));
   };
 
+  const handleAvatarChange = (e) => {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let image = e.target.files[0];
+
+    reader.onloadend = () => {
+      setUploadedAvatar(image);
+      setAvatarPreview(reader.result)
+    }
+
+    reader.readAsDataURL(image)
+  }
+
+  const handleAvatarMouseOver = () => {
+    if (showUploadingAvatar)
+      return;
+
+    setShowUploadingAvatar(true);
+  }
+
+  const handleAvatarMouseOut = () => {
+    setShowUploadingAvatar(false);
+  }
+
+  const handleBtnUpdateClick = () => {
+    let data = {
+      ...formState.values
+    };
+
+    if (uploadedAvatar)
+      data.avatar = uploadedAvatar;
+
+    console.log(data);
+  }
+
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
 
@@ -76,7 +134,30 @@ export default function Info() {
       <Grid container spacing={2}>
         <Grid item xs={3}>
           <Box display="flex" flexDirection="column" alignItems="center">
-            <Avatar alt={userState.authUser.fullName} src={userState.authUser.avatarUrl} className={classes.avatar} />
+            <ButtonBase
+              className={classes.avatarContainer}
+              onMouseOver={handleAvatarMouseOver}
+              onMouseOut={handleAvatarMouseOut}
+            >
+              <Box>
+                <input
+                  accept="image/*"
+                  id="contained-button-file"
+                  type="file"
+                  onChange={handleAvatarChange}
+                  hidden
+                />
+                <Avatar alt={userState.authUser.fullName} src={avatarPreview} className={classes.avatar} />
+                <label
+                  htmlFor="contained-button-file"
+                  style={{ opacity: showUploadingAvatar ? 1 : 0 }}
+                >
+                  <Box display="flex" justifyContent="center" alignItems="center" className={classes.avatarUploading}>
+                    <EditOutlinedIcon color="inherit" fontSize="large" />
+                  </Box>
+                </label>
+              </Box>
+            </ButtonBase>
             <Box mt={2} mb={1}>
               <Typography variant="body1">{userRoles[userState.authUser.role]}</Typography>
             </Box>
@@ -140,6 +221,7 @@ export default function Info() {
                 size="large"
                 variant="contained"
                 className={classes.btnUpdate}
+                onClick={handleBtnUpdateClick}
               >
                 Cập nhật thông tin
             </Button>
