@@ -9,11 +9,11 @@ const useStyles = makeStyles(theme => ({
   root: {
     borderRadius: '1.5rem',
     alignItems: 'center',
-    padding: theme.spacing(0.5),
+    padding: theme.spacing(0.5, 1),
     display: 'flex',
     width: '18.75rem',
     boxShadow: 'none',
-    border: '1px solid #d9d9d9'
+    backgroundColor: theme.palette.background.default
   },
   icon: {
     marginRight: theme.spacing(1),
@@ -37,7 +37,7 @@ const SearchInput = props => {
       className={clsx(classes.root, className)}
       style={style}
     >
-      <SearchIcon className={classes.icon} />
+      <SearchIcon className={classes.icon} style={{ color: 'rgba(0,0,0,0.5)' }} />
       <Input
         {...rest}
         className={classes.input}

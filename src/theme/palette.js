@@ -49,7 +49,7 @@ export default {
     link: colors.blue[600]
   },
   background: {
-    default: '#F4F6F8',
+    default: '#f0f2f5',
     paper: white
   },
   card: {
