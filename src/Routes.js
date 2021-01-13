@@ -13,6 +13,7 @@ import {
   CategoryCourses as CategoryCoursesView,
   CourseSearching as CourseSearchingView,
   InChargeCourses as InChargeCoursesView,
+  RegistrationCourses as RegistrationCoursesView,
   Profile as ProfileView
 } from './views';
 
@@ -78,6 +79,13 @@ const Routes = () => {
           layout={MainLayout}
           path={availablePages.IN_CHARGE_COURSES.path}
           title={availablePages.IN_CHARGE_COURSES.title}
+        />
+        <RouteWithLayout
+          component={RegistrationCoursesView}
+          exact
+          layout={MainLayout}
+          path={availablePages.REGISTRATION_COURSES.path}
+          title={availablePages.REGISTRATION_COURSES.title}
         />
         <RouteWithLayout
           component={ProfileView}

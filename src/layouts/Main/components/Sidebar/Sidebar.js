@@ -5,6 +5,8 @@ import { availablePages } from 'constants/global.constant';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { UserInfo, SidebarNav } from './components';
+import { useSelector } from 'react-redux';
+import { shallowEqual } from 'recompose';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -31,35 +33,43 @@ const useStyles = makeStyles(theme => ({
 
 const Sidebar = props => {
   const { open, variant, onClose, className, ...rest } = props;
-  const role = 3;
+  const userState = useSelector(state => ({
+    authUser: state.user.authUser
+  }), shallowEqual)
 
   const classes = useStyles();
 
-  const pages = Object.keys(availablePages).map(key => ({
-    ...availablePages[key],
-    href: availablePages[key].path
-  })).filter(page => page.auth && (page.role === 0 || page.role === role));
+  let pages = [];
+
+  if (userState.authUser) {
+    pages = Object.keys(availablePages).map(key => ({
+      ...availablePages[key],
+      href: availablePages[key].path
+    })).filter(page => page.auth && (page.role === 0 || page.role === userState.authUser.role));
+  }
 
   return (
-    <Drawer
-      anchor="left"
-      classes={{ paper: classes.drawer }}
-      onClose={onClose}
-      open={open}
-      variant={variant}
-    >
-      <div
-        {...rest}
-        className={clsx(classes.root, className)}
+    userState.authUser && (
+      <Drawer
+        anchor="left"
+        classes={{ paper: classes.drawer }}
+        onClose={onClose}
+        open={open}
+        variant={variant}
       >
-        <UserInfo />
-        <Divider className={classes.divider} />
-        <SidebarNav
-          className={classes.nav}
-          pages={pages}
-        />
-      </div>
-    </Drawer>
+        <div
+          {...rest}
+          className={clsx(classes.root, className)}
+        >
+          <UserInfo />
+          <Divider className={classes.divider} />
+          <SidebarNav
+            className={classes.nav}
+            pages={pages}
+          />
+        </div>
+      </Drawer>
+    )
   );
 };
 

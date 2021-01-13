@@ -1020,7 +1020,7 @@ const CourseDetails = () => {
               <Card>
                 <CardContent>
                   <Typography variant="h5" className={classes.secondaryText} gutterBottom>
-                    <NumberFormat value={2500} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' bình luận'} />
+                    <b><NumberFormat value={2500} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' bình luận'} /></b>
                   </Typography>
                   <PerfectScrollbar className={classes.feedbackList}>
                     {feedbacks.map(f => (

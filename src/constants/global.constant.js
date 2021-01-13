@@ -52,8 +52,16 @@ export const availablePages = {
     role: 3,
     icon: SchoolIcon
   },
-  PROFILE: {
+  REGISTRATION_COURSES: {
     _id: 9,
+    title: 'Khóa học đăng ký',
+    path: '/registration-courses',
+    auth: true,
+    role: 2,
+    icon: SchoolIcon
+  },
+  PROFILE: {
+    _id: 99,
     title: 'Hồ sơ cá nhân',
     path: '/profile',
     auth: true,

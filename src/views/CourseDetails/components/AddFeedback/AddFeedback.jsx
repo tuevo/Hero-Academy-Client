@@ -68,7 +68,7 @@ const AddFeedback = props => {
     >
       <form>
         <CardContent className={classes.cardContent}>
-          <Typography variant="h5" gutterBottom className={classes.secondaryText}>Đánh giá khóa học</Typography>
+          <Typography variant="h5" gutterBottom className={classes.secondaryText}><b>Đánh giá khóa học</b></Typography>
           <Rating
             name="rating"
             onChange={handleChange}
