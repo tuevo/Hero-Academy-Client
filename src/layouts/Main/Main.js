@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Sidebar, Topbar } from './components';
+import Content from './components/Content/Content';
 
 
 const useStyles = makeStyles(theme => ({
@@ -57,7 +58,7 @@ const Main = props => {
         variant={isDesktop ? 'persistent' : 'temporary'}
       />
       <main className={classes.content}>
-        {children}
+        <Content inner={children} />
       </main>
     </div>
   );

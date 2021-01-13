@@ -6,6 +6,10 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { List, ListItem, Button, colors } from '@material-ui/core';
+import * as _ from 'lodash';
+import { availablePages } from 'constants/global.constant';
+import { useDispatch } from 'react-redux';
+import { setActivePage } from 'redux/actions/app.action';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -34,7 +38,7 @@ const useStyles = makeStyles(theme => ({
   active: {
     backgroundColor: theme.palette.primary.light,
     color: theme.palette.primary.main,
-    fontWeight: theme.typography.fontWeightMedium,
+    fontWeight: 'bold',
     '& $icon': {
       color: theme.palette.primary.main
     }
@@ -54,6 +58,12 @@ const SidebarNav = props => {
   const { pages, className, ...rest } = props;
 
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const handleClick = (pageId) => {
+    const page = _.find(availablePages, page => page._id === pageId);
+    dispatch(setActivePage(page));
+  }
 
   return (
     <List
@@ -71,6 +81,7 @@ const SidebarNav = props => {
             className={classes.button}
             component={CustomRouterLink}
             to={page.href}
+            onClick={() => handleClick(page._id)}
           >
             <div className={classes.icon}><page.icon /></div>
             {page.title}

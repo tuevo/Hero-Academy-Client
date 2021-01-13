@@ -75,7 +75,7 @@ const Course = ({ data, type }) => {
               </Typography>
               <Box display="flex" flexDirection="column" alignItems="flex-end">
                 <Typography variant="h5" className={`${classes.featuredCoursesCarouselItem__courseText} ${classes.featuredCoursesCarouselItem__price}`}>
-                  <NumberFormat value={data.tuition - data.tuition * data.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={data.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} />
+                  <b><NumberFormat value={data.tuition - data.tuition * data.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={data.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} /></b>
                 </Typography>
 
                 {data.discountPercent > 0 && (
@@ -133,7 +133,7 @@ const Course = ({ data, type }) => {
                   </Typography>
                   <Box display="flex" flexDirection="column" alignItems="flex-end" justifyContent="flex-end">
                     <Typography variant="h5" className={`${classes.featuredCoursesCarouselItem__courseText} ${classes.featuredCoursesCarouselItem__price}`}>
-                      <NumberFormat value={data.tuition - data.tuition * data.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={data.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} />
+                      <b><NumberFormat value={data.tuition - data.tuition * data.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={data.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} /></b>
                     </Typography>
 
                     {data.discountPercent > 0 && (

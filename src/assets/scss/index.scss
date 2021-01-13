@@ -17,6 +17,10 @@ html {
 
 body {
   height: 100%;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 }
 
 a {

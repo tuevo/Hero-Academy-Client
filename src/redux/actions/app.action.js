@@ -21,3 +21,10 @@ export const hideNotification = () => {
     type: appActionTypes.HIDE_NOTIFICATION
   }
 }
+
+export const setActivePage = (page) => {
+  return {
+    type: appActionTypes.SET_ACTIVE_PAGE,
+    payload: page
+  }
+}

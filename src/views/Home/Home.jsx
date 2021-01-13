@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2)
   },
   logoImage: {
-    width: '60px',
+    width: '3.75rem',
     marginRight: theme.spacing(1),
     filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.2))'
   },
@@ -492,7 +492,7 @@ const Home = () => {
         <div className={classes.featuredCourses}>
           <Box display="flex" alignItems="center">
             <StarIcon color="primary" className={`${classes.starIcon} ${classes.featuredCoursesCarouselTitleIcon}`} />
-            <Typography variant="h4" className={classes.featuredCourses__title}>Khóa học nổi bật trong tuần qua</Typography>
+            <Typography variant="h4" className={classes.featuredCourses__title}><b>Khóa học nổi bật trong tuần qua</b></Typography>
           </Box>
           <div className={classes.featuredCoursesCarousel}>
             <Carousel showThumbs={false} autoPlay={true} interval={2000} infiniteLoop={true} showStatus={false}>
@@ -560,7 +560,7 @@ const Home = () => {
         </div>
 
         <div className={`${classes.section} ${classes.highestViewCourses}`}>
-          <Typography variant="h4" className={classes.highestViewCourses__title}>Khóa học được xem nhiều <span className={`${classes.label} ${classes.label__hot}`}>HOT</span></Typography>
+          <Typography variant="h4" className={classes.highestViewCourses__title}><b>Khóa học được xem nhiều <span className={`${classes.label} ${classes.label__hot}`}>HOT</span></b></Typography>
           <div className={classes.highestViewCoursesCarousel}>
             <CourseMultiCarousel courses={courses || []} />
           </div>
@@ -570,7 +570,7 @@ const Home = () => {
           <Grid container spacing={1}>
             <Grid item xs={9}>
               <div className={classes.newCourses}>
-                <Typography variant="h4" className={classes.newCourses__title}>Khóa học mới <span className={`${classes.label} ${classes.label__new}`}>NEW</span></Typography>
+                <Typography variant="h4" className={classes.newCourses__title}><b>Khóa học mới <span className={`${classes.label} ${classes.label__new}`}>NEW</span></b></Typography>
                 {(courses || []).map(c => (
                   <div key={c._id} className={classes.newCourses__item}>
                     <Course data={c} type="stretch" />
@@ -580,7 +580,7 @@ const Home = () => {
             </Grid>
             <Grid item xs={3}>
               <div className={classes.popularCategories}>
-                <Typography variant="h5" className={classes.popularCategories__title}>Lĩnh vực được đăng ký nhiều</Typography>
+                <Typography variant="h5" className={classes.popularCategories__title}><b>Lĩnh vực được đăng ký nhiều</b></Typography>
                 <List component="div" disablePadding>
                   {(categories || []).map(c => (
                     <ListItem

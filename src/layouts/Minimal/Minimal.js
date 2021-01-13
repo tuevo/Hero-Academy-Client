@@ -6,7 +6,7 @@ import { Topbar } from './components';
 
 const useStyles = makeStyles(() => ({
   root: {
-    paddingTop: 64,
+    paddingTop: '4rem',
     height: '100%'
   },
   content: {

@@ -28,14 +28,14 @@ validate.validators = {
 };
 
 const App = () => {
-  const notificationState = useSelector(states => ({
-    open: states.app.isNotificationOpened,
-    type: states.app.notification.type,
-    message: states.app.notification.message,
+  const notificationState = useSelector(state => ({
+    open: state.app.isNotificationOpened,
+    type: state.app.notification.type,
+    message: state.app.notification.message,
   }), shallowEqual);
 
-  const loadingState = useSelector(states => ({
-    isLoading: states.app.isLoading
+  const loadingState = useSelector(state => ({
+    isLoading: state.app.isLoading
   }), shallowEqual);
 
   const dispatch = useDispatch();

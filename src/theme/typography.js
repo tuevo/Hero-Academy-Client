@@ -1,7 +1,7 @@
 import palette from './palette';
 
 export default {
-  // fontFamily: "'Quicksand', sans-serif",
+  fontFamily: "'Quicksand', sans-serif",
   h1: {
     color: palette.text.primary,
     fontWeight: 500,

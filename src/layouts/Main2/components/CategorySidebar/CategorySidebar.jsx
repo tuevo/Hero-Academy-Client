@@ -160,7 +160,7 @@ const CategorySidebar = props => {
         className={clsx(classes.root, className)}
       >
         <Box ml={2} mt={2} mb={1}>
-          <Typography variant="h5" className={classes.title}>Nhóm lĩnh vực</Typography>
+          <Typography variant="h5" className={classes.title}><b>Nhóm lĩnh vực</b></Typography>
         </Box>
         <CategorySidebarNav
           className={classes.nav}

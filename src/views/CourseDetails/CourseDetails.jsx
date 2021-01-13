@@ -287,6 +287,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
     backgroundColor: theme.palette.primary.light,
     color: theme.palette.primary.main,
+    fontWeight: 'bold',
     '&:hover': {
       backgroundColor: theme.palette.primary.light1,
     }
@@ -911,7 +912,7 @@ const CourseDetails = () => {
                     id="panel1a-header"
                   >
                     <Box display="flex" flexDirection="column">
-                      <Typography variant="h5" gutterBottom>{chapter.title}</Typography>
+                      <Typography variant="h5" gutterBottom><b>{chapter.title}</b></Typography>
                       <Typography variant="body1">
                         <NumberFormat value={chapter.videos.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' video'} />
                       </Typography>
@@ -937,7 +938,7 @@ const CourseDetails = () => {
                               <AddIcon />
                             </Fab>
                           </Tooltip>
-                          <Typography gutterBottom variant="body1" className={classes.videoList__title}>Danh sách video khóa học</Typography>
+                          <Typography gutterBottom variant="body1" className={classes.videoList__title}><b>Danh sách video khóa học</b></Typography>
                           <PerfectScrollbar className={classes.videoList}>
                             {chapter.videos.map(video => (
                               <Card key={video._id} className={classes.videoListItem}>
@@ -1011,7 +1012,7 @@ const CourseDetails = () => {
               <Box display="flex">
                 <Avatar alt={lecturer.name} src={lecturer.avatarUrl} className={classes.lecturer__avatar} />
                 <Box display="flex" flexDirection="column" pt={1}>
-                  <Typography variant="h4" className={classes.secondaryText} gutterBottom>{lecturer.name}</Typography>
+                  <Typography variant="h4" className={classes.secondaryText} gutterBottom><b>{lecturer.name}</b></Typography>
                   <Box display="flex">
                     <Typography variant="body1" style={{ marginRight: 3 }}>
                       {`${Math.floor(lecturer.averageRating)}.${(lecturer.averageRating - Math.floor(lecturer.averageRating)) * 10}`}
@@ -1036,7 +1037,7 @@ const CourseDetails = () => {
 
         </div>
         <div className={`${classes.section} ${classes.highestViewCourses}`}>
-          <Typography variant="h5" className={classes.highestViewCourses__title}>Khóa học liên quan được đăng ký nhiều</Typography>
+          <Typography variant="h5" className={classes.highestViewCourses__title}><b>Các khóa học liên quan</b></Typography>
           <div className={classes.highestViewCoursesCarousel}>
             <CourseMultiCarousel courses={courses || []} />
           </div>

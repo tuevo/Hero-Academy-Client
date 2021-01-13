@@ -1,7 +1,6 @@
 import { Box, Button, Drawer, Fab, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, Input, InputAdornment, InputLabel, Radio, RadioGroup, Select, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
-import EditIcon from '@material-ui/icons/Edit';
 import ImageUploading from 'components/ImageUploading/ImageUploading';
 import TextEditor from 'components/TextEditor/TextEditor';
 import React, { useEffect, useState } from 'react';
@@ -47,14 +46,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function UpdateCourse({ course }) {
+export default function AddCourse({ open, onClose }) {
   const classes = useStyles();
-  const [state, setState] = useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
+  const anchor = 'right';
 
   const categoryClusters = [
     {
@@ -169,20 +163,17 @@ export default function UpdateCourse({ course }) {
     },
   ];
 
-  const originalFormData = {
-    thumbnail: course.thumbnail,
-    title: course.title,
-    categoryId: course.categoryCluster.category._id,
-    tuition: course.tuition,
-    discountPercent: course.discountPercent * 100,
-    isFinished: course.isFinished,
-    description: course.description,
-    content: course.content
-  }
   const [formState, setFormState] = useState({
     isValid: false,
     values: {
-      ...originalFormData
+      thumbnail: null,
+      title: '',
+      categoryId: categoryClusters[0].categories[0]._id,
+      tuition: 0,
+      discountPercent: 0,
+      isFinished: false,
+      description: '',
+      content: '',
     },
     touched: {},
     errors: {}
@@ -229,18 +220,6 @@ export default function UpdateCourse({ course }) {
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
 
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
-    }
-
-    if (open) {
-      setFormState({ ...formState, values: { ...originalFormData } });
-    }
-
-    setState({ ...state, [anchor]: open });
-  };
-
   const handleImageChange = (image) => {
     const name = 'thumbnail', value = image;
     setFormState(formState => ({
@@ -271,7 +250,7 @@ export default function UpdateCourse({ course }) {
     }));
   }
 
-  const hanldeBtnUpdateClick = (e) => {
+  const hanldeBtnAddClick = (e) => {
     const data = { ...formState.values };
     console.log(data);
   }
@@ -282,13 +261,13 @@ export default function UpdateCourse({ course }) {
       role="presentation"
     >
       <Box my={2}>
-        <Fab size="small" style={{ boxShadow: 'none' }} onClick={() => setState({ ...state, [anchor]: false })} >
+        <Fab size="small" style={{ boxShadow: 'none' }} onClick={e => onClose(e)} >
           <CloseIcon />
         </Fab>
       </Box>
 
       <div className={classes.formControl}>
-        <ImageUploading initImageUrl={formState.values.thumbnail} onImageChange={handleImageChange} />
+        <ImageUploading initImageUrl={null} onImageChange={handleImageChange} />
       </div>
 
       <form>
@@ -397,9 +376,10 @@ export default function UpdateCourse({ course }) {
             color="primary"
             fullWidth
             variant="contained"
-            onClick={hanldeBtnUpdateClick}
+            onClick={hanldeBtnAddClick}
+            disabled={!formState.isValid}
           >
-            Cập nhật thông tin khóa học
+            Đăng khóa học
           </Button>
         </Box>
       </form>
@@ -407,23 +387,8 @@ export default function UpdateCourse({ course }) {
   );
 
   return (
-    <div>
-      {['right'].map((anchor) => (
-        <React.Fragment key={anchor}>
-          <Button
-            startIcon={<EditIcon />}
-            variant="outlined"
-            onClick={toggleDrawer(anchor, true)}
-            color="inherit"
-            size="small"
-          >
-            Chỉnh sửa
-          </Button>
-          <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
-            {content(anchor)}
-          </Drawer>
-        </React.Fragment>
-      ))}
-    </div>
+    <Drawer anchor={anchor} open={open} onClose={e => onClose(e)}>
+      {content(anchor)}
+    </Drawer>
   );
 }

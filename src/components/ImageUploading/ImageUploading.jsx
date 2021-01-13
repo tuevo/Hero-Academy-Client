@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ImageUploading({ initImageUrl, onImageChange }) {
   const classes = useStyles();
   const [imagePreviewUrl, setImagePreviewUrl] = useState(initImageUrl);
-  const [uploadingVisible, setUploadingVisible] = useState(false);
+  const [uploadingVisible, setUploadingVisible] = useState(true);
 
   const handleImageChange = (e) => {
     e.preventDefault();
@@ -44,13 +44,16 @@ export default function ImageUploading({ initImageUrl, onImageChange }) {
   }
 
   const handleMouseOver = (e) => {
-    if (uploadingVisible)
+    if (uploadingVisible && !imagePreviewUrl)
       return;
 
     setUploadingVisible(true);
   }
 
   const handleMouseOut = (e) => {
+    if (!imagePreviewUrl)
+      return;
+
     setUploadingVisible(false);
   }
 
@@ -79,12 +82,14 @@ export default function ImageUploading({ initImageUrl, onImageChange }) {
           </Button>
         </label>
       </div>
-      <Image
-        src={imagePreviewUrl}
-        aspectRatio={(16 / 9)}
-        disableSpinner
-        style={{ position: 'absolute', width: '100%' }}
-      />
+      {imagePreviewUrl && (
+        <Image
+          src={imagePreviewUrl}
+          aspectRatio={(16 / 9)}
+          disableSpinner
+          style={{ position: 'absolute', width: '100%' }}
+        />
+      )}
     </div>
   )
 }

@@ -3,7 +3,8 @@ import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: theme.spacing(4)
+    padding: theme.spacing(4),
+    minHeight: 500
   },
 }));
 
@@ -12,7 +13,6 @@ const Profile = () => {
 
   return (
     <div className={classes.root}>
-      Hồ sơ cá nhân
     </div>
   );
 };

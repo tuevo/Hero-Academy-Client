@@ -40,8 +40,6 @@ const Sidebar = props => {
     href: availablePages[key].path
   })).filter(page => page.auth && (page.role === 0 || page.role === role));
 
-  console.log(pages);
-
   return (
     <Drawer
       anchor="left"

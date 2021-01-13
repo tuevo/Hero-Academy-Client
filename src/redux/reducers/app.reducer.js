@@ -6,7 +6,8 @@ const initialStates = {
     type: '',
     message: ''
   },
-  isNotificationOpened: false
+  isNotificationOpened: false,
+  activePage: null
 }
 
 const appActionTypes = { ...actionTypes.app };
@@ -21,6 +22,9 @@ const appReducer = (states = initialStates, action) => {
 
     case appActionTypes.HIDE_NOTIFICATION:
       return { ...states, isNotificationOpened: false }
+
+    case appActionTypes.SET_ACTIVE_PAGE:
+      return { ...states, activePage: action.payload }
 
     default:
       return states;
