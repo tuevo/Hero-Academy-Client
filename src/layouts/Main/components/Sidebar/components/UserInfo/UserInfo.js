@@ -4,6 +4,9 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Avatar, Typography } from '@material-ui/core';
+import { useSelector } from 'react-redux';
+import { shallowEqual } from 'recompose';
+import { userRoles } from 'constants/user-roles.constant';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -13,8 +16,9 @@ const useStyles = makeStyles(theme => ({
     minHeight: 'fit-content'
   },
   avatar: {
-    width: 60,
-    height: 60
+    width: '3.375rem',
+    height: '3.375rem',
+    marginTop: theme.spacing(2)
   },
   name: {
     marginTop: theme.spacing(1)
@@ -26,11 +30,9 @@ const UserInfo = props => {
 
   const classes = useStyles();
 
-  const user = {
-    name: 'Shen Zhi',
-    avatar: '/images/avatars/avatar_11.png',
-    bio: 'Quản trị viên'
-  };
+  const userState = useSelector(state => ({
+    authUser: state.user.authUser
+  }), shallowEqual);
 
   return (
     <div
@@ -41,16 +43,16 @@ const UserInfo = props => {
         alt="Person"
         className={classes.avatar}
         component={RouterLink}
-        src={user.avatar}
+        src={userState.authUser.avatarUrl}
         to="/settings"
       />
       <Typography
         className={classes.name}
         variant="h4"
       >
-        {user.name}
+        {userState.authUser.fullName}
       </Typography>
-      <Typography variant="body2">{user.bio}</Typography>
+      <Typography variant="body2">{userRoles[userState.authUser.role]}</Typography>
     </div>
   );
 };

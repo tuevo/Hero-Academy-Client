@@ -2,6 +2,8 @@ import { actionTypes } from '../actions/action-types';
 
 const initialStates = {
   authUser: {
+    fullName: 'Tue Vo',
+    avatarUrl: 'images/avatars/tuevo.jpg',
     role: 2
   }
 }
