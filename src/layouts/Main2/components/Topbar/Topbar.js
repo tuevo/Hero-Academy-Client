@@ -29,6 +29,10 @@ const useStyles = makeStyles(theme => ({
   btnSignIn: {
     marginRight: theme.spacing(1)
   },
+  btnSignUp: {
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+  },
   searchInput: {
     marginRight: theme.spacing(2)
   }
@@ -79,7 +83,7 @@ const Topbar = props => {
             <Button variant="outlined" color="primary">ĐĂNG NHẬP</Button>
           </RouterLink>
           <RouterLink to={availablePages.SIGN_UP.path}>
-            <Button variant="contained" color="primary">ĐĂNG KÝ</Button>
+            <Button variant="contained" color="primary" className={classes.btnSignUp}>ĐĂNG KÝ</Button>
           </RouterLink>
         </Box>
 

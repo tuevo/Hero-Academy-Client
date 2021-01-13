@@ -20,14 +20,8 @@ const useStyles = makeStyles(theme => ({
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
   btnLoadMoreCourse: {
-    backgroundColor: theme.palette.primary.light,
-    color: theme.palette.primary.main,
-    fontWeight: 'bold',
-    boxShadow: 'none',
-    '&:hover': {
-      backgroundColor: theme.palette.primary.light1,
-      boxShadow: 'none',
-    }
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   }
 }));
 
@@ -246,7 +240,7 @@ const InChargeCourses = () => {
         </GridList>
       </Box>
       <Box p={3}>
-        <Button fullWidth className={classes.btnLoadMoreCourse} variant="contained" size="large">Xem thêm khóa học</Button>
+        <Button fullWidth className={classes.btnLoadMoreCourse} variant="contained" size="large" color="primary">Xem thêm khóa học</Button>
       </Box>
     </div >
   );

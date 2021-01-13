@@ -20,7 +20,9 @@ const useStyles = makeStyles(theme => ({
     animationDuration: '0.75s'
   },
   btnLoadMoreCourse: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
   sencondaryText: {
     color: theme.palette.text.secondary
@@ -248,7 +250,7 @@ const CategoryCourses = () => {
             ))}
           </GridList>
         </Box>
-        <Button fullWidth className={classes.btnLoadMoreCourse} variant="contained" color="primary">Xem thêm khóa học</Button>
+        <Button fullWidth className={classes.btnLoadMoreCourse} variant="contained" color="primary" size="large">Xem thêm khóa học</Button>
       </Box>
     </div >
   );

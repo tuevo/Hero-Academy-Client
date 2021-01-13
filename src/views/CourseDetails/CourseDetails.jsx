@@ -224,6 +224,11 @@ const useStyles = makeStyles(theme => ({
       backgroundColor: theme.palette.success.main
     }
   },
+  tabs: {
+    boxShadow: 'none',
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+  },
   chapters: {
     width: '100%',
   },
@@ -284,6 +289,8 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     right: '7%',
     top: '-5%',
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
   btnOpenWatchHistory: {
     width: '100%',
@@ -914,7 +921,7 @@ const CourseDetails = () => {
 
       <main className={classes.main}>
         <div className={`${classes.panel} animate__animated animate__slideInUp`}>
-          <AppBar position="static" style={{ boxShadow: 'none' }} color="primary">
+          <AppBar position="static" className={classes.tabs} color="primary">
             <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" centered>
               <Tab icon={<SchoolIcon />} label="Nội dung khóa học" {...a11yProps(0)} />
               <Tab icon={<VideoLibraryIcon />} label="Video khóa học" {...a11yProps(1)} />
