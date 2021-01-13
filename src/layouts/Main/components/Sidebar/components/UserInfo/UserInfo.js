@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Profile = props => {
+const UserInfo = props => {
   const { className, ...rest } = props;
 
   const classes = useStyles();
@@ -29,7 +29,7 @@ const Profile = props => {
   const user = {
     name: 'Shen Zhi',
     avatar: '/images/avatars/avatar_11.png',
-    bio: 'Brain Director'
+    bio: 'Quản trị viên'
   };
 
   return (
@@ -55,8 +55,8 @@ const Profile = props => {
   );
 };
 
-Profile.propTypes = {
+UserInfo.propTypes = {
   className: PropTypes.string
 };
 
-export default Profile;
+export default UserInfo;

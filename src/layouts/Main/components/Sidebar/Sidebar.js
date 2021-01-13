@@ -4,14 +4,14 @@ import clsx from 'clsx';
 import { availablePages } from 'constants/global.constant';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Profile, SidebarNav } from './components';
+import { UserInfo, SidebarNav } from './components';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
-    width: 240,
+    width: '15rem',
     [theme.breakpoints.up('lg')]: {
-      marginTop: 64,
-      height: 'calc(100% - 64px)'
+      marginTop: '4rem',
+      height: 'calc(100% - 4rem)'
     }
   },
   root: {
@@ -54,7 +54,7 @@ const Sidebar = props => {
         {...rest}
         className={clsx(classes.root, className)}
       >
-        <Profile />
+        <UserInfo />
         <Divider className={classes.divider} />
         <SidebarNav
           className={classes.nav}

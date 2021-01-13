@@ -226,14 +226,13 @@ const useStyles = makeStyles(theme => ({
   },
   videoPlayer: {
     ...theme.palette.card,
-    padding: theme.spacing(2),
     width: '100%',
     overflow: 'hidden',
     boxShadow: '0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15)',
   },
   videoPlayer__video: {
     width: '100% !important',
-    height: '22.5rem !important',
+    height: '23.75rem !important',
     marginBottom: theme.spacing(2)
   },
   videoListItem: {
@@ -271,7 +270,7 @@ const useStyles = makeStyles(theme => ({
     borderRadius: theme.palette.card.borderRadius
   },
   videoList: {
-    height: '21.5rem',
+    height: '21.6rem',
     overflow: 'scroll',
     marginTop: theme.spacing(2)
   },
@@ -923,10 +922,12 @@ const CourseDetails = () => {
                       <Grid item xs={8}>
                         <div className={classes.videoPlayer}>
                           <ReactPlayer url='https://www.youtube.com/watch?v=MOms7uWpmT0' className={classes.videoPlayer__video} />
-                          <Typography variant="h4" gutterBottom>{chapter.videos[0].title}</Typography>
-                          <Typography variant="body2" gutterBottom>
-                            <span>Đăng lúc {moment(chapter.videos[0].updatedAt).format('DD/MM HH:mm')} </span>
-                          </Typography>
+                          <Box px={2} py={1}>
+                            <Typography variant="h4" gutterBottom>{chapter.videos[0].title}</Typography>
+                            <Typography variant="body2" gutterBottom>
+                              <span>Đăng lúc {moment(chapter.videos[0].updatedAt).format('DD/MM HH:mm')} </span>
+                            </Typography>
+                          </Box>
                         </div>
                       </Grid>
                       <Grid item xs={4}>
