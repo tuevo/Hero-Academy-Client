@@ -44,11 +44,6 @@ const Routes = () => {
     // <GuardProvider guards={[requireLogin]} error={NotFoundView}>
     <GuardProvider error={NotFoundView}>
       <Switch>
-        <Redirect
-          exact
-          from="/"
-          to={availablePages.HOME.path}
-        />
         <RouteWithLayout
           component={HomeView}
           exact

@@ -4,7 +4,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 export const availablePages = {
   HOME: {
     title: 'Trang chủ',
-    path: '/home',
+    path: '/',
     auth: false
   },
   COURSE_DETAILS: {
