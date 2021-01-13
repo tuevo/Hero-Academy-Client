@@ -7,6 +7,7 @@ import { Avatar, Typography } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { shallowEqual } from 'recompose';
 import { userRoles } from 'constants/user-roles.constant';
+import { availablePages } from 'constants/global.constant';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,7 +45,7 @@ const UserInfo = props => {
         className={classes.avatar}
         component={RouterLink}
         src={userState.authUser.avatarUrl}
-        to="/settings"
+        to={availablePages.PROFILE.path}
       />
       <Typography
         className={classes.name}
