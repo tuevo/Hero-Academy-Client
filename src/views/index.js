@@ -7,4 +7,5 @@ export { default as CategoryCourses } from './CategoryCourses';
 export { default as CourseSearching } from './CourseSearching';
 export { default as InChargeCourses } from './InChargeCourses';
 export { default as RegistrationCourses } from './RegistrationCourses';
+export { default as FavoriteCourses } from './FavoriteCourses';
 export { default as Profile } from './Profile';

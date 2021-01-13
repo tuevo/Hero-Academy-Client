@@ -1,5 +1,6 @@
 import SchoolIcon from '@material-ui/icons/School';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 export const availablePages = {
   HOME: {
@@ -59,6 +60,14 @@ export const availablePages = {
     auth: true,
     role: 2,
     icon: SchoolIcon
+  },
+  FAVORITE_COURSES: {
+    _id: 10,
+    title: 'Khóa học yêu thích',
+    path: '/favorite-courses',
+    auth: true,
+    role: 2,
+    icon: FavoriteIcon
   },
   PROFILE: {
     _id: 99,

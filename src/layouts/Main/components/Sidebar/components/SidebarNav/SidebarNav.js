@@ -83,7 +83,7 @@ const SidebarNav = props => {
             to={page.href}
             onClick={() => handleClick(page._id)}
           >
-            <div className={classes.icon}><page.icon /></div>
+            <div className={classes.icon}><page.icon fontSize="small" /></div>
             {page.title}
           </Button>
         </ListItem>
