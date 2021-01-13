@@ -48,7 +48,7 @@ const UserInfo = props => {
       />
       <Typography
         className={classes.name}
-        variant="h4"
+        variant="h5"
       >
         {userState.authUser.fullName}
       </Typography>

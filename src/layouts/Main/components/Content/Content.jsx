@@ -32,6 +32,7 @@ const useStyles = makeStyles(theme => ({
   contentInner: {
     ...theme.palette.card,
     borderRadius: '1.5rem',
+    overflow: 'hidden',
     width: '95%',
     animationDuration: '0.75s'
   }

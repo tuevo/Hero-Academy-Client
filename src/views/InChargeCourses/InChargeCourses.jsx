@@ -8,7 +8,6 @@ import { useState } from 'react';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    position: 'relative',
     padding: theme.spacing(4),
     minHeight: 500,
   },
