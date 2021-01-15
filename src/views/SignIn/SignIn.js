@@ -120,7 +120,9 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2)
   },
   signInButton: {
-    margin: theme.spacing(2, 0)
+    margin: theme.spacing(2, 0),
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
   cover: {
     width: '28rem'
@@ -312,7 +314,6 @@ const SignIn = props => {
                 <Button
                   className={classes.signInButton}
                   color="primary"
-                  disabled={!formState.isValid}
                   fullWidth
                   size="large"
                   type="submit"

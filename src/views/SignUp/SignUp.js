@@ -128,7 +128,9 @@ const useStyles = makeStyles(theme => ({
     marginLeft: '-14px'
   },
   signUpButton: {
-    margin: theme.spacing(2, 0)
+    margin: theme.spacing(2, 0),
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
   cover: {
     width: '28rem'
@@ -282,7 +284,6 @@ const SignUp = props => {
                 <Button
                   className={classes.signUpButton}
                   color="primary"
-                  disabled={!formState.isValid}
                   fullWidth
                   size="large"
                   type="submit"
