@@ -32,7 +32,7 @@ const schema = {
       greaterThanOrEqualTo: 0,
       lessThanOrEqualTo: 100
     }
-  },
+  }
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -43,6 +43,10 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     marginBottom: theme.spacing(2)
+  },
+  btnSubmit: {
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   }
 }));
 
@@ -373,11 +377,12 @@ export default function AddCourse({ open, onClose }) {
 
         <Box mt={2}>
           <Button
+            className={classes.btnSubmit}
             color="primary"
             fullWidth
             variant="contained"
             onClick={hanldeBtnAddClick}
-            disabled={!formState.isValid}
+            size="large"
           >
             Đăng khóa học
           </Button>

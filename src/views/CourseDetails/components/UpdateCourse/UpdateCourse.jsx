@@ -44,6 +44,10 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     marginBottom: theme.spacing(2)
+  },
+  btnSubmit: {
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   }
 }));
 
@@ -398,6 +402,8 @@ export default function UpdateCourse({ course }) {
             fullWidth
             variant="contained"
             onClick={hanldeBtnUpdateClick}
+            className={classes.btnSubmit}
+            size="large"
           >
             Cập nhật thông tin khóa học
           </Button>
