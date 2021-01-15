@@ -41,12 +41,18 @@ const Sidebar = props => {
 
   let pages = [];
 
-  if (userState.authUser) {
-    pages = Object.keys(availablePages).map(key => ({
-      ...availablePages[key],
-      href: availablePages[key].path
-    })).filter(page => page.auth && (page.role === 0 || page.role === userState.authUser.role));
-  }
+  // if (userState.authUser) {
+  //   pages = Object.keys(availablePages).map(key => ({
+  //     ...availablePages[key],
+  //     href: availablePages[key].path
+  //   })).filter(page => page.auth && (page.role === 0 || page.role === userState.authUser.role));
+  // }
+
+  // Testing
+  pages = Object.keys(availablePages).map(key => ({
+    ...availablePages[key],
+    href: availablePages[key].path
+  })).filter(page => page.auth);
 
   return (
     userState.authUser && (
