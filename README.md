@@ -3,7 +3,7 @@
 
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 
-> Tracking System Dashboard  made with [Material UI's](https://material-ui.com/?ref=devias-io) components, [React](https://reactjs.org/?ref=devias-io) and of course [create-react-app](https://facebook.github.io/create-react-app/?ref=devias-io) to boost your app development process!
+> Hero Acedemy Client made with [Material UI's](https://material-ui.com/?ref=devias-io) components, [React](https://reactjs.org/?ref=devias-io) and of course [create-react-app](https://facebook.github.io/create-react-app/?ref=devias-io) to boost your app development process!
 
 ## Quick start
 
