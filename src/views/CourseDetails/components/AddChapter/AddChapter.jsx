@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '1rem !important'
   },
   btnAdd: {
-    minWidth: '6.25rem',
+    minWidth: '10.625rem',
     marginLeft: 5,
     "backgroundColor": "#a4508b",
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
@@ -66,7 +66,7 @@ const AddChapter = props => {
               variant="contained"
               className={classes.btnAdd}
             >
-              Thêm
+              Thêm chương
             </Button>
           </Box>
         </CardContent>

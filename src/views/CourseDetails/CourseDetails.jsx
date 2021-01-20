@@ -232,10 +232,10 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
   videoPlayer: {
-    ...theme.palette.card,
+    // ...theme.palette.card,
     width: '100%',
     overflow: 'hidden',
-    boxShadow: '0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15)',
+    // boxShadow: '0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15)',
   },
   videoPlayer__video: {
     width: '100% !important',
@@ -273,7 +273,7 @@ const useStyles = makeStyles(theme => ({
   videoListContainer: {
     position: 'relative',
     padding: theme.spacing(2),
-    boxShadow: '0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15)',
+    border: '1px solid #eee',
     borderRadius: theme.palette.card.borderRadius
   },
   videoList: {
@@ -293,13 +293,7 @@ const useStyles = makeStyles(theme => ({
   },
   btnOpenWatchHistory: {
     width: '100%',
-    marginTop: theme.spacing(2),
-    backgroundColor: theme.palette.primary.light,
-    color: theme.palette.primary.main,
-    fontWeight: 'bold',
-    '&:hover': {
-      backgroundColor: theme.palette.primary.light1,
-    }
+    marginTop: theme.spacing(2)
   },
   feedbackList: {
     height: '25rem',
@@ -965,7 +959,7 @@ const CourseDetails = () => {
                             controls
                             className={classes.videoPlayer__video}
                           />
-                          <Box px={2} py={1}>
+                          <Box pr={2}>
                             <Typography variant="h4" gutterBottom><b>{chapter.videos[0].title}</b></Typography>
                             <Typography variant="body2" gutterBottom>
                               <span>Đăng lúc {moment(chapter.videos[0].updatedAt).format('DD/MM HH:mm')} </span>
@@ -1009,7 +1003,7 @@ const CourseDetails = () => {
                               </Card>
                             ))}
                           </PerfectScrollbar>
-                          <Button className={classes.btnOpenWatchHistory}><HistoryIcon /><span style={{ marginLeft: 5 }}>Lịch sử theo dõi video</span></Button>
+                          <Button className={classes.btnOpenWatchHistory} variant="outlined" color="primary"><HistoryIcon /><span style={{ marginLeft: 5 }}>Lịch sử theo dõi video</span></Button>
                         </div>
                       </Grid>
                     </Grid>
