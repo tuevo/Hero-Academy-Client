@@ -1,35 +1,34 @@
-import { AppBar, Box, Button, IconButton, Card, CardActionArea, CardContent, CardMedia, colors, Fab, Grid, Tab, Tabs, Tooltip, Typography, Avatar } from '@material-ui/core';
+import { AppBar, Avatar, Box, Button, Card, CardActionArea, CardContent, CardMedia, colors, Fab, Grid, IconButton, Tab, Tabs, Tooltip, Typography } from '@material-ui/core';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AddIcon from '@material-ui/icons/Add';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FeedbackIcon from '@material-ui/icons/Feedback';
 import HistoryIcon from '@material-ui/icons/History';
 import SchoolIcon from '@material-ui/icons/School';
 import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/styles';
+import { Video } from 'cloudinary-react';
+import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import CourseMultiCarousel from 'components/CourseMultiCarousel/CourseMultiCarousel';
 import * as moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import ReactPlayer from 'react-player';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { useHistory } from 'react-router-dom';
+import { format } from 'timeago.js';
 import { AddChapter } from './components';
 import AddFeedback from './components/AddFeedback/AddFeedback';
-import { format } from 'timeago.js';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { useHistory } from 'react-router-dom';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import { useState } from 'react';
 import UpdateCourse from './components/UpdateCourse/UpdateCourse';
-import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
-import DeleteIcon from '@material-ui/icons/Delete';
 
 function a11yProps(index) {
   return {
@@ -240,7 +239,7 @@ const useStyles = makeStyles(theme => ({
   },
   videoPlayer__video: {
     width: '100% !important',
-    height: '23.75rem !important',
+    // height: '23.5rem !important',
     marginBottom: theme.spacing(2)
   },
   videoListItem: {
@@ -959,9 +958,15 @@ const CourseDetails = () => {
                     <Grid container spacing={2}>
                       <Grid item xs={8}>
                         <div className={classes.videoPlayer}>
-                          <ReactPlayer url='https://www.youtube.com/watch?v=MOms7uWpmT0' className={classes.videoPlayer__video} />
+                          <Video
+                            cloudName="dye8sx2yk"
+                            publicId="de6fyyfz69eibikughvs"
+                            poster="https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png"
+                            controls
+                            className={classes.videoPlayer__video}
+                          />
                           <Box px={2} py={1}>
-                            <Typography variant="h4" gutterBottom>{chapter.videos[0].title}</Typography>
+                            <Typography variant="h4" gutterBottom><b>{chapter.videos[0].title}</b></Typography>
                             <Typography variant="body2" gutterBottom>
                               <span>Đăng lúc {moment(chapter.videos[0].updatedAt).format('DD/MM HH:mm')} </span>
                             </Typography>
@@ -995,7 +1000,7 @@ const CourseDetails = () => {
                                     </Grid>
                                     <Grid item xs={7}>
                                       <CardContent className={classes.videoListItem__details}>
-                                        <Typography gutterBottom variant="h6">{video.title}</Typography>
+                                        <Typography gutterBottom variant="h6"><b>{video.title}</b></Typography>
                                         <Typography variant="body2">{`Đăng lúc ${moment(video.updatedAt).format('DD/MM HH:mm')}`}</Typography>
                                       </CardContent>
                                     </Grid>
@@ -1080,7 +1085,7 @@ const CourseDetails = () => {
           </div>
         </div>
       </main>
-    </div>
+    </div >
   );
 };
 
