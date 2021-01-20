@@ -42,8 +42,9 @@ const schema = {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: theme.palette.white,
-    height: '100%'
+    height: '100%',
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
   grid: {
     height: '100%'
@@ -51,7 +52,9 @@ const useStyles = makeStyles(theme => ({
   quoteContainer: {
     [theme.breakpoints.down('md')]: {
       display: 'none'
-    }
+    },
+    backgroundImage: 'url(https://cdn.dribbble.com/users/2260983/screenshots/5875334/_______1-8.png)',
+    backgroundSize: 'cover'
   },
   quote: {
     backgroundColor: theme.palette.neutral,
@@ -69,29 +72,30 @@ const useStyles = makeStyles(theme => ({
     flexBasis: '600px'
   },
   quoteText: {
-    color: theme.palette.white,
+    color: theme.palette.paper,
     fontWeight: 300
   },
   name: {
     marginTop: theme.spacing(3),
-    color: theme.palette.white
+    color: theme.palette.paper
   },
   bio: {
-    color: theme.palette.white
+    color: theme.palette.paper
   },
   contentContainer: {},
   content: {
     height: '100%',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    backgroundColor: theme.palette.background.signUp,
   },
   contentHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingTop: theme.spacing(5),
-    paddingBototm: theme.spacing(2),
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2)
+    // display: 'flex',
+    // alignItems: 'center',
+    // paddingTop: theme.spacing(5),
+    // paddingBototm: theme.spacing(2),
+    // paddingLeft: theme.spacing(2),
+    // paddingRight: theme.spacing(2)
   },
   logoImage: {
     marginLeft: theme.spacing(4)
@@ -105,12 +109,10 @@ const useStyles = makeStyles(theme => ({
     }
   },
   form: {
-    paddingRight: 200,
-    paddingBottom: 125,
-    flexBasis: 600,
+    padding: '6.25rem',
+    flexBasis: '40.625rem',
     [theme.breakpoints.down('sm')]: {
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(2)
+      padding: theme.spacing(0, 2)
     }
   },
   title: {
@@ -133,7 +135,7 @@ const useStyles = makeStyles(theme => ({
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
   cover: {
-    width: '28rem'
+    width: '25rem'
   },
 }));
 
@@ -194,9 +196,9 @@ const SignUp = props => {
           item
           lg={5}
         >
-          <div className={classes.quote}>
-            <img className={`${classes.cover} animate__animated animate__fadeInLeft`} src="https://image.freepik.com/free-vector/online-tutorials-illustration-concept_23-2148525396.jpg" alt="" />
-          </div>
+          {/* <div className={classes.quote}>
+            <img className={`${classes.cover}`} src="images/sign-up.png" alt="" />
+          </div> */}
         </Grid>
         <Grid
           className={classes.content}

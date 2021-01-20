@@ -2,6 +2,12 @@ import { actionTypes } from './action-types';
 
 const appActionTypes = { ...actionTypes.app };
 
+export const switchDarkMode = () => {
+  return {
+    type: appActionTypes.SWITCH_DARK_MODE
+  }
+}
+
 export const setLoading = (isLoading) => {
   return {
     type: appActionTypes.SET_LOADING,

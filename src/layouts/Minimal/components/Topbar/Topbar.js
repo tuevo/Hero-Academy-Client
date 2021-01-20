@@ -3,10 +3,15 @@ import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { AppBar, Toolbar, Typography, Button, Box } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, Button, Box, Grid, IconButton } from '@material-ui/core';
 import { availablePages } from 'constants/global.constant';
 import { SearchInput } from 'components';
 import { useHistory } from 'react-router-dom';
+import Brightness4Icon from '@material-ui/icons/Brightness4';
+import { useSelector, useDispatch } from 'react-redux';
+import { shallowEqual } from 'recompose';
+import Brightness7Icon from '@material-ui/icons/Brightness7';
+import { switchDarkMode } from 'redux/actions/app.action';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -15,6 +20,9 @@ const useStyles = makeStyles(theme => ({
   toolbar: {
     display: 'flex',
     justifyContent: 'space-between'
+  },
+  logo: {
+    minWidth: '12.5rem'
   },
   logoImage: {
     width: '2.8125rem'
@@ -34,6 +42,9 @@ const useStyles = makeStyles(theme => ({
   },
   searchInput: {
     marginRight: theme.spacing(2)
+  },
+  btnBrightness: {
+    color: theme.palette.icon
   }
 }));
 
@@ -43,6 +54,12 @@ const Topbar = props => {
 
   const history = useHistory();
   const [searchTerm, setSearchTerm] = useState('');
+
+  const appState = useSelector(state => ({
+    ...state.app
+  }), shallowEqual);
+
+  const dispatch = useDispatch();
 
   const handleSearchInputChange = (e) => {
     setSearchTerm(e.target.value);
@@ -62,7 +79,7 @@ const Topbar = props => {
     >
       <Toolbar className={classes.toolbar}>
         <RouterLink to="/">
-          <Box display="flex" justifyContent="center" alignItems="center">
+          <Box display="flex" alignItems="center" className={classes.logo}>
             <img
               alt="Logo"
               src="https://icons-for-free.com/iconfiles/png/128/hero+marvel+character+super+hero+icon-1320166754459520952.png"
@@ -71,20 +88,35 @@ const Topbar = props => {
             <Typography variant="h5" className={classes.logoTitle}>Hero Academy</Typography>
           </Box>
         </RouterLink>
-        <Box display="flex" alignItems="center">
-          <div className={classes.searchInput}>
-            <SearchInput
-              onChange={handleSearchInputChange}
-              onKeyUp={handleSearchInputKeyUp}
-            />
-          </div>
-          <RouterLink to={availablePages.SIGN_IN.path} className={classes.btnSignIn}>
-            <Button variant="outlined" color="primary">ĐĂNG NHẬP</Button>
-          </RouterLink>
-          <RouterLink to={availablePages.SIGN_UP.path}>
-            <Button variant="contained" color="primary" className={classes.btnSignUp}>ĐĂNG KÝ</Button>
-          </RouterLink>
-        </Box>
+        <Grid container justify="flex-end" alignItems="center" spacing={2}>
+          <Grid item>
+            <div className={classes.searchInput}>
+              <SearchInput
+                onChange={handleSearchInputChange}
+                onKeyUp={handleSearchInputKeyUp}
+              />
+            </div>
+          </Grid>
+          <Grid item>
+            <Grid container spacing={1}>
+              <Grid item>
+                <RouterLink to={availablePages.SIGN_IN.path} className={classes.btnSignIn}>
+                  <Button variant="outlined" color="primary">ĐĂNG NHẬP</Button>
+                </RouterLink>
+              </Grid>
+              <Grid item>
+                <RouterLink to={availablePages.SIGN_UP.path}>
+                  <Button variant="contained" color="primary" className={classes.btnSignUp}>ĐĂNG KÝ</Button>
+                </RouterLink>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <IconButton onClick={() => dispatch(switchDarkMode())} className={classes.btnBrightness}>
+              {appState.darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
+          </Grid>
+        </Grid>
       </Toolbar>
     </AppBar>
   );

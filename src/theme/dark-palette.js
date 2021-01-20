@@ -8,8 +8,8 @@ export default {
   white,
   primary: {
     contrastText: white,
-    dark: colors.purple[900],
-    main: colors.purple[800],
+    dark: colors.purple['A700'],
+    main: colors.purple['A700'],
     light: 'rgba(123, 31, 162, 0.1)',
     light1: 'rgba(123, 31, 162, 0.15)'
   },
@@ -44,25 +44,24 @@ export default {
     light: colors.red[400]
   },
   text: {
-    primary: colors.blueGrey[900],
-    secondary: colors.blueGrey[600],
-    link: colors.blue[600]
+    primary: white,
+    secondary: colors.grey[400],
+    link: colors.orange['A400'],
   },
   background: {
-    default: '#f0f2f5',
-    paper: white,
-    course: '#f8f8f8',
-    signIn: white,
-    signUp: white
+    default: '#212121',
+    paper: '#313131',
+    course: '#212121',
+    signIn: 'rgba(0,0,0,0.4)',
+    signUp: 'rgba(0,0,0,0.4)'
   },
   border: {
-    color: '#dcdcdc'
+    color: '#414141'
   },
   card: {
-    backgroundColor: white,
-    boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
-    borderRadius: '0.625rem',
+    backgroundColor: '#313131',
+    borderRadius: '0.625rem'
   },
-  icon: colors.blueGrey[600],
+  icon: colors.grey[400],
   divider: colors.grey[200]
 };

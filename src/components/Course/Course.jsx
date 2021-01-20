@@ -10,7 +10,7 @@ import './Course.style.scss';
 const useStyles = makeStyles((theme) => ({
   card: {
     boxShadow: 'none',
-    background: '#f8f8f8'
+    background: theme.palette.background.course
   },
   card__minimal: {
     width: '15.625rem'

@@ -1,4 +1,4 @@
-import { AppBar, Box, Hidden, IconButton, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Box, Hidden, IconButton, Toolbar, Typography, Grid, Tooltip } from '@material-ui/core';
 import InputIcon from '@material-ui/icons/Input';
 import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles } from '@material-ui/styles';
@@ -8,6 +8,11 @@ import { localStorageItems } from 'constants/local-storage.constant';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
+import Brightness4Icon from '@material-ui/icons/Brightness4';
+import { useSelector, useDispatch } from 'react-redux';
+import { shallowEqual } from 'recompose';
+import Brightness7Icon from '@material-ui/icons/Brightness7';
+import { switchDarkMode } from 'redux/actions/app.action';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,6 +24,9 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'space-between'
   },
+  logo: {
+    minWidth: '12.5rem'
+  },
   logoImage: {
     width: '2.8125rem'
   },
@@ -28,8 +36,11 @@ const useStyles = makeStyles(theme => ({
     fontFamily: "'Share Tech Mono', monospace",
     fontWeight: 'bold',
   },
+  btnBrightness: {
+    color: theme.palette.icon
+  },
   signOutButton: {
-    marginLeft: theme.spacing(1)
+    color: theme.palette.icon
   }
 }));
 
@@ -37,6 +48,12 @@ const Topbar = props => {
   const { className, onSidebarOpen, history } = props;
 
   const classes = useStyles();
+
+  const appState = useSelector(state => ({
+    ...state.app
+  }), shallowEqual);
+
+  const dispatch = useDispatch();
 
   const handleSignOut = () => {
     localStorage.removeItem(localStorageItems.ACCESS_TOKEN.name);
@@ -52,7 +69,7 @@ const Topbar = props => {
     >
       <Toolbar className={classes.toolbar}>
         <RouterLink to="/">
-          <Box display="flex" justifyContent="center" alignItems="center">
+          <Box display="flex" alignItems="center" className={classes.logo}>
             <img
               alt="Logo"
               src="https://icons-for-free.com/iconfiles/png/128/hero+marvel+character+super+hero+icon-1320166754459520952.png"
@@ -63,13 +80,26 @@ const Topbar = props => {
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden mdDown>
-          <IconButton
-            className={classes.signOutButton}
-            color="inherit"
-            onClick={handleSignOut}
-          >
-            <InputIcon />
-          </IconButton>
+          <Grid container justify="flex-end" alignItems="center" spacing={1}>
+            <Grid item>
+              <Tooltip title={appState.darkMode ? 'Bật chế độ sáng' : 'Bật chế độ tối'}>
+                <IconButton onClick={() => dispatch(switchDarkMode())} className={classes.btnBrightness}>
+                  {appState.darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+                </IconButton>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Đăng xuất">
+                <IconButton
+                  className={classes.signOutButton}
+                  color="inherit"
+                  onClick={handleSignOut}
+                >
+                  <InputIcon />
+                </IconButton>
+              </Tooltip>
+            </Grid>
+          </Grid>
         </Hidden>
         <Hidden lgUp>
           <IconButton
@@ -80,7 +110,7 @@ const Topbar = props => {
           </IconButton>
         </Hidden>
       </Toolbar>
-    </AppBar>
+    </AppBar >
   );
 };
 

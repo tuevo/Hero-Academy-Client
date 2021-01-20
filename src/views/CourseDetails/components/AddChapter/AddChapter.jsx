@@ -15,10 +15,11 @@ import React, { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
+    boxShadow: 'none'
   },
   cardContent: {
-    padding: '1rem !important'
+    padding: '0 !important'
   },
   btnAdd: {
     minWidth: '10.625rem',

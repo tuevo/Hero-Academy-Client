@@ -14,17 +14,20 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up('lg')]: {
       marginTop: '4rem',
       height: 'calc(100% - 4rem)'
-    }
+    },
+    border: 0,
   },
   root: {
-    backgroundColor: theme.palette.white,
+    backgroundColor: theme.palette.background.paper,
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
+    border: 0
   },
   divider: {
-    margin: theme.spacing(2, 0)
+    margin: theme.spacing(2, 0),
+    backgroundColor: theme.palette.border.color
   },
   nav: {
     marginBottom: theme.spacing(2)

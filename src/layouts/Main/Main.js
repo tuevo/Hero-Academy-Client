@@ -13,14 +13,13 @@ const useStyles = makeStyles(theme => ({
     height: '100%',
     [theme.breakpoints.up('sm')]: {
       paddingTop: '4rem'
-    }
+    },
   },
   shiftContent: {
     paddingLeft: '15rem'
   },
   content: {
-    height: '100%',
-    backgroundColor: theme.palette.background.paper
+    height: '100%'
   }
 }));
 

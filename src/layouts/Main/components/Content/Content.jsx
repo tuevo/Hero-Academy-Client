@@ -27,14 +27,14 @@ const useStyles = makeStyles(theme => ({
   content: {
     position: 'absolute',
     width: '100%',
-    top: '32.5%',
+    top: '32.5%'
   },
   contentInner: {
     ...theme.palette.card,
     borderRadius: '1.5rem',
     overflow: 'hidden',
     width: '95%',
-    animationDuration: '0.75s'
+    animationDuration: '0.75s',
   }
 }));
 

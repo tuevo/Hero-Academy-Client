@@ -29,6 +29,9 @@ const useStyles = makeStyles(theme => ({
   },
   sencondaryText: {
     color: theme.palette.text.secondary
+  },
+  divider: {
+    backgroundColor: theme.palette.border.color
   }
 }));
 
@@ -250,7 +253,7 @@ const CourseSearching = () => {
           </FormControl>
         </Box>
         <Box mt={3} mb={2} >
-          <Divider />
+          <Divider className={classes.divider} />
         </Box>
         <Box ml={-2}>
           <GridList cellHeight="auto" cols={4}>

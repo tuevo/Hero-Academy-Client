@@ -11,10 +11,11 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up('lg')]: {
       marginTop: '4rem',
       height: 'calc(100% - 4rem)'
-    }
+    },
+    border: 0,
   },
   root: {
-    backgroundColor: theme.palette.white,
+    backgroundColor: theme.palette.background.paper,
     display: 'flex',
     flexDirection: 'column',
     height: '100%',

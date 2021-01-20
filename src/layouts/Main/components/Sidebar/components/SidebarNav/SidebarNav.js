@@ -5,7 +5,7 @@ import { NavLink as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { List, ListItem, Button, colors } from '@material-ui/core';
+import { List, ListItem, Button, colors, Typography } from '@material-ui/core';
 import * as _ from 'lodash';
 import { availablePages } from 'constants/global.constant';
 import { useDispatch } from 'react-redux';
@@ -16,10 +16,11 @@ const useStyles = makeStyles(theme => ({
   item: {
     display: 'flex',
     paddingTop: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
+    marginBottom: theme.spacing(1)
   },
   button: {
-    color: colors.blueGrey[800],
+    color: theme.palette.text.secondary,
     padding: '10px 8px',
     justifyContent: 'flex-start',
     textTransform: 'none',
@@ -41,6 +42,9 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 'bold',
     '& $icon': {
       color: theme.palette.primary.main
+    },
+    '&:hover': {
+      backgroundColor: theme.palette.primary.light1,
     }
   }
 }));

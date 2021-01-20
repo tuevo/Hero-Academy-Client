@@ -247,7 +247,7 @@ const useStyles = makeStyles(theme => ({
     height: '5.625rem',
     marginBottom: theme.spacing(1),
     boxShadow: 'none',
-    backgroundColor: '#f8f8f8'
+    backgroundColor: theme.palette.background.course
   },
   videoListItem__thumbnailContainer: {
     position: 'relative',
@@ -273,7 +273,7 @@ const useStyles = makeStyles(theme => ({
   videoListContainer: {
     position: 'relative',
     padding: theme.spacing(2),
-    border: '1px solid #eee',
+    border: `1px solid ${theme.palette.border.color}`,
     borderRadius: theme.palette.card.borderRadius
   },
   videoList: {
@@ -320,22 +320,32 @@ const useStyles = makeStyles(theme => ({
   },
   secondaryText: {
     color: theme.palette.text.secondary
+  },
+  icon: {
+    color: theme.palette.icon
+  },
+  chapter: {
+    boxShadow: 'none',
+    backgroundColor: theme.palette.background.default,
+    borderRadius: 5,
+    marginTop: theme.spacing(1)
   }
 }));
 
 const CourseDetails = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [value, setValue] = useState(0);
+  const [tabValue, setTabValue] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const [openRemovingCourseConfirmDialog, setOpenRemovingCourseConfirmDialog] = useState(false);
+  const [expandedChapterIndex, setExpandedChapterIndex] = useState(0);
 
   const handleBack = () => {
     history.goBack();
   };
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleTabChange = (event, newTabValue) => {
+    setTabValue(newTabValue);
   };
 
   const handleBtnFavoriteClick = () => {
@@ -349,6 +359,13 @@ const CourseDetails = () => {
   const handleRemovingCourseDialogClose = isAccepted => {
     console.log(isAccepted);
     setOpenRemovingCourseConfirmDialog(false);
+  }
+
+  const handleChapterClick = (index) => {
+    if (index === expandedChapterIndex)
+      setExpandedChapterIndex(null);
+    else
+      setExpandedChapterIndex(index);
   }
 
   const course = {
@@ -915,7 +932,7 @@ const CourseDetails = () => {
       <main className={classes.main}>
         <div className={`${classes.panel} animate__animated animate__slideInUp`}>
           <AppBar position="static" className={classes.tabs} color="primary">
-            <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" centered>
+            <Tabs value={tabValue} onChange={handleTabChange} aria-label="simple tabs example" centered>
               <Tab icon={<SchoolIcon />} label="Nội dung khóa học" {...a11yProps(0)} />
               <Tab icon={<VideoLibraryIcon />} label="Video khóa học" {...a11yProps(1)} />
               <Tab icon={<FeedbackIcon />} label="Phản hồi khóa học" {...a11yProps(2)} />
@@ -923,7 +940,7 @@ const CourseDetails = () => {
             </Tabs>
           </AppBar>
 
-          {value === 0 && (
+          {tabValue === 0 && (
             <Box p={6}>
               <Typography variant="body1">
                 <span dangerouslySetInnerHTML={{ __html: course.content }} />
@@ -931,15 +948,16 @@ const CourseDetails = () => {
             </Box>
           )}
 
-          {value === 1 && (
+          {tabValue === 1 && (
             <Box p={6}>
               <AddChapter />
-              {chapters.map(chapter => (
-                <Accordion key={chapter._id}>
+              {chapters.map((chapter, index) => (
+                <Accordion key={chapter._id} expanded={index === expandedChapterIndex} className={classes.chapter}>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMoreIcon className={classes.icon} />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
+                    onClick={() => handleChapterClick(index)}
                   >
                     <Box display="flex" flexDirection="column">
                       <Typography variant="h5" gutterBottom><b>{chapter.title}</b></Typography>
@@ -1013,7 +1031,7 @@ const CourseDetails = () => {
             </Box>
           )}
 
-          {value === 2 && (
+          {tabValue === 2 && (
             <Box p={6}>
               <AddFeedback />
               <Card>
@@ -1043,7 +1061,7 @@ const CourseDetails = () => {
             </Box>
           )}
 
-          {value === 3 && (
+          {tabValue === 3 && (
             <Box p={6}>
               <Box display="flex">
                 <Avatar alt={lecturer.name} src={lecturer.avatarUrl} className={classes.lecturer__avatar} />
