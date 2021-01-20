@@ -60,7 +60,7 @@ export default {
   },
   card: {
     backgroundColor: '#313131',
-    borderRadius: '0.625rem'
+    borderRadius: '1.5rem'
   },
   icon: colors.grey[400],
   divider: colors.grey[200]

@@ -61,7 +61,7 @@ export default {
   card: {
     backgroundColor: white,
     boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
-    borderRadius: '0.625rem',
+    borderRadius: '1.5rem',
   },
   icon: colors.blueGrey[600],
   divider: colors.grey[200]
