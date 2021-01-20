@@ -494,7 +494,7 @@ const Home = () => {
         </Box>
       </div>
 
-      <main className={`${classes.main}`}>
+      <main className={`${classes.main} animate__animated animate__fadeIn`}>
         <div className={classes.featuredCourses}>
           <Box display="flex" alignItems="center">
             <StarIcon color="primary" className={`${classes.starIcon} ${classes.featuredCoursesCarouselTitleIcon}`} />
