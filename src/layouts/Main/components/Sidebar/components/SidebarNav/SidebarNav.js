@@ -1,14 +1,14 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable react/display-name */
-import React, { forwardRef } from 'react';
-import { NavLink as RouterLink } from 'react-router-dom';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
+import { Button, List, ListItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { List, ListItem, Button, colors, Typography } from '@material-ui/core';
-import * as _ from 'lodash';
+import clsx from 'clsx';
 import { availablePages } from 'constants/global.constant';
+import * as _ from 'lodash';
+import PropTypes from 'prop-types';
+import React, { forwardRef } from 'react';
 import { useDispatch } from 'react-redux';
+import { NavLink as RouterLink } from 'react-router-dom';
 import { setActivePage } from 'redux/actions/app.action';
 
 const useStyles = makeStyles(theme => ({
