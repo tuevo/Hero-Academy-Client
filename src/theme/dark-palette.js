@@ -53,7 +53,12 @@ export default {
     paper: '#313131',
     course: '#212121',
     signIn: 'rgba(0,0,0,0.4)',
-    signUp: 'rgba(0,0,0,0.4)'
+    signUp: 'rgba(0,0,0,0.4)',
+    searchInput: '#313131'
+  },
+  topbar: {
+    background: '#212121',
+    "boxShadow": "rgba(0, 0, 0, 0.2) 0px 60px 40px -7px"
   },
   sidebar: {
     background: 'rgba(0,0,0,0.4)',

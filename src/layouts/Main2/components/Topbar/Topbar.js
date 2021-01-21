@@ -16,7 +16,7 @@ import { switchDarkMode } from 'redux/actions/app.action';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: theme.palette.background.paper
+    ...theme.palette.topbar
   },
   toolbar: {
     display: 'flex',

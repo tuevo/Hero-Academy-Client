@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     width: '18.75rem',
     boxShadow: 'none',
-    backgroundColor: theme.palette.background.default
+    backgroundColor: theme.palette.background.searchInput
   },
   icon: {
     marginRight: theme.spacing(1),
