@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     left: '50%',
     top: '15%',
     transform: 'translate(-50%, 0)',
-    width: '95%',
+    width: '90%',
     color: theme.palette.primary.contrastText
   },
   content: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     ...theme.palette.card,
     borderRadius: '1.5rem',
     overflow: 'hidden',
-    width: '95%',
+    width: '90%',
     animationDuration: '0.75s',
   }
 }));

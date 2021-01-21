@@ -6,16 +6,18 @@ import clsx from 'clsx';
 import { availablePages } from 'constants/global.constant';
 import { localStorageItems } from 'constants/local-storage.constant';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
 import { useSelector, useDispatch } from 'react-redux';
 import { shallowEqual } from 'recompose';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import { switchDarkMode } from 'redux/actions/app.action';
+import { SearchInput } from 'components';
 
 const useStyles = makeStyles(theme => ({
   root: {
+    ...theme.palette.topbar
   },
   flexGrow: {
     flexGrow: 1
@@ -55,6 +57,18 @@ const Topbar = props => {
 
   const dispatch = useDispatch();
 
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchInputChange = (e) => {
+    setSearchTerm(e.target.value);
+  }
+
+  const handleSearchInputKeyUp = (e) => {
+    if (e.keyCode === 13 && searchTerm) {
+      history.push(availablePages.COURSE_SEARCHING.path);
+    }
+  }
+
   const handleSignOut = () => {
     localStorage.removeItem(localStorageItems.ACCESS_TOKEN.name);
     history.length = 0;
@@ -81,6 +95,14 @@ const Topbar = props => {
         <div className={classes.flexGrow} />
         <Hidden mdDown>
           <Grid container justify="flex-end" alignItems="center" spacing={1}>
+            <Grid item>
+              <div className={classes.searchInput}>
+                <SearchInput
+                  onChange={handleSearchInputChange}
+                  onKeyUp={handleSearchInputKeyUp}
+                />
+              </div>
+            </Grid>
             <Grid item>
               <Tooltip title={appState.darkMode ? 'Bật chế độ sáng' : 'Bật chế độ tối'}>
                 <IconButton onClick={() => dispatch(switchDarkMode())} className={classes.btnBrightness}>

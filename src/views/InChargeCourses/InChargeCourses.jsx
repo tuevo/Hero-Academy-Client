@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
   },
   btnAddCourse: {
     position: 'absolute',
-    right: '5%',
+    right: '8%',
     top: '-3%',
     "backgroundColor": "#a4508b",
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
@@ -222,7 +222,7 @@ const InChargeCourses = () => {
   return (
     <div className={classes.root}>
       <AddCourse open={openAddCouse} onClose={(e) => toggleAddCourse(e, false)} />
-      <Tooltip title="Thêm khóa học mới">
+      <Tooltip title="Tạo khóa học mới">
         <Fab size="large" color="primary" aria-label="add" className={classes.btnAddCourse} onClick={(e) => toggleAddCourse(e, true)}>
           <AddIcon fontSize="large" />
         </Fab>
@@ -231,7 +231,7 @@ const InChargeCourses = () => {
         <GridList cellHeight="auto" cols={4}>
           {courses.map((c, i) => (
             <GridListTile key={c._id}>
-              <Box p={3} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.2 * i}s` }}>
+              <Box p={2} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.2 * i}s` }}>
                 <Course data={c} type="minimal" />
               </Box>
             </GridListTile>
