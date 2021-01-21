@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable react/display-name */
-import { ButtonBase, Collapse, colors, Grid, List, ListItem, Typography } from '@material-ui/core';
+import { ButtonBase, Collapse, Grid, List, ListItem, Typography } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/styles';
@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   button: {
-    color: colors.blueGrey[800],
+    color: theme.palette.text.primary,
     padding: theme.spacing(1, 2),
     justifyContent: 'flex-start',
     textTransform: 'none',
@@ -79,6 +79,7 @@ const CategorySidebarNavItem = props => {
               >
                 <Typography
                   variant="body2"
+                  color="inherit"
                 >
                   {c.name}
                 </Typography>

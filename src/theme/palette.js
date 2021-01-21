@@ -53,7 +53,11 @@ export default {
     paper: white,
     course: '#f8f8f8',
     signIn: white,
-    signUp: white
+    signUp: white,
+    sidebar: white
+  },
+  sidebar: {
+    background: white
   },
   border: {
     color: '#dcdcdc'

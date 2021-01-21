@@ -49,18 +49,23 @@ export default {
     link: colors.orange['A400'],
   },
   background: {
-    default: '#212121',
+    default: '#212111',
     paper: '#313131',
     course: '#212121',
     signIn: 'rgba(0,0,0,0.4)',
     signUp: 'rgba(0,0,0,0.4)'
+  },
+  sidebar: {
+    background: 'rgba(0,0,0,0.4)',
+    "boxShadow": "rgba(0, 0, 0, 0.56) 0px 22px 70px 4px"
   },
   border: {
     color: '#414141'
   },
   card: {
     backgroundColor: '#313131',
-    borderRadius: '1.5rem'
+    borderRadius: '1.5rem',
+    "boxShadow": "rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px"
   },
   icon: colors.grey[400],
   divider: colors.grey[200]

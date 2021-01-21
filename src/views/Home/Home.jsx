@@ -1,4 +1,4 @@
-import { Box, ButtonBase, colors, Grid, List, ListItem, Typography } from '@material-ui/core';
+import { Box, ButtonBase, Grid, List, ListItem, Typography } from '@material-ui/core';
 import StarIcon from '@material-ui/icons/Star';
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/styles';
@@ -82,7 +82,8 @@ const useStyles = makeStyles(theme => ({
     ...theme.palette.card,
     marginTop: theme.spacing(3),
     overflow: 'hidden',
-    borderRadius: '1.875rem'
+    borderRadius: '1.875rem',
+    boxShadow: 'none'
   },
   featuredCoursesCarouselItem: {
     height: '30rem',
@@ -143,7 +144,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary
   },
   popularCategories__item: {
-    color: colors.blueGrey[800],
+    color: theme.palette.text.primary,
     padding: theme.spacing(1, 4),
     justifyContent: 'flex-start',
     textTransform: 'none',
@@ -600,6 +601,7 @@ const Home = () => {
                       >
                         <Typography
                           variant="body2"
+                          color="inherit"
                         >
                           {c.name}
                         </Typography>
