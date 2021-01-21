@@ -941,8 +941,8 @@ const CourseDetails = () => {
           <AppBar position="static" className={classes.tabs} color="primary">
             <Tabs value={tabValue} onChange={handleTabChange} aria-label="simple tabs example" centered>
               <Tab icon={<SchoolIcon />} label="Nội dung khóa học" {...a11yProps(0)} />
-              <Tab icon={<VideoLibraryIcon />} label="Video khóa học" {...a11yProps(1)} />
-              <Tab icon={<FeedbackIcon />} label="Phản hồi khóa học" {...a11yProps(2)} />
+              <Tab icon={<VideoLibraryIcon />} label="Video bài giảng" {...a11yProps(1)} />
+              <Tab icon={<FeedbackIcon />} label="Đánh giá & phản hồi" {...a11yProps(2)} />
               <Tab icon={<AssignmentIndIcon />} label="Thông tin giảng viên" {...a11yProps(3)} />
             </Tabs>
           </AppBar>
