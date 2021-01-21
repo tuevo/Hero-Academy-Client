@@ -296,10 +296,16 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     marginTop: theme.spacing(2)
   },
+  feedbackListContainer: {
+    boxShadow: 'none',
+    background: theme.palette.background.course,
+    borderRadius: 5
+  },
   feedbackList: {
-    height: '25rem',
+    maxHeight: '22rem',
     overflow: 'scroll',
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
+    // background: theme.palette.background.course,
   },
   feedbackItem: {
     marginTop: theme.spacing(2),
@@ -311,7 +317,7 @@ const useStyles = makeStyles(theme => ({
   feedbackItem__comment: {
     width: '100%',
     padding: theme.spacing(1, 2),
-    backgroundColor: '#f8f8f8',
+    backgroundColor: theme.palette.background.paper,
     borderRadius: '0.625rem'
   },
   lecturer__avatar: {
@@ -1037,7 +1043,7 @@ const CourseDetails = () => {
           {tabValue === 2 && (
             <Box p={6}>
               <AddFeedback />
-              <Card>
+              <Card className={classes.feedbackListContainer}>
                 <CardContent>
                   <Typography variant="h5" className={classes.secondaryText} gutterBottom>
                     <b><NumberFormat value={2500} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' bình luận'} /></b>
