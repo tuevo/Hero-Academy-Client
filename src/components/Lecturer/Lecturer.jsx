@@ -51,8 +51,8 @@ function Details(props) {
         </Box>
         <Box py={2} display="flex" flexDirection="column" alignItems="center">
           <Typography variant="h4" gutterBottom><b>{data.fullName}</b></Typography>
-          <Typography variant="body2">{data.email}</Typography>
-          <Box pt={2} display="flex" alignItems="center">
+          <Typography variant="body2" gutterBottom>{data.email}</Typography>
+          <Box display="flex" alignItems="center">
             <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</Typography>
             <Box style={{ marginBottom: 1 }}>
               <Rating name="read-only" value={data.averageRating} size="small" precision={0.5} readOnly />
