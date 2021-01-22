@@ -292,8 +292,8 @@ const Users = () => {
               </GridListTile>
             ))}
           </GridList>
-          <Box px={1} pt={2}>
-            <Button fullWidth className={classes.btnLoadMore} variant="contained" color="primary" size="large">Xem thêm khóa học</Button>
+          <Box px={1} pt={3}>
+            <Button fullWidth className={classes.btnLoadMore} variant="contained" color="primary" size="large">Xem thêm học viên</Button>
           </Box>
         </Box>
       )}
@@ -316,6 +316,9 @@ const Users = () => {
               </GridListTile>
             ))}
           </GridList>
+          <Box px={1} pt={3}>
+            <Button fullWidth className={classes.btnLoadMore} variant="contained" color="primary" size="large">Xem thêm giảng viên</Button>
+          </Box>
         </Box>
       )}
 
