@@ -16,6 +16,7 @@ import {
   FavoriteCourses as FavoriteCoursesView,
   InChargeCourses as InChargeCoursesView,
   Courses as CoursesView,
+  Users as UsersView,
   Profile as ProfileView
 } from './views';
 
@@ -102,6 +103,13 @@ const Routes = () => {
           layout={MainLayout}
           path={availablePages.COURSES.path}
           title={availablePages.COURSES.title}
+        />
+        <RouteWithLayout
+          component={UsersView}
+          exact
+          layout={MainLayout}
+          path={availablePages.USERS.path}
+          title={availablePages.USERS.title}
         />
         <RouteWithLayout
           component={ProfileView}

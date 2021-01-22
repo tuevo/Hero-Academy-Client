@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/styles';
 import * as _ from 'lodash';
 import { availablePages } from 'constants/global.constant';
 import { setActivePage } from 'redux/actions/app.action';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,14 +44,14 @@ export default function Content({ inner }) {
 
   return (
     appState.activePage && (
-      <Box className={classes.root}>
+      <PerfectScrollbar className={classes.root}>
         <Box pl={2} pb={4} className={classes.title}>
           <Typography variant="h3" color="inherit"><b>{appState.activePage.title}</b></Typography>
         </Box>
         <Box display="flex" justifyContent="center" className={`${classes.content}`}>
           {inner}
         </Box>
-      </Box>
+      </PerfectScrollbar>
     )
   )
 }

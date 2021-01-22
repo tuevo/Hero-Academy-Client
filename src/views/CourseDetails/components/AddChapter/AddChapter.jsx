@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 5,
     "backgroundColor": "#a4508b",
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+  },
+  input: {
+    ...theme.palette.input
   }
 }));
 
@@ -60,6 +63,11 @@ const AddChapter = props => {
               value={values.name}
               variant="standard"
               fullWidth
+              InputProps={{
+                classes: {
+                  underline: classes.input
+                }
+              }}
             />
             <Button
               startIcon={<AddIcon />}

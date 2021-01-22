@@ -53,6 +53,7 @@ export default {
     default: '#212111',
     paper: '#313131',
     course: '#212121',
+    user: '#212121',
     signIn: 'rgba(0,0,0,0.4)',
     signUp: 'rgba(0,0,0,0.4)',
     searchInput: '#313131'
@@ -66,7 +67,7 @@ export default {
     "boxShadow": "rgba(0, 0, 0, 0.56) 0px 22px 70px 4px"
   },
   border: {
-    color: '#414141'
+    color: '#515151'
   },
   card: {
     backgroundColor: '#313131',

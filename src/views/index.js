@@ -9,4 +9,5 @@ export { default as RegistrationCourses } from './RegistrationCourses';
 export { default as FavoriteCourses } from './FavoriteCourses';
 export { default as InChargeCourses } from './InChargeCourses';
 export { default as Courses } from './Courses';
+export { default as Users } from './Users';
 export { default as Profile } from './Profile';

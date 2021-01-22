@@ -1,6 +1,7 @@
 import SchoolIcon from '@material-ui/icons/School';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import PeopleIcon from '@material-ui/icons/People';
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 
 export const availablePages = {
   HOME: {
@@ -74,8 +75,16 @@ export const availablePages = {
     title: 'Tất cả khóa học',
     path: '/courses',
     auth: true,
-    role: 2,
+    role: 4,
     icon: SchoolIcon
+  },
+  USERS: {
+    _id: 12,
+    title: 'Học viên & Giảng viên',
+    path: '/users',
+    auth: true,
+    role: 4,
+    icon: PeopleIcon
   },
   PROFILE: {
     _id: 99,
@@ -83,7 +92,7 @@ export const availablePages = {
     path: '/profile',
     auth: true,
     role: 0,
-    icon: AccountCircleIcon
+    icon: AssignmentIndIcon
   }
 };
 

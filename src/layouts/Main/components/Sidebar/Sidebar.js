@@ -37,6 +37,8 @@ const useStyles = makeStyles(theme => ({
     background: theme.palette.sidebar.background,
   },
   divider: {
+    position: 'relative',
+    zIndex: 5,
     margin: theme.spacing(2, 0),
     backgroundColor: theme.palette.border.color
   },

@@ -224,7 +224,7 @@ const InChargeCourses = () => {
   return (
     <div className={classes.root}>
       <AddCourse open={openAddCouse} onClose={(e) => toggleAddCourse(e, false)} />
-      <Tooltip title="Tạo khóa học mới">
+      <Tooltip title="Tạo khóa học mới" className="animate__animated animate__bounceIn">
         <Fab size="large" color="primary" aria-label="add" className={classes.btnAddCourse} onClick={(e) => toggleAddCourse(e, true)}>
           <AddIcon fontSize="large" />
         </Fab>
@@ -233,7 +233,7 @@ const InChargeCourses = () => {
         <GridList cellHeight="auto" cols={4}>
           {courses.map((c, i) => (
             <GridListTile key={c._id}>
-              <Box p={2} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.2 * i}s` }}>
+              <Box p={2} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
                 <Course data={c} type="minimal" />
               </Box>
             </GridListTile>

@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
   },
   secondaryText: {
     color: theme.palette.text.secondary,
+  },
+  input: {
+    ...theme.palette.input
   }
 }));
 
@@ -85,6 +88,11 @@ const AddFeedback = props => {
               variant="standard"
               fullWidth
               multiline
+              InputProps={{
+                classes: {
+                  underline: classes.input
+                }
+              }}
             />
             <IconButton children={<SendIcon />} color="primary" style={{ marginLeft: 5 }} />
           </Box>

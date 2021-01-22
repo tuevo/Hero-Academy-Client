@@ -11,6 +11,8 @@ import { availablePages } from 'constants/global.constant';
 
 const useStyles = makeStyles(theme => ({
   root: {
+    position: 'relative',
+    zIndex: 5,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

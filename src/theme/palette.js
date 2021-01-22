@@ -53,6 +53,7 @@ export default {
     default: '#f0f2f5',
     paper: white,
     course: '#f8f8f8',
+    user: '#f8f8f8',
     signIn: white,
     signUp: white,
     sidebar: white,

@@ -5,13 +5,13 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AddIcon from '@material-ui/icons/Add';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FeedbackIcon from '@material-ui/icons/Feedback';
 import HistoryIcon from '@material-ui/icons/History';
+import PersonPinIcon from '@material-ui/icons/PersonPin';
 import SchoolIcon from '@material-ui/icons/School';
 import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
 import Rating from '@material-ui/lab/Rating';
@@ -447,7 +447,7 @@ const CourseDetails = () => {
     numberOfRatings: 1500,
     numberOfStudents: 2500,
     lecturer: {
-      name: 'Tue Vo'
+      fullfullName: 'Tue Vo'
     },
     categoryCluster: {
       _id: '1',
@@ -660,7 +660,7 @@ const CourseDetails = () => {
       numberOfRatings: 1500,
       numberOfStudents: 2500,
       lecturer: {
-        name: 'Tue Vo'
+        fullName: 'Tue Vo'
       },
       categoryCluster: {
         name: 'Công nghệ thông tin',
@@ -682,7 +682,7 @@ const CourseDetails = () => {
       numberOfRatings: 1500,
       numberOfStudents: 2500,
       lecturer: {
-        name: 'Tue Vo'
+        fullName: 'Tue Vo'
       },
       categoryCluster: {
         name: 'Công nghệ thông tin',
@@ -704,7 +704,7 @@ const CourseDetails = () => {
       numberOfRatings: 1500,
       numberOfStudents: 2500,
       lecturer: {
-        name: 'Tue Vo'
+        fullName: 'Tue Vo'
       },
       categoryCluster: {
         name: 'Công nghệ thông tin',
@@ -726,7 +726,7 @@ const CourseDetails = () => {
       numberOfRatings: 1500,
       numberOfStudents: 2500,
       lecturer: {
-        name: 'Tue Vo'
+        fullName: 'Tue Vo'
       },
       categoryCluster: {
         name: 'Công nghệ thông tin',
@@ -748,7 +748,7 @@ const CourseDetails = () => {
       numberOfRatings: 1500,
       numberOfStudents: 2500,
       lecturer: {
-        name: 'Tue Vo'
+        fullName: 'Tue Vo'
       },
       categoryCluster: {
         name: 'Công nghệ thông tin',
@@ -770,7 +770,7 @@ const CourseDetails = () => {
       _id: 1,
       user: {
         _id: 1,
-        name: 'Lana',
+        fullName: 'Lana',
         avatarUrl: 'images/avatars/avatar_6.png'
       },
       rating: 4,
@@ -781,7 +781,7 @@ const CourseDetails = () => {
       _id: 2,
       user: {
         _id: 1,
-        name: 'Lee Wei Shuan',
+        fullName: 'Lee Wei Shuan',
         avatarUrl: 'images/avatars/avatar_5.png'
       },
       rating: 5,
@@ -792,7 +792,7 @@ const CourseDetails = () => {
       _id: 3,
       user: {
         _id: 1,
-        name: 'Steve Jonathan',
+        fullName: 'Steve Jonathan',
         avatarUrl: 'images/avatars/avatar_4.png'
       },
       rating: 3,
@@ -803,7 +803,7 @@ const CourseDetails = () => {
       _id: 4,
       user: {
         _id: 1,
-        name: 'Steve Jonathan',
+        fullName: 'Steve Jonathan',
         avatarUrl: 'images/avatars/avatar_4.png'
       },
       rating: 3,
@@ -814,7 +814,7 @@ const CourseDetails = () => {
       _id: 5,
       user: {
         _id: 1,
-        name: 'Steve Jonathan',
+        fullName: 'Steve Jonathan',
         avatarUrl: 'images/avatars/avatar_4.png'
       },
       rating: 3,
@@ -825,7 +825,7 @@ const CourseDetails = () => {
 
   const lecturer = {
     _id: 1,
-    name: 'Tue Vo',
+    fullfullName: 'Tue Vo',
     avatarUrl: 'images/avatars/tuevo.jpg',
     averageRating: 4.5,
     numberOfRatings: 1200,
@@ -909,7 +909,7 @@ const CourseDetails = () => {
               </Box>
 
               <Box display="flex" alignItems="center">
-                <Typography variant="body2" className={classes.contrastText}>Giảng viên: <b>{course.lecturer.name}</b></Typography>
+                <Typography variant="body2" className={classes.contrastText}>Giảng viên: <b>{course.lecturer.fullName}</b></Typography>
                 <Typography variant="body2" className={classes.contrastText} style={{ marginLeft: 9 }}>Cập nhật lần cuối: {moment(course.updatedAt).format('DD/MM HH:mm')}</Typography>
               </Box>
             </Grid>
@@ -943,7 +943,7 @@ const CourseDetails = () => {
               <Tab icon={<SchoolIcon />} label="Nội dung khóa học" {...a11yProps(0)} />
               <Tab icon={<VideoLibraryIcon />} label="Video bài giảng" {...a11yProps(1)} />
               <Tab icon={<FeedbackIcon />} label="Đánh giá & phản hồi" {...a11yProps(2)} />
-              <Tab icon={<AssignmentIndIcon />} label="Thông tin giảng viên" {...a11yProps(3)} />
+              <Tab icon={<PersonPinIcon />} label="Thông tin giảng viên" {...a11yProps(3)} />
             </Tabs>
           </AppBar>
 
@@ -991,7 +991,7 @@ const CourseDetails = () => {
                         </Grid>
                         <Grid item xs={4}>
                           <div className={classes.videoListContainer}>
-                            <Tooltip title="Đăng tải video">
+                            <Tooltip title="Đăng tải video" className="animate__animated animate__bounceIn">
                               <Fab size="medium" color="primary" aria-label="add" className={classes.btnAddVideo}>
                                 <AddIcon />
                               </Fab>
@@ -1047,10 +1047,10 @@ const CourseDetails = () => {
                   <PerfectScrollbar className={classes.feedbackList}>
                     {feedbacks.map(f => (
                       <Box key={f._id} display="flex" className={classes.feedbackItem}>
-                        <Avatar alt={f.user.name} src={f.user.avatarUrl} className={classes.feedbackItem__avatar} />
+                        <Avatar alt={f.user.fullName} src={f.user.avatarUrl} className={classes.feedbackItem__avatar} />
                         <Box display="flex" flexDirection="column" className={classes.feedbackItem__comment}>
                           <Box display="flex" alignItems="center">
-                            <Typography variant="body1"><b>{f.user.name}</b></Typography>
+                            <Typography variant="body1"><b>{f.user.fullName}</b></Typography>
                             <Typography variant="body2" style={{ marginLeft: 9 }}>{format(f.createdAt, 'vi')}</Typography>
                           </Box>
                           <Rating name="read-only" value={f.rating} size="small" precision={0.5} readOnly />

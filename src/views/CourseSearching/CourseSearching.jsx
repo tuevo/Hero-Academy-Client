@@ -271,7 +271,7 @@ const CourseSearching = () => {
           <GridList cellHeight="auto" cols={4}>
             {courses.map((c, i) => (
               <GridListTile key={c._id}>
-                <Box p={2} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.2 * i}s` }}>
+                <Box p={2} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
                   <Course data={c} type="minimal" />
                 </Box>
               </GridListTile>
