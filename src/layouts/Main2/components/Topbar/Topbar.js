@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
   searchInput: {
   },
   btnBrightness: {
-    color: theme.palette.icon
+    color: theme.palette.primary.main
   }
 }));
 

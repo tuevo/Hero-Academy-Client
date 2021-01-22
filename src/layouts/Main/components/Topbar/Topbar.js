@@ -39,10 +39,10 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 'bold',
   },
   btnBrightness: {
-    color: theme.palette.icon
+    color: theme.palette.primary.main
   },
   signOutButton: {
-    color: theme.palette.icon
+    color: theme.palette.primary.main
   }
 }));
 

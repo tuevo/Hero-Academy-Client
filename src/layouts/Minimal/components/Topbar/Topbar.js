@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(2)
   },
   btnBrightness: {
-    color: theme.palette.icon
+    color: theme.palette.primary.main
   }
 }));
 

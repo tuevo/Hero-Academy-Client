@@ -239,6 +239,9 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
     borderRadius: '1.5rem'
   },
+  videoPlayer__video: {
+    height: '23.75rem'
+  },
   videoListItem: {
     width: '100%',
     height: '5.625rem',
@@ -975,7 +978,9 @@ const CourseDetails = () => {
                       <Grid container spacing={2}>
                         <Grid item xs={8}>
                           <div className={classes.videoPlayer}>
-                            <VideoPlayer />
+                            <div className={classes.videoPlayer__video}>
+                              <VideoPlayer />
+                            </div>
                             <Box px={2} pt={2} pb={1}>
                               <Typography variant="h4" gutterBottom><b>{chapter.videos[0].title}</b></Typography>
                               <Typography variant="body2" gutterBottom>
