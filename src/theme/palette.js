@@ -46,7 +46,8 @@ export default {
   text: {
     primary: colors.blueGrey[900],
     secondary: colors.blueGrey[600],
-    link: colors.blue[600]
+    link: colors.blue[600],
+    disabled: colors.blueGrey[300]
   },
   background: {
     default: '#f0f2f5',
@@ -71,7 +72,12 @@ export default {
   card: {
     backgroundColor: white,
     boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
-    borderRadius: '1.5rem',
+    borderRadius: '1.5rem'
+  },
+  input: {
+    '&:before': {
+      borderColor: '#dcdcdc'
+    }
   },
   icon: colors.blueGrey[600],
   divider: colors.grey[200]

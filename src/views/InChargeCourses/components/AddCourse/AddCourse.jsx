@@ -1,4 +1,4 @@
-import { Box, Button, Drawer, Fab, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, Input, InputAdornment, InputLabel, Radio, RadioGroup, Select, TextField } from '@material-ui/core';
+import { Box, Button, Drawer, Fab, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, Input, InputAdornment, InputLabel, Radio, RadioGroup, Select, TextField, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import ImageUploading from 'components/ImageUploading/ImageUploading';
@@ -47,6 +47,22 @@ const useStyles = makeStyles((theme) => ({
   btnSubmit: {
     "backgroundColor": "#a4508b",
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+  },
+  input: {
+    ...theme.palette.input
+  },
+  icon: {
+    color: theme.palette.icon
+  },
+  btnClose: {
+    backgroundColor: theme.palette.background.default,
+    color: theme.palette.icon,
+    boxShadow: 'none',
+    '&:hover': {
+      backgroundColor: theme.palette.background.default,
+      color: theme.palette.icon,
+      boxShadow: 'none',
+    }
   }
 }));
 
@@ -265,7 +281,7 @@ export default function AddCourse({ open, onClose }) {
       role="presentation"
     >
       <Box my={2}>
-        <Fab size="small" style={{ boxShadow: 'none' }} onClick={e => onClose(e)} >
+        <Fab size="small" className={classes.btnClose} onClick={e => onClose(e)} >
           <CloseIcon />
         </Fab>
       </Box>
@@ -287,12 +303,28 @@ export default function AddCourse({ open, onClose }) {
             type="text"
             value={formState.values.title || ''}
             variant="standard"
+            InputProps={{
+              classes: {
+                underline: classes.input
+              }
+            }}
           />
         </FormControl>
 
         <FormControl className={classes.formControl} fullWidth>
           <InputLabel htmlFor="grouped-native-select">Lĩnh vực</InputLabel>
-          <Select name="categoryId" native value={formState.values.categoryId} onChange={handleChange}>
+          <Select
+            name="categoryId"
+            native
+            alue={formState.values.categoryId}
+            onChange={handleChange}
+            className={classes.input}
+            inputProps={{
+              classes: {
+                icon: classes.icon
+              }
+            }}
+          >
             {categoryClusters.map(cc => (
               <optgroup key={cc._id} label={cc.name}>
                 {cc.categories.map(c => (
@@ -316,6 +348,7 @@ export default function AddCourse({ open, onClose }) {
                 variant="standard"
                 endAdornment={<InputAdornment position="end">đ</InputAdornment>}
                 inputProps={{ min: 0, max: 99999999 }}
+                classes={{ underline: classes.input }}
               />
               <FormHelperText>{hasError('tuition') ? formState.errors.tuition[0] : null}</FormHelperText>
             </FormControl>
@@ -332,6 +365,7 @@ export default function AddCourse({ open, onClose }) {
                 variant="standard"
                 endAdornment={<InputAdornment position="end">%</InputAdornment>}
                 inputProps={{ min: 0, max: 100 }}
+                classes={{ underline: classes.input }}
               />
               <FormHelperText>{hasError('discountPercent') ? formState.errors.discountPercent[0] : null}</FormHelperText>
             </FormControl>
@@ -341,7 +375,9 @@ export default function AddCourse({ open, onClose }) {
         <FormControl className={classes.formControl} component="fieldset" fullWidth>
           <Box display="flex" alignItems="center">
             <Box mr={4}>
-              <FormLabel component="legend">Trạng thái khóa học</FormLabel>
+              <FormLabel component="legend">
+                <Typography variant="body2" color="textPrimary">Trạng thái khóa học</Typography>
+              </FormLabel>
             </Box>
             <RadioGroup row name="isFinished" value={formState.values.isFinished} onChange={handleChange}>
               <FormControlLabel value={true} control={<Radio color="primary" />} label="Đã hoàn thành" />
@@ -365,6 +401,11 @@ export default function AddCourse({ open, onClose }) {
             value={formState.values.description || ''}
             variant="standard"
             multiline
+            InputProps={{
+              classes: {
+                underline: classes.input
+              }
+            }}
           />
         </FormControl>
 

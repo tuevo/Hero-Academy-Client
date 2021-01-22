@@ -8,12 +8,14 @@ import { useState } from 'react';
 
 const useStyles = makeStyles(theme => ({
   root: {
+    zIndex: 5,
     padding: theme.spacing(4),
     minHeight: 500,
   },
   btnAddCourse: {
     position: 'absolute',
-    right: '8%',
+    zIndex: 10,
+    right: '5%',
     top: '-3%',
     "backgroundColor": "#a4508b",
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"

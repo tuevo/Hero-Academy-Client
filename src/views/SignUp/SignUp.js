@@ -130,13 +130,16 @@ const useStyles = makeStyles(theme => ({
     marginLeft: '-14px'
   },
   signUpButton: {
-    margin: theme.spacing(2, 0),
+    margin: theme.spacing(4, 0, 2, 0),
     "backgroundColor": "#a4508b",
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
   cover: {
     width: '25rem'
   },
+  input: {
+    ...theme.palette.input
+  }
 }));
 
 const SignUp = props => {
@@ -240,6 +243,11 @@ const SignUp = props => {
                   type="text"
                   value={formState.values.fullName || ''}
                   variant="standard"
+                  InputProps={{
+                    classes: {
+                      underline: classes.input
+                    }
+                  }}
                 />
                 <TextField
                   className={classes.textField}
@@ -254,6 +262,11 @@ const SignUp = props => {
                   type="text"
                   value={formState.values.email || ''}
                   variant="standard"
+                  InputProps={{
+                    classes: {
+                      underline: classes.input
+                    }
+                  }}
                 />
                 <TextField
                   className={classes.textField}
@@ -268,6 +281,11 @@ const SignUp = props => {
                   type="password"
                   value={formState.values.password || ''}
                   variant="standard"
+                  InputProps={{
+                    classes: {
+                      underline: classes.input
+                    }
+                  }}
                 />
                 <TextField
                   className={classes.textField}
@@ -282,6 +300,11 @@ const SignUp = props => {
                   type="password"
                   value={formState.values.confirmPassword || ''}
                   variant="standard"
+                  InputProps={{
+                    classes: {
+                      underline: classes.input
+                    }
+                  }}
                 />
                 <Button
                   className={classes.signUpButton}

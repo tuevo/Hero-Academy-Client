@@ -7,7 +7,6 @@ import React, { useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useSelector } from 'react-redux';
 import validate from 'validate.js';
-import theme from 'theme';
 
 const schema = {
   fullName: {
@@ -15,7 +14,7 @@ const schema = {
   }
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   root: {},
   avatar: {
     width: '7.5rem',
@@ -40,6 +39,13 @@ const useStyles = makeStyles(() => ({
     backgroundColor: 'rgba(0,0,0,0.4)',
     borderRadius: '50%',
     cursor: 'pointer'
+  },
+  input: {
+    ...theme.palette.input
+  },
+  disabledInput: {
+    ...theme.palette.input,
+    color: theme.palette.text.disabled,
   }
 }));
 
@@ -180,7 +186,7 @@ export default function Info() {
         <Grid item xs={9}>
           <form
           >
-            <Box mb={2}>
+            <Box mb={4}>
               <TextField
                 fullWidth
                 error={hasError('fullName')}
@@ -193,26 +199,42 @@ export default function Info() {
                 type="text"
                 value={formState.values.fullName || ''}
                 variant="standard"
+                InputProps={{
+                  classes: {
+                    underline: classes.input
+                  }
+                }}
               />
             </Box>
-            <Box mb={2}>
+            <Box mb={4}>
               <TextField
                 fullWidth
                 label="Địa chỉ email"
                 type="text"
                 value={userState.authUser.email}
                 variant="standard"
+                InputProps={{
+                  classes: {
+                    underline: classes.input,
+                    disabled: classes.disabledInput
+                  }
+                }}
                 disabled
               />
             </Box>
-            <Box mb={2}>
+            <Box mb={4}>
               <TextField
                 fullWidth
                 label="Tự giới thiệu"
                 type="text"
                 value={formState.values.introduction}
-                variant="standard"
                 multiline
+                variant="standard"
+                InputProps={{
+                  classes: {
+                    underline: classes.input
+                  }
+                }}
               />
             </Box>
             <Box mt={4}>

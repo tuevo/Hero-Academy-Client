@@ -122,12 +122,15 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2)
   },
   signInButton: {
-    margin: theme.spacing(2, 0),
+    margin: theme.spacing(4, 0, 2, 0),
     "backgroundColor": "#a4508b",
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
   cover: {
     width: '25rem'
+  },
+  input: {
+    ...theme.palette.input
   }
 }));
 
@@ -298,6 +301,11 @@ const SignIn = props => {
                   type="text"
                   value={formState.values.email || ''}
                   variant="standard"
+                  InputProps={{
+                    classes: {
+                      underline: classes.input
+                    }
+                  }}
                 />
                 <TextField
                   className={classes.textField}
@@ -312,6 +320,11 @@ const SignIn = props => {
                   type="password"
                   value={formState.values.password || ''}
                   variant="standard"
+                  InputProps={{
+                    classes: {
+                      underline: classes.input
+                    }
+                  }}
                 />
                 <Button
                   className={classes.signInButton}

@@ -47,6 +47,7 @@ export default {
     primary: white,
     secondary: colors.grey[400],
     link: colors.orange['A400'],
+    disabled: colors.grey[600]
   },
   background: {
     default: '#212111',
@@ -71,6 +72,11 @@ export default {
     backgroundColor: '#313131',
     borderRadius: '1.5rem',
     "boxShadow": "rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px"
+  },
+  input: {
+    '&:before': {
+      borderColor: '#616161'
+    }
   },
   icon: colors.grey[400],
   divider: colors.grey[200]

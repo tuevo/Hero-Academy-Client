@@ -15,12 +15,15 @@ const schema = {
   }
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   root: {},
   btnUpdate: {
     "backgroundColor": "#a4508b",
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
+  input: {
+    ...theme.palette.input
+  }
 }));
 
 export default function Password() {
@@ -85,6 +88,11 @@ export default function Password() {
           type="password"
           value={formState.values.currentPassword || ''}
           variant="standard"
+          InputProps={{
+            classes: {
+              underline: classes.input
+            }
+          }}
         />
       </Box>
       <Box mb={2}>
@@ -100,6 +108,11 @@ export default function Password() {
           type="password"
           value={formState.values.newPassword || ''}
           variant="standard"
+          InputProps={{
+            classes: {
+              underline: classes.input
+            }
+          }}
         />
       </Box>
       <Box mb={2}>
@@ -115,6 +128,11 @@ export default function Password() {
           type="password"
           value={formState.values.confirmNewPassword || ''}
           variant="standard"
+          InputProps={{
+            classes: {
+              underline: classes.input
+            }
+          }}
         />
       </Box>
       <Box mt={4}>
