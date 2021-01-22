@@ -12,9 +12,10 @@ import {
   CourseDetails as CourseDetailsView,
   CategoryCourses as CategoryCoursesView,
   CourseSearching as CourseSearchingView,
-  InChargeCourses as InChargeCoursesView,
   RegistrationCourses as RegistrationCoursesView,
   FavoriteCourses as FavoriteCoursesView,
+  InChargeCourses as InChargeCoursesView,
+  Courses as CoursesView,
   Profile as ProfileView
 } from './views';
 
@@ -75,13 +76,6 @@ const Routes = () => {
           title={availablePages.COURSE_SEARCHING.title}
         />
         <RouteWithLayout
-          component={InChargeCoursesView}
-          exact
-          layout={MainLayout}
-          path={availablePages.IN_CHARGE_COURSES.path}
-          title={availablePages.IN_CHARGE_COURSES.title}
-        />
-        <RouteWithLayout
           component={RegistrationCoursesView}
           exact
           layout={MainLayout}
@@ -94,6 +88,20 @@ const Routes = () => {
           layout={MainLayout}
           path={availablePages.FAVORITE_COURSES.path}
           title={availablePages.FAVORITE_COURSES.title}
+        />
+        <RouteWithLayout
+          component={InChargeCoursesView}
+          exact
+          layout={MainLayout}
+          path={availablePages.IN_CHARGE_COURSES.path}
+          title={availablePages.IN_CHARGE_COURSES.title}
+        />
+        <RouteWithLayout
+          component={CoursesView}
+          exact
+          layout={MainLayout}
+          path={availablePages.COURSES.path}
+          title={availablePages.COURSES.title}
         />
         <RouteWithLayout
           component={ProfileView}

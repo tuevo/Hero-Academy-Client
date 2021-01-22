@@ -45,16 +45,8 @@ export const availablePages = {
     path: '/not-found',
     auth: false
   },
-  IN_CHARGE_COURSES: {
-    _id: 8,
-    title: 'Khóa học phụ trách',
-    path: '/in-charge-courses',
-    auth: true,
-    role: 3,
-    icon: SchoolIcon
-  },
   REGISTRATION_COURSES: {
-    _id: 9,
+    _id: 8,
     title: 'Khóa học đăng ký',
     path: '/registration-courses',
     auth: true,
@@ -62,12 +54,28 @@ export const availablePages = {
     icon: SchoolIcon
   },
   FAVORITE_COURSES: {
-    _id: 10,
+    _id: 9,
     title: 'Khóa học yêu thích',
     path: '/favorite-courses',
     auth: true,
     role: 2,
     icon: FavoriteIcon
+  },
+  IN_CHARGE_COURSES: {
+    _id: 10,
+    title: 'Khóa học phụ trách',
+    path: '/in-charge-courses',
+    auth: true,
+    role: 3,
+    icon: SchoolIcon
+  },
+  COURSES: {
+    _id: 11,
+    title: 'Tất cả khóa học',
+    path: '/courses',
+    auth: true,
+    role: 2,
+    icon: SchoolIcon
   },
   PROFILE: {
     _id: 99,
