@@ -16,9 +16,9 @@ import SchoolIcon from '@material-ui/icons/School';
 import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/styles';
-import { Video } from 'cloudinary-react';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import CourseMultiCarousel from 'components/CourseMultiCarousel/CourseMultiCarousel';
+import { VideoPlayer } from 'components/VideoPlayer';
 import * as moment from 'moment';
 import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
@@ -237,10 +237,7 @@ const useStyles = makeStyles(theme => ({
     overflow: 'hidden',
     // boxShadow: '0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15)',
     backgroundColor: theme.palette.background.paper,
-  },
-  videoPlayer__video: {
-    width: '100% !important',
-    // height: '23.5rem !important',
+    borderRadius: '1.5rem'
   },
   videoListItem: {
     width: '100%',
@@ -978,13 +975,7 @@ const CourseDetails = () => {
                       <Grid container spacing={2}>
                         <Grid item xs={8}>
                           <div className={classes.videoPlayer}>
-                            <Video
-                              cloudName="dye8sx2yk"
-                              publicId="de6fyyfz69eibikughvs"
-                              poster="https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png"
-                              controls
-                              className={classes.videoPlayer__video}
-                            />
+                            <VideoPlayer />
                             <Box px={2} pt={2} pb={1}>
                               <Typography variant="h4" gutterBottom><b>{chapter.videos[0].title}</b></Typography>
                               <Typography variant="body2" gutterBottom>
