@@ -28,6 +28,14 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     border: 0
   },
+  darkCover: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '15rem',
+    height: '100vh',
+    background: theme.palette.sidebar.background,
+  },
   divider: {
     margin: theme.spacing(2, 0),
     backgroundColor: theme.palette.border.color
@@ -73,6 +81,7 @@ const Sidebar = props => {
           {...rest}
           className={clsx(classes.root, className)}
         >
+          <div className={classes.darkCover}></div>
           <UserInfo />
           <Divider className={classes.divider} />
           <SidebarNav

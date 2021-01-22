@@ -56,7 +56,7 @@ const CategorySidebarNavItem = props => {
       <ListItem button onClick={handleClick}>
         <Grid container alignItems="center">
           <Grid item xs={10}>
-            <Typography variant="body1">{data.name}</Typography>
+            <Typography variant="body1"><b>{data.name}</b></Typography>
           </Grid>
           <Grid item xs={2}>
             {open ? <ExpandMore fontSize="small" /> : <ChevronRightIcon fontSize="small" />}

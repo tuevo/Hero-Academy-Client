@@ -62,7 +62,7 @@ export default {
     "boxShadow": "rgba(0, 0, 0, 0.2) 0px 60px 40px -7px"
   },
   sidebar: {
-    background: 'rgba(0,0,0,0.4)',
+    background: 'rgba(0,0,0,0.3)',
     "boxShadow": "rgba(0, 0, 0, 0.56) 0px 22px 70px 4px"
   },
   border: {

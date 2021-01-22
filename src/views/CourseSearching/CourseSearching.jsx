@@ -32,6 +32,12 @@ const useStyles = makeStyles(theme => ({
   },
   divider: {
     backgroundColor: theme.palette.border.color
+  },
+  input: {
+    ...theme.palette.input
+  },
+  icon: {
+    color: theme.palette.icon
   }
 }));
 
@@ -244,6 +250,12 @@ const CourseSearching = () => {
               id="demo-simple-select"
               value={filterValue}
               onChange={handleChange}
+              className={classes.input}
+              inputProps={{
+                classes: {
+                  icon: classes.icon
+                }
+              }}
             >
               <MenuItem value={1}>Điểm đánh giá giảm dần</MenuItem>
               <MenuItem value={2}>Điểm đánh giá tăng dần</MenuItem>

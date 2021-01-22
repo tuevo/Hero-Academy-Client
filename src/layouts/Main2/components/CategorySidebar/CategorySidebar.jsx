@@ -1,4 +1,4 @@
-import { Drawer, Typography, Box } from '@material-ui/core';
+import { Drawer } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -18,12 +18,20 @@ const useStyles = makeStyles(theme => ({
     boxShadow: theme.palette.sidebar.boxShadow
   },
   root: {
-    background: theme.palette.sidebar.background,
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
     padding: theme.spacing(2),
     paddingRight: 0,
+  },
+  darkCover: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '15rem',
+    height: '100vh',
+    background: theme.palette.sidebar.background,
   },
   nav: {
     marginBottom: theme.spacing(2)
@@ -163,9 +171,7 @@ const CategorySidebar = props => {
         {...rest}
         className={clsx(classes.root, className)}
       >
-        <Box ml={2} mt={2} mb={1}>
-          <Typography variant="h5" className={classes.title}><b>Nhóm lĩnh vực</b></Typography>
-        </Box>
+        <div className={classes.darkCover}></div>
         <CategorySidebarNav
           className={classes.nav}
           categoryClusters={categoryClusters}
