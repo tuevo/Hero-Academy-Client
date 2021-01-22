@@ -1,4 +1,4 @@
-import { AppBar, Box, Tab, Tabs, GridList, GridListTile, Tooltip, Fab } from '@material-ui/core';
+import { AppBar, Box, Tab, Tabs, GridList, GridListTile, Tooltip, Fab, Button } from '@material-ui/core';
 import FaceIcon from '@material-ui/icons/Face';
 import PersonIcon from '@material-ui/icons/Person';
 import { makeStyles } from '@material-ui/styles';
@@ -33,6 +33,10 @@ const useStyles = makeStyles(theme => ({
     top: '-5%'
   },
   btnAddLecturer: {
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+  },
+  btnLoadMore: {
     "backgroundColor": "#a4508b",
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   }
@@ -288,6 +292,9 @@ const Users = () => {
               </GridListTile>
             ))}
           </GridList>
+          <Box px={1} pt={2}>
+            <Button fullWidth className={classes.btnLoadMore} variant="contained" color="primary" size="large">Xem thêm khóa học</Button>
+          </Box>
         </Box>
       )}
 

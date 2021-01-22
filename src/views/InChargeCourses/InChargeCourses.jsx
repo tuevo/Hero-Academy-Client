@@ -240,7 +240,7 @@ const InChargeCourses = () => {
           ))}
         </GridList>
       </Box>
-      <Box p={3}>
+      <Box px={3} pt={2}>
         <Button fullWidth className={classes.btnLoadMoreCourse} variant="contained" size="large" color="primary">Xem thêm khóa học</Button>
       </Box>
     </div >
