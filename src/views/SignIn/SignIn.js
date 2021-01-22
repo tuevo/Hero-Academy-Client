@@ -238,6 +238,7 @@ const SignIn = props => {
               <form
                 className={`${classes.form} animate__animated animate__fadeInRight`}
                 onSubmit={handleSignIn}
+                style={{ animationDuration: '0.5s' }}
               >
                 <Typography
                   className={classes.title}
