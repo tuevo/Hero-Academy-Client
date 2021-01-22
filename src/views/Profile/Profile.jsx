@@ -46,13 +46,13 @@ const Profile = () => {
       </AppBar>
 
       {tabValue === 0 && (
-        <Box pl={2} pr={6} py={6} className="animate__animated animate__fadeInLeft" style={{ animationDuration: '0.5s' }}>
+        <Box pl={2} pr={6} py={10} className="animate__animated animate__fadeInLeft" style={{ animationDuration: '0.5s' }}>
           <Info />
         </Box>
       )}
 
       {tabValue === 1 && (
-        <Box p={6} className="animate__animated animate__fadeInRight" style={{ animationDuration: '0.5s' }}>
+        <Box px={6} py={10} className="animate__animated animate__fadeInRight" style={{ animationDuration: '0.5s' }}>
           <Password />
         </Box>
       )}
