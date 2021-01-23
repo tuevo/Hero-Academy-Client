@@ -825,7 +825,7 @@ const CourseDetails = () => {
 
   const lecturer = {
     _id: 1,
-    fullfullName: 'Tue Vo',
+    fullName: 'Tue Vo',
     avatarUrl: 'images/avatars/tuevo.jpg',
     averageRating: 4.5,
     numberOfRatings: 1200,
@@ -1071,7 +1071,7 @@ const CourseDetails = () => {
               <Box display="flex">
                 <Avatar alt={lecturer.name} src={lecturer.avatarUrl} className={classes.lecturer__avatar} />
                 <Box display="flex" flexDirection="column" pt={1}>
-                  <Typography variant="h4" className={classes.secondaryText} gutterBottom><b>{lecturer.name}</b></Typography>
+                  <Typography variant="h4" className={classes.secondaryText} gutterBottom><b>{lecturer.fullName}</b></Typography>
                   <Box display="flex">
                     <Typography variant="body1" style={{ marginRight: 3 }}>
                       {`${Math.floor(lecturer.averageRating)}.${(lecturer.averageRating - Math.floor(lecturer.averageRating)) * 10}`}
