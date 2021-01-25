@@ -1,52 +1,71 @@
+import { availablePages } from 'constants/global.constant';
+import { localStorageItems } from 'constants/local-storage.constant';
+import * as _ from 'lodash';
 import React from 'react';
-import { Switch, Redirect } from 'react-router-dom';
-
+import { useDispatch } from 'react-redux';
+import { Redirect, Switch, useHistory } from 'react-router-dom';
+import { GuardProvider } from 'react-router-guards';
+import { hideNotification, setLoading } from 'redux/actions/app.action';
 import { RouteWithLayout } from './components';
 import { Main as MainLayout, Main2 as Main2Layout, Minimal as MinimalLayout } from './layouts';
-
 import {
-  SignUp as SignUpView,
-  SignIn as SignInView,
-  NotFound as NotFoundView,
-  Home as HomeView,
-  CourseDetails as CourseDetailsView,
   CategoryCourses as CategoryCoursesView,
-  CourseSearching as CourseSearchingView,
-  RegistrationCourses as RegistrationCoursesView,
-  FavoriteCourses as FavoriteCoursesView,
-  InChargeCourses as InChargeCoursesView,
+  CourseDetails as CourseDetailsView,
   Courses as CoursesView,
-  Users as UsersView,
-  Profile as ProfileView
+  CourseSearching as CourseSearchingView,
+  FavoriteCourses as FavoriteCoursesView,
+  Home as HomeView,
+  InChargeCourses as InChargeCoursesView,
+  NotFound as NotFoundView,
+  Profile as ProfileView,
+  RegistrationCourses as RegistrationCoursesView,
+  SignIn as SignInView,
+  SignUp as SignUpView,
+  Users as UsersView
 } from './views';
-
-import { availablePages } from 'constants/global.constant';
-import { GuardProvider } from 'react-router-guards';
-import { localStorageItems } from 'constants/local-storage.constant';
+import { userRole } from 'constants/user-role.constant';
 
 const Routes = () => {
-  const requireLogin = (to, from, next) => {
-    const accessToken = localStorage.getItem(localStorageItems.ACCESS_TOKEN.name);
-    const isAuthenticated = !!accessToken;
+  const history = useHistory();
+  const dispatch = useDispatch();
 
-    if (to.meta.auth) {
-      if (isAuthenticated) {
-        next();
+  const requireLogin = (to, from, next) => {
+    dispatch(setLoading(false));
+    dispatch(hideNotification());
+
+    const accessToken = localStorage.getItem(localStorageItems.ACCESS_TOKEN.name);
+    let authUser = localStorage.getItem(localStorageItems.AUTH_USER.name);
+    authUser = authUser ? JSON.parse(authUser) : null;
+    const isAuthenticated = !!accessToken && !!authUser;
+
+    if (isAuthenticated) {
+      const fromPath = from.location.pathname;
+      const toPath = to.location.pathname;
+      const authUserPages = _.filter(availablePages, page => page.role === userRole.GUEST.value || (page.auth && page.role === authUser.role));
+
+      if ([availablePages.SIGN_IN.path, availablePages.SIGN_UP.path].includes(toPath)) {
+        if (fromPath !== toPath) {
+          next.redirect(fromPath);
+        } else {
+          next.redirect(authUserPages[0].path);
+        }
       } else {
-        next.redirect(availablePages.SIGN_IN.path);
+        const toPage = authUserPages.find(page => page.path === toPath);
+        if (!toPage) {
+          history.push(availablePages.NOT_FOUND.path);
+        }
       }
     } else {
-      if (!isAuthenticated) {
-        next();
-      } else {
-        next.redirect('/');
+      if (to.meta.auth) {
+        history.push(availablePages.SIGN_IN.path, { from: from.location.pathname });
       }
     }
+
+    next();
   };
 
   return (
-    // <GuardProvider guards={[requireLogin]} error={NotFoundView}>
-    <GuardProvider error={NotFoundView}>
+    <GuardProvider guards={[requireLogin]} error={NotFoundView}>
       <Switch>
         <RouteWithLayout
           component={HomeView}
@@ -54,6 +73,7 @@ const Routes = () => {
           layout={Main2Layout}
           path={availablePages.HOME.path}
           title={availablePages.HOME.title}
+          meta={{ auth: availablePages.HOME.auth }}
         />
         <RouteWithLayout
           component={CourseDetailsView}
@@ -61,6 +81,7 @@ const Routes = () => {
           layout={Main2Layout}
           path={availablePages.COURSE_DETAILS.path}
           title={availablePages.COURSE_DETAILS.title}
+          meta={{ auth: availablePages.COURSE_DETAILS.auth }}
         />
         <RouteWithLayout
           component={CategoryCoursesView}
@@ -68,6 +89,7 @@ const Routes = () => {
           layout={Main2Layout}
           path={availablePages.CATEGORY_COURSES.path}
           title={availablePages.CATEGORY_COURSES.title}
+          meta={{ auth: availablePages.CATEGORY_COURSES.auth }}
         />
         <RouteWithLayout
           component={CourseSearchingView}
@@ -75,6 +97,7 @@ const Routes = () => {
           layout={Main2Layout}
           path={availablePages.COURSE_SEARCHING.path}
           title={availablePages.COURSE_SEARCHING.title}
+          meta={{ auth: availablePages.COURSE_SEARCHING.auth }}
         />
         <RouteWithLayout
           component={RegistrationCoursesView}
@@ -82,6 +105,7 @@ const Routes = () => {
           layout={MainLayout}
           path={availablePages.REGISTRATION_COURSES.path}
           title={availablePages.REGISTRATION_COURSES.title}
+          meta={{ auth: availablePages.REGISTRATION_COURSES.auth }}
         />
         <RouteWithLayout
           component={FavoriteCoursesView}
@@ -89,6 +113,7 @@ const Routes = () => {
           layout={MainLayout}
           path={availablePages.FAVORITE_COURSES.path}
           title={availablePages.FAVORITE_COURSES.title}
+          meta={{ auth: availablePages.FAVORITE_COURSES.auth }}
         />
         <RouteWithLayout
           component={InChargeCoursesView}
@@ -96,6 +121,7 @@ const Routes = () => {
           layout={MainLayout}
           path={availablePages.IN_CHARGE_COURSES.path}
           title={availablePages.IN_CHARGE_COURSES.title}
+          meta={{ auth: availablePages.IN_CHARGE_COURSES.auth }}
         />
         <RouteWithLayout
           component={CoursesView}
@@ -103,6 +129,7 @@ const Routes = () => {
           layout={MainLayout}
           path={availablePages.COURSES.path}
           title={availablePages.COURSES.title}
+          meta={{ auth: availablePages.COURSES.auth }}
         />
         <RouteWithLayout
           component={UsersView}
@@ -110,6 +137,7 @@ const Routes = () => {
           layout={MainLayout}
           path={availablePages.USERS.path}
           title={availablePages.USERS.title}
+          meta={{ auth: availablePages.USERS.auth }}
         />
         <RouteWithLayout
           component={ProfileView}
@@ -117,6 +145,7 @@ const Routes = () => {
           layout={MainLayout}
           path={availablePages.PROFILE.path}
           title={availablePages.PROFILE.title}
+          meta={{ auth: availablePages.PROFILE.auth }}
         />
         <RouteWithLayout
           component={SignUpView}
@@ -124,6 +153,7 @@ const Routes = () => {
           layout={MinimalLayout}
           path={availablePages.SIGN_UP.path}
           title={availablePages.SIGN_UP.title}
+          meta={{ auth: availablePages.SIGN_UP.auth }}
         />
         <RouteWithLayout
           component={SignInView}
@@ -131,12 +161,14 @@ const Routes = () => {
           layout={MinimalLayout}
           path={availablePages.SIGN_IN.path}
           title={availablePages.SIGN_IN.title}
+          meta={{ auth: availablePages.SIGN_IN.auth }}
         />
         <RouteWithLayout
           component={NotFoundView}
           exact
           layout={MinimalLayout}
           title={availablePages.NOT_FOUND.title}
+          meta={{ auth: availablePages.NOT_FOUND.auth }}
         />
         <Redirect to={availablePages.NOT_FOUND.path} />
       </Switch>

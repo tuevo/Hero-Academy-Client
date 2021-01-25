@@ -1,12 +1,12 @@
-import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { shallowEqual } from 'recompose';
 import { Box, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import * as _ from 'lodash';
 import { availablePages } from 'constants/global.constant';
-import { setActivePage } from 'redux/actions/app.action';
+import * as _ from 'lodash';
+import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual } from 'recompose';
+import { setPageBasics } from 'redux/actions/page.action';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,21 +32,21 @@ export default function Content({ inner }) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const appState = useSelector(state => ({
-    activePage: state.app.activePage
+  const pageState = useSelector(state => ({
+    ...state.page
   }), shallowEqual);
 
-  if (!appState.activePage) {
+  if (!pageState.basics) {
     const { pathname } = window.location;
     const page = _.find(availablePages, page => page.path === pathname);
-    dispatch(setActivePage(page));
+    dispatch(setPageBasics(page));
   }
 
   return (
-    appState.activePage && (
+    pageState.basics && (
       <PerfectScrollbar className={classes.root}>
         <Box pl={2} pb={4} className={classes.title}>
-          <Typography variant="h3" color="inherit"><b>{appState.activePage.title}</b></Typography>
+          <Typography variant="h3" color="inherit"><b>{pageState.basics.title}</b></Typography>
         </Box>
         <Box display="flex" justifyContent="center" className={`${classes.content}`}>
           {inner}

@@ -8,7 +8,6 @@ import {
   Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import userApi from 'api/user.api';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -17,8 +16,10 @@ import { setLoading, showNotification } from 'redux/actions/app.action';
 import validate from 'validate.js';
 import { localStorageItems } from '../../constants/local-storage.constant';
 import { signIn } from '../../redux/actions/user.action';
-
-
+import { authApi } from 'api';
+import { apiMessage } from 'constants/api-message.constant';
+import * as _ from 'lodash';
+import { availablePages } from 'constants/global.constant';
 
 const schema = {
   email: {
@@ -175,36 +176,50 @@ const SignIn = props => {
 
   const handleSignIn = event => {
     event.preventDefault();
+
+    if (!formState.isValid) {
+      dispatch(showNotification('error', apiMessage.SIGN_IN_INVALID));
+      return;
+    }
+
     const params = {
       email: formState.values.email,
       password: formState.values.password
     }
 
-    const postSignIn = async () => {
+    const login = async () => {
       dispatch(setLoading(true));
       try {
-        const res = await userApi.signIn(params);
-
+        const res = await authApi.login(params);
         const { user, meta: { accessToken } } = res.data;
         if (!user || !accessToken) {
-          console.log("Sign In Component: user or accessToken is not defined");
+          console.log("SignIn Component: user or accessToken is not defined");
           return;
         }
 
         localStorage.setItem(localStorageItems.ACCESS_TOKEN.name, accessToken);
+        localStorage.setItem(localStorageItems.AUTH_USER.name, JSON.stringify(user));
         dispatch(signIn(user));
         dispatch(setLoading(false));
 
-        history.push('/');
+        if (history.location.state) {
+          const { from } = history.location.state;
+          history.push(from);
+          return;
+        }
+
+        const firstPage = _.find(availablePages, page => page.auth && page.role === user.role);
+        history.push(firstPage.path);
+
       } catch (error) {
-        if (error.errors && error.errors.length > 0) {
+        if (error.messages && error.messages.length > 0) {
           dispatch(setLoading(false));
-          dispatch(showNotification('error', error.errors[0]));
+          dispatch(showNotification('error', apiMessage[error.messages[0]]));
         }
       }
     }
 
-    postSignIn();
+    login();
   };
 
   const hasError = field =>

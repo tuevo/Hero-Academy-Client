@@ -1,17 +1,8 @@
 import { actionTypes } from '../actions/action-types';
+import { localStorageItems } from 'constants/local-storage.constant';
 
 const initialStates = {
-  authUser: {
-    fullName: 'Tue Vo',
-    avatarUrl: 'images/avatars/tuevo.jpg',
-    email: 'tuevo.it@gmail.com',
-    introduction: 'Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica. Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica. Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica.',
-    role: 3,
-    averageRating: 5,
-    numberOfRatings: 1200,
-    numberOfStudents: 2500,
-    numberOfCourses: 10
-  }
+  authUser: JSON.parse(localStorage.getItem(localStorageItems.AUTH_USER.name)) || null
 }
 
 const userActionTypes = { ...actionTypes.user };

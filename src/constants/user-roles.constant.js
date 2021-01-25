@@ -1,1 +1,0 @@
-export const userRoles = ['', 'Nặc danh', 'Học viên', 'Giảng viên', 'Quản trị viên']

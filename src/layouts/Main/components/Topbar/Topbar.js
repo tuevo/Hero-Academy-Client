@@ -14,6 +14,7 @@ import { shallowEqual } from 'recompose';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import { switchDarkMode } from 'redux/actions/app.action';
 import { SearchInput } from 'components';
+import { signOut } from 'redux/actions/user.action';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,16 +34,16 @@ const useStyles = makeStyles(theme => ({
     width: '2.8125rem'
   },
   logoTitle: {
-    color: theme.palette.primary.dark,
+    color: theme.palette.text.topbar,
     marginLeft: theme.spacing(0.5),
     fontFamily: "'Share Tech Mono', monospace",
     fontWeight: 'bold',
   },
   btnBrightness: {
-    color: theme.palette.primary.main
+    color: theme.palette.icon
   },
   signOutButton: {
-    color: theme.palette.primary.main
+    color: theme.palette.icon
   }
 }));
 
@@ -71,7 +72,8 @@ const Topbar = props => {
 
   const handleSignOut = () => {
     localStorage.removeItem(localStorageItems.ACCESS_TOKEN.name);
-    history.length = 0;
+    localStorage.removeItem(localStorageItems.AUTH_USER.name);
+    dispatch(signOut());
     history.push(availablePages.SIGN_IN.path);
   }
 

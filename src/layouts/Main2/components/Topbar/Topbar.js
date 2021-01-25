@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
-import { AppBar, Toolbar, Typography, Button, Box, Hidden, IconButton, Grid, Tooltip } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
-import { availablePages } from 'constants/global.constant';
-import { SearchInput } from 'components';
-import { useHistory } from 'react-router-dom';
+import { AppBar, Box, Button, Grid, Hidden, IconButton, Toolbar, Tooltip, Typography } from '@material-ui/core';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
-import { useSelector, useDispatch } from 'react-redux';
-import { shallowEqual } from 'recompose';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
+import MenuIcon from '@material-ui/icons/Menu';
+import { makeStyles } from '@material-ui/styles';
+import clsx from 'clsx';
+import { SearchInput } from 'components';
+import AccountMenu from 'components/AccountMenu/AccountMenu';
+import { availablePages } from 'constants/global.constant';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { shallowEqual } from 'recompose';
 import { switchDarkMode } from 'redux/actions/app.action';
 
 const useStyles = makeStyles(theme => ({
@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
     width: '2.8125rem'
   },
   logoTitle: {
-    color: theme.palette.primary.dark,
+    color: theme.palette.text.topbar,
     marginLeft: theme.spacing(0.5),
     fontFamily: "'Share Tech Mono', monospace",
     fontWeight: 'bold',
@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
   searchInput: {
   },
   btnBrightness: {
-    color: theme.palette.primary.main
+    color: theme.palette.icon
   }
 }));
 
@@ -57,6 +57,10 @@ const Topbar = props => {
   const appState = useSelector(state => ({
     ...state.app
   }), shallowEqual);
+
+  const userState = useSelector(state => ({
+    ...state.user
+  }));
 
   const dispatch = useDispatch();
 
@@ -96,20 +100,27 @@ const Topbar = props => {
               />
             </div>
           </Grid>
-          <Grid item>
-            <Grid container spacing={1}>
-              <Grid item>
-                <RouterLink to={availablePages.SIGN_IN.path} className={classes.btnSignIn}>
-                  <Button variant="outlined" color="primary">ĐĂNG NHẬP</Button>
-                </RouterLink>
-              </Grid>
-              <Grid item>
-                <RouterLink to={availablePages.SIGN_UP.path}>
-                  <Button variant="contained" color="primary" className={classes.btnSignUp}>ĐĂNG KÝ</Button>
-                </RouterLink>
+          {!userState.authUser && (
+            <Grid item>
+              <Grid container spacing={1}>
+                <Grid item>
+                  <div className="animate__animated animate__fadeIn">
+                    <RouterLink to={availablePages.SIGN_IN.path} className={classes.btnSignIn}>
+                      <Button variant="outlined" color="primary">ĐĂNG NHẬP</Button>
+                    </RouterLink>
+                  </div>
+                </Grid>
+                <Grid item>
+                  <div className="animate__animated animate__fadeIn">
+                    <RouterLink to={availablePages.SIGN_UP.path}>
+                      <Button variant="contained" color="primary" className={classes.btnSignUp}>ĐĂNG KÝ</Button>
+                    </RouterLink>
+                  </div>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
+          )}
+          {userState.authUser && <AccountMenu authUser={userState.authUser} />}
           <Grid item>
             <Tooltip title={appState.darkMode ? 'Bật chế độ sáng' : 'Bật chế độ tối'}>
               <IconButton onClick={() => dispatch(switchDarkMode())} className={classes.btnBrightness}>

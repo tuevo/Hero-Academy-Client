@@ -47,7 +47,8 @@ export default {
     primary: colors.blueGrey[900],
     secondary: colors.blueGrey[600],
     link: colors.blue[600],
-    disabled: colors.blueGrey[300]
+    disabled: colors.blueGrey[300],
+    topbar: colors.purple[900]
   },
   background: {
     default: '#f0f2f5',

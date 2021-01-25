@@ -1,13 +1,14 @@
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
 import { Avatar, Typography } from '@material-ui/core';
-import { useSelector } from 'react-redux';
-import { shallowEqual } from 'recompose';
-import { userRoles } from 'constants/user-roles.constant';
+import { makeStyles } from '@material-ui/styles';
+import clsx from 'clsx';
 import { availablePages } from 'constants/global.constant';
+import { userRole } from 'constants/user-role.constant';
+import * as _ from 'lodash';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link as RouterLink } from 'react-router-dom';
+import { shallowEqual } from 'recompose';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -55,7 +56,7 @@ const UserInfo = props => {
       >
         {userState.authUser.fullName}
       </Typography>
-      <Typography variant="body2">{userRoles[userState.authUser.role]}</Typography>
+      <Typography variant="body2">{_.find(userRole, role => role.value === userState.authUser.role).name}</Typography>
     </div>
   );
 };

@@ -1,11 +1,13 @@
-import { Avatar, Box, Button, Grid, TextField, Typography, ButtonBase } from '@material-ui/core';
+import { Avatar, Box, Button, ButtonBase, Grid, TextField, Typography } from '@material-ui/core';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/styles';
-import { userRoles } from 'constants/user-roles.constant';
+import { userRole } from 'constants/user-role.constant';
+import * as _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useSelector } from 'react-redux';
+import { shallowEqual } from 'recompose';
 import validate from 'validate.js';
 
 const schema = {
@@ -54,17 +56,22 @@ export default function Info() {
 
   const userState = useSelector(state => ({
     authUser: state.user.authUser
-  }));
+  }), shallowEqual);
 
-  const [formState, setFormState] = useState({
+  const initFormState = {
     isValid: false,
     values: {
-      fullName: userState.authUser.fullName,
-      introduction: userState.authUser.introduction || ''
+      fullName: userState.authUser.fullName
     },
     touched: {},
     errors: {}
-  });
+  };
+
+  if (userState.authUser.role === userRole.LECTURER) {
+    initFormState.values.introduction = userState.authUser.roleInfo ? userState.authUser.roleInfo.introduction : null;
+  }
+
+  const [formState, setFormState] = useState(initFormState);
 
   const [showUploadingAvatar, setShowUploadingAvatar] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState(userState.authUser.avatarUrl);
@@ -135,6 +142,9 @@ export default function Info() {
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
 
+  if (!userState.authUser)
+    return <div className={classes.root}></div>;
+
   return (
     <div className={classes.root}>
       <Grid container spacing={2}>
@@ -165,22 +175,26 @@ export default function Info() {
               </Box>
             </ButtonBase>
             <Box mt={2} mb={1}>
-              <Typography variant="body1">{userRoles[userState.authUser.role]}</Typography>
+              <Typography variant="body1">{_.find(userRole, role => role.value === userState.authUser.role).name}</Typography>
             </Box>
-            <Box display="flex" alignItems="center">
-              <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(userState.authUser.averageRating)}.${(userState.authUser.averageRating - Math.floor(userState.authUser.averageRating)) * 10}`}</Typography>
-              <Box style={{ marginBottom: 1 }}>
-                <Rating name="read-only" value={userState.authUser.averageRating} size="small" precision={0.5} readOnly />
-              </Box>
-            </Box>
-            <Typography variant="body2" gutterBottom>
-              <span>(</span>
-              <NumberFormat value={userState.authUser.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
-              <span>)</span>
-            </Typography>
-            <Typography variant="body2">
-              <NumberFormat value={userState.authUser.numberOfStudents} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
-            </Typography>
+            {userState.authUser.role === userRole.LECTURER.value && (
+              <div>
+                <Box display="flex" alignItems="center">
+                  <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(userState.authUser.averageRating)}.${(userState.authUser.averageRating - Math.floor(userState.authUser.averageRating)) * 10}`}</Typography>
+                  <Box style={{ marginBottom: 1 }}>
+                    <Rating name="read-only" value={userState.authUser.averageRating} size="small" precision={0.5} readOnly />
+                  </Box>
+                </Box>
+                <Typography variant="body2" gutterBottom>
+                  <span>(</span>
+                  <NumberFormat value={userState.authUser.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
+                  <span>)</span>
+                </Typography>
+                <Typography variant="body2">
+                  <NumberFormat value={userState.authUser.numberOfStudents} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
+                </Typography>
+              </div>
+            )}
           </Box>
         </Grid>
         <Grid item xs={9}>
@@ -222,21 +236,23 @@ export default function Info() {
                 disabled
               />
             </Box>
-            <Box mb={4}>
-              <TextField
-                fullWidth
-                label="Tự giới thiệu"
-                type="text"
-                value={formState.values.introduction}
-                multiline
-                variant="standard"
-                InputProps={{
-                  classes: {
-                    underline: classes.input
-                  }
-                }}
-              />
-            </Box>
+            {userState.authUser.role === userRole.LECTURER.value && (
+              <Box mb={4}>
+                <TextField
+                  fullWidth
+                  label="Tự giới thiệu"
+                  type="text"
+                  value={formState.values.introduction}
+                  multiline
+                  variant="standard"
+                  InputProps={{
+                    classes: {
+                      underline: classes.input
+                    }
+                  }}
+                />
+              </Box>
+            )}
             <Box mt={4}>
               <Button
                 color="primary"

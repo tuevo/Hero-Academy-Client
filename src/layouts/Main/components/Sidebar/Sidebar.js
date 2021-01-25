@@ -7,6 +7,8 @@ import React from 'react';
 import { UserInfo, SidebarNav } from './components';
 import { useSelector } from 'react-redux';
 import { shallowEqual } from 'recompose';
+import * as _ from 'lodash';
+import { userRole } from 'constants/user-role.constant';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -57,18 +59,18 @@ const Sidebar = props => {
 
   let pages = [];
 
-  // if (userState.authUser) {
-  //   pages = Object.keys(availablePages).map(key => ({
-  //     ...availablePages[key],
-  //     href: availablePages[key].path
-  //   })).filter(page => page.auth && (page.role === 0 || page.role === userState.authUser.role));
-  // }
+  if (userState.authUser) {
+    pages = _.map(availablePages, page => ({
+      ...page,
+      href: page.path
+    })).filter(page => page.auth && (page.role === userRole.GUEST.value || page.role === userState.authUser.role))
+  }
 
   // Testing
-  pages = Object.keys(availablePages).map(key => ({
-    ...availablePages[key],
-    href: availablePages[key].path
-  })).filter(page => page.auth);
+  // pages = Object.keys(availablePages).map(key => ({
+  //   ...availablePages[key],
+  //   href: availablePages[key].path
+  // })).filter(page => page.auth);
 
   return (
     userState.authUser && (

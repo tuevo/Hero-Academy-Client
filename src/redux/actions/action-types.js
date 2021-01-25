@@ -6,6 +6,9 @@ export const actionTypes = {
     HIDE_NOTIFICATION: { type: 'HIDE_NOTIFICATION' },
     SET_ACTIVE_PAGE: { type: 'SET_ACTIVE_PAGE' }
   },
+  page: {
+    SET_PAGE_BASICS: { type: 'SET_PAGE_BASICS' }
+  },
   user: {
     SIGN_IN: { type: 'SIGN_IN' },
     SIGN_OUT: { type: 'SIGN_OUT' }

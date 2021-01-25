@@ -47,7 +47,8 @@ export default {
     primary: white,
     secondary: colors.grey[400],
     link: colors.orange['A400'],
-    disabled: colors.grey[600]
+    disabled: colors.grey[600],
+    topbar: white
   },
   background: {
     default: '#212111',

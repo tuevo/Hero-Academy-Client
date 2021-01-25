@@ -71,15 +71,13 @@ const App = () => {
         <Routes />
       </Router>
       <Loading open={appState.isLoading} />
-      {appState.isNotificationOpened && (
-        <Notification
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          open={true}
-          type={appState.notification.type}
-          message={appState.notification.message}
-          onClose={handleCloseNotification}
-        />
-      )}
+      <Notification
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        open={appState.isNotificationOpened}
+        type={appState.notification.type}
+        message={appState.notification.message}
+        onClose={handleCloseNotification}
+      />
     </ThemeProvider>
   );
 }
