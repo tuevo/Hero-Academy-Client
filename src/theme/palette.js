@@ -48,7 +48,8 @@ export default {
     secondary: colors.blueGrey[600],
     link: colors.blue[600],
     disabled: colors.blueGrey[300],
-    topbar: colors.purple[900]
+    topbar: colors.purple[900],
+    sidebarActive: colors.purple[800]
   },
   background: {
     default: '#f0f2f5',

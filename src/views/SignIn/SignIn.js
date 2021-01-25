@@ -20,6 +20,7 @@ import { authApi } from 'api';
 import { apiMessage } from 'constants/api-message.constant';
 import * as _ from 'lodash';
 import { availablePages } from 'constants/global.constant';
+import { setPageBasics } from 'redux/actions/page.action';
 
 const schema = {
   email: {
@@ -209,6 +210,7 @@ const SignIn = props => {
         }
 
         const firstPage = _.find(availablePages, page => page.auth && page.role === user.role);
+        dispatch(setPageBasics(firstPage));
         history.push(firstPage.path);
 
       } catch (error) {
@@ -251,9 +253,8 @@ const SignIn = props => {
             </div>
             <div className={classes.contentBody}>
               <form
-                className={`${classes.form} animate__animated animate__fadeInRight`}
+                className={`${classes.form} animate__animated animate__fadeIn`}
                 onSubmit={handleSignIn}
-                style={{ animationDuration: '0.75s' }}
               >
                 <Typography
                   className={classes.title}
@@ -322,6 +323,7 @@ const SignIn = props => {
                       underline: classes.input
                     }
                   }}
+                  autoFocus
                 />
                 <TextField
                   className={classes.textField}

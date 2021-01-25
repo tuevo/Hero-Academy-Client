@@ -229,7 +229,7 @@ const CourseSearching = () => {
   ]
 
   for (let c of courses)
-    c['href'] = '/course-details';
+    c['href'] = '/chi-tiet-khoa-hoc';
 
   return (
     <div className={classes.root}>

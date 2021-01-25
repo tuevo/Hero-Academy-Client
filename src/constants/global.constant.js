@@ -1,7 +1,8 @@
 import SchoolIcon from '@material-ui/icons/School';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import PeopleIcon from '@material-ui/icons/People';
-import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import CategoryIcon from '@material-ui/icons/Category';
 import { userRole } from './user-role.constant';
 
 export const availablePages = {
@@ -15,14 +16,14 @@ export const availablePages = {
   SIGN_UP: {
     _id: 2,
     title: 'Đăng ký tài khoản học viên',
-    path: '/sign-up',
+    path: '/dang-ky-tai-khoan-hoc-vien',
     auth: false,
     role: userRole.GUEST.value
   },
   SIGN_IN: {
     _id: 3,
     title: 'Đăng nhập tài khoản',
-    path: '/sign-in',
+    path: '/dang-nhap',
     auth: false,
     role: userRole.GUEST.value
   },
@@ -36,28 +37,28 @@ export const availablePages = {
   COURSE_DETAILS: {
     _id: 2,
     title: 'Chi tiết khóa học',
-    path: '/course-details',
+    path: '/chi-tiet-khoa-hoc',
     auth: false,
     role: userRole.GUEST.value
   },
   CATEGORY_COURSES: {
     _id: 5,
     title: 'Danh sách khóa học',
-    path: '/category-courses',
+    path: '/khoa-hoc-thuoc-linh-vuc',
     auth: false,
     role: userRole.GUEST.value
   },
   COURSE_SEARCHING: {
     _id: 6,
     title: 'Tìm kiếm khóa học',
-    path: '/course-searching',
+    path: '/tim-kiem-khoa-hoc',
     auth: false,
     role: userRole.GUEST.value
   },
   REGISTRATION_COURSES: {
     _id: 7,
     title: 'Khóa học đăng ký',
-    path: '/registration-courses',
+    path: '/khoa-hoc-dang-ky',
     auth: true,
     role: userRole.STUDENT.value,
     icon: SchoolIcon
@@ -65,7 +66,7 @@ export const availablePages = {
   FAVORITE_COURSES: {
     _id: 8,
     title: 'Khóa học yêu thích',
-    path: '/favorite-courses',
+    path: '/khoa-hoc-yeu-thich',
     auth: true,
     role: userRole.STUDENT.value,
     icon: FavoriteIcon
@@ -73,34 +74,42 @@ export const availablePages = {
   IN_CHARGE_COURSES: {
     _id: 9,
     title: 'Khóa học phụ trách',
-    path: '/in-charge-courses',
+    path: '/khoa-hoc-phu-trach',
     auth: true,
     role: userRole.LECTURER.value,
     icon: SchoolIcon
   },
-  COURSES: {
+  CATEGORIES: {
     _id: 10,
-    title: 'Tất cả khóa học',
-    path: '/courses',
+    title: 'Lĩnh vực',
+    path: '/linh-vuc',
+    auth: true,
+    role: userRole.ADMIN.value,
+    icon: CategoryIcon
+  },
+  COURSES: {
+    _id: 11,
+    title: 'Khóa học',
+    path: '/khoa-hoc',
     auth: true,
     role: userRole.ADMIN.value,
     icon: SchoolIcon
   },
   USERS: {
-    _id: 11,
-    title: 'Học viên & Giảng viên',
-    path: '/users',
+    _id: 12,
+    title: 'Thành viên',
+    path: '/thanh-vien',
     auth: true,
     role: userRole.ADMIN.value,
     icon: PeopleIcon
   },
   PROFILE: {
     _id: 99,
-    title: 'Hồ sơ cá nhân',
-    path: '/profile',
+    title: 'Tài khoản',
+    path: '/tai-khoan',
     auth: true,
     role: userRole.GUEST.value,
-    icon: AssignmentIndIcon
+    icon: AccountCircleIcon
   }
 };
 

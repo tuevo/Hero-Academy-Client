@@ -29,6 +29,8 @@ import { format } from 'timeago.js';
 import { AddChapter } from './components';
 import AddFeedback from './components/AddFeedback/AddFeedback';
 import UpdateCourse from './components/UpdateCourse/UpdateCourse';
+import { useSelector } from 'react-redux';
+import { userRole } from 'constants/user-role.constant';
 
 function a11yProps(index) {
   return {
@@ -342,6 +344,11 @@ const useStyles = makeStyles(theme => ({
 const CourseDetails = () => {
   const classes = useStyles();
   const history = useHistory();
+
+  const userState = useSelector(state => ({
+    authUser: state.user.authUser
+  }));
+
   const [tabValue, setTabValue] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const [openRemovingCourseConfirmDialog, setOpenRemovingCourseConfirmDialog] = useState(false);
@@ -447,7 +454,7 @@ const CourseDetails = () => {
     numberOfRatings: 1500,
     numberOfStudents: 2500,
     lecturer: {
-      fullfullName: 'Tue Vo'
+      fullName: 'Tue Vo'
     },
     categoryCluster: {
       _id: '1',
@@ -763,7 +770,7 @@ const CourseDetails = () => {
   ];
 
   for (let c of courses)
-    c['href'] = '/course-details';
+    c['href'] = '/chi-tiet-khoa-hoc';
 
   const feedbacks = [
     {
@@ -843,35 +850,41 @@ const CourseDetails = () => {
               <ArrowBackIcon />
             </IconButton>
             <Box display="flex" className={classes.contrastText}>
-              <Button
-                startIcon={isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                variant={isFavorite ? 'contained' : 'outlined'}
-                color={isFavorite ? 'secondary' : 'inherit'}
-                onClick={handleBtnFavoriteClick}
-                size="small"
-              >
-                Yêu thích
-              </Button>
-              <Box ml={1}>
-                <UpdateCourse course={course} />
-              </Box>
-              <Box ml={1}>
+              {userState.authUser && userState.authUser.role === userRole.STUDENT.value && (
                 <Button
-                  startIcon={<DeleteIcon />}
-                  variant="outlined"
-                  color="inherit"
-                  onClick={handleBtnOpenRemovingCourseDialogClick}
+                  startIcon={isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                  variant={isFavorite ? 'contained' : 'outlined'}
+                  color={isFavorite ? 'secondary' : 'inherit'}
+                  onClick={handleBtnFavoriteClick}
                   size="small"
                 >
-                  Gỡ khóa học
+                  Yêu thích
                 </Button>
-                <ConfirmDialog
-                  title="Xác nhận"
-                  content="Bạn thật sự muốn gỡ bỏ khóa học này?"
-                  open={openRemovingCourseConfirmDialog}
-                  onClose={isAccepted => handleRemovingCourseDialogClose(isAccepted)}
-                />
-              </Box>
+              )}
+              {userState.authUser && userState.authUser.role === userRole.LECTURER.value && (
+                <Box ml={1}>
+                  <UpdateCourse course={course} />
+                </Box>
+              )}
+              {userState.authUser && userState.authUser.role === userRole.ADMIN.value && (
+                <Box ml={1}>
+                  <Button
+                    startIcon={<DeleteIcon />}
+                    variant="outlined"
+                    color="inherit"
+                    onClick={handleBtnOpenRemovingCourseDialogClick}
+                    size="small"
+                  >
+                    Gỡ khóa học
+                  </Button>
+                  <ConfirmDialog
+                    title="Xác nhận"
+                    content="Bạn thật sự muốn gỡ bỏ khóa học này?"
+                    open={openRemovingCourseConfirmDialog}
+                    onClose={isAccepted => handleRemovingCourseDialogClose(isAccepted)}
+                  />
+                </Box>
+              )}
             </Box>
           </Box>
           <Grid container alignItems="center">
@@ -929,7 +942,17 @@ const CourseDetails = () => {
                   </Typography>
                 )}
 
-                <Button variant="contained" className={classes.btnRegister} color="primary" size="large">ĐĂNG KÝ KHÓA HỌC</Button>
+                {(userState.authUser && userState.authUser.role !== userRole.LECTURER.value && userState.authUser.role !== userRole.ADMIN.value) || !userState.authUser ? (
+                  <Button
+                    variant="contained"
+                    className={classes.btnRegister}
+                    color="primary"
+                    size="large"
+                  >
+                    ĐĂNG KÝ KHÓA HỌC
+                  </Button>
+                ) : <></>}
+
               </Box>
             </Grid>
           </Grid>
@@ -957,7 +980,9 @@ const CourseDetails = () => {
 
           {tabValue === 1 && (
             <Box p={6}>
-              <AddChapter />
+              {userState.authUser && userState.authUser.role === userRole.LECTURER.value && (
+                <AddChapter />
+              )}
               <Box mt={4}>
                 {chapters.map((chapter, index) => (
                   <Accordion key={chapter._id} expanded={index === expandedChapterIndex} className={classes.chapter}>
@@ -991,11 +1016,13 @@ const CourseDetails = () => {
                         </Grid>
                         <Grid item xs={4}>
                           <div className={classes.videoListContainer}>
-                            <Tooltip title="Đăng tải video" className="animate__animated animate__bounceIn">
-                              <Fab size="medium" color="primary" aria-label="add" className={classes.btnAddVideo}>
-                                <AddIcon />
-                              </Fab>
-                            </Tooltip>
+                            {userState.authUser && userState.authUser.role === userRole.LECTURER.value && (
+                              <Tooltip title="Đăng tải video" className="animate__animated animate__bounceIn">
+                                <Fab size="medium" color="primary" aria-label="add" className={classes.btnAddVideo}>
+                                  <AddIcon />
+                                </Fab>
+                              </Tooltip>
+                            )}
                             <Typography gutterBottom variant="body1" className={classes.videoList__title}><b>Danh sách video khóa học</b></Typography>
                             <PerfectScrollbar className={classes.videoList}>
                               {chapter.videos.map(video => (
@@ -1038,7 +1065,9 @@ const CourseDetails = () => {
 
           {tabValue === 2 && (
             <Box p={6}>
-              <AddFeedback />
+              {userState.authUser && userState.authUser.role !== userRole.LECTURER.value && userState.authUser.role !== userRole.ADMIN.value && (
+                <AddFeedback />
+              )}
               <Card className={classes.feedbackListContainer}>
                 <CardContent>
                   <Typography variant="h5" className={classes.secondaryText} gutterBottom>
@@ -1095,7 +1124,7 @@ const CourseDetails = () => {
           )}
 
         </div>
-        <div className={`${classes.section} ${classes.highestViewCourses}`}>
+        <div className={`${classes.section} ${classes.highestViewCourses} animate__animated animate__fadeInUp`}>
           <Typography variant="h5" className={classes.highestViewCourses__title}><b>Các khóa học liên quan</b></Typography>
           <div className={classes.highestViewCoursesCarousel}>
             <CourseMultiCarousel courses={courses || []} />

@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     zIndex: 5,
     padding: theme.spacing(4),
-    minHeight: 500,
+    minHeight: '33rem',
   },
   btnAddCourse: {
     position: 'absolute',
@@ -219,7 +219,7 @@ const InChargeCourses = () => {
   ]
 
   for (let c of courses)
-    c['href'] = '/course-details';
+    c['href'] = '/chi-tiet-khoa-hoc';
 
   return (
     <div className={classes.root}>

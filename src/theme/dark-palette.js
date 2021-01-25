@@ -1,4 +1,5 @@
 import { colors } from '@material-ui/core';
+import { purple } from '@material-ui/core/colors';
 
 const white = '#FFFFFF';
 const black = '#000000';
@@ -48,7 +49,8 @@ export default {
     secondary: colors.grey[400],
     link: colors.orange['A400'],
     disabled: colors.grey[600],
-    topbar: white
+    topbar: purple['A700'],
+    sidebarActive: white
   },
   background: {
     default: '#212111',

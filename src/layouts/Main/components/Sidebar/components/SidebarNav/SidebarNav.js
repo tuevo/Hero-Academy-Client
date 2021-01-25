@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import React, { forwardRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink as RouterLink } from 'react-router-dom';
-import { setActivePage } from 'redux/actions/app.action';
+import { setPageBasics } from 'redux/actions/page.action';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
   },
   active: {
     backgroundColor: theme.palette.primary.light,
-    color: theme.palette.primary.main,
+    color: theme.palette.text.sidebarActive,
     fontWeight: 'bold',
     '& $icon': {
       color: theme.palette.primary.main
@@ -66,7 +66,7 @@ const SidebarNav = props => {
 
   const handleClick = (pageId) => {
     const page = _.find(availablePages, page => page._id === pageId);
-    dispatch(setActivePage(page));
+    dispatch(setPageBasics(page));
   }
 
   return (

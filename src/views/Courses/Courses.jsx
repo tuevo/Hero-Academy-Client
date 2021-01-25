@@ -7,7 +7,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     position: 'relative',
     padding: theme.spacing(4),
-    minHeight: 500,
+    minHeight: '33rem',
   },
   btnLoadMoreCourse: {
     "backgroundColor": "#a4508b",
@@ -198,7 +198,7 @@ const Courses = () => {
   ]
 
   for (let c of courses)
-    c['href'] = '/course-details';
+    c['href'] = '/chi-tiet-khoa-hoc';
 
   return (
     <div className={classes.root}>

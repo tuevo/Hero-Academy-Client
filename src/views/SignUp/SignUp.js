@@ -214,9 +214,8 @@ const SignUp = props => {
             </div>
             <div className={classes.contentBody}>
               <form
-                className={`${classes.form} animate__animated animate__fadeInRight`}
+                className={`${classes.form} animate__animated animate__fadeIn`}
                 onSubmit={handleSignUp}
-                style={{ animationDuration: '0.75s' }}
               >
                 <Typography
                   className={classes.title}
@@ -249,6 +248,7 @@ const SignUp = props => {
                       underline: classes.input
                     }
                   }}
+                  autoFocus
                 />
                 <TextField
                   className={classes.textField}

@@ -15,7 +15,7 @@
 
 	```
 	PORT=5000
-	REACT_APP_API_URL=http://localhost:3000/api
+	REACT_APP_API_URL=http://localhost:3500/api
 	```
 
 - Start the server: `npm run start` or `yarn start`

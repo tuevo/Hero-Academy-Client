@@ -54,17 +54,17 @@ const CategorySidebar = props => {
         {
           _id: '1.1',
           name: 'Lập trình web',
-          href: '/category-courses'
+          href: '/khoa-hoc-thuoc-linh-vuc'
         },
         {
           _id: '1.2',
           name: 'Lập trình di động',
-          href: '/category-courses'
+          href: '/khoa-hoc-thuoc-linh-vuc'
         },
         {
           _id: '1.3',
           name: 'Lập trình game',
-          href: '/category-courses'
+          href: '/khoa-hoc-thuoc-linh-vuc'
         }
       ]
     },
@@ -75,17 +75,17 @@ const CategorySidebar = props => {
         {
           _id: '2.1',
           name: 'Đồ họa',
-          href: '/category-courses'
+          href: '/khoa-hoc-thuoc-linh-vuc'
         },
         {
           _id: '2.2',
           name: 'Nội thất',
-          href: '/category-courses'
+          href: '/khoa-hoc-thuoc-linh-vuc'
         },
         {
           _id: '2.3',
           name: 'Thời trang',
-          href: '/category-courses'
+          href: '/khoa-hoc-thuoc-linh-vuc'
         }
       ]
     },
@@ -96,17 +96,17 @@ const CategorySidebar = props => {
         {
           _id: '3.1',
           name: 'Lập trình web',
-          href: '/category-courses'
+          href: '/khoa-hoc-thuoc-linh-vuc'
         },
         {
           _id: '3.2',
           name: 'Lập trình di động',
-          href: '/category-courses'
+          href: '/khoa-hoc-thuoc-linh-vuc'
         },
         {
           _id: '3.3',
           name: 'Lập trình game',
-          href: '/category-courses'
+          href: '/khoa-hoc-thuoc-linh-vuc'
         }
       ]
     },
@@ -117,17 +117,17 @@ const CategorySidebar = props => {
         {
           _id: '4.1',
           name: 'Lập trình web',
-          href: '/category-courses'
+          href: '/khoa-hoc-thuoc-linh-vuc'
         },
         {
           _id: '4.2',
           name: 'Lập trình di động',
-          href: '/category-courses'
+          href: '/khoa-hoc-thuoc-linh-vuc'
         },
         {
           _id: '4.3',
           name: 'Lập trình game',
-          href: '/category-courses'
+          href: '/khoa-hoc-thuoc-linh-vuc'
         }
       ]
     },
@@ -138,22 +138,22 @@ const CategorySidebar = props => {
         {
           _id: '5.1',
           name: 'Tiếng Anh',
-          href: '/category-courses'
+          href: '/khoa-hoc-thuoc-linh-vuc'
         },
         {
           _id: '5.2',
           name: 'Tiếng Trung',
-          href: '/category-courses'
+          href: '/khoa-hoc-thuoc-linh-vuc'
         },
         {
           _id: '5.3',
           name: 'Tiếng Nhật',
-          href: '/category-courses'
+          href: '/khoa-hoc-thuoc-linh-vuc'
         },
         {
           _id: '5.4',
           name: 'Tiếng Pháp',
-          href: '/category-courses'
+          href: '/khoa-hoc-thuoc-linh-vuc'
         }
       ]
     },

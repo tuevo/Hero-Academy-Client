@@ -420,58 +420,58 @@ const Home = () => {
   ];
 
   for (let c of courses)
-    c['href'] = '/course-details';
+    c['href'] = '/chi-tiet-khoa-hoc';
 
   const categories = [
     {
       _id: 1,
       name: 'Lập trình web',
-      href: '/category-courses'
+      href: '/khoa-hoc-thuoc-linh-vuc'
     },
     {
       _id: 2,
       name: 'Lập trình di động',
-      href: '/category-courses'
+      href: '/khoa-hoc-thuoc-linh-vuc'
     },
     {
       _id: 3,
       name: 'Lập trình game',
-      href: '/category-courses'
+      href: '/khoa-hoc-thuoc-linh-vuc'
     },
     {
       _id: 4,
       name: 'Đồ họa',
-      href: '/category-courses'
+      href: '/khoa-hoc-thuoc-linh-vuc'
     },
     {
       _id: 5,
       name: 'Nội thất',
-      href: '/category-courses'
+      href: '/khoa-hoc-thuoc-linh-vuc'
     },
     {
       _id: 6,
       name: 'Thời trang',
-      href: '/category-courses'
+      href: '/khoa-hoc-thuoc-linh-vuc'
     },
     {
       _id: 7,
       name: 'Tiếng Anh',
-      href: '/category-courses'
+      href: '/khoa-hoc-thuoc-linh-vuc'
     },
     {
       _id: 8,
       name: 'Tiếng Trung',
-      href: '/category-courses'
+      href: '/khoa-hoc-thuoc-linh-vuc'
     },
     {
       _id: 9,
       name: 'Tiếng Nhật',
-      href: '/category-courses'
+      href: '/khoa-hoc-thuoc-linh-vuc'
     },
     {
       _id: 10,
       name: 'Tiếng Pháp',
-      href: '/category-courses'
+      href: '/khoa-hoc-thuoc-linh-vuc'
     }
   ]
 

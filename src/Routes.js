@@ -11,6 +11,7 @@ import { Main as MainLayout, Main2 as Main2Layout, Minimal as MinimalLayout } fr
 import {
   CategoryCourses as CategoryCoursesView,
   CourseDetails as CourseDetailsView,
+  Categories as CategoriesView,
   Courses as CoursesView,
   CourseSearching as CourseSearchingView,
   FavoriteCourses as FavoriteCoursesView,
@@ -122,6 +123,14 @@ const Routes = () => {
           path={availablePages.IN_CHARGE_COURSES.path}
           title={availablePages.IN_CHARGE_COURSES.title}
           meta={{ auth: availablePages.IN_CHARGE_COURSES.auth }}
+        />
+        <RouteWithLayout
+          component={CategoriesView}
+          exact
+          layout={MainLayout}
+          path={availablePages.CATEGORIES.path}
+          title={availablePages.CATEGORIES.title}
+          meta={{ auth: availablePages.CATEGORIES.auth }}
         />
         <RouteWithLayout
           component={CoursesView}

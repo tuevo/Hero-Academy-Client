@@ -14,7 +14,7 @@ import { signOut } from 'redux/actions/user.action';
 const useStyles = makeStyles((theme) => ({
   account: {
     textTransform: 'none',
-    borderRadius: '1.5rem'
+    borderRadius: '3.125rem'
   },
   list: {
     width: '100%',
