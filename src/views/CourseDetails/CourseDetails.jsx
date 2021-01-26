@@ -31,6 +31,8 @@ import { format } from 'timeago.js';
 import { AddChapter } from './components';
 import AddFeedback from './components/AddFeedback/AddFeedback';
 import UpdateCourse from './components/UpdateCourse/UpdateCourse';
+import { useRef } from 'react';
+import { useEffect } from 'react';
 
 function a11yProps(index) {
   return {
@@ -314,10 +316,18 @@ const CourseDetails = () => {
     authUser: state.user.authUser
   }));
 
+  const ps = useRef();
+  const chapterRefs = useRef();
+
   const [tabValue, setTabValue] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const [openRemovingCourseConfirmDialog, setOpenRemovingCourseConfirmDialog] = useState(false);
   const [expandedChapterIndex, setExpandedChapterIndex] = useState(0);
+
+  const scrollToChapter = (_id) => {
+    const ref = chapterRefs.current.find(r => r._id === _id);
+    ps.current.scrollTop = ref.current.getBoundingClientRect().top;
+  }
 
   const handleBack = () => {
     history.goBack();
@@ -346,6 +356,12 @@ const CourseDetails = () => {
     else
       setExpandedChapterIndex(index);
   }
+
+  useEffect(() => {
+    if (tabValue === 1) {
+      scrollToChapter(1);
+    }
+  }, [tabValue])
 
   const course = {
     _id: 2,
@@ -806,7 +822,10 @@ const CourseDetails = () => {
   }
 
   return (
-    <div className={classes.root}>
+    <PerfectScrollbar
+      className={classes.root}
+      containerRef={el => (ps.current = el)}
+    >
       <div className={classes.banner} style={{ backgroundImage: `url(${course.thumbnail})` }}>
         <div className={classes.bannerCover}></div>
         <Box display="flex" flexDirection="column" className={`${classes.bannerContent} animate__animated animate__fadeIn`}>
@@ -953,7 +972,29 @@ const CourseDetails = () => {
               )}
               <Box mt={4}>
                 {chapters.map((chapter, index) => (
-                  <Accordion key={chapter._id} expanded={index === expandedChapterIndex} className={classes.chapter}>
+                  <Accordion
+                    key={chapter._id}
+                    expanded={index === expandedChapterIndex}
+                    className={classes.chapter}
+                    ref={el => {
+                      if (chapterRefs.current) {
+                        chapterRefs.current = [
+                          ...chapterRefs.current,
+                          {
+                            _id: chapter._id,
+                            current: el
+                          }
+                        ]
+                      } else {
+                        chapterRefs.current = [
+                          {
+                            _id: chapter._id,
+                            current: el
+                          }
+                        ]
+                      }
+                    }}
+                  >
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon className={classes.icon} />}
                       aria-controls="panel1a-content"
@@ -1099,7 +1140,7 @@ const CourseDetails = () => {
           </div>
         </div>
       </main>
-    </div >
+    </PerfectScrollbar>
   );
 };
 
