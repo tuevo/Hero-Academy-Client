@@ -15,17 +15,18 @@ import React, { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginBottom: theme.spacing(2),
-    boxShadow: 'none'
+    boxShadow: 'none',
+    width: '100%'
   },
   cardContent: {
     padding: '0 !important'
   },
   btnAdd: {
+    height: '2.625rem',
     minWidth: '10.625rem',
     marginLeft: 5,
     "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)",
   },
   input: {
     ...theme.palette.input
@@ -55,7 +56,7 @@ const AddChapter = props => {
     >
       <form>
         <CardContent className={classes.cardContent}>
-          <Box display="flex">
+          <Box display="flex" alignItems="center">
             <TextField
               label="Tiêu đề chương"
               name="name"

@@ -168,17 +168,15 @@ const CategorySidebar = props => {
       open={open}
       variant={variant}
     >
-      <PerfectScrollbar>
-        <div
-          {...rest}
-          className={clsx(classes.root, className)}
-        >
-          <div className={classes.darkCover}></div>
-          <CategorySidebarNav
-            className={classes.nav}
-            categoryClusters={categoryClusters}
-          />
-        </div>
+      <PerfectScrollbar
+        {...rest}
+        className={clsx(classes.root, className)}
+      >
+        <div className={classes.darkCover}></div>
+        <CategorySidebarNav
+          className={classes.nav}
+          categoryClusters={categoryClusters}
+        />
       </PerfectScrollbar>
     </Drawer>
   );

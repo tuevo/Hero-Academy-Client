@@ -21,7 +21,7 @@ import CourseMultiCarousel from 'components/CourseMultiCarousel/CourseMultiCarou
 import { VideoPlayer } from 'components/VideoPlayer';
 import { userRole } from 'constants/user-role.constant';
 import * as moment from 'moment';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useSelector } from 'react-redux';
@@ -31,8 +31,7 @@ import { format } from 'timeago.js';
 import { AddChapter } from './components';
 import AddFeedback from './components/AddFeedback/AddFeedback';
 import UpdateCourse from './components/UpdateCourse/UpdateCourse';
-import { useRef } from 'react';
-import { useEffect } from 'react';
+import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
 
 function a11yProps(index) {
   return {
@@ -209,7 +208,6 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '1.5rem'
   },
   videoPlayer__video: {
-    height: '23.75rem'
   },
   videoListItem: {
     width: '100%',
@@ -242,16 +240,19 @@ const useStyles = makeStyles(theme => ({
   },
   videoListContainer: {
     position: 'relative',
+    height: '29.25rem',
     padding: theme.spacing(2),
     border: `1px solid ${theme.palette.border.color}`,
     borderRadius: theme.palette.card.borderRadius
   },
   videoList: {
-    height: '21rem',
+    height: '90%',
     overflow: 'scroll',
     marginTop: theme.spacing(2)
   },
   videoList__title: {
+    display: 'flex',
+    alignItems: 'center',
     color: theme.palette.text.secondary
   },
   btnAddVideo: {
@@ -260,10 +261,6 @@ const useStyles = makeStyles(theme => ({
     top: '-5%',
     "backgroundColor": "#a4508b",
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
-  },
-  btnOpenWatchHistory: {
-    width: '100%',
-    marginTop: theme.spacing(2)
   },
   feedbackListContainer: {
     boxShadow: 'none',
@@ -305,6 +302,9 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.default,
     borderRadius: 5,
     marginTop: theme.spacing(1)
+  },
+  chapter__content: {
+
   }
 }));
 
@@ -356,12 +356,6 @@ const CourseDetails = () => {
     else
       setExpandedChapterIndex(index);
   }
-
-  useEffect(() => {
-    if (tabValue === 1) {
-      scrollToChapter(1);
-    }
-  }, [tabValue])
 
   const course = {
     _id: 2,
@@ -967,10 +961,27 @@ const CourseDetails = () => {
 
           {tabValue === 1 && (
             <Box p={6}>
-              {userState.authUser && userState.authUser.role === userRole.LECTURER.value && (
-                <AddChapter />
+              {userState.authUser && (
+                <Box mb={4} display="flex" alignItems="center" style={{ width: '100%' }}>
+                  {userState.authUser.role === userRole.LECTURER.value && (
+                    <Box style={{ flexGrow: 2 }}>
+                      <AddChapter />
+                    </Box>
+                  )}
+                  {userState.authUser.role === userRole.STUDENT.value && (
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      startIcon={(<HistoryIcon />)}
+                      size="large"
+                      fullWidth
+                    >
+                      Lịch sử theo dõi video
+                    </Button>
+                  )}
+                </Box>
               )}
-              <Box mt={4}>
+              <Box>
                 {chapters.map((chapter, index) => (
                   <Accordion
                     key={chapter._id}
@@ -1009,62 +1020,66 @@ const CourseDetails = () => {
                       </Box>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <Grid container spacing={2}>
-                        <Grid item xs={8}>
-                          <div className={classes.videoPlayer}>
-                            <div className={classes.videoPlayer__video}>
-                              <VideoPlayer />
+                      <Box className={classes.chapter__content}>
+                        <Grid container spacing={2}>
+                          <Grid item xs={8}>
+                            <div className={classes.videoPlayer}>
+                              <div className={classes.videoPlayer__video}>
+                                <VideoPlayer />
+                              </div>
+                              <Box px={2} pt={2} pb={1}>
+                                <Typography variant="h4" gutterBottom><b>{chapter.videos[0].title}</b></Typography>
+                                <Typography variant="body2" gutterBottom>
+                                  <span>Đăng lúc {moment(chapter.videos[0].updatedAt).format('DD/MM HH:mm')} </span>
+                                </Typography>
+                              </Box>
                             </div>
-                            <Box px={2} pt={2} pb={1}>
-                              <Typography variant="h4" gutterBottom><b>{chapter.videos[0].title}</b></Typography>
-                              <Typography variant="body2" gutterBottom>
-                                <span>Đăng lúc {moment(chapter.videos[0].updatedAt).format('DD/MM HH:mm')} </span>
+                          </Grid>
+                          <Grid item xs={4}>
+                            <div className={classes.videoListContainer}>
+                              {userState.authUser && userState.authUser.role === userRole.LECTURER.value && (
+                                <Tooltip title="Đăng tải video" className="animate__animated animate__bounceIn">
+                                  <Fab size="medium" color="primary" aria-label="add" className={classes.btnAddVideo}>
+                                    <AddIcon />
+                                  </Fab>
+                                </Tooltip>
+                              )}
+                              <Typography gutterBottom variant="body1" className={classes.videoList__title}>
+                                <PlaylistPlayIcon />
+                                <span style={{ marginLeft: 3 }}><b>Danh sách phát</b></span>
                               </Typography>
-                            </Box>
-                          </div>
-                        </Grid>
-                        <Grid item xs={4}>
-                          <div className={classes.videoListContainer}>
-                            {userState.authUser && userState.authUser.role === userRole.LECTURER.value && (
-                              <Tooltip title="Đăng tải video" className="animate__animated animate__bounceIn">
-                                <Fab size="medium" color="primary" aria-label="add" className={classes.btnAddVideo}>
-                                  <AddIcon />
-                                </Fab>
-                              </Tooltip>
-                            )}
-                            <Typography gutterBottom variant="body1" className={classes.videoList__title}><b>Danh sách video khóa học</b></Typography>
-                            <PerfectScrollbar className={classes.videoList}>
-                              {chapter.videos.map(video => (
-                                <Card key={video._id} className={classes.videoListItem}>
-                                  <CardActionArea>
-                                    <Grid container>
-                                      <Grid item xs={5}>
-                                        <div className={classes.videoListItem__thumbnailContainer}>
-                                          <CardMedia
-                                            className={classes.videoListItem__thumbnail}
-                                            image={video.thumbnailUrl}
-                                            title="Contemplative Reptile"
-                                          />
-                                          <Typography variant="body2" className={classes.videoListItem__duration}>
-                                            {moment.utc(video.duration).format('mm:ss')}
-                                          </Typography>
-                                        </div>
+                              <PerfectScrollbar className={classes.videoList}>
+                                {chapter.videos.map(video => (
+                                  <Card key={video._id} className={classes.videoListItem}>
+                                    <CardActionArea>
+                                      <Grid container>
+                                        <Grid item xs={5}>
+                                          <div className={classes.videoListItem__thumbnailContainer}>
+                                            <CardMedia
+                                              className={classes.videoListItem__thumbnail}
+                                              image={video.thumbnailUrl}
+                                              title="Contemplative Reptile"
+                                            />
+                                            <Typography variant="body2" className={classes.videoListItem__duration}>
+                                              {moment.utc(video.duration).format('mm:ss')}
+                                            </Typography>
+                                          </div>
+                                        </Grid>
+                                        <Grid item xs={7}>
+                                          <CardContent className={classes.videoListItem__details}>
+                                            <Typography gutterBottom variant="h6"><b>{video.title}</b></Typography>
+                                            <Typography variant="body2">{`Đăng lúc ${moment(video.updatedAt).format('DD/MM HH:mm')}`}</Typography>
+                                          </CardContent>
+                                        </Grid>
                                       </Grid>
-                                      <Grid item xs={7}>
-                                        <CardContent className={classes.videoListItem__details}>
-                                          <Typography gutterBottom variant="h6"><b>{video.title}</b></Typography>
-                                          <Typography variant="body2">{`Đăng lúc ${moment(video.updatedAt).format('DD/MM HH:mm')}`}</Typography>
-                                        </CardContent>
-                                      </Grid>
-                                    </Grid>
-                                  </CardActionArea>
-                                </Card>
-                              ))}
-                            </PerfectScrollbar>
-                            <Button className={classes.btnOpenWatchHistory} variant="outlined" color="primary"><HistoryIcon /><span style={{ marginLeft: 5 }}>Lịch sử theo dõi video</span></Button>
-                          </div>
+                                    </CardActionArea>
+                                  </Card>
+                                ))}
+                              </PerfectScrollbar>
+                            </div>
+                          </Grid>
                         </Grid>
-                      </Grid>
+                      </Box>
                     </AccordionDetails>
                   </Accordion>
                 ))}
