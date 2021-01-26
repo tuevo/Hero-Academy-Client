@@ -19,18 +19,18 @@ import { makeStyles } from '@material-ui/styles';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import CourseMultiCarousel from 'components/CourseMultiCarousel/CourseMultiCarousel';
 import { VideoPlayer } from 'components/VideoPlayer';
+import { userRole } from 'constants/user-role.constant';
 import * as moment from 'moment';
 import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import { useSelector } from 'react-redux';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { useHistory } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { format } from 'timeago.js';
 import { AddChapter } from './components';
 import AddFeedback from './components/AddFeedback/AddFeedback';
 import UpdateCourse from './components/UpdateCourse/UpdateCourse';
-import { useSelector } from 'react-redux';
-import { userRole } from 'constants/user-role.constant';
 
 function a11yProps(index) {
   return {
@@ -68,20 +68,15 @@ const useStyles = makeStyles(theme => ({
     width: '85%',
     height: '100%',
   },
-  bannerText: {
-    color: '#fff',
-    textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
-  },
-  bannerSubTitle: {
-    marginTop: theme.spacing(2)
-  },
-  logoImage: {
-    width: '2.8125rem',
-    marginRight: theme.spacing(1.5),
-    filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.2))'
-  },
-  searchInputContainer: {
-    marginTop: theme.spacing(4)
+  btnContrast: {
+    paddingLeft: theme.spacing(1.5),
+    paddingRight: theme.spacing(1.5),
+    color: theme.palette.primary.contrastText,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    fontWeight: 'bold',
+    '&:hover': {
+      backgroundColor: 'rgba(255,255,255,0.2)'
+    }
   },
   main: {
     position: 'absolute',
@@ -99,36 +94,6 @@ const useStyles = makeStyles(theme => ({
   },
   starIcon: {
     color: '#ffb600'
-  },
-  featuredCoursesCarouselTitleIcon: {
-    marginRight: theme.spacing(1)
-  },
-  featuredCoursesCarousel: {
-    ...theme.palette.card,
-    marginTop: theme.spacing(3),
-    overflow: 'hidden',
-    borderRadius: '1.875rem'
-  },
-  featuredCoursesCarouselItem: {
-    height: '30rem',
-    position: 'relative'
-  },
-  featuredCoursesCarouselItemLegend: {
-    textAlign: 'left !important',
-    opacity: '1 !important',
-    background: 'none !important'
-  },
-  featuredCoursesCarouselItem__courseThumbnail: {
-    width: '100%',
-    height: '100%'
-  },
-  featuredCoursesCarouselItem__courseThumbnailCover: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    boxShadow: 'inset 0 -14rem 6.25rem rgba(3, 155, 229, 0.7)'
   },
   contrastText: {
     color: '#fff',
@@ -849,31 +814,30 @@ const CourseDetails = () => {
             <IconButton onClick={handleBack} color="inherit">
               <ArrowBackIcon />
             </IconButton>
-            <Box display="flex" className={classes.contrastText}>
+            <Box display="flex" color="inherit">
               {userState.authUser && userState.authUser.role === userRole.STUDENT.value && (
                 <Button
                   startIcon={isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                  variant={isFavorite ? 'contained' : 'outlined'}
-                  color={isFavorite ? 'secondary' : 'inherit'}
                   onClick={handleBtnFavoriteClick}
                   size="small"
+                  className={classes.btnContrast}
                 >
                   Yêu thích
                 </Button>
               )}
               {userState.authUser && userState.authUser.role === userRole.LECTURER.value && (
                 <Box ml={1}>
-                  <UpdateCourse course={course} />
+                  <UpdateCourse course={course} className={classes.btnContrast} />
                 </Box>
               )}
               {userState.authUser && userState.authUser.role === userRole.ADMIN.value && (
                 <Box ml={1}>
                   <Button
                     startIcon={<DeleteIcon />}
-                    variant="outlined"
                     color="inherit"
                     onClick={handleBtnOpenRemovingCourseDialogClick}
                     size="small"
+                    className={classes.btnContrast}
                   >
                     Gỡ khóa học
                   </Button>
@@ -889,21 +853,25 @@ const CourseDetails = () => {
           </Box>
           <Grid container alignItems="center">
             <Grid item xs={6}>
-              <Box display="flex" alignItems="center" style={{ marginBottom: 9 }}>
-                <Typography variant="body2" className={classes.contrastText} >
+              <Box display="flex" alignItems="center" mb={2}>
+                <Typography variant="body2" color="inherit" >
                   {course.categoryCluster.name.toUpperCase()}
                 </Typography>
-                <ArrowRightIcon className={classes.contrastText} />
-                <Typography variant="body2" className={classes.contrastText}>
-                  {course.categoryCluster.category.name.toUpperCase()}
-                </Typography>
+                <ArrowRightIcon color="inherit" />
+                <RouterLink to="/khoa-hoc-thuoc-linh-vuc">
+                  <Typography variant="body2" color="inherit">
+                    <Button className={classes.btnContrast} size="small">
+                      {course.categoryCluster.category.name.toUpperCase()}
+                    </Button>
+                  </Typography>
+                </RouterLink>
               </Box>
 
-              <Typography variant="h3" className={classes.contrastText}><b>{course.title}</b></Typography>
-              <Typography variant="body1" className={`${classes.contrastText} ${classes.description}`}>{course.description}</Typography>
+              <Typography variant="h3" color="inherit"><b>{course.title}</b></Typography>
+              <Typography variant="body1" className={classes.description} color="inherit">{course.description}</Typography>
 
               <Box display="flex" alignItems="flex-end" className={classes.featuredCoursesCarouselItem__ratingDetails}>
-                <Typography variant="body2" className={classes.contrastText} style={{ marginRight: 3 }}>
+                <Typography variant="body2" color="inherit" style={{ marginRight: 3 }}>
                   <span className={`${classes.label} ${classes.label__bestSeller}`} style={{ marginLeft: 0 }}>Best Seller</span>
                   {course.isFinished ? (
                     <span className={`${classes.label} ${classes.label__new}`} style={{ marginLeft: 9 }}>Đã hoàn thành</span>
@@ -911,30 +879,30 @@ const CourseDetails = () => {
                   <span style={{ marginLeft: 9 }}>{`${Math.floor(course.averageRating)}.${(course.averageRating - Math.floor(course.averageRating)) * 10}`}</span>
                 </Typography>
                 <Rating name="read-only" value={course.averageRating} size="small" precision={0.5} readOnly />
-                <Typography variant="body2" className={classes.contrastText} style={{ marginLeft: 3 }}>
+                <Typography variant="body2" color="inherit" style={{ marginLeft: 3 }}>
                   <span>(</span>
                   <NumberFormat value={course.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
                   <span>)</span>
                 </Typography>
-                <Typography variant="body2" className={classes.contrastText} style={{ marginLeft: 9 }}>
+                <Typography variant="body2" color="inherit" style={{ marginLeft: 9 }}>
                   <NumberFormat value={course.numberOfStudents} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
                 </Typography>
               </Box>
 
               <Box display="flex" alignItems="center">
-                <Typography variant="body2" className={classes.contrastText}>Giảng viên: <b>{course.lecturer.fullName}</b></Typography>
-                <Typography variant="body2" className={classes.contrastText} style={{ marginLeft: 9 }}>Cập nhật lần cuối: {moment(course.updatedAt).format('DD/MM HH:mm')}</Typography>
+                <Typography variant="body2" color="inherit">Giảng viên: <b>{course.lecturer.fullName}</b></Typography>
+                <Typography variant="body2" color="inherit" style={{ marginLeft: 9 }}>Cập nhật lần cuối: {moment(course.updatedAt).format('DD/MM HH:mm')}</Typography>
               </Box>
             </Grid>
             <Grid item xs={6}>
               <Box display="flex" flexDirection="column" alignItems="flex-end">
-                <Typography variant="h3" className={`${classes.contrastText} ${classes.featuredCoursesCarouselItem__price}`}>
+                <Typography variant="h3" className={classes.featuredCoursesCarouselItem__price} color="inherit">
                   <NumberFormat value={course.tuition - course.tuition * course.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={course.discountPercent > 0 ? 'Chỉ còn ' : `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                 across all continents except Antarctica.`} suffix={'đ'} />
                 </Typography>
 
                 {course.discountPercent > 0 && (
-                  <Typography variant="h4" className={classes.contrastText}>
+                  <Typography variant="h4" color="inherit">
                     <strike>
                       <NumberFormat value={course.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
                     </strike>

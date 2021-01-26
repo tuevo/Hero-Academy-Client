@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React from 'react';
 import CategorySidebarNav from './CategorySidebarNav/CategorySidebarNav';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -167,17 +168,19 @@ const CategorySidebar = props => {
       open={open}
       variant={variant}
     >
-      <div
-        {...rest}
-        className={clsx(classes.root, className)}
-      >
-        <div className={classes.darkCover}></div>
-        <CategorySidebarNav
-          className={classes.nav}
-          categoryClusters={categoryClusters}
-        />
-      </div>
-    </Drawer >
+      <PerfectScrollbar>
+        <div
+          {...rest}
+          className={clsx(classes.root, className)}
+        >
+          <div className={classes.darkCover}></div>
+          <CategorySidebarNav
+            className={classes.nav}
+            categoryClusters={categoryClusters}
+          />
+        </div>
+      </PerfectScrollbar>
+    </Drawer>
   );
 };
 

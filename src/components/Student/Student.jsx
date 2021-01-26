@@ -43,11 +43,11 @@ function Details(props) {
         <Box py={4}>
           <Box pb={2} display="flex" justifyContent="space-between">
             <Typography variant="body2">Ngày tham gia</Typography>
-            <Typography variant="h6">{moment(data.createdAt).format('DD/MM/YYYY')}</Typography>
+            <Typography variant="body2" color="textPrimary">{moment(data.createdAt).format('DD/MM/YYYY')}</Typography>
           </Box>
           <Box pb={2} display="flex" justifyContent="space-between">
             <Typography variant="body2">Số khóa học đã tham gia</Typography>
-            <Typography variant="h6">5</Typography>
+            <Typography variant="body2" color="textPrimary">5</Typography>
           </Box>
         </Box>
         <Box pt={6}>

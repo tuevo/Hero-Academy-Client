@@ -88,7 +88,7 @@ const Topbar = props => {
           <Box display="flex" alignItems="center" className={classes.logo}>
             <img
               alt="Logo"
-              src="https://icons-for-free.com/iconfiles/png/128/hero+marvel+character+super+hero+icon-1320166754459520952.png"
+              src="images/logos/logo.png"
               className={classes.logoImage}
             />
             <Typography variant="h5" className={classes.logoTitle}>Hero Academy</Typography>

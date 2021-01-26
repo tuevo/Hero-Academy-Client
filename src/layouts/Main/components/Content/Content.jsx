@@ -46,7 +46,7 @@ export default function Content({ inner }) {
     pageState.basics && (
       <PerfectScrollbar className={classes.root}>
         <Box pl={2} pb={4} className={classes.title}>
-          <Typography variant="h3" color="inherit"><b>{pageState.basics.title}</b></Typography>
+          <Typography variant="h2" color="inherit"><b>{pageState.basics.title}</b></Typography>
         </Box>
         <Box display="flex" justifyContent="center" className={`${classes.content}`}>
           {inner}

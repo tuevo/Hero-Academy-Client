@@ -482,7 +482,7 @@ const Home = () => {
           <Box ml={-2} display="flex" justifyContent="center" alignItems="center" className={`animate__animated animate__fadeInRight`}>
             <img
               alt="Logo"
-              src="https://icons-for-free.com/iconfiles/png/128/hero+marvel+character+super+hero+icon-1320166754459520952.png"
+              src="images/logos/logo.png"
               className={classes.logoImage}
             />
             <Typography className={`${classes.bannerText} ${classes.bannerTitle}`} variant="h1">Hero Academy</Typography>

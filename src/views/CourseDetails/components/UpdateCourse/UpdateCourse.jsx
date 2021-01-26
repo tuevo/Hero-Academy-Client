@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function UpdateCourse({ course }) {
+export default function UpdateCourse({ course, className }) {
   const classes = useStyles();
   const [state, setState] = useState({
     top: false,
@@ -459,10 +459,10 @@ export default function UpdateCourse({ course }) {
         <React.Fragment key={anchor}>
           <Button
             startIcon={<EditIcon />}
-            variant="outlined"
             onClick={toggleDrawer(anchor, true)}
             color="inherit"
             size="small"
+            className={className}
           >
             Chỉnh sửa
           </Button>

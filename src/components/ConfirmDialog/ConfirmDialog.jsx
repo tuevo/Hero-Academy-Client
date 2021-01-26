@@ -21,11 +21,11 @@ export default function ConfirmDialog({ title, content, open, onClose }) {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => onClose(true)} color="primary">
-          Đồng ý
-          </Button>
-        <Button onClick={() => onClose(false)} color="primary" autoFocus>
+        <Button onClick={() => onClose(false)} color="primary">
           Hủy bỏ
+          </Button>
+        <Button onClick={() => onClose(true)} color="primary" autoFocus>
+          Đồng ý
           </Button>
       </DialogActions>
     </Dialog>

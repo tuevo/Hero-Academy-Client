@@ -93,13 +93,13 @@ function AccountMenu({ authUser }) {
         >
           <ListItem button onClick={() => handleClickListItem(1)}>
             <ListItemIcon className={classes.list__icon}>
-              <AppsIcon color="inherit" />
+              <AppsIcon color="inherit" fontSize="small" />
             </ListItemIcon>
             <ListItemText primary="Bảng điều khiển" />
           </ListItem>
           <ListItem button onClick={() => handleClickListItem(2)}>
             <ListItemIcon className={classes.list__icon}>
-              <ExitToAppIcon color="inherit" />
+              <ExitToAppIcon color="inherit" fontSize="small" />
             </ListItemIcon>
             <ListItemText primary="Đăng xuất" />
           </ListItem>
