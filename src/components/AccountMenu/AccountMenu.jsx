@@ -1,15 +1,10 @@
-import React from 'react';
+import { Avatar, Box, Button, List, ListItem, ListItemIcon, ListItemText, Popover, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Button, Popover, Box, Avatar, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { userRole } from 'constants/user-role.constant';
-import * as _ from 'lodash';
 import AppsIcon from '@material-ui/icons/Apps';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { useHistory } from 'react-router-dom';
-import { availablePages } from 'constants/global.constant';
-import { localStorageItems } from 'constants/local-storage.constant';
-import { useDispatch } from 'react-redux';
-import { signOut } from 'redux/actions/user.action';
+import { userRole } from 'constants/user-role.constant';
+import * as _ from 'lodash';
+import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
   account: {
@@ -26,10 +21,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function AccountMenu({ authUser }) {
+function AccountMenu({ authUser, onClickItem }) {
   const classes = useStyles();
-  const history = useHistory();
-  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -41,21 +34,8 @@ function AccountMenu({ authUser }) {
   };
 
   const handleClickListItem = index => {
-    switch (index) {
-      case 1:
-        const firstPage = _.find(availablePages, page => page.auth && page.role === authUser.role);
-        history.push(firstPage.path);
-        break;
-
-      case 2:
-        localStorage.removeItem(localStorageItems.ACCESS_TOKEN.name);
-        localStorage.removeItem(localStorageItems.AUTH_USER.name);
-        dispatch(signOut());
-        break;
-
-      default:
-        break;
-    }
+    setAnchorEl(null);
+    onClickItem(index);
   }
 
   const open = Boolean(anchorEl);

@@ -15,6 +15,7 @@ import Brightness7Icon from '@material-ui/icons/Brightness7';
 import { switchDarkMode } from 'redux/actions/app.action';
 import { SearchInput } from 'components';
 import { signOut } from 'redux/actions/user.action';
+import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -59,6 +60,7 @@ const Topbar = props => {
   const dispatch = useDispatch();
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [openSignOutConfirmDialog, setOpenSignOutConfirmDialog] = useState(false);
 
   const handleSearchInputChange = (e) => {
     setSearchTerm(e.target.value);
@@ -70,11 +72,18 @@ const Topbar = props => {
     }
   }
 
-  const handleSignOut = () => {
-    localStorage.removeItem(localStorageItems.ACCESS_TOKEN.name);
-    localStorage.removeItem(localStorageItems.AUTH_USER.name);
-    dispatch(signOut());
-    history.push(availablePages.SIGN_IN.path);
+  const handleClickBtnSignOut = () => {
+    setOpenSignOutConfirmDialog(true);
+  }
+
+  const handleCloseSignOutConfirmDialog = (accepted) => {
+    setOpenSignOutConfirmDialog(false);
+    if (accepted) {
+      localStorage.removeItem(localStorageItems.ACCESS_TOKEN.name);
+      localStorage.removeItem(localStorageItems.AUTH_USER.name);
+      dispatch(signOut());
+      history.push(availablePages.SIGN_IN.path);
+    }
   }
 
   return (
@@ -117,7 +126,7 @@ const Topbar = props => {
                 <IconButton
                   className={classes.signOutButton}
                   color="inherit"
-                  onClick={handleSignOut}
+                  onClick={handleClickBtnSignOut}
                 >
                   <InputIcon />
                 </IconButton>
@@ -134,6 +143,12 @@ const Topbar = props => {
           </IconButton>
         </Hidden>
       </Toolbar>
+      <ConfirmDialog
+        title="Xác nhận"
+        content="Bạn thật sự muốn đăng xuất?"
+        open={openSignOutConfirmDialog}
+        onClose={handleCloseSignOutConfirmDialog}
+      />
     </AppBar >
   );
 };

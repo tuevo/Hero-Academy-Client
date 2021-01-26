@@ -13,6 +13,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { shallowEqual } from 'recompose';
 import { switchDarkMode } from 'redux/actions/app.action';
+import * as _ from 'lodash';
+import { localStorageItems } from 'constants/local-storage.constant';
+import { signOut } from 'redux/actions/user.action';
+import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -53,6 +57,7 @@ const Topbar = props => {
 
   const history = useHistory();
   const [searchTerm, setSearchTerm] = useState('');
+  const [openSignOutConfirmDialog, setOpenSignOutConfirmDialog] = useState(false);
 
   const appState = useSelector(state => ({
     ...state.app
@@ -71,6 +76,31 @@ const Topbar = props => {
   const handleSearchInputKeyUp = (e) => {
     if (e.keyCode === 13 && searchTerm) {
       history.push(availablePages.COURSE_SEARCHING.path);
+    }
+  }
+
+  const handleClickAccountMenuItem = (index) => {
+    switch (index) {
+      case 1:
+        const firstPage = _.find(availablePages, page => page.auth && page.role === userState.authUser.role);
+        history.push(firstPage.path);
+        break;
+
+      case 2:
+        setOpenSignOutConfirmDialog(true);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  const handleCloseSignOutConfirmDialog = (accepted) => {
+    setOpenSignOutConfirmDialog(false);
+    if (accepted) {
+      localStorage.removeItem(localStorageItems.ACCESS_TOKEN.name);
+      localStorage.removeItem(localStorageItems.AUTH_USER.name);
+      dispatch(signOut());
     }
   }
 
@@ -120,7 +150,7 @@ const Topbar = props => {
               </Grid>
             </Grid>
           )}
-          {userState.authUser && <AccountMenu authUser={userState.authUser} />}
+          {userState.authUser && <AccountMenu authUser={userState.authUser} onClickItem={handleClickAccountMenuItem} />}
           <Grid item>
             <Tooltip title={appState.darkMode ? 'Bật chế độ sáng' : 'Bật chế độ tối'}>
               <IconButton onClick={() => dispatch(switchDarkMode())} className={classes.btnBrightness}>
@@ -139,6 +169,12 @@ const Topbar = props => {
           </IconButton>
         </Hidden>
       </Toolbar>
+      <ConfirmDialog
+        title="Xác nhận"
+        content="Bạn thật sự muốn đăng xuất?"
+        open={openSignOutConfirmDialog}
+        onClose={handleCloseSignOutConfirmDialog}
+      />
     </AppBar>
   );
 };
