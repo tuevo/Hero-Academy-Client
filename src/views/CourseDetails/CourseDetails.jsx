@@ -436,7 +436,8 @@ const CourseDetails = () => {
       name: 'Công nghệ thông tin',
       category: {
         _id: '1.1',
-        name: 'Lập trình web'
+        name: 'Lập trình web',
+        href: '/categories/1.1/courses'
       }
     },
     tuition: 350000,
@@ -871,7 +872,7 @@ const CourseDetails = () => {
                   {course.categoryCluster.name.toUpperCase()}
                 </Typography>
                 <ArrowRightIcon color="inherit" />
-                <RouterLink to="/khoa-hoc-thuoc-linh-vuc">
+                <RouterLink to={course.categoryCluster.category.href}>
                   <Typography variant="body2" color="inherit">
                     <Button className={classes.btnContrast} size="small">
                       {course.categoryCluster.category.name.toUpperCase()}

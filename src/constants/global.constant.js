@@ -53,7 +53,7 @@ export const availablePages = {
   CATEGORY_COURSES: {
     _id: 5,
     title: 'Danh sách khóa học',
-    path: '/category/:categoryId/courses',
+    path: '/categories/:categoryId/courses',
     auth: false,
     role: userRole.GUEST.value
   },
