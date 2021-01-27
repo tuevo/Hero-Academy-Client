@@ -58,7 +58,7 @@ export default function CategoryDetails(props) {
               size="large"
               color="primary"
             >
-              Xem tất cả khóa học
+              Xem danh sách khóa học
             </Button>
           </RouterLink>
         </Box>

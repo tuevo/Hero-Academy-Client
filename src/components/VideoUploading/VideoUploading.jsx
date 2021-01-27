@@ -1,14 +1,13 @@
-import { Button } from '@material-ui/core';
+import { Box, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BackupIcon from '@material-ui/icons/Backup';
-import Image from 'material-ui-image';
 import React, { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     position: 'relative',
     width: '100%',
-    height: '18.75rem'
+    height: '19rem'
   },
   darkCover: {
     display: 'flex',
@@ -21,37 +20,47 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     zIndex: 5,
     backgroundColor: 'rgba(0,0,0,0.6)'
+  },
+  video: {
+    position: 'relative',
+    backgroundColor: theme.palette.background.default,
+    width: '100%',
+    height: '100%'
+  },
+  video__inner: {
+    width: '95%',
+    height: '95%'
   }
 }));
 
-export default function ImageUploading({ uploadText, initImageUrl, onImageChange }) {
+export default function VideoUploading({ initVideoUrl, onVideoChange }) {
   const classes = useStyles();
-  const [imagePreviewUrl, setImagePreviewUrl] = useState(initImageUrl);
+  const [videoPreviewUrl, setVideoPreviewUrl] = useState(initVideoUrl);
   const [uploadingVisible, setUploadingVisible] = useState(true);
 
-  const handleImageChange = (e) => {
+  const handleVideoChange = (e) => {
     e.preventDefault();
 
     let reader = new FileReader();
-    let image = e.target.files[0];
+    let video = e.target.files[0];
 
     reader.onloadend = () => {
-      onImageChange(image)
-      setImagePreviewUrl(reader.result)
+      onVideoChange(video)
+      setVideoPreviewUrl(reader.result)
     }
 
-    reader.readAsDataURL(image)
+    reader.readAsDataURL(video)
   }
 
   const handleMouseOver = (e) => {
-    if (uploadingVisible && !imagePreviewUrl)
+    if (uploadingVisible && !videoPreviewUrl)
       return;
 
     setUploadingVisible(true);
   }
 
   const handleMouseOut = (e) => {
-    if (!imagePreviewUrl)
+    if (!videoPreviewUrl)
       return;
 
     setUploadingVisible(false);
@@ -66,28 +75,29 @@ export default function ImageUploading({ uploadText, initImageUrl, onImageChange
         onMouseOut={handleMouseOut}
       >
         <input
-          accept="image/*"
-          id="image-upload"
+          accept="video/*"
+          id="video-upload"
           type="file"
-          onChange={handleImageChange}
+          onChange={handleVideoChange}
           hidden
         />
         <label
-          htmlFor="image-upload"
+          htmlFor="video-upload"
           style={{ color: '#fff', opacity: uploadingVisible ? 1 : 0 }}
         >
           <Button startIcon={<BackupIcon />} variant="outlined" color="inherit" component="span">
-            {uploadText}
+            Tải video lên
           </Button>
         </label>
       </div>
-      {imagePreviewUrl && (
-        <Image
-          src={imagePreviewUrl}
-          aspectRatio={(16 / 9)}
-          disableSpinner
-          style={{ position: 'absolute', width: '100%' }}
-        />
+      {videoPreviewUrl && (
+        <Box p={2} display="flex" justifyContent="center" alignItems="center" className={classes.video}>
+          <video className={classes.video__inner}>
+            <source src={videoPreviewUrl} type="video/webm" />
+            <source src={videoPreviewUrl} type="video/mp4" />
+            <source src={videoPreviewUrl} type="video/ogg" />
+          </video>
+        </Box>
       )}
     </div>
   )

@@ -7,7 +7,13 @@ import { useEffect } from 'react';
 const useStyles = makeStyles(theme => ({
   content: {
     minWidth: '18.75rem'
-  }
+  },
+  root: {
+    '&$disabled': {
+      color: theme.palette.text.disabled,
+    },
+  },
+  disabled: {}
 }))
 
 export default function UpdateCategory({ data, open, onClose }) {
@@ -56,6 +62,10 @@ export default function UpdateCategory({ data, open, onClose }) {
             onClick={() => handleClose(true)}
             color="primary"
             disabled={name === data.name}
+            classes={{
+              root: classes.root,
+              disabled: classes.disabled
+            }}
           >
             Lưu thay đổi
           </Button>

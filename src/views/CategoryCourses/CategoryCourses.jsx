@@ -4,6 +4,7 @@ import { Box, Typography, GridList, GridListTile, Divider, Button } from '@mater
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import Course from 'components/Course/Course';
 import NumberFormat from 'react-number-format';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,6 +35,9 @@ const useStyles = makeStyles(theme => ({
 
 const CategoryCourses = () => {
   const classes = useStyles();
+
+  const { categoryId } = useParams();
+  console.log('categoryId:', categoryId);
 
   const category = {
     _id: 1,

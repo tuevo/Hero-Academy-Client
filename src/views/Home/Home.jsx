@@ -10,6 +10,7 @@ import NumberFormat from 'react-number-format';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Link as RouterLink } from 'react-router-dom';
+import { APP_NAME } from 'constants/global.constant';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,9 +30,7 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     zIndex: 5,
     width: '100%',
-    height: '100%',
-    // backgroundColor: 'rgba(0, 0, 0, 0.2)',
-    // boxShadow: 'inset 0 -12.5rem 6.25rem rgba(0,0,0,0.5)',
+    height: '100%'
   },
   bannerText: {
     color: '#fff',
@@ -46,8 +45,9 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2)
   },
   logoImage: {
-    width: '3.75rem',
-    marginRight: theme.spacing(1),
+    width: '4.5rem',
+    marginTop: theme.spacing(-1),
+    marginRight: theme.spacing(2),
     filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.2))'
   },
   main: {
@@ -482,10 +482,10 @@ const Home = () => {
           <Box ml={-2} display="flex" justifyContent="center" alignItems="center" className={`animate__animated animate__fadeInRight`}>
             <img
               alt="Logo"
-              src="https://userscontent2.emaze.com/images/74a02508-7863-4bde-b9b8-246f9e57a116/b0f793876e2bd85b52170dd0fb462aa7.png"
+              src="https://cdn.iconscout.com/icon/free/png-256/graduation-cap-1519981-1287612.png"
               className={classes.logoImage}
             />
-            <Typography className={`${classes.bannerText} ${classes.bannerTitle}`} variant="h1">Hero Academy</Typography>
+            <Typography className={`${classes.bannerText} ${classes.bannerTitle}`} variant="h1">{APP_NAME}</Typography>
           </Box>
           <Typography className={`${classes.bannerText} ${classes.bannerSubTitle} animate__animated animate__fadeInLeft`} variant="h4">Cung cấp khóa học online chất lượng cao</Typography>
         </Box>

@@ -1,7 +1,8 @@
 import { Avatar, Box, Card, CardActionArea, CardContent, Dialog, Grid, Typography, DialogTitle, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useState } from 'react';
 import * as moment from 'moment';
+import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -24,6 +25,16 @@ const useStyles = makeStyles(theme => ({
 function Details(props) {
   const classes = useStyles();
   const { onClose, data, open } = props;
+  const [openRemoveAccountConfirmDialog, setOpenRemoveAccountConfirmDialog] = useState(false);
+
+  const handleCloseRemoveAccountConfirmDialog = (accepted) => {
+    setOpenRemoveAccountConfirmDialog(false);
+    console.log(accepted);
+  }
+
+  const handleClickBtnRemoveAccount = () => {
+    setOpenRemoveAccountConfirmDialog(true);
+  }
 
   const handleClose = () => {
     onClose();
@@ -50,10 +61,23 @@ function Details(props) {
             <Typography variant="body2" color="textPrimary">5</Typography>
           </Box>
         </Box>
-        <Box pt={6}>
-          <Button variant="outlined" fullWidth color="secondary">Xóa tài khoản</Button>
+        <Box pt={6} style={{ color: '	#df4759' }}>
+          <Button
+            variant="outlined"
+            fullWidth
+            color="inherit"
+            onClick={handleClickBtnRemoveAccount}
+          >
+            Xóa tài khoản
+            </Button>
         </Box>
       </Box>
+      <ConfirmDialog
+        title="Xác nhận"
+        content="Bạn thật sự muốn xóa tài khoản này?"
+        open={openRemoveAccountConfirmDialog}
+        onClose={handleCloseRemoveAccountConfirmDialog}
+      />
     </Dialog>
   );
 }

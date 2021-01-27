@@ -6,13 +6,13 @@ import PropTypes from 'prop-types';
 const useStyles = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.default,
     color: theme.palette.primary.main,
   },
   logoImage: {
     width: '6.25rem',
     height: '6.25rem',
-    filter: 'drop-shadow(0 0 2px rgba(0,0,0,0.4))'
+    filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.4))'
   }
 }));
 
@@ -26,7 +26,7 @@ const Loading = (props) => {
         <Box display="flex" alignItems="center" mb={2}>
           <img
             alt="Logo"
-            src="https://userscontent2.emaze.com/images/74a02508-7863-4bde-b9b8-246f9e57a116/b0f793876e2bd85b52170dd0fb462aa7.png"
+            src="https://cdn.iconscout.com/icon/free/png-256/graduation-cap-1519981-1287612.png"
             className={classes.logoImage}
           />
         </Box>

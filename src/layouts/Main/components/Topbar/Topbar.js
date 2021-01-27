@@ -32,11 +32,12 @@ const useStyles = makeStyles(theme => ({
     minWidth: '12.5rem'
   },
   logoImage: {
-    width: '2.8125rem'
+    width: '2.8125rem',
+    marginTop: theme.spacing(-1)
   },
   logoTitle: {
     color: theme.palette.text.topbar,
-    marginLeft: theme.spacing(0.5),
+    marginLeft: theme.spacing(1.5),
     fontFamily: "'Share Tech Mono', monospace",
     fontWeight: 'bold',
   },
@@ -97,7 +98,7 @@ const Topbar = props => {
           <Box display="flex" alignItems="center" className={classes.logo}>
             <img
               alt="Logo"
-              src="https://userscontent2.emaze.com/images/74a02508-7863-4bde-b9b8-246f9e57a116/b0f793876e2bd85b52170dd0fb462aa7.png"
+              src="https://cdn.iconscout.com/icon/free/png-256/graduation-cap-1519981-1287612.png"
               className={classes.logoImage}
             />
             <Typography variant="h5" className={classes.logoTitle}>Hero Academy</Typography>

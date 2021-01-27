@@ -1,4 +1,4 @@
-![logo](https://userscontent2.emaze.com/images/74a02508-7863-4bde-b9b8-246f9e57a116/b0f793876e2bd85b52170dd0fb462aa7.png)
+![logo](https://cdn.iconscout.com/icon/free/png-256/graduation-cap-1519981-1287612.png)
 # Hero Academy Client
 
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)

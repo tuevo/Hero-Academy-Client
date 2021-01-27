@@ -32,6 +32,7 @@ import { AddChapter } from './components';
 import AddFeedback from './components/AddFeedback/AddFeedback';
 import UpdateCourse from './components/UpdateCourse/UpdateCourse';
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
+import AddVideo from './components/AddVideo/AddVideo';
 
 function a11yProps(index) {
   return {
@@ -326,6 +327,7 @@ const CourseDetails = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [openRemovingCourseConfirmDialog, setOpenRemovingCourseConfirmDialog] = useState(false);
   const [expandedChapterIndex, setExpandedChapterIndex] = useState(0);
+  const [openAddVideo, setOpenAddVideo] = useState(false);
 
   const scrollToChapter = (_id) => {
     const ref = chapterRefs.current.find(r => r._id === _id);
@@ -358,6 +360,15 @@ const CourseDetails = () => {
       setExpandedChapterIndex(null);
     else
       setExpandedChapterIndex(index);
+  }
+
+  const handleCloseAddVideo = (accepted) => {
+    setOpenAddVideo(false);
+    console.log(accepted);
+  }
+
+  const handleClickBtnAddVideo = () => {
+    setOpenAddVideo(true);
   }
 
   const course = {
@@ -965,7 +976,7 @@ const CourseDetails = () => {
 
           {tabValue === 1 && (
             <Box p={6}>
-              {userState.authUser && (
+              {userState.authUser && userState.authUser.role !== userRole.ADMIN.value && (
                 <Box mb={4} display="flex" alignItems="center" style={{ width: '100%' }}>
                   {userState.authUser.role === userRole.LECTURER.value && (
                     <Box style={{ flexGrow: 2 }}>
@@ -1043,7 +1054,13 @@ const CourseDetails = () => {
                             <div className={classes.videoListContainer}>
                               {userState.authUser && userState.authUser.role === userRole.LECTURER.value && (
                                 <Tooltip title="Đăng tải video" className="animate__animated animate__bounceIn">
-                                  <Fab size="medium" color="primary" aria-label="add" className={classes.btnAddVideo}>
+                                  <Fab
+                                    size="medium"
+                                    color="primary"
+                                    aria-label="add"
+                                    className={classes.btnAddVideo}
+                                    onClick={handleClickBtnAddVideo}
+                                  >
                                     <AddIcon />
                                   </Fab>
                                 </Tooltip>
@@ -1158,6 +1175,12 @@ const CourseDetails = () => {
             <CourseMultiCarousel courses={courses || []} />
           </div>
         </div>
+
+        <AddVideo
+          open={openAddVideo}
+          onClose={handleCloseAddVideo}
+        />
+
       </main>
     </PerfectScrollbar>
   );

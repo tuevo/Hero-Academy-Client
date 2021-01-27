@@ -287,7 +287,7 @@ export default function AddCourse({ open, onClose }) {
       </Box>
 
       <div className={classes.formControl}>
-        <ImageUploading initImageUrl={null} onImageChange={handleImageChange} />
+        <ImageUploading uploadText="Tải ảnh bìa lên" initImageUrl={null} onImageChange={handleImageChange} />
       </div>
 
       <form>

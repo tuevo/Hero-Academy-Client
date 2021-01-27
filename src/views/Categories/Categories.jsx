@@ -54,7 +54,7 @@ export default function Categories() {
         {
           _id: '1.1',
           name: 'Lập trình web',
-          href: '/khoa-hoc-thuoc-linh-vuc',
+          href: '/categories/1.1/courses',
           numberOfCourses: 150,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -62,7 +62,7 @@ export default function Categories() {
         {
           _id: '1.2',
           name: 'Lập trình di động',
-          href: '/khoa-hoc-thuoc-linh-vuc',
+          href: '/categories/1.1/courses',
           numberOfCourses: 150,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -70,7 +70,7 @@ export default function Categories() {
         {
           _id: '1.3',
           name: 'Lập trình game',
-          href: '/khoa-hoc-thuoc-linh-vuc',
+          href: '/categories/1.1/courses',
           numberOfCourses: 150,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -84,7 +84,7 @@ export default function Categories() {
         {
           _id: '2.1',
           name: 'Đồ họa',
-          href: '/khoa-hoc-thuoc-linh-vuc',
+          href: '/categories/1.1/courses',
           numberOfCourses: 150,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -92,7 +92,7 @@ export default function Categories() {
         {
           _id: '2.2',
           name: 'Nội thất',
-          href: '/khoa-hoc-thuoc-linh-vuc',
+          href: '/categories/1.1/courses',
           numberOfCourses: 150,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -100,7 +100,7 @@ export default function Categories() {
         {
           _id: '2.3',
           name: 'Thời trang',
-          href: '/khoa-hoc-thuoc-linh-vuc',
+          href: '/categories/1.1/courses',
           numberOfCourses: 150,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -114,7 +114,7 @@ export default function Categories() {
         {
           _id: '3.1',
           name: 'Lập trình web',
-          href: '/khoa-hoc-thuoc-linh-vuc',
+          href: '/categories/1.1/courses',
           numberOfCourses: 150,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -122,7 +122,7 @@ export default function Categories() {
         {
           _id: '3.2',
           name: 'Lập trình di động',
-          href: '/khoa-hoc-thuoc-linh-vuc',
+          href: '/categories/1.1/courses',
           numberOfCourses: 150,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -130,7 +130,7 @@ export default function Categories() {
         {
           _id: '3.3',
           name: 'Lập trình game',
-          href: '/khoa-hoc-thuoc-linh-vuc',
+          href: '/categories/1.1/courses',
           numberOfCourses: 150,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -144,7 +144,7 @@ export default function Categories() {
         {
           _id: '4.1',
           name: 'Lập trình web',
-          href: '/khoa-hoc-thuoc-linh-vuc',
+          href: '/categories/1.1/courses',
           numberOfCourses: 150,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -152,7 +152,7 @@ export default function Categories() {
         {
           _id: '4.2',
           name: 'Lập trình di động',
-          href: '/khoa-hoc-thuoc-linh-vuc',
+          href: '/categories/1.1/courses',
           numberOfCourses: 150,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -160,7 +160,7 @@ export default function Categories() {
         {
           _id: '4.3',
           name: 'Lập trình game',
-          href: '/khoa-hoc-thuoc-linh-vuc',
+          href: '/categories/1.1/courses',
           numberOfCourses: 150,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -174,7 +174,7 @@ export default function Categories() {
         {
           _id: '5.1',
           name: 'Tiếng Anh',
-          href: '/khoa-hoc-thuoc-linh-vuc',
+          href: '/categories/1.1/courses',
           numberOfCourses: 150,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -182,7 +182,7 @@ export default function Categories() {
         {
           _id: '5.2',
           name: 'Tiếng Trung',
-          href: '/khoa-hoc-thuoc-linh-vuc',
+          href: '/categories/1.1/courses',
           numberOfCourses: 150,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -190,7 +190,7 @@ export default function Categories() {
         {
           _id: '5.3',
           name: 'Tiếng Nhật',
-          href: '/khoa-hoc-thuoc-linh-vuc',
+          href: '/categories/1.1/courses',
           numberOfCourses: 150,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -198,7 +198,7 @@ export default function Categories() {
         {
           _id: '5.4',
           name: 'Tiếng Pháp',
-          href: '/khoa-hoc-thuoc-linh-vuc',
+          href: '/categories/1.1/courses',
           numberOfCourses: 150,
           createdAt: new Date(),
           updatedAt: new Date()

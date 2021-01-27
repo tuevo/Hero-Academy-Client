@@ -308,7 +308,7 @@ export default function UpdateCourse({ course, className }) {
       </Box>
 
       <div className={classes.formControl}>
-        <ImageUploading initImageUrl={formState.values.thumbnail} onImageChange={handleImageChange} />
+        <ImageUploading uploadText="Tải ảnh bìa lên" initImageUrl={formState.values.thumbnail} onImageChange={handleImageChange} />
       </div>
 
       <form>
