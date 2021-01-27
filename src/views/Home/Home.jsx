@@ -41,10 +41,7 @@ const useStyles = makeStyles(theme => ({
     fontFamily: "'Share Tech Mono', monospace",
     fontWeight: 'bold',
     marginTop: theme.spacing(1),
-    "WebkitBackgroundClip": "text",
-    "WebkitTextFillColor": "transparent",
-    "backgroundColor": "#fec84e",
-    "backgroundImage": "linear-gradient(315deg, #fec84e 0%, #ffdea8 74%)"
+    color: '#ffc100'
   },
   bannerSubTitle: {
     marginTop: theme.spacing(2)
