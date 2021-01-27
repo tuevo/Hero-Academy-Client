@@ -26,7 +26,7 @@ import NumberFormat from 'react-number-format';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useSelector } from 'react-redux';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
 import { format } from 'timeago.js';
 import { AddChapter } from './components';
 import AddFeedback from './components/AddFeedback/AddFeedback';
@@ -83,7 +83,7 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     // position: 'relative',
     zIndex: 10,
-    top: '38%',
+    top: '40%',
     left: '50%',
     transform: 'translate(-50%,0)',
     width: '85%',
@@ -318,6 +318,9 @@ const CourseDetails = () => {
 
   const ps = useRef();
   const chapterRefs = useRef();
+
+  const { courseId } = useParams();
+  console.log("courseId:", courseId);
 
   const [tabValue, setTabValue] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -873,11 +876,11 @@ const CourseDetails = () => {
                 </Typography>
                 <ArrowRightIcon color="inherit" />
                 <RouterLink to={course.categoryCluster.category.href}>
-                  <Typography variant="body2" color="inherit">
-                    <Button className={classes.btnContrast} size="small">
+                  <Button size="small" color="primary">
+                    <Typography variant="body2" style={{ color: '#fff' }}>
                       {course.categoryCluster.category.name.toUpperCase()}
-                    </Button>
-                  </Typography>
+                    </Typography>
+                  </Button>
                 </RouterLink>
               </Box>
 

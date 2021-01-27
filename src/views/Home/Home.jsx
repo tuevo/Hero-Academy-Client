@@ -426,52 +426,52 @@ const Home = () => {
     {
       _id: 1,
       name: 'Lập trình web',
-      href: '/khoa-hoc-thuoc-linh-vuc'
+      href: '/categories/1.1/courses'
     },
     {
       _id: 2,
       name: 'Lập trình di động',
-      href: '/khoa-hoc-thuoc-linh-vuc'
+      href: '/categories/1.1/courses'
     },
     {
       _id: 3,
       name: 'Lập trình game',
-      href: '/khoa-hoc-thuoc-linh-vuc'
+      href: '/categories/1.1/courses'
     },
     {
       _id: 4,
       name: 'Đồ họa',
-      href: '/khoa-hoc-thuoc-linh-vuc'
+      href: '/categories/1.1/courses'
     },
     {
       _id: 5,
       name: 'Nội thất',
-      href: '/khoa-hoc-thuoc-linh-vuc'
+      href: '/categories/1.1/courses'
     },
     {
       _id: 6,
       name: 'Thời trang',
-      href: '/khoa-hoc-thuoc-linh-vuc'
+      href: '/categories/1.1/courses'
     },
     {
       _id: 7,
       name: 'Tiếng Anh',
-      href: '/khoa-hoc-thuoc-linh-vuc'
+      href: '/categories/1.1/courses'
     },
     {
       _id: 8,
       name: 'Tiếng Trung',
-      href: '/khoa-hoc-thuoc-linh-vuc'
+      href: '/categories/1.1/courses'
     },
     {
       _id: 9,
       name: 'Tiếng Nhật',
-      href: '/khoa-hoc-thuoc-linh-vuc'
+      href: '/categories/1.1/courses'
     },
     {
       _id: 10,
       name: 'Tiếng Pháp',
-      href: '/khoa-hoc-thuoc-linh-vuc'
+      href: '/categories/1.1/courses'
     }
   ]
 
