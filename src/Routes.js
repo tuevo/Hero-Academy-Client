@@ -2,59 +2,47 @@ import { availablePages } from 'constants/global.constant';
 import { localStorageItems } from 'constants/local-storage.constant';
 import * as _ from 'lodash';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Switch, useHistory } from 'react-router-dom';
 import { GuardProvider } from 'react-router-guards';
 import { hideNotification, setLoading } from 'redux/actions/app.action';
 import { RouteWithLayout } from './components';
 import { Main as MainLayout, Main2 as Main2Layout, Minimal as MinimalLayout } from './layouts';
 import {
-  CategoryCourses as CategoryCoursesView,
-  CourseDetails as CourseDetailsView,
-  Categories as CategoriesView,
-  Courses as CoursesView,
-  CourseSearching as CourseSearchingView,
-  FavoriteCourses as FavoriteCoursesView,
   Home as HomeView,
-  InChargeCourses as InChargeCoursesView,
-  NotFound as NotFoundView,
-  Profile as ProfileView,
-  RegistrationCourses as RegistrationCoursesView,
-  SignIn as SignInView,
+  CategoryCourses as CategoryCoursesView,
+  CourseSearching as CourseSearchingView,
+  CourseDetails as CourseDetailsView,
   SignUp as SignUpView,
-  Users as UsersView
+  SignIn as SignInView,
+  Profile as ProfileView,
+  NotFound as NotFoundView,
 } from './views';
 import { userRole } from 'constants/user-role.constant';
+import { shallowEqual } from 'recompose';
 
 const Routes = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const authUser = useSelector(state => ({
+    ...state.user.authUser
+  }), shallowEqual);
 
   const requireLogin = (to, from, next) => {
     dispatch(setLoading(false));
     dispatch(hideNotification());
 
     const accessToken = localStorage.getItem(localStorageItems.ACCESS_TOKEN.name);
-    let authUser = localStorage.getItem(localStorageItems.AUTH_USER.name);
-    authUser = authUser ? JSON.parse(authUser) : null;
     const isAuthenticated = !!accessToken && !!authUser;
 
     if (isAuthenticated) {
-      const fromPath = from.location.pathname;
       const toPath = to.location.pathname;
       const authUserPages = _.filter(availablePages, page => page.role === userRole.GUEST.value || (page.auth && page.role === authUser.role));
 
       if ([availablePages.SIGN_IN.path, availablePages.SIGN_UP.path].includes(toPath)) {
-        if (fromPath !== toPath) {
-          next.redirect(fromPath);
-        } else {
-          next.redirect(authUserPages[0].path);
-        }
-      } else {
-        const toPage = authUserPages.find(page => page.path === toPath);
-        if (!toPage) {
-          history.push(availablePages.NOT_FOUND.path);
-        }
+        const firstPage = _.find(authUserPages, page => page.type === 'FIRST_BY_ROLE');
+        next.redirect(firstPage.path);
       }
     } else {
       if (to.meta.auth) {
@@ -100,54 +88,18 @@ const Routes = () => {
           title={availablePages.COURSE_SEARCHING.title}
           meta={{ auth: availablePages.COURSE_SEARCHING.auth }}
         />
-        <RouteWithLayout
-          component={RegistrationCoursesView}
-          exact
-          layout={MainLayout}
-          path={availablePages.REGISTRATION_COURSES.path}
-          title={availablePages.REGISTRATION_COURSES.title}
-          meta={{ auth: availablePages.REGISTRATION_COURSES.auth }}
-        />
-        <RouteWithLayout
-          component={FavoriteCoursesView}
-          exact
-          layout={MainLayout}
-          path={availablePages.FAVORITE_COURSES.path}
-          title={availablePages.FAVORITE_COURSES.title}
-          meta={{ auth: availablePages.FAVORITE_COURSES.auth }}
-        />
-        <RouteWithLayout
-          component={InChargeCoursesView}
-          exact
-          layout={MainLayout}
-          path={availablePages.IN_CHARGE_COURSES.path}
-          title={availablePages.IN_CHARGE_COURSES.title}
-          meta={{ auth: availablePages.IN_CHARGE_COURSES.auth }}
-        />
-        <RouteWithLayout
-          component={CategoriesView}
-          exact
-          layout={MainLayout}
-          path={availablePages.CATEGORIES.path}
-          title={availablePages.CATEGORIES.title}
-          meta={{ auth: availablePages.CATEGORIES.auth }}
-        />
-        <RouteWithLayout
-          component={CoursesView}
-          exact
-          layout={MainLayout}
-          path={availablePages.COURSES.path}
-          title={availablePages.COURSES.title}
-          meta={{ auth: availablePages.COURSES.auth }}
-        />
-        <RouteWithLayout
-          component={UsersView}
-          exact
-          layout={MainLayout}
-          path={availablePages.USERS.path}
-          title={availablePages.USERS.title}
-          meta={{ auth: availablePages.USERS.auth }}
-        />
+        {authUser && _.filter(availablePages, page => page.auth && page.role === authUser.role)
+          .map(page => (
+            <RouteWithLayout
+              key={page._id}
+              component={page.component}
+              exact
+              layout={MainLayout}
+              path={page.path}
+              title={page.title}
+              meta={{ auth: page.auth }}
+            />
+          ))}
         <RouteWithLayout
           component={ProfileView}
           exact

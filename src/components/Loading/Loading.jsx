@@ -26,7 +26,7 @@ const Loading = (props) => {
         <Box display="flex" alignItems="center" mb={2}>
           <img
             alt="Logo"
-            src="images/logos/logo.png"
+            src="https://userscontent2.emaze.com/images/74a02508-7863-4bde-b9b8-246f9e57a116/b0f793876e2bd85b52170dd0fb462aa7.png"
             className={classes.logoImage}
           />
         </Box>

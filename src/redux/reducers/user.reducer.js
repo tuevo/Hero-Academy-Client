@@ -2,7 +2,7 @@ import { actionTypes } from '../actions/action-types';
 import { localStorageItems } from 'constants/local-storage.constant';
 
 const initialStates = {
-  authUser: JSON.parse(localStorage.getItem(localStorageItems.AUTH_USER.name)) || null
+  authUser: localStorage.getItem(localStorageItems.AUTH_USER.name) ? JSON.parse(localStorage.getItem(localStorageItems.AUTH_USER.name)) : null
 }
 
 const userActionTypes = { ...actionTypes.user };

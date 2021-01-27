@@ -745,7 +745,7 @@ const CourseDetails = () => {
   ];
 
   for (let c of courses)
-    c['href'] = '/chi-tiet-khoa-hoc';
+    c['href'] = `/courses/${c._id}`;
 
   const feedbacks = [
     {

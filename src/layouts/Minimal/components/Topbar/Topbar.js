@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { AppBar, Toolbar, Typography, Button, Box, Grid, IconButton } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, Button, Box, Grid, IconButton, Tooltip } from '@material-ui/core';
 import { availablePages } from 'constants/global.constant';
 import { SearchInput } from 'components';
 import { useHistory } from 'react-router-dom';
@@ -12,6 +12,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { shallowEqual } from 'recompose';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import { switchDarkMode } from 'redux/actions/app.action';
+import { localStorageItems } from 'constants/local-storage.constant';
+import * as _ from 'lodash';
+import { signOut } from 'redux/actions/user.action';
+import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
+import AccountMenu from 'components/AccountMenu/AccountMenu';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 'bold',
   },
   btnSignIn: {
-    marginRight: theme.spacing(1)
+
   },
   btnSignUp: {
     "backgroundColor": "#a4508b",
@@ -44,7 +49,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(2)
   },
   btnBrightness: {
-    color: theme.palette.primary.main
+    color: theme.palette.icon
   }
 }));
 
@@ -54,10 +59,15 @@ const Topbar = props => {
 
   const history = useHistory();
   const [searchTerm, setSearchTerm] = useState('');
+  const [openSignOutConfirmDialog, setOpenSignOutConfirmDialog] = useState(false);
 
   const appState = useSelector(state => ({
     ...state.app
   }), shallowEqual);
+
+  const userState = useSelector(state => ({
+    ...state.user
+  }));
 
   const dispatch = useDispatch();
 
@@ -68,6 +78,31 @@ const Topbar = props => {
   const handleSearchInputKeyUp = (e) => {
     if (e.keyCode === 13 && searchTerm) {
       history.push(availablePages.COURSE_SEARCHING.path);
+    }
+  }
+
+  const handleClickAccountMenuItem = (index) => {
+    switch (index) {
+      case 1:
+        const firstPage = _.find(availablePages, page => page.auth && page.role === userState.authUser.role);
+        history.push(firstPage.path);
+        break;
+
+      case 2:
+        setOpenSignOutConfirmDialog(true);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  const handleCloseSignOutConfirmDialog = (accepted) => {
+    setOpenSignOutConfirmDialog(false);
+    if (accepted) {
+      localStorage.removeItem(localStorageItems.ACCESS_TOKEN.name);
+      localStorage.removeItem(localStorageItems.AUTH_USER.name);
+      dispatch(signOut());
     }
   }
 
@@ -97,27 +132,42 @@ const Topbar = props => {
               />
             </div>
           </Grid>
-          <Grid item>
-            <Grid container spacing={1}>
-              <Grid item>
-                <RouterLink to={availablePages.SIGN_IN.path} className={classes.btnSignIn}>
-                  <Button variant="outlined" color="primary">ĐĂNG NHẬP</Button>
-                </RouterLink>
-              </Grid>
-              <Grid item>
-                <RouterLink to={availablePages.SIGN_UP.path}>
-                  <Button variant="contained" color="primary" className={classes.btnSignUp}>ĐĂNG KÝ</Button>
-                </RouterLink>
+          {!userState.authUser && (
+            <Grid item>
+              <Grid container spacing={1}>
+                <Grid item>
+                  <div className="animate__animated animate__fadeIn">
+                    <RouterLink to={availablePages.SIGN_IN.path} className={classes.btnSignIn}>
+                      <Button variant="outlined" color="primary">ĐĂNG NHẬP</Button>
+                    </RouterLink>
+                  </div>
+                </Grid>
+                <Grid item>
+                  <div className="animate__animated animate__fadeIn">
+                    <RouterLink to={availablePages.SIGN_UP.path}>
+                      <Button variant="contained" color="primary" className={classes.btnSignUp}>ĐĂNG KÝ</Button>
+                    </RouterLink>
+                  </div>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
+          )}
+          {userState.authUser && <AccountMenu authUser={userState.authUser} onClickItem={handleClickAccountMenuItem} />}
           <Grid item>
-            <IconButton onClick={() => dispatch(switchDarkMode())} className={classes.btnBrightness}>
-              {appState.darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
-            </IconButton>
+            <Tooltip title={appState.darkMode ? 'Bật chế độ sáng' : 'Bật chế độ tối'}>
+              <IconButton onClick={() => dispatch(switchDarkMode())} className={classes.btnBrightness}>
+                {appState.darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+              </IconButton>
+            </Tooltip>
           </Grid>
         </Grid>
       </Toolbar>
+      <ConfirmDialog
+        title="Xác nhận"
+        content="Bạn thật sự muốn đăng xuất?"
+        open={openSignOutConfirmDialog}
+        onClose={handleCloseSignOutConfirmDialog}
+      />
     </AppBar>
   );
 };

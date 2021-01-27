@@ -40,8 +40,7 @@ const useStyles = makeStyles(theme => ({
   bannerTitle: {
     fontFamily: "'Share Tech Mono', monospace",
     fontWeight: 'bold',
-    marginTop: theme.spacing(1),
-    color: '#ffc100'
+    marginTop: theme.spacing(1)
   },
   bannerSubTitle: {
     marginTop: theme.spacing(2)
@@ -421,7 +420,7 @@ const Home = () => {
   ];
 
   for (let c of courses)
-    c['href'] = '/chi-tiet-khoa-hoc';
+    c['href'] = `/courses/${c._id}`;
 
   const categories = [
     {
@@ -483,7 +482,7 @@ const Home = () => {
           <Box ml={-2} display="flex" justifyContent="center" alignItems="center" className={`animate__animated animate__fadeInRight`}>
             <img
               alt="Logo"
-              src="images/logos/logo.png"
+              src="https://userscontent2.emaze.com/images/74a02508-7863-4bde-b9b8-246f9e57a116/b0f793876e2bd85b52170dd0fb462aa7.png"
               className={classes.logoImage}
             />
             <Typography className={`${classes.bannerText} ${classes.bannerTitle}`} variant="h1">Hero Academy</Typography>

@@ -59,10 +59,10 @@ export default {
     user: '#212121',
     signIn: 'rgba(0,0,0,0.4)',
     signUp: 'rgba(0,0,0,0.4)',
-    searchInput: '#313131'
+    searchInput: '#414141'
   },
   topbar: {
-    background: '#212121',
+    background: '#313131',
     "boxShadow": "rgba(0, 0, 0, 0.2) 0px 60px 40px -7px"
   },
   sidebar: {
