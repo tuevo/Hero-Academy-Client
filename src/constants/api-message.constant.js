@@ -4,5 +4,8 @@ export const apiMessage = {
   THE_ACCOUNT_HAS_BEEN_BLOCKED: 'Tài khoản đang tạm thời bị khóa',
   ACCOUNT_HAS_NOT_BEEN_CONFIRMED: 'Tài khoản chưa xác nhận',
   LOGIN_SUCCESSFULLY: 'Đăng nhập thành công',
-  ACCESS_IS_NOT_ALLOWED: 'Không truy cập tài nguyên này'
+  ACCESS_IS_NOT_ALLOWED: 'Không được phép truy cập tài nguyên này',
+  ACCESS_TOKEN_EXPIRED: 'accessToken đã hết hạn',
+  INVALID_REFRESH_TOKEN: 'refreshToken không hợp lệ',
+  REFRESH_SUCCESSFULLY: 'refresh thành công'
 }

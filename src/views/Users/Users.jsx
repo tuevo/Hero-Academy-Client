@@ -1,17 +1,15 @@
-import { AppBar, Box, Tab, Tabs, GridList, GridListTile, Tooltip, Fab, Button } from '@material-ui/core';
+import { AppBar, Box, Button, Fab, GridList, GridListTile, Tab, Tabs, Tooltip } from '@material-ui/core';
 import FaceIcon from '@material-ui/icons/Face';
 import PersonIcon from '@material-ui/icons/Person';
-import { makeStyles } from '@material-ui/styles';
-import React, { useState } from 'react';
-import Student from 'components/Student/Student';
-import Lecturer from 'components/Lecturer/Lecturer';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import { useEffect } from 'react';
-import studentApi from 'api/student.api';
+import { makeStyles } from '@material-ui/styles';
+import Lecturer from 'components/Lecturer/Lecturer';
+import Student from 'components/Student/Student';
+import { apiMessage } from 'constants/api-message.constant';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { showNotification } from 'redux/actions/app.action';
-import { apiMessage } from 'constants/api-message.constant';
-import { userRole } from 'constants/user-role.constant';
+import { studentApi } from 'api';
 
 function a11yProps(index) {
   return {
@@ -60,30 +58,29 @@ const Users = () => {
 
   const [disableBtnLoadMore, setDisableBtnLoadMore] = useState(false);
 
-  const getAllStudents = async () => {
-    setDisableBtnLoadMore(true);
+  useEffect(() => {
+    const getAllStudents = async () => {
+      setDisableBtnLoadMore(true);
 
-    try {
-      const res = await studentApi.getAll(studentListPage, limit);
-      const students = res.data.entries;
+      try {
+        const res = await studentApi.getAll(studentListPage, limit);
+        const students = res.data.entries;
+        const totalItems = 2; // TODO
 
-      const totalItems = 2; // TODO
+        const newStudentList = [...studentList, ...students];
+        setStudentList(newStudentList);
 
-      const newStudentList = [...studentList, ...students];
-      setStudentList(newStudentList);
+        if (newStudentList.length < totalItems) {
+          setDisableBtnLoadMore(false);
+        }
 
-      if (newStudentList.length < totalItems) {
-        setDisableBtnLoadMore(false);
-      }
-
-    } catch (error) {
-      if (error.messages && error.messages.length > 0) {
-        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      } catch (error) {
+        if (error.messages && error.messages.length > 0) {
+          dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        }
       }
     }
-  }
 
-  useEffect(() => {
     getAllStudents();
   }, [studentListPage]);
 
