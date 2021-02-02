@@ -6,6 +6,12 @@ import React, { useState } from 'react';
 import Student from 'components/Student/Student';
 import Lecturer from 'components/Lecturer/Lecturer';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import { useEffect } from 'react';
+import studentApi from 'api/student.api';
+import { useDispatch } from 'react-redux';
+import { showNotification } from 'redux/actions/app.action';
+import { apiMessage } from 'constants/api-message.constant';
+import { userRole } from 'constants/user-role.constant';
 
 function a11yProps(index) {
   return {
@@ -44,7 +50,42 @@ const useStyles = makeStyles(theme => ({
 
 const Users = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const limit = 1;
+
   const [tabValue, setTabValue] = useState(0);
+
+  const [studentList, setStudentList] = useState([]);
+  const [studentListPage, setStudentListPage] = useState(1);
+
+  const [disableBtnLoadMore, setDisableBtnLoadMore] = useState(false);
+
+  const getAllStudents = async () => {
+    setDisableBtnLoadMore(true);
+
+    try {
+      const res = await studentApi.getAll(studentListPage, limit);
+      const students = res.data.entries;
+
+      const totalItems = 2; // TODO
+
+      const newStudentList = [...studentList, ...students];
+      setStudentList(newStudentList);
+
+      if (newStudentList.length < totalItems) {
+        setDisableBtnLoadMore(false);
+      }
+
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
+  }
+
+  useEffect(() => {
+    getAllStudents();
+  }, [studentListPage]);
 
   const students = [
     {
@@ -272,6 +313,18 @@ const Users = () => {
     setTabValue(newValue);
   };
 
+  const handleClickBtnLoadMore = (type) => {
+    switch (type) {
+      case 1:
+        const newPage = studentListPage + 1;
+        setStudentListPage(newPage);
+        break;
+
+      default:
+        break;
+    }
+  }
+
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.tabs} color="primary">
@@ -284,7 +337,7 @@ const Users = () => {
       {tabValue === 0 && (
         <Box p={4}>
           <GridList cellHeight="auto" cols={3}>
-            {students.map((s, i) => (
+            {studentList.map((s, i) => (
               <GridListTile key={s._id}>
                 <Box m={1} className="animate__animated animate__fadeIn" style={{ animationDelay: `${0.1 * i}s` }}>
                   <Student data={s} />
@@ -293,7 +346,17 @@ const Users = () => {
             ))}
           </GridList>
           <Box px={1} pt={3}>
-            <Button fullWidth className={classes.btnLoadMore} variant="contained" color="primary" size="large">Xem thêm học viên</Button>
+            <Button
+              fullWidth
+              className={classes.btnLoadMore}
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={() => handleClickBtnLoadMore(1)}
+              disabled={disableBtnLoadMore}
+            >
+              Xem thêm học viên
+            </Button>
           </Box>
         </Box>
       )}
@@ -317,7 +380,16 @@ const Users = () => {
             ))}
           </GridList>
           <Box px={1} pt={3}>
-            <Button fullWidth className={classes.btnLoadMore} variant="contained" color="primary" size="large">Xem thêm giảng viên</Button>
+            <Button
+              fullWidth
+              className={classes.btnLoadMore}
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={() => handleClickBtnLoadMore(2)}
+            >
+              Xem thêm giảng viên
+            </Button>
           </Box>
         </Box>
       )}

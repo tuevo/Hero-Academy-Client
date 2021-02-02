@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import * as moment from 'moment';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
+import NumberFormat from 'react-number-format';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -58,7 +59,9 @@ function Details(props) {
           </Box>
           <Box pb={2} display="flex" justifyContent="space-between">
             <Typography variant="body2">Số khóa học đã tham gia</Typography>
-            <Typography variant="body2" color="textPrimary">5</Typography>
+            <Typography variant="body2" color="textPrimary">
+              <NumberFormat value={data.roleInfo ? data.roleInfo.numberOfCoursesRegistered : 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} />
+            </Typography>
           </Box>
         </Box>
         <Box pt={6} style={{ color: '	#df4759' }}>
