@@ -52,7 +52,7 @@ export const availablePages = {
   },
   CATEGORY_COURSES: {
     _id: 5,
-    title: 'Danh sách khóa học',
+    title: 'Khóa học theo lĩnh vực',
     path: '/categories/:categoryId/courses',
     auth: false,
     role: userRole.GUEST.value
@@ -60,14 +60,14 @@ export const availablePages = {
   COURSE_SEARCHING: {
     _id: 6,
     title: 'Tìm kiếm khóa học',
-    path: '/searching-course',
+    path: '/search',
     auth: false,
     role: userRole.GUEST.value
   },
   REGISTRATION_COURSES: {
     _id: 7,
     title: 'Khóa học đăng ký',
-    path: '/registered-courses',
+    path: '/registrations',
     auth: true,
     role: userRole.STUDENT.value,
     icon: SchoolIcon,
@@ -76,7 +76,7 @@ export const availablePages = {
   FAVORITE_COURSES: {
     _id: 8,
     title: 'Khóa học yêu thích',
-    path: '/favorite-courses',
+    path: '/favorites',
     auth: true,
     role: userRole.STUDENT.value,
     icon: FavoriteIcon,
@@ -85,7 +85,7 @@ export const availablePages = {
   IN_CHARGE_COURSES: {
     _id: 9,
     title: 'Khóa học phụ trách',
-    path: '/in-charge-courses',
+    path: '/uploaded',
     auth: true,
     role: userRole.LECTURER.value,
     icon: SchoolIcon,
