@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { showNotification } from 'redux/actions/app.action';
 import { studentApi } from 'api';
+import NumberFormat from 'react-number-format';
 
 function a11yProps(index) {
   return {
@@ -55,23 +56,24 @@ const Users = () => {
 
   const [studentList, setStudentList] = useState([]);
   const [studentListPage, setStudentListPage] = useState(1);
-
-  const [disableBtnLoadMore, setDisableBtnLoadMore] = useState(false);
+  const [studentListTotalItems, setStudentListTotalItems] = useState(0);
+  const [disableBtnLoadMoreStudent, setDisableBtnLoadMoreStudent] = useState(false);
 
   useEffect(() => {
     const getAllStudents = async () => {
-      setDisableBtnLoadMore(true);
-
+      setDisableBtnLoadMoreStudent(true);
       try {
         const res = await studentApi.getAll(studentListPage, limit);
         const students = res.data.entries;
-        const totalItems = 2; // TODO
 
-        const newStudentList = [...studentList, ...students];
+        const { totalItems } = res.data.meta;
+        setStudentListTotalItems(totalItems);
+
+        const newStudentList = studentList.concat(students);
         setStudentList(newStudentList);
 
         if (newStudentList.length < totalItems) {
-          setDisableBtnLoadMore(false);
+          setDisableBtnLoadMoreStudent(false);
         }
 
       } catch (error) {
@@ -82,7 +84,7 @@ const Users = () => {
     }
 
     getAllStudents();
-  }, [studentListPage]);
+  }, [studentListPage, dispatch]);
 
   const students = [
     {
@@ -326,8 +328,24 @@ const Users = () => {
     <div className={classes.root}>
       <AppBar position="static" className={classes.tabs} color="primary">
         <Tabs value={tabValue} onChange={handleTabChange} aria-label="simple tabs example">
-          <Tab icon={<PersonIcon />} label="Học viên (550)" {...a11yProps(0)} />
-          <Tab icon={<FaceIcon />} label="Giảng viên (10)" {...a11yProps(1)} />
+          <Tab
+            icon={<PersonIcon />}
+            label={
+              <span>
+                Học viên (<NumberFormat value={studentListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} />)
+              </span>
+            }
+            {...a11yProps(0)}
+          />
+          <Tab
+            icon={<FaceIcon />}
+            label={
+              <span>
+                Giảng viên (<NumberFormat value={lecturers.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} />)
+              </span>
+            }
+            {...a11yProps(1)}
+          />
         </Tabs>
       </AppBar>
 
@@ -350,7 +368,7 @@ const Users = () => {
               color="primary"
               size="large"
               onClick={() => handleClickBtnLoadMore(1)}
-              disabled={disableBtnLoadMore}
+              disabled={disableBtnLoadMoreStudent}
             >
               Xem thêm học viên
             </Button>
