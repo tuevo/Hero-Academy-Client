@@ -84,7 +84,7 @@ const Users = () => {
     }
 
     getAllStudents();
-  }, [studentListPage, dispatch]);
+  }, [studentListPage]);
 
   const students = [
     {
