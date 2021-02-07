@@ -52,7 +52,7 @@ const Users = () => {
   const dispatch = useDispatch();
   const limit = 1;
 
-  const [tabValue, setTabValue] = useState(0);
+  const [tabValue, setTabValue] = useState(1);
 
   const [studentList, setStudentList] = useState([]);
   const [studentListPage, setStudentListPage] = useState(1);
