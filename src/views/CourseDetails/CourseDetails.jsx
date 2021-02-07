@@ -21,7 +21,7 @@ import CourseMultiCarousel from 'components/CourseMultiCarousel/CourseMultiCarou
 import { VideoPlayer } from 'components/VideoPlayer';
 import { userRole } from 'constants/user-role.constant';
 import * as moment from 'moment';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import NumberFormat from 'react-number-format';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useSelector } from 'react-redux';
@@ -33,6 +33,7 @@ import AddFeedback from './components/AddFeedback/AddFeedback';
 import UpdateCourse from './components/UpdateCourse/UpdateCourse';
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
 import AddVideo from './components/AddVideo/AddVideo';
+import WatchHistory from './components/WatchHistory/WatchHistory';
 
 function a11yProps(index) {
   return {
@@ -321,144 +322,6 @@ const CourseDetails = () => {
   const chapterRefs = useRef();
 
   const { courseId } = useParams();
-  console.log("courseId:", courseId);
-
-  const [tabValue, setTabValue] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [openRemovingCourseConfirmDialog, setOpenRemovingCourseConfirmDialog] = useState(false);
-  const [expandedChapterIndex, setExpandedChapterIndex] = useState(0);
-  const [openAddVideo, setOpenAddVideo] = useState(false);
-
-  const scrollToChapter = (_id) => {
-    const ref = chapterRefs.current.find(r => r._id === _id);
-    ps.current.scrollTop = ref.current.getBoundingClientRect().top;
-  }
-
-  const handleBack = () => {
-    history.goBack();
-  };
-
-  const handleTabChange = (event, tabValue) => {
-    setTabValue(tabValue);
-  };
-
-  const handleBtnFavoriteClick = () => {
-    setIsFavorite(!isFavorite);
-  }
-
-  const handleBtnOpenRemovingCourseDialogClick = () => {
-    setOpenRemovingCourseConfirmDialog(true);
-  }
-
-  const handleRemovingCourseDialogClose = isAccepted => {
-    console.log(isAccepted);
-    setOpenRemovingCourseConfirmDialog(false);
-  }
-
-  const handleChapterClick = (index) => {
-    if (index === expandedChapterIndex)
-      setExpandedChapterIndex(null);
-    else
-      setExpandedChapterIndex(index);
-  }
-
-  const handleCloseAddVideo = (accepted) => {
-    setOpenAddVideo(false);
-    console.log(accepted);
-  }
-
-  const handleClickBtnAddVideo = () => {
-    setOpenAddVideo(true);
-  }
-
-  const course = {
-    _id: 2,
-    thumbnail: 'https://damminhtien.com/assets/images/reactjs.png',
-    title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-    description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica.`,
-    content: `<p>
-    <span style="font-size: large;">Giới thiệu tổng quan</span>
-</p>
-<p>
-    <br>
-</p>
-<p>Quill is a free,
-    <a href="https://github.com/quilljs/quill/" target="_blank">open source</a>WYSIWYG editor built for the modern web. With its
-    <a href="http://quilljs.com/docs/modules/" target="_blank">extensible architecture</a>and a
-    <a href="http://quilljs.com/docs/api/" target="_blank">expressive API</a>you can completely customize it to fulfill your needs. Some built in features include:</p>
-<p>
-    <br>
-</p>
-<ul>
-    <li>Fast and lightweight</li>
-    <li>Semantic markup</li>
-    <li>Standardized HTML between browsers</li>
-    <li>Cross browser support including Chrome, Firefox, Safari, and IE 9+</li>
-</ul>
-<p>
-    <br>
-</p>
-<p>
-    <span style="font-size: large;">Component, Prop, State</span>
-</p>
-<p>
-    <br>
-</p>
-<p>Quill is a free,
-    <a href="https://github.com/quilljs/quill/" target="_blank">open source</a>WYSIWYG editor built for the modern web. With its
-    <a href="http://quilljs.com/docs/modules/" target="_blank">extensible architecture</a>and a
-    <a href="http://quilljs.com/docs/api/" target="_blank">expressive API</a>you can completely customize it to fulfill your needs. Some built in features include:</p>
-<p>
-    <br>
-</p>
-<ul>
-    <li>Fast and lightweight</li>
-    <li>Semantic markup</li>
-    <li>Standardized HTML between browsers</li>
-    <li>Cross browser support including Chrome, Firefox, Safari, and IE 9+</li>
-</ul>
-<p>
-    <br>
-</p>
-<p>
-    <span style="font-size: large;">React Hooks</span>
-</p>
-<p>
-    <br>
-</p>
-<p>Quill is a free,
-    <a href="https://github.com/quilljs/quill/" target="_blank">open source</a>WYSIWYG editor built for the modern web. With its
-    <a href="http://quilljs.com/docs/modules/" target="_blank">extensible architecture</a>and a
-    <a href="http://quilljs.com/docs/api/" target="_blank">expressive API</a>you can completely customize it to fulfill your needs. Some built in features include:</p>
-<p>
-    <br>
-</p>
-<ul>
-    <li>Fast and lightweight</li>
-    <li>Semantic markup</li>
-    <li>Standardized HTML between browsers</li>
-    <li>Cross browser support including Chrome, Firefox, Safari, and IE 9+</li>
-</ul>`,
-    averageRating: 4.5,
-    numberOfRatings: 1500,
-    numberOfStudents: 2500,
-    lecturer: {
-      fullName: 'Tue Vo'
-    },
-    categoryCluster: {
-      _id: '1',
-      name: 'Công nghệ thông tin',
-      category: {
-        _id: '1.1',
-        name: 'Lập trình web',
-        href: '/categories/1.1/courses'
-      }
-    },
-    tuition: 350000,
-    discountPercent: 0.5,
-    updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-    isFinished: true
-  };
 
   const chapters = [
     {
@@ -468,9 +331,9 @@ const CourseDetails = () => {
       videos: [
         {
           _id: 1,
-          title: 'Khái niệm Single Page Application',
+          title: 'JSX là gì?',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          thumbnailUrl: 'https://i.morioh.com/200626/3c53255f.jpg',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
@@ -635,9 +498,9 @@ const CourseDetails = () => {
         },
         {
           _id: 3,
-          title: 'Title',
+          title: 'JSX là gì?',
           url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
+          thumbnailUrl: 'https://i.morioh.com/200626/3c53255f.jpg',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
           duration: 1000 * 60 * 5 + 1000 * 30
@@ -645,6 +508,175 @@ const CourseDetails = () => {
       ]
     }
   ]
+
+  const [tabValue, setTabValue] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [openRemovingCourseConfirmDialog, setOpenRemovingCourseConfirmDialog] = useState(false);
+  const [expandedChapterIndex, setExpandedChapterIndex] = useState(null);
+  const [openAddVideo, setOpenAddVideo] = useState(false);
+  const [openWatchHistory, setOpenWatchHistory] = useState(false);
+  const [activeVideo, setActiveVideo] = useState(null);
+
+  useEffect(() => {
+    if (expandedChapterIndex !== null) {
+      const chapter = chapters[expandedChapterIndex];
+      scrollToChapter(chapter._id);
+
+      if (!activeVideo) {
+        setActiveVideo(chapter.videos[0]);
+      }
+    }
+  }, [expandedChapterIndex]);
+
+  const scrollToChapter = (_id) => {
+    if (chapterRefs.current && chapterRefs.current.length > 0) {
+      const ref = chapterRefs.current.find(r => r._id === _id);
+      const y = ref.current.getBoundingClientRect().top;
+      ps.current.scrollTop = y;
+    }
+  }
+
+  const handleBack = () => {
+    history.goBack();
+  };
+
+  const handleTabChange = (event, tabValue) => {
+    setTabValue(tabValue);
+  };
+
+  const handleBtnFavoriteClick = () => {
+    setIsFavorite(!isFavorite);
+  }
+
+  const handleBtnOpenRemovingCourseDialogClick = () => {
+    setOpenRemovingCourseConfirmDialog(true);
+  }
+
+  const handleRemovingCourseDialogClose = isAccepted => {
+    console.log(isAccepted);
+    setOpenRemovingCourseConfirmDialog(false);
+  }
+
+  const handleClickChapter = (index) => {
+    if (index === expandedChapterIndex)
+      setExpandedChapterIndex(null);
+    else
+      setExpandedChapterIndex(index);
+  }
+
+  const handleCloseAddVideo = (accepted) => {
+    setOpenAddVideo(false);
+    console.log(accepted);
+  }
+
+  const handleClickBtnAddVideo = () => {
+    setOpenAddVideo(true);
+  }
+
+  const handleClickBtnShowWatchHistory = () => {
+    setOpenWatchHistory(true);
+  }
+
+  const handleCloseWatchHistory = () => {
+    setOpenWatchHistory(false);
+  }
+
+  const handleClickWatchHistoryVideo = (video) => {
+    setOpenWatchHistory(false);
+    setActiveVideo(video);
+
+    const chapterIndex = chapters.findIndex(c => c._id === video.chapter._id);
+    setExpandedChapterIndex(chapterIndex);
+  }
+
+  const course = {
+    _id: 2,
+    thumbnail: 'https://damminhtien.com/assets/images/reactjs.png',
+    title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
+    description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica.`,
+    content: `<p>
+    <span style="font-size: large;">Giới thiệu tổng quan</span>
+</p>
+<p>
+    <br>
+</p>
+<p>Quill is a free,
+    <a href="https://github.com/quilljs/quill/" target="_blank">open source</a>WYSIWYG editor built for the modern web. With its
+    <a href="http://quilljs.com/docs/modules/" target="_blank">extensible architecture</a>and a
+    <a href="http://quilljs.com/docs/api/" target="_blank">expressive API</a>you can completely customize it to fulfill your needs. Some built in features include:</p>
+<p>
+    <br>
+</p>
+<ul>
+    <li>Fast and lightweight</li>
+    <li>Semantic markup</li>
+    <li>Standardized HTML between browsers</li>
+    <li>Cross browser support including Chrome, Firefox, Safari, and IE 9+</li>
+</ul>
+<p>
+    <br>
+</p>
+<p>
+    <span style="font-size: large;">Component, Prop, State</span>
+</p>
+<p>
+    <br>
+</p>
+<p>Quill is a free,
+    <a href="https://github.com/quilljs/quill/" target="_blank">open source</a>WYSIWYG editor built for the modern web. With its
+    <a href="http://quilljs.com/docs/modules/" target="_blank">extensible architecture</a>and a
+    <a href="http://quilljs.com/docs/api/" target="_blank">expressive API</a>you can completely customize it to fulfill your needs. Some built in features include:</p>
+<p>
+    <br>
+</p>
+<ul>
+    <li>Fast and lightweight</li>
+    <li>Semantic markup</li>
+    <li>Standardized HTML between browsers</li>
+    <li>Cross browser support including Chrome, Firefox, Safari, and IE 9+</li>
+</ul>
+<p>
+    <br>
+</p>
+<p>
+    <span style="font-size: large;">React Hooks</span>
+</p>
+<p>
+    <br>
+</p>
+<p>Quill is a free,
+    <a href="https://github.com/quilljs/quill/" target="_blank">open source</a>WYSIWYG editor built for the modern web. With its
+    <a href="http://quilljs.com/docs/modules/" target="_blank">extensible architecture</a>and a
+    <a href="http://quilljs.com/docs/api/" target="_blank">expressive API</a>you can completely customize it to fulfill your needs. Some built in features include:</p>
+<p>
+    <br>
+</p>
+<ul>
+    <li>Fast and lightweight</li>
+    <li>Semantic markup</li>
+    <li>Standardized HTML between browsers</li>
+    <li>Cross browser support including Chrome, Firefox, Safari, and IE 9+</li>
+</ul>`,
+    averageRating: 4.5,
+    numberOfRatings: 1500,
+    numberOfStudents: 2500,
+    lecturer: {
+      fullName: 'Tue Vo'
+    },
+    categoryCluster: {
+      _id: '1',
+      name: 'Công nghệ thông tin',
+      category: {
+        _id: '1.1',
+        name: 'Lập trình web',
+        href: '/categories/1.1/courses'
+      }
+    },
+    tuition: 350000,
+    discountPercent: 0.5,
+    updatedAt: new Date('2021-01-09T16:59:58.031Z'),
+    isFinished: true
+  };
 
   const courses = [
     {
@@ -990,6 +1022,7 @@ const CourseDetails = () => {
                       startIcon={(<HistoryIcon />)}
                       size="large"
                       fullWidth
+                      onClick={handleClickBtnShowWatchHistory}
                     >
                       Lịch sử theo dõi video
                     </Button>
@@ -999,7 +1032,7 @@ const CourseDetails = () => {
               <Box>
                 {chapters.map((chapter, index) => (
                   <Accordion
-                    key={chapter._id}
+                    key={index}
                     expanded={index === expandedChapterIndex}
                     className={classes.chapter}
                     ref={el => {
@@ -1025,7 +1058,7 @@ const CourseDetails = () => {
                       expandIcon={<ExpandMoreIcon className={classes.icon} />}
                       aria-controls="panel1a-content"
                       id="panel1a-header"
-                      onClick={() => handleChapterClick(index)}
+                      onClick={() => handleClickChapter(index)}
                     >
                       <Box display="flex" flexDirection="column">
                         <Typography variant="h5" gutterBottom><b>{chapter.title}</b></Typography>
@@ -1040,7 +1073,7 @@ const CourseDetails = () => {
                           <Grid item xs={8}>
                             <div className={classes.videoPlayer}>
                               <div className={classes.videoPlayer__video}>
-                                <VideoPlayer />
+                                {activeVideo && (<VideoPlayer data={activeVideo} />)}
                               </div>
                               <Box px={2} pt={2} pb={1}>
                                 <Typography variant="h4" gutterBottom><b>{chapter.videos[0].title}</b></Typography>
@@ -1176,10 +1209,21 @@ const CourseDetails = () => {
           </div>
         </div>
 
-        <AddVideo
-          open={openAddVideo}
-          onClose={handleCloseAddVideo}
-        />
+        {userState.authUser && userState.authUser.role === userRole.LECTURER.value && (
+          <AddVideo
+            open={openAddVideo}
+            onClose={handleCloseAddVideo}
+          />
+        )}
+
+        {userState.authUser && userState.authUser.role === userRole.STUDENT.value && (
+          <WatchHistory
+            data={{ course }}
+            open={openWatchHistory}
+            onClose={handleCloseWatchHistory}
+            onClickVideo={handleClickWatchHistoryVideo}
+          />
+        )}
 
       </main>
     </PerfectScrollbar>
