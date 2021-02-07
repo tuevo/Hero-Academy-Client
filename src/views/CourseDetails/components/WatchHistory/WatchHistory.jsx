@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(1),
     boxShadow: 'none',
     backgroundColor: theme.palette.background.default,
-    borderRadius: 0
+    borderRadius: 5
   },
   videoListItem__thumbnailContainer: {
     position: 'relative',

@@ -218,7 +218,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(1),
     boxShadow: 'none',
     backgroundColor: theme.palette.background.paper,
-    borderRadius: 0
+    borderRadius: 5
   },
   videoListItemActive: {
     backgroundColor: theme.palette.primary.light,
