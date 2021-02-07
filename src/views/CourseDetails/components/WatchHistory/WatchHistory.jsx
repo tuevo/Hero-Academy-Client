@@ -8,7 +8,7 @@ import * as moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
   videoList: {
-    maxHeight: '25rem',
+    maxHeight: '28.125rem',
     overflow: 'scroll'
   },
   videoListItem: {
