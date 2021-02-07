@@ -220,15 +220,15 @@ const useStyles = makeStyles(theme => ({
   },
   videoListItem__thumbnailContainer: {
     position: 'relative',
-    height: '100%'
+    height: '5.625rem'
   },
   videoListItem__thumbnail: {
     height: '100%'
   },
   videoListItem__duration: {
     position: 'absolute',
-    bottom: '15%',
-    right: '3%',
+    bottom: '6%',
+    right: '4%',
     padding: theme.spacing(0.25, 0.5),
     color: '#fff',
     backgroundColor: '#1d1d1d',
@@ -1072,8 +1072,8 @@ const CourseDetails = () => {
                               <PerfectScrollbar className={classes.videoList}>
                                 {chapter.videos.map(video => (
                                   <Card key={video._id} className={classes.videoListItem}>
-                                    <CardActionArea>
-                                      <Grid container>
+                                    <CardActionArea style={{ height: '100%' }}>
+                                      <Grid container style={{ height: '100%' }}>
                                         <Grid item xs={5}>
                                           <div className={classes.videoListItem__thumbnailContainer}>
                                             <CardMedia
