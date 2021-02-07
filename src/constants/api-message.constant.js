@@ -1,4 +1,5 @@
 export const apiMessage = {
+  CONFIRM_ACCOUNT_INVALID: 'Vui lòng nhập mã xác thực OTP',
   SIGN_IN_INVALID: 'Vui lòng kiếm tra lại thông tin đăng nhập',
   MAIL_NOT_FOUND_OR_PASSWORD_NOT_MATCH: 'Địa chỉ email hoặc mật khẩu không chính xác',
   THE_ACCOUNT_HAS_BEEN_BLOCKED: 'Tài khoản đang tạm thời bị khóa',

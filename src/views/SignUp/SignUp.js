@@ -315,7 +315,7 @@ const SignUp = props => {
                   type="submit"
                   variant="contained"
                 >
-                  Tiếp tục
+                  Đăng ký
                 </Button>
                 <Typography
                   color="textSecondary"

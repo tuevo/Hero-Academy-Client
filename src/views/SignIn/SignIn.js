@@ -21,6 +21,7 @@ import { apiMessage } from 'constants/api-message.constant';
 import * as _ from 'lodash';
 import { availablePages } from 'constants/global.constant';
 import { setPageBasics } from 'redux/actions/page.action';
+import ConfirmAccount from 'components/ConfirmAccount/ConfirmAccount';
 
 const schema = {
   email: {
@@ -142,6 +143,8 @@ const SignIn = props => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const [showConfirmAccount, setShowConfirmAccount] = useState(false);
+
   const [formState, setFormState] = useState({
     isValid: false,
     values: {},
@@ -238,9 +241,6 @@ const SignIn = props => {
           item
           lg={5}
         >
-          {/* <div className={classes.quote}>
-            <img className={`${classes.cover}`} src="https://aws.techdost.com/wp-content/uploads/2020/05/digital-marketing-php-developer-jobs-meerut-delhi-ncr-ghaziabad-muzaffarnagar.gif" alt="" />
-          </div> */}
         </Grid>
         <Grid
           className={classes.content}
@@ -248,128 +248,88 @@ const SignIn = props => {
           lg={7}
           xs={12}
         >
-          <div className={classes.content}>
-            <div className={classes.contentHeader}>
-            </div>
-            <div className={classes.contentBody}>
-              <form
-                className={`${classes.form} animate__animated animate__fadeIn`}
-                onSubmit={handleSignIn}
-              >
-                <Typography
-                  className={classes.title}
-                  variant="h2"
-                  gutterBottom
+          {!showConfirmAccount ? (
+            <div className={classes.content}>
+              <div className={classes.contentHeader}>
+              </div>
+              <div className={classes.contentBody}>
+                <form
+                  className={`${classes.form} animate__animated animate__fadeIn`}
+                  onSubmit={handleSignIn}
                 >
-                  Đăng nhập tài khoản
-                </Typography>
-                {/* <Typography
-                  className={classes.constrastText}
-                  gutterBottom
-                >
-                  Sign in with social media
-                </Typography>
-                <Grid
-                  className={classes.socialButtons}
-                  container
-                  spacing={2}
-                >
-                  <Grid item>
-                    <Button
-                      color="primary"
-                      onClick={handleSignIn}
-                      size="large"
-                      variant="contained"
-                      style={{ backgroundColor: '#2957f3' }}
-                    >
-                      <FacebookIcon className={classes.socialIcon} />
-                      Login with Facebook
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      onClick={handleSignIn}
-                      size="large"
-                      variant="contained"
-                    >
-                      <GoogleIcon className={classes.socialIcon} />
-                      Login with Google
-                    </Button>
-                  </Grid>
-                </Grid>
-                <Typography
-                  align="center"
-                  className={`${classes.sugestion} ${classes.constrastText}`}
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  or login with email address
-                </Typography> */}
-                <TextField
-                  className={classes.textField}
-                  error={hasError('email')}
-                  fullWidth
-                  helperText={
-                    hasError('email') ? formState.errors.email[0] : null
-                  }
-                  label="Địa chỉ email"
-                  name="email"
-                  onChange={handleChange}
-                  type="text"
-                  value={formState.values.email || ''}
-                  variant="standard"
-                  InputProps={{
-                    classes: {
-                      underline: classes.input
-                    }
-                  }}
-                  autoFocus
-                />
-                <TextField
-                  className={classes.textField}
-                  error={hasError('password')}
-                  fullWidth
-                  helperText={
-                    hasError('password') ? formState.errors.password[0] : null
-                  }
-                  label="Mật khẩu"
-                  name="password"
-                  onChange={handleChange}
-                  type="password"
-                  value={formState.values.password || ''}
-                  variant="standard"
-                  InputProps={{
-                    classes: {
-                      underline: classes.input
-                    }
-                  }}
-                />
-                <Button
-                  className={classes.signInButton}
-                  color="primary"
-                  fullWidth
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                >
-                  Đăng nhập
-                </Button>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Chưa có tài khoản?{' '}
-                  <Link
-                    component={RouterLink}
-                    to="/sign-up"
-                    variant="h6"
+                  <Typography
+                    className={classes.title}
+                    variant="h2"
+                    gutterBottom
                   >
-                    Đăng ký
-                  </Link>
+                    Đăng nhập tài khoản
                 </Typography>
-              </form>
+                  <TextField
+                    className={classes.textField}
+                    error={hasError('email')}
+                    fullWidth
+                    helperText={
+                      hasError('email') ? formState.errors.email[0] : null
+                    }
+                    label="Địa chỉ email"
+                    name="email"
+                    onChange={handleChange}
+                    type="text"
+                    value={formState.values.email || ''}
+                    variant="standard"
+                    InputProps={{
+                      classes: {
+                        underline: classes.input
+                      }
+                    }}
+                    autoFocus
+                  />
+                  <TextField
+                    className={classes.textField}
+                    error={hasError('password')}
+                    fullWidth
+                    helperText={
+                      hasError('password') ? formState.errors.password[0] : null
+                    }
+                    label="Mật khẩu"
+                    name="password"
+                    onChange={handleChange}
+                    type="password"
+                    value={formState.values.password || ''}
+                    variant="standard"
+                    InputProps={{
+                      classes: {
+                        underline: classes.input
+                      }
+                    }}
+                  />
+                  <Button
+                    className={classes.signInButton}
+                    color="primary"
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
+                    Đăng nhập
+                </Button>
+                  <Typography
+                    color="textSecondary"
+                    variant="body1"
+                  >
+                    Chưa có tài khoản?{' '}
+                    <Link
+                      component={RouterLink}
+                      to="/sign-up"
+                      variant="h6"
+                    >
+                      Đăng ký
+                  </Link>
+                  </Typography>
+                </form>
+              </div>
             </div>
-          </div>
+          ) : <ConfirmAccount />}
         </Grid>
       </Grid>
     </div>
