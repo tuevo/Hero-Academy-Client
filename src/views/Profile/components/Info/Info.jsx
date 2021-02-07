@@ -67,7 +67,7 @@ export default function Info() {
     errors: {}
   };
 
-  if (userState.authUser.role === userRole.LECTURER) {
+  if (userState.authUser.role === userRole.LECTURER.value) {
     initFormState.values.introduction = userState.authUser.roleInfo ? userState.authUser.roleInfo.introduction : null;
   }
 
@@ -178,22 +178,22 @@ export default function Info() {
               <Typography variant="body1">{_.find(userRole, role => role.value === userState.authUser.role).name}</Typography>
             </Box>
             {userState.authUser.role === userRole.LECTURER.value && (
-              <div>
+              <Box display="flex" flexDirection="column" alignItems="center">
                 <Box display="flex" alignItems="center">
-                  <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(userState.authUser.averageRating)}.${(userState.authUser.averageRating - Math.floor(userState.authUser.averageRating)) * 10}`}</Typography>
+                  <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(userState.authUser.roleInfo.averageRating)}.${(userState.authUser.roleInfo.averageRating - Math.floor(userState.authUser.roleInfo.averageRating)) * 10}`}</Typography>
                   <Box style={{ marginBottom: 1 }}>
-                    <Rating name="read-only" value={userState.authUser.averageRating} size="small" precision={0.5} readOnly />
+                    <Rating name="read-only" value={userState.authUser.roleInfo.averageRating} size="small" precision={0.5} readOnly />
                   </Box>
                 </Box>
                 <Typography variant="body2" gutterBottom>
                   <span>(</span>
-                  <NumberFormat value={userState.authUser.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
+                  <NumberFormat value={userState.authUser.roleInfo.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
                   <span>)</span>
                 </Typography>
                 <Typography variant="body2">
-                  <NumberFormat value={userState.authUser.numberOfStudents} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
+                  <NumberFormat value={userState.authUser.roleInfo.numberOfStudents} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
                 </Typography>
-              </div>
+              </Box>
             )}
           </Box>
         </Grid>
