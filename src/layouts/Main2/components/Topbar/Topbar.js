@@ -102,6 +102,7 @@ const Topbar = props => {
       localStorage.removeItem(localStorageItems.ACCESS_TOKEN.name);
       localStorage.removeItem(localStorageItems.AUTH_USER.name);
       dispatch(signOut());
+      history.push(availablePages.SIGN_IN.path);
     }
   }
 
@@ -135,18 +136,14 @@ const Topbar = props => {
             <Grid item>
               <Grid container spacing={1}>
                 <Grid item>
-                  <div className="animate__animated animate__fadeIn">
-                    <RouterLink to={availablePages.SIGN_IN.path} className={classes.btnSignIn}>
-                      <Button variant="outlined" color="primary">ĐĂNG NHẬP</Button>
-                    </RouterLink>
-                  </div>
+                  <RouterLink to={availablePages.SIGN_IN.path} className={classes.btnSignIn}>
+                    <Button variant="outlined" color="primary">ĐĂNG NHẬP</Button>
+                  </RouterLink>
                 </Grid>
                 <Grid item>
-                  <div className="animate__animated animate__fadeIn">
-                    <RouterLink to={availablePages.SIGN_UP.path}>
-                      <Button variant="contained" color="primary" className={classes.btnSignUp}>ĐĂNG KÝ</Button>
-                    </RouterLink>
-                  </div>
+                  <RouterLink to={availablePages.SIGN_UP.path}>
+                    <Button variant="contained" color="primary" className={classes.btnSignUp}>ĐĂNG KÝ</Button>
+                  </RouterLink>
                 </Grid>
               </Grid>
             </Grid>
