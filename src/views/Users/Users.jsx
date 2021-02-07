@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { showNotification } from 'redux/actions/app.action';
 import { studentApi } from 'api';
 import NumberFormat from 'react-number-format';
+import AddLecturer from './components/AddLecturer/AddLecturer';
 
 function a11yProps(index) {
   return {
@@ -58,6 +59,8 @@ const Users = () => {
   const [studentListPage, setStudentListPage] = useState(1);
   const [studentListTotalItems, setStudentListTotalItems] = useState(0);
   const [disableBtnLoadMoreStudent, setDisableBtnLoadMoreStudent] = useState(false);
+
+  const [openAddLecturer, setOpenAddLecturer] = useState(false);
 
   useEffect(() => {
     const getAllStudents = async () => {
@@ -324,6 +327,18 @@ const Users = () => {
     }
   }
 
+  const handleClickBtnAddLecturer = () => {
+    setOpenAddLecturer(true);
+  }
+
+  const handleCloseAddLecturer = (accepted, data) => {
+    setOpenAddLecturer(false);
+
+    if (accepted) {
+      console.log(data);
+    }
+  }
+
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.tabs} color="primary">
@@ -378,9 +393,10 @@ const Users = () => {
 
       {tabValue === 1 && (
         <Box p={4} position="relative">
+          <AddLecturer open={openAddLecturer} onClose={handleCloseAddLecturer} />
           <Box className={`${classes.btnAddLecturerContainer} animate__animated animate__bounceIn`}>
             <Tooltip title="Thêm giảng viên mới">
-              <Fab size="large" color="primary" aria-label="add" className={classes.btnAddLecturer}>
+              <Fab size="large" color="primary" aria-label="add" className={classes.btnAddLecturer} onClick={handleClickBtnAddLecturer}>
                 <PersonAddIcon fontSize="large" />
               </Fab>
             </Tooltip>
