@@ -1,7 +1,10 @@
 import { Box, Button, GridList, GridListTile } from '@material-ui/core';
+import { Sync } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/styles';
+import { courseApi } from 'api';
 import Course from 'components/Course/Course';
 import React from 'react';
+import { useEffect, useState } from 'react';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,6 +20,30 @@ const useStyles = makeStyles(theme => ({
 
 const Courses = () => {
   const classes = useStyles();
+  const limit = 8;
+
+  const [courseList, setCourseList] = useState([]);
+  const [courseListPage, setCourseListPage] = useState(1);
+
+  const [disableBtnLoadMoreCourse, setDisableBtnLoadMoreCourse] = useState(false)
+
+  const getAllCourses = async () => {
+    setDisableBtnLoadMoreCourse(true)
+    const res = await courseApi.getAll(courseListPage, limit);
+    const courses = res.data.entries;
+    const { totalItems } = res.data.meta
+
+    const newCourseList = [...courseList, ...courses]
+    setCourseList(newCourseList);
+
+    if (newCourseList.length < totalItems) {
+      setDisableBtnLoadMoreCourse(false)
+    }
+  }
+
+  useEffect(() => {
+    getAllCourses();
+  }, [courseListPage])
 
   const courses = [
     {
@@ -197,14 +224,19 @@ const Courses = () => {
     },
   ]
 
-  for (let c of courses)
+  for (let c of courseList)
     c['href'] = `/courses/${c._id}`;
+
+  const handleClickBtnLoadMoreCourse = () => {
+    const newPage = courseListPage + 1;
+    setCourseListPage(newPage);
+  }
 
   return (
     <div className={classes.root}>
       <Box display="flex" justifyContent="center">
         <GridList cellHeight="auto" cols={4}>
-          {courses.map((c, i) => (
+          {courseList.map((c, i) => (
             <GridListTile key={c._id}>
               <Box p={2} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
                 <Course data={c} type="minimal" />
@@ -214,7 +246,17 @@ const Courses = () => {
         </GridList>
       </Box>
       <Box p={2}>
-        <Button fullWidth className={classes.btnLoadMoreCourse} variant="contained" size="large" color="primary">Xem thêm khóa học</Button>
+        <Button
+          fullWidth
+          className={classes.btnLoadMoreCourse}
+          variant="contained"
+          size="large"
+          color="primary"
+          onClick={handleClickBtnLoadMoreCourse}
+          disabled={disableBtnLoadMoreCourse}
+        >
+          Xem thêm khóa học
+        </Button>
       </Box>
     </div >
   );
