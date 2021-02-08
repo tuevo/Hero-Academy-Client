@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { showNotification } from 'redux/actions/app.action';
 import { apiMessage } from 'constants/api-message.constant';
-import { categoryClusterApi } from 'api';
+import { categoryClusterApi, categoryApi } from 'api';
 import { availablePages } from 'constants/global.constant';
 
 const useStyles = makeStyles(theme => ({
@@ -326,6 +326,24 @@ export default function Categories() {
     }
   }
 
+  const handleSubmitAddCategory = async (data) => {
+    const params = {
+      ...data,
+      categoryClusterId: categoryClusterList[expandedCategoryClusterIndex]._id
+    };
+
+    try {
+      const res = await categoryApi.add(params);
+      const { category } = res.data;
+      categoryClusterList[expandedCategoryClusterIndex].categories.unshift(category);
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
+  }
+
   return (
     <Box p={4} pt={6} className={classes.root}>
       <Box mb={3}>
@@ -345,9 +363,8 @@ export default function Categories() {
       </Box>
       {categoryClusterList.map((cc, i) => (
         <Accordion
-          key={cc._id}
-          className={`${classes.categoryCluster} animate__animated animate__fadeIn`}
-          style={{ animationDelay: `${0.15 * i}s` }}
+          key={i}
+          className={classes.categoryCluster}
           expanded={i === expandedCategoryClusterIndex}
         >
           <AccordionSummary
@@ -366,7 +383,7 @@ export default function Categories() {
           <AccordionDetails>
             <Box display="flex" flexDirection="column" style={{ width: '100%' }}>
               <Box mb={2}>
-                <AddCategory />
+                <AddCategory onSubmit={handleSubmitAddCategory} />
               </Box>
               <List className={classes.categoryList}>
                 <PerfectScrollbar className={classes.categoryList__container}>

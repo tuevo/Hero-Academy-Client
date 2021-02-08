@@ -7,7 +7,14 @@ import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import validate from 'validate.js';
+
+const schema = {
+  name: {
+    presence: { allowEmpty: false, message: 'is required' },
+  }
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '0 !important'
   },
   btnAdd: {
+    height: '3rem',
     minWidth: '10.5rem',
     marginLeft: 5,
     "backgroundColor": "#a4508b",
@@ -29,53 +37,114 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AddCategory = props => {
-  const { className, ...rest } = props;
+  const { onSubmit, className, ...rest } = props;
 
   const classes = useStyles();
 
-  const [values, setValues] = useState({
-    name: ''
+  const [formState, setFormState] = useState({
+    isValid: false,
+    values: {},
+    touched: {},
+    errors: {}
   });
+  const [isFormCleared, setIsFormCleared] = useState(false);
+
+  useEffect(() => {
+    if (isFormCleared) {
+      setIsFormCleared(false);
+      return;
+    }
+
+    const errors = validate(formState.values, schema);
+
+    setFormState(formState => ({
+      ...formState,
+      isValid: errors ? false : true,
+      errors: errors || {}
+    }));
+  }, [formState.values]);
+
+  useEffect(() => {
+    if (isFormCleared) {
+      setFormState({
+        isValid: false,
+        values: {},
+        touched: {},
+        errors: {}
+      });
+    }
+  }, [isFormCleared]);
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    handleClickBtnAdd();
+  }
+
+  const handleClickBtnAdd = () => {
+    if (!formState.isValid)
+      return;
+
+    onSubmit(formState.values);
+    setIsFormCleared(true);
+  }
 
   const handleChange = event => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
+    event.persist();
+
+    setFormState(formState => ({
+      ...formState,
+      values: {
+        ...formState.values,
+        [event.target.name]: event.target.value
+      },
+      touched: {
+        ...formState.touched,
+        [event.target.name]: true
+      }
+    }));
   };
+
+  const hasError = field =>
+    formState.touched[field] && formState.errors[field] ? true : false;
 
   return (
     <Card
       {...rest}
       className={clsx(classes.root, className)}
     >
-      <form>
-        <CardContent className={classes.cardContent}>
-          <Box display="flex">
+      <CardContent className={classes.cardContent}>
+        <Box display="flex">
+          <form onSubmit={handleSubmit} style={{ width: '100%' }}>
             <TextField
               label="Tên lĩnh vực"
               name="name"
               onChange={handleChange}
-              value={values.name}
+              value={formState.values.name || ''}
               variant="standard"
               fullWidth
+              helperText={
+                hasError('name') ? formState.errors.name[0] : null
+              }
               InputProps={{
                 classes: {
                   underline: classes.input
                 }
               }}
             />
-            <Button
-              startIcon={<AddIcon />}
-              color="primary"
-              variant="contained"
-              className={classes.btnAdd}
-            >
-              Thêm lĩnh vực
+            <button type="submit" style={{ display: 'none' }}></button>
+          </form>
+          <Button
+            startIcon={<AddIcon />}
+            color="primary"
+            variant="contained"
+            className={classes.btnAdd}
+            onClick={handleClickBtnAdd}
+            disabled={!formState.isValid}
+          >
+            Thêm lĩnh vực
             </Button>
-          </Box>
-        </CardContent>
-      </form>
+        </Box>
+      </CardContent>
     </Card>
   );
 };

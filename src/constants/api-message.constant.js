@@ -15,5 +15,8 @@ export const apiMessage = {
   PASSWORD_AND_CONFIRM_PASSWORD_NOT_MATCH: 'Nhập lại mật khẩu không chính xác',
   REGISTER_SUCCESS: 'Đăng ký tài khoản thành công',
   CATEGORY_CLUSTER_ALREADY_EXISTS: 'Nhóm lĩnh vực này đã tồn tại',
-  ADD_CATEGORY_CLUSTER_SUCCESSFULLY: 'Thêm nhóm lĩnh vực thành công'
+  ADD_CATEGORY_CLUSTER_SUCCESSFULLY: 'Thêm nhóm lĩnh vực thành công',
+  CATEGORY_CLUSTER_NOT_FOUND: 'Không tìm thấy nhóm lĩnh vực',
+  CATEGORY_ALREADY_EXISTS: 'Lĩnh vực này đã tồn tại',
+  CATEGORY_ADDED_SUCCESSFULLY: 'Thêm lĩnh vực thành công',
 }
