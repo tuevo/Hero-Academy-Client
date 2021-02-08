@@ -10,6 +10,10 @@ const categoryClusterApi = {
       url += `?page=${page}&limit=${limit}`;
 
     return axiosClient.get(url);
+  },
+  add: (params) => {
+    const url = `${baseUrl}`;
+    return axiosClient.post(url, params);
   }
 }
 

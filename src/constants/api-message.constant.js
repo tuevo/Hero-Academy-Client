@@ -13,5 +13,7 @@ export const apiMessage = {
   REFRESH_SUCCESSFULLY: 'refresh thành công',
   EMAIL_ALREADY_EXISTS: 'Địa chỉ email đã được sử dụng',
   PASSWORD_AND_CONFIRM_PASSWORD_NOT_MATCH: 'Nhập lại mật khẩu không chính xác',
-  REGISTER_SUCCESS: 'Đăng ký tài khoản thành công'
+  REGISTER_SUCCESS: 'Đăng ký tài khoản thành công',
+  CATEGORY_CLUSTER_ALREADY_EXISTS: 'Nhóm lĩnh vực này đã tồn tại',
+  ADD_CATEGORY_CLUSTER_SUCCESSFULLY: 'Thêm nhóm lĩnh vực thành công'
 }

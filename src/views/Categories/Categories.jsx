@@ -222,41 +222,40 @@ export default function Categories() {
     },
   ];
 
-  useEffect(() => {
-    const getAllCategoryClusters = async () => {
-      setDisableBtnLoadMoreCategoryCluster(true);
-      try {
-        const res = await categoryClusterApi.getAll(categoryClusterListPage, limit);
-        const { entries } = res.data;
+  const getAllCategoryClusters = async (page) => {
+    setDisableBtnLoadMoreCategoryCluster(true);
+    try {
+      const res = await categoryClusterApi.getAll(page, limit);
+      const { entries } = res.data;
 
-        let newCategoryClusterList = [];
-        if (categoryClusterListPage === 1) {
-          newCategoryClusterList = entries;
-        } else {
-          newCategoryClusterList = categoryClusterList.concat(entries);
-        }
+      let newCategoryClusterList = [];
+      if (page === 1) {
+        newCategoryClusterList = entries;
+      } else {
+        newCategoryClusterList = categoryClusterList.concat(entries);
+      }
 
-        for (let cc of newCategoryClusterList) {
-          cc.categories = cc.categories.map(c => ({
-            ...c,
-            href: availablePages.CATEGORY_COURSES.path.replace(':categoryId', c._id)
-          }));
-        }
-        setCategoryClusterList(newCategoryClusterList);
+      for (let cc of newCategoryClusterList) {
+        cc.categories = cc.categories.map(c => ({
+          ...c,
+          href: availablePages.CATEGORY_COURSES.path.replace(':categoryId', c._id)
+        }));
+      }
+      setCategoryClusterList(newCategoryClusterList);
 
-        if (newCategoryClusterList.length < res.data.meta.totalItems) {
-          setDisableBtnLoadMoreCategoryCluster(false);
-        }
+      if (newCategoryClusterList.length < res.data.meta.totalItems) {
+        setDisableBtnLoadMoreCategoryCluster(false);
+      }
 
-      } catch (error) {
-        if (error.messages && error.messages.length > 0) {
-          dispatch(showNotification('error', apiMessage[error.messages[0]]));
-        }
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
       }
     }
+  }
 
-    getAllCategoryClusters();
-
+  useEffect(() => {
+    getAllCategoryClusters(categoryClusterListPage);
   }, [categoryClusterListPage]);
 
   const handleClickCategoryCluster = (index) => {
@@ -308,13 +307,23 @@ export default function Categories() {
     setOpenAddCategoryCluster(true);
   }
 
-  const handleCloseAddCategoryCluster = (accepted, data) => {
-    setOpenAddCategoryCluster(false);
+  const handleCloseAddCategoryCluster = async (accepted, data) => {
 
-    if (!accepted)
+    if (!accepted) {
+      setOpenAddCategoryCluster(false);
       return;
+    }
 
-    console.log(data);
+    try {
+      const res = await categoryClusterApi.add(data);
+      setOpenAddCategoryCluster(false);
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+      getAllCategoryClusters(1);
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
   }
 
   return (
