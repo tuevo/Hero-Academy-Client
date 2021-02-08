@@ -7,6 +7,13 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { AddCategory, AddCategoryCluster, CategoryDetails, CategoryMenu } from './components';
 import UpdateCategory from './components/UpdateCategory/UpdateCategory';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
+import AddIcon from '@material-ui/icons/Add';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { showNotification } from 'redux/actions/app.action';
+import { apiMessage } from 'constants/api-message.constant';
+import { categoryClusterApi } from 'api';
+import { availablePages } from 'constants/global.constant';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,11 +47,19 @@ const useStyles = makeStyles(theme => ({
 
 export default function Categories() {
   const classes = useStyles();
-  const [expandedCategoryClusterIndex, setExpandedCategoryClusterIndex] = useState(0);
+  const dispatch = useDispatch();
+  const limit = 2;
+
+  const [expandedCategoryClusterIndex, setExpandedCategoryClusterIndex] = useState(null);
   const [openCategoryDetails, setOpenCategoryDetails] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [openUpdateCategory, setOpenUpdateCategory] = useState(false);
   const [openRemoveCategoryConfirmDialog, setOpenRemoveCategoryConfirmDialog] = useState(false);
+  const [openAddCategoryCluster, setOpenAddCategoryCluster] = useState(false);
+
+  const [categoryClusterList, setCategoryClusterList] = useState([]);
+  const [categoryClusterListPage, setCategoryClusterListPage] = useState(1);
+  const [disableBtnLoadMoreCategoryCluster, setDisableBtnLoadMoreCategoryCluster] = useState(false);
 
   const categoryClusters = [
     {
@@ -207,6 +222,36 @@ export default function Categories() {
     },
   ];
 
+  useEffect(() => {
+    const getAllCategoryClusters = async () => {
+      setDisableBtnLoadMoreCategoryCluster(true);
+      try {
+        const res = await categoryClusterApi.getAll(categoryClusterListPage, limit);
+
+        const newCategoryClusterList = categoryClusterList.concat(res.data.entries);
+        for (let cc of newCategoryClusterList) {
+          cc.categories = cc.categories.map(c => ({
+            ...c,
+            href: availablePages.CATEGORY_COURSES.path.replace(':categoryId', c._id)
+          }));
+        }
+        setCategoryClusterList(newCategoryClusterList);
+
+        if (newCategoryClusterList.length < res.data.meta.totalItems) {
+          setDisableBtnLoadMoreCategoryCluster(false);
+        }
+
+      } catch (error) {
+        if (error.messages && error.messages.length > 0) {
+          dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        }
+      }
+    }
+
+    getAllCategoryClusters();
+
+  }, [categoryClusterListPage]);
+
   const handleClickCategoryCluster = (index) => {
     if (index === expandedCategoryClusterIndex)
       setExpandedCategoryClusterIndex(null);
@@ -252,16 +297,41 @@ export default function Categories() {
     console.log(accepted);
   }
 
+  const handleClickBtnAddCategoryCluster = () => {
+    setOpenAddCategoryCluster(true);
+  }
+
+  const handleCloseAddCategoryCluster = (accepted, data) => {
+    setOpenAddCategoryCluster(false);
+
+    if (!accepted)
+      return;
+
+    console.log(data);
+  }
+
   return (
     <Box p={4} pt={6} className={classes.root}>
       <Box mb={3}>
-        <AddCategoryCluster />
+        <Button
+          fullWidth
+          variant="outlined"
+          color="primary"
+          startIcon={<AddIcon />}
+          onClick={handleClickBtnAddCategoryCluster}
+        >
+          Thêm nhóm lĩnh vực
+        </Button>
+        <AddCategoryCluster
+          open={openAddCategoryCluster}
+          onClose={handleCloseAddCategoryCluster}
+        />
       </Box>
-      {categoryClusters.map((cc, i) => (
+      {categoryClusterList.map((cc, i) => (
         <Accordion
           key={cc._id}
           className={`${classes.categoryCluster} animate__animated animate__fadeIn`}
-          style={{ animationDelay: `${0.2 * i}s` }}
+          style={{ animationDelay: `${0.15 * i}s` }}
           expanded={i === expandedCategoryClusterIndex}
         >
           <AccordionSummary
@@ -298,12 +368,20 @@ export default function Categories() {
                       </Box>
                     </ListItem>
                   ))}
+
+                  {cc.categories.length === 0 && (
+                    <Box p={2}>
+                      <Typography variant="body2">Chưa có lĩnh vực nào.</Typography>
+                    </Box>
+
+                  )}
                 </PerfectScrollbar>
               </List>
             </Box>
           </AccordionDetails>
         </Accordion>
-      ))}
+      ))
+      }
 
       <Box pt={3}>
         <Button
@@ -312,32 +390,36 @@ export default function Categories() {
           variant="contained"
           size="large"
           color="primary"
+          disabled={disableBtnLoadMoreCategoryCluster}
+          onClick={() => setCategoryClusterListPage(categoryClusterListPage + 1)}
         >
           Xem thêm nhóm lĩnh vực
         </Button>
       </Box>
 
-      {selectedCategory && (
-        <div>
-          <CategoryDetails
-            data={selectedCategory}
-            open={openCategoryDetails}
-            onClose={handleCloseCategoryDetails}
-          />
-          <UpdateCategory
-            data={selectedCategory}
-            open={openUpdateCategory}
-            onClose={handleCloseUpdateCategory}
-          />
-          <ConfirmDialog
-            title="Xác nhận"
-            content="Bạn thật sự muốn xóa lĩnh vực này?"
-            open={openRemoveCategoryConfirmDialog}
-            onClose={handleCloseRemoveCategoryConfirmDialog}
-          />
-        </div>
-      )}
+      {
+        selectedCategory && (
+          <div>
+            <CategoryDetails
+              data={selectedCategory}
+              open={openCategoryDetails}
+              onClose={handleCloseCategoryDetails}
+            />
+            <UpdateCategory
+              data={selectedCategory}
+              open={openUpdateCategory}
+              onClose={handleCloseUpdateCategory}
+            />
+            <ConfirmDialog
+              title="Xác nhận"
+              content="Bạn thật sự muốn xóa lĩnh vực này?"
+              open={openRemoveCategoryConfirmDialog}
+              onClose={handleCloseRemoveCategoryConfirmDialog}
+            />
+          </div>
+        )
+      }
 
-    </Box>
+    </Box >
   )
 }

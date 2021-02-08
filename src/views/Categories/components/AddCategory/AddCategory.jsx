@@ -19,7 +19,9 @@ const useStyles = makeStyles((theme) => ({
   },
   btnAdd: {
     minWidth: '10.5rem',
-    marginLeft: 5
+    marginLeft: 5,
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
   input: {
     ...theme.palette.input
@@ -66,7 +68,7 @@ const AddCategory = props => {
             <Button
               startIcon={<AddIcon />}
               color="primary"
-              variant="outlined"
+              variant="contained"
               className={classes.btnAdd}
             >
               Thêm lĩnh vực

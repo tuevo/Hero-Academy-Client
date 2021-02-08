@@ -1,86 +1,134 @@
-import {
-  Box, Button, Card,
-  CardContent,
-  TextField
-} from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import validate from 'validate.js';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    boxShadow: 'none'
-  },
-  cardContent: {
-    padding: '0 !important'
-  },
-  btnAdd: {
-    minWidth: '13.5rem',
-    marginLeft: 5,
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
-  },
-  input: {
-    ...theme.palette.input
+const schema = {
+  name: {
+    presence: { allowEmpty: false, message: 'is required' },
   }
-}));
+};
 
-const AddCategoryCluster = props => {
-  const { className, ...rest } = props;
+const useStyles = makeStyles(theme => ({
+  content: {
+    minWidth: '18.75rem'
+  },
+  root: {
+    '&$disabled': {
+      color: theme.palette.text.disabled,
+    },
+  },
+  disabled: {},
+  textField: {
+    marginBottom: theme.spacing(1)
+  }
+}))
 
+export default function AddCategoryCluster({ open, onClose }) {
   const classes = useStyles();
 
-  const [values, setValues] = useState({
-    name: ''
+  const [formState, setFormState] = useState({
+    isValid: false,
+    values: {},
+    touched: {},
+    errors: {}
   });
 
+  useEffect(() => {
+    const errors = validate(formState.values, schema);
+
+    setFormState(formState => ({
+      ...formState,
+      isValid: errors ? false : true,
+      errors: errors || {}
+    }));
+  }, [formState.values]);
+
   const handleChange = event => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
+    event.persist();
+
+    setFormState(formState => ({
+      ...formState,
+      values: {
+        ...formState.values,
+        [event.target.name]: event.target.value
+      },
+      touched: {
+        ...formState.touched,
+        [event.target.name]: true
+      }
+    }));
   };
 
+  const hasError = field =>
+    formState.touched[field] && formState.errors[field] ? true : false;
+
+  const handleClose = (accepted, data) => {
+    onClose(accepted, data);
+  }
+
+  const handleClickBtnAdd = () => {
+    if (!formState.isValid)
+      return;
+
+    handleClose(true, { ...formState.values });
+  }
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    handleClickBtnAdd();
+  }
+
   return (
-    <Card
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      <form>
-        <CardContent className={classes.cardContent}>
-          <Box display="flex">
+    <div>
+      <Dialog
+        open={open}
+        onClose={() => handleClose(false)}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Nhóm lĩnh vực mới</DialogTitle>
+        <DialogContent>
+          <form className={classes.content} onSubmit={handleSubmit}>
             <TextField
+              className={classes.textField}
+              error={hasError('name')}
+              fullWidth
+              helperText={
+                hasError('name') ? formState.errors.name[0] : null
+              }
               label="Tên nhóm lĩnh vực"
               name="name"
               onChange={handleChange}
-              value={values.name}
+              type="text"
+              value={formState.values.name || ''}
               variant="standard"
-              fullWidth
               InputProps={{
                 classes: {
                   underline: classes.input
                 }
               }}
+              autoFocus
             />
-            <Button
-              startIcon={<AddIcon />}
-              color="primary"
-              variant="contained"
-              className={classes.btnAdd}
-            >
-              Thêm nhóm lĩnh vực
-            </Button>
-          </Box>
-        </CardContent>
-      </form>
-    </Card>
-  );
-};
-
-AddCategoryCluster.propTypes = {
-  className: PropTypes.string
-};
-
-export default AddCategoryCluster;
+            <button type="submit" style={{ display: 'none' }}></button>
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleClose(false, null)} color="primary">
+            Hủy bỏ
+          </Button>
+          <Button
+            onClick={handleClickBtnAdd}
+            color="primary"
+            disabled={!formState.isValid}
+            classes={{
+              root: classes.root,
+              disabled: classes.disabled
+            }}
+          >
+            Thêm
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  )
+}
