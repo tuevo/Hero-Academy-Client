@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
 export default function Categories() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const limit = 2;
+  const limit = 10;
 
   const [expandedCategoryClusterIndex, setExpandedCategoryClusterIndex] = useState(null);
   const [openCategoryDetails, setOpenCategoryDetails] = useState(false);
@@ -227,8 +227,15 @@ export default function Categories() {
       setDisableBtnLoadMoreCategoryCluster(true);
       try {
         const res = await categoryClusterApi.getAll(categoryClusterListPage, limit);
+        const { entries } = res.data;
 
-        const newCategoryClusterList = categoryClusterList.concat(res.data.entries);
+        let newCategoryClusterList = [];
+        if (categoryClusterListPage === 1) {
+          newCategoryClusterList = entries;
+        } else {
+          newCategoryClusterList = categoryClusterList.concat(entries);
+        }
+
         for (let cc of newCategoryClusterList) {
           cc.categories = cc.categories.map(c => ({
             ...c,
