@@ -6,6 +6,10 @@ const categoryApi = {
   add: (params) => {
     const url = `${baseUrl}`;
     return axiosClient.post(url, params);
+  },
+  delete: (id) => {
+    const url = `${baseUrl}/${id}`;
+    return axiosClient.delete(url);
   }
 }
 

@@ -19,4 +19,6 @@ export const apiMessage = {
   CATEGORY_CLUSTER_NOT_FOUND: 'Không tìm thấy nhóm lĩnh vực',
   CATEGORY_ALREADY_EXISTS: 'Lĩnh vực này đã tồn tại',
   CATEGORY_ADDED_SUCCESSFULLY: 'Thêm lĩnh vực thành công',
+  CATEGORY_NOT_FOUND: 'Không tìm thấy lĩnh vực',
+  DELETE_CATEGORY_SUCCESSFULLY: 'Xóa lĩnh vực thành công'
 }

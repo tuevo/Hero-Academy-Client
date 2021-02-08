@@ -33,8 +33,8 @@ const useStyles = makeStyles(theme => ({
     boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px'
   },
   categoryList__container: {
-    maxHeight: '18.75rem',
-    overflow: 'scroll'
+    // maxHeight: '18.75rem',
+    // overflow: 'scroll'
   },
   icon: {
     color: theme.palette.icon
@@ -292,15 +292,27 @@ export default function Categories() {
     setOpenCategoryDetails(false);
   }
 
-  const handleCloseUpdateCategory = (accepted, newCategoryName) => {
+  const handleCloseUpdateCategory = (accepted, name) => {
     setOpenUpdateCategory(false);
-    console.log(accepted);
-    console.log(newCategoryName);
+    if (!accepted)
+      return;
   }
 
-  const handleCloseRemoveCategoryConfirmDialog = (accepted) => {
+  const handleCloseRemoveCategoryConfirmDialog = async (accepted) => {
     setOpenRemoveCategoryConfirmDialog(false);
-    console.log(accepted);
+    if (!accepted)
+      return;
+
+    try {
+      const res = await categoryApi.delete(selectedCategory._id);
+      categoryClusterList[expandedCategoryClusterIndex].categories = categoryClusterList[expandedCategoryClusterIndex].categories
+        .filter(c => c._id !== selectedCategory._id);
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
   }
 
   const handleClickBtnAddCategoryCluster = () => {
@@ -388,7 +400,7 @@ export default function Categories() {
               <List className={classes.categoryList}>
                 <PerfectScrollbar className={classes.categoryList__container}>
                   {cc.categories.map(c => (
-                    <ListItem key={c._id} onClick={() => handleClickCategory({ ...c, categoryCluster: cc })}>
+                    <ListItem key={c._id} onClick={() => handleClickCategory({ ...c, categoryCluster: { name: cc.name } })}>
                       <Box display="flex" justifyContent="space-between" alignItems="center" style={{ width: '100%' }}>
                         <ListItemText
                           primary={(
