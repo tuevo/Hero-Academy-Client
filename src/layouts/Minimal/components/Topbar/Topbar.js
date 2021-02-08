@@ -1,22 +1,21 @@
-import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
-import { AppBar, Toolbar, Typography, Button, Box, Grid, IconButton, Tooltip } from '@material-ui/core';
-import { availablePages } from 'constants/global.constant';
-import { SearchInput } from 'components';
-import { useHistory } from 'react-router-dom';
+import { AppBar, Box, Button, Grid, IconButton, Toolbar, Tooltip, Typography } from '@material-ui/core';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
-import { useSelector, useDispatch } from 'react-redux';
-import { shallowEqual } from 'recompose';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
-import { switchDarkMode } from 'redux/actions/app.action';
+import { makeStyles } from '@material-ui/styles';
+import clsx from 'clsx';
+import { SearchInput } from 'components';
+import AccountMenu from 'components/AccountMenu/AccountMenu';
+import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
+import { availablePages } from 'constants/global.constant';
 import { localStorageItems } from 'constants/local-storage.constant';
 import * as _ from 'lodash';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { shallowEqual } from 'recompose';
+import { switchDarkMode } from 'redux/actions/app.action';
 import { signOut } from 'redux/actions/user.action';
-import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
-import AccountMenu from 'components/AccountMenu/AccountMenu';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -57,9 +56,9 @@ const useStyles = makeStyles(theme => ({
 const Topbar = props => {
   const { className, ...rest } = props;
   const classes = useStyles();
-
+  const dispatch = useDispatch();
   const history = useHistory();
-  const [searchTerm, setSearchTerm] = useState('');
+
   const [openSignOutConfirmDialog, setOpenSignOutConfirmDialog] = useState(false);
 
   const appState = useSelector(state => ({
@@ -69,18 +68,6 @@ const Topbar = props => {
   const userState = useSelector(state => ({
     ...state.user
   }));
-
-  const dispatch = useDispatch();
-
-  const handleSearchInputChange = (e) => {
-    setSearchTerm(e.target.value);
-  }
-
-  const handleSearchInputKeyUp = (e) => {
-    if (e.keyCode === 13 && searchTerm) {
-      history.push(availablePages.COURSE_SEARCHING.path);
-    }
-  }
 
   const handleClickAccountMenuItem = (index) => {
     switch (index) {
@@ -128,10 +115,7 @@ const Topbar = props => {
         <Grid container justify="flex-end" alignItems="center" spacing={2}>
           <Grid item>
             <div className={classes.searchInput}>
-              <SearchInput
-                onChange={handleSearchInputChange}
-                onKeyUp={handleSearchInputKeyUp}
-              />
+              <SearchInput />
             </div>
           </Grid>
           {!userState.authUser && (

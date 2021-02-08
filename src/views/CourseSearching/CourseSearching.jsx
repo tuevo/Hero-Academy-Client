@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/styles';
 import Course from 'components/Course/Course';
 import React from 'react';
 import NumberFormat from 'react-number-format';
+import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,7 +45,10 @@ const useStyles = makeStyles(theme => ({
 
 const CourseSearching = () => {
   const classes = useStyles();
-  const [filterValue, setFilterValue] = React.useState(1);
+  const query = new URLSearchParams(useLocation().search);
+  const searchTerm = query.get('q');
+
+  const [filterValue, setFilterValue] = useState(1);
 
   const handleChange = (event) => {
     setFilterValue(event.target.value);

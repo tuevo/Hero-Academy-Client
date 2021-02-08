@@ -4,6 +4,9 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import { Paper, Input } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import { useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
+import { availablePages } from 'constants/global.constant';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,9 +31,22 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SearchInput = props => {
-  const { className, onChange, onKeyUp, style, ...rest } = props;
-
+  const { className, style, ...rest } = props;
   const classes = useStyles();
+  const history = useHistory();
+  const query = new URLSearchParams(useLocation().search);
+
+  const [term, setTerm] = useState(query.get('q'));
+
+  const handleChange = e => {
+    setTerm(e.target.value);
+  }
+
+  const handleKeyUp = e => {
+    if (e.keyCode === 13) {
+      history.push(`${availablePages.COURSE_SEARCHING.path}?q=${term}`);
+    }
+  }
 
   return (
     <Paper
@@ -43,8 +59,9 @@ const SearchInput = props => {
         {...rest}
         className={classes.input}
         disableUnderline
-        onChange={onChange}
-        onKeyUp={onKeyUp}
+        value={term}
+        onChange={handleChange}
+        onKeyUp={handleKeyUp}
         placeholder="Tìm kiếm khóa học"
       />
     </Paper>

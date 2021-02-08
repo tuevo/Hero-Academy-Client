@@ -53,25 +53,13 @@ const Topbar = props => {
   const { className, onSidebarOpen, history } = props;
 
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const appState = useSelector(state => ({
     ...state.app
   }), shallowEqual);
 
-  const dispatch = useDispatch();
-
-  const [searchTerm, setSearchTerm] = useState('');
   const [openSignOutConfirmDialog, setOpenSignOutConfirmDialog] = useState(false);
-
-  const handleSearchInputChange = (e) => {
-    setSearchTerm(e.target.value);
-  }
-
-  const handleSearchInputKeyUp = (e) => {
-    if (e.keyCode === 13 && searchTerm) {
-      history.push(availablePages.COURSE_SEARCHING.path);
-    }
-  }
 
   const handleClickBtnSignOut = () => {
     setOpenSignOutConfirmDialog(true);
@@ -109,10 +97,7 @@ const Topbar = props => {
           <Grid container justify="flex-end" alignItems="center" spacing={1}>
             <Grid item>
               <div className={classes.searchInput}>
-                <SearchInput
-                  onChange={handleSearchInputChange}
-                  onKeyUp={handleSearchInputKeyUp}
-                />
+                <SearchInput />
               </div>
             </Grid>
             <Grid item>
