@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import validate from 'validate.js';
+import { useDispatch } from 'react-redux';
 
 const schema = {
   fullName: {
@@ -144,8 +145,8 @@ const useStyles = makeStyles(theme => ({
 
 const SignUp = props => {
   const { history } = props;
-
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [formState, setFormState] = useState({
     isValid: false,
@@ -180,9 +181,10 @@ const SignUp = props => {
     }));
   };
 
-  const handleSignUp = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    history.push('/');
+    const params = { ...formState.values };
+    console.log(params);
   };
 
   const hasError = field =>
@@ -199,9 +201,6 @@ const SignUp = props => {
           item
           lg={5}
         >
-          {/* <div className={classes.quote}>
-            <img className={`${classes.cover}`} src="images/sign-up.png" alt="" />
-          </div> */}
         </Grid>
         <Grid
           className={classes.content}
@@ -215,7 +214,7 @@ const SignUp = props => {
             <div className={classes.contentBody}>
               <form
                 className={`${classes.form} animate__animated animate__fadeIn`}
-                onSubmit={handleSignUp}
+                onSubmit={handleSubmit}
               >
                 <Typography
                   className={classes.title}
@@ -293,7 +292,7 @@ const SignUp = props => {
                   error={hasError('confirmPassword')}
                   fullWidth
                   helperText={
-                    hasError('confirmPassword') ? formState.errors.password[0] : null
+                    hasError('confirmPassword') ? formState.errors.confirmPassword[0] : null
                   }
                   label="Nhập lại mật khẩu"
                   name="confirmPassword"
@@ -314,6 +313,7 @@ const SignUp = props => {
                   size="large"
                   type="submit"
                   variant="contained"
+                  disabled={!formState.isValid}
                 >
                   Đăng ký
                 </Button>

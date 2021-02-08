@@ -36,7 +36,7 @@ const SearchInput = props => {
   const history = useHistory();
   const query = new URLSearchParams(useLocation().search);
 
-  const [term, setTerm] = useState(query.get('q'));
+  const [term, setTerm] = useState(query.get('q') || '');
 
   const handleChange = e => {
     setTerm(e.target.value);
