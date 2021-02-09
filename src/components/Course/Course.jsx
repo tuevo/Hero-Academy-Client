@@ -47,7 +47,7 @@ const Course = ({ data, type }) => {
           <CardActionArea>
             <CardMedia
               className={classes.media__minimal}
-              image={data.thumbnail}
+              image={data.thumbnailUrl}
               title="Contemplative Reptile"
             />
             <CardContent className={classes.cardContent}>
@@ -67,7 +67,7 @@ const Course = ({ data, type }) => {
                   <span>)</span>
                 </Typography>
                 <Typography variant="body2" style={{ marginLeft: 9 }}>
-                  <NumberFormat value={data.numberOfStudents} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
+                  <NumberFormat value={data.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
                 </Typography>
               </Box>
               <Typography variant="body2" color="textSecondary" component="p" className={classes.description}>
@@ -99,7 +99,7 @@ const Course = ({ data, type }) => {
               <Grid item xs={5}>
                 <CardMedia
                   className={classes.media__stretch}
-                  image={data.thumbnail}
+                  image={data.thumbnailUrl}
                   title="Contemplative Reptile"
                 />
               </Grid>
@@ -119,7 +119,7 @@ const Course = ({ data, type }) => {
                       <span>)</span>
                     </Typography>
                     <Typography variant="body2" style={{ marginLeft: 9 }}>
-                      <NumberFormat value={data.numberOfStudents} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
+                      <NumberFormat value={data.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
                     </Typography>
                   </Box>
                   <Box display="flex" alignItems="center">
