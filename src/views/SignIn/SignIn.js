@@ -210,12 +210,6 @@ const SignIn = props => {
 
   const handleSignIn = event => {
     event.preventDefault();
-
-    if (!formState.isValid) {
-      dispatch(showNotification('error', apiMessage.SIGN_IN_INVALID));
-      return;
-    }
-
     login();
   };
 
@@ -308,6 +302,7 @@ const SignIn = props => {
                     size="large"
                     type="submit"
                     variant="contained"
+                    disabled={!formState.isValid}
                   >
                     Đăng nhập
                 </Button>
