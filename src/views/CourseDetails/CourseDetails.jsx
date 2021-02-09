@@ -820,7 +820,7 @@ const CourseDetails = () => {
       className={classes.root}
       containerRef={el => (ps.current = el)}
     >
-      <div className={classes.banner} style={{ backgroundImage: `url(${course.thumbnail})` }}>
+      <div className={classes.banner} style={{ backgroundImage: `url(${course.thumbnailUrl})` }}>
         <div className={classes.bannerCover}></div>
         <Box display="flex" flexDirection="column" className={`${classes.bannerContent} animate__animated animate__fadeIn`}>
           <Box ml={-2} mb={1} display="flex" justifyContent="space-between" alignItems="center">
