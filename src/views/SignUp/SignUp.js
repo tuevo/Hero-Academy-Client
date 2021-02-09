@@ -15,6 +15,7 @@ import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import validate from 'validate.js';
 import { useDispatch } from 'react-redux';
+import { availablePages } from 'constants/global.constant';
 
 const schema = {
   fullName: {
@@ -324,7 +325,7 @@ const SignUp = props => {
                   Đã có tài khoản?{' '}
                   <Link
                     component={RouterLink}
-                    to="/sign-in"
+                    to={availablePages.SIGN_IN.path}
                     variant="h6"
                   >
                     Đăng nhập

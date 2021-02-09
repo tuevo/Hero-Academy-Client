@@ -1,7 +1,8 @@
 import {
   Box, Button,
   Link, TextField,
-  Typography
+  Typography,
+  IconButton
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { apiMessage } from 'constants/api-message.constant';
@@ -10,7 +11,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { showNotification } from 'redux/actions/app.action';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import validate from 'validate.js';
+import { authApi } from 'api';
 
 const schema = {
   otpCode: {
@@ -53,12 +56,13 @@ const useStyles = makeStyles(theme => ({
   },
   input: {
     ...theme.palette.input
+  },
+  btnGoBack: {
+    color: theme.palette.icon.color
   }
 }));
 
-const ConfirmAccount = props => {
-  const { history } = props;
-
+const ConfirmAccount = ({ visible, onSubmit, onClose }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -95,12 +99,18 @@ const ConfirmAccount = props => {
     }));
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    const params = { ...formState.values };
 
-    if (!formState.isValid) {
-      dispatch(showNotification('error', apiMessage.CONFIRM_ACCOUNT_INVALID))
-      return;
+    try {
+      const res = await authApi.confirm(params);
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+      onSubmit();
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
     }
   };
 
@@ -114,13 +124,16 @@ const ConfirmAccount = props => {
 
   return (
     <div className={classes.content}>
-      <div className={classes.contentHeader}>
-      </div>
       <div className={classes.contentBody}>
         <form
           className={`${classes.form} animate__animated animate__fadeIn`}
           onSubmit={handleSubmit}
         >
+          <Box ml={-2}>
+            <IconButton className={classes.btnGoBack} onClick={onClose}>
+              <ArrowBackIcon />
+            </IconButton>
+          </Box>
           <Typography
             className={classes.title}
             variant="h2"
@@ -152,6 +165,7 @@ const ConfirmAccount = props => {
             size="large"
             type="submit"
             variant="contained"
+            disabled={!formState.isValid}
           >
             Xác thực tài khoản
           </Button>

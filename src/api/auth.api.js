@@ -10,7 +10,11 @@ const authApi = {
   refresh: (params) => {
     const url = `${baseUrl}/refresh`;
     return axiosClient.post(url, params);
-  }
+  },
+  confirm: (params) => {
+    const url = `${baseUrl}/confirm`;
+    return axiosClient.post(url, params);
+  },
 }
 
 export default authApi;

@@ -143,7 +143,7 @@ const SignIn = props => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [showConfirmAccount, setShowConfirmAccount] = useState(false);
+  const [confirmAccountVisible, setConfirmAccountVisible] = useState(false);
 
   const [formState, setFormState] = useState({
     isValid: false,
@@ -178,6 +178,49 @@ const SignIn = props => {
     }));
   };
 
+  const login = async () => {
+    const params = {
+      email: formState.values.email,
+      password: formState.values.password
+    }
+
+    dispatch(setLoading(true));
+    try {
+      const res = await authApi.login(params);
+      const { user, meta: { accessToken } } = res.data;
+      if (!user || !accessToken) {
+        console.log("SignIn Component: user or accessToken is not defined");
+        return;
+      }
+
+      localStorage.setItem(localStorageItems.ACCESS_TOKEN.name, accessToken);
+      localStorage.setItem(localStorageItems.AUTH_USER.name, JSON.stringify(user));
+      dispatch(signIn(user));
+      dispatch(setLoading(false));
+
+      if (history.location.state) {
+        const { from } = history.location.state;
+        history.push(from);
+        return;
+      }
+
+      const firstPage = _.find(availablePages, page => page.auth && page.role === user.role);
+      dispatch(setPageBasics(firstPage));
+      history.push(firstPage.path);
+
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(setLoading(false));
+
+        if (error.messages[0] === 'ACCOUNT_HAS_NOT_BEEN_CONFIRMED') {
+          setConfirmAccountVisible(true);
+        } else {
+          dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        }
+      }
+    }
+  }
+
   const handleSignIn = event => {
     event.preventDefault();
 
@@ -186,46 +229,16 @@ const SignIn = props => {
       return;
     }
 
-    const params = {
-      email: formState.values.email,
-      password: formState.values.password
-    }
-
-    const login = async () => {
-      dispatch(setLoading(true));
-      try {
-        const res = await authApi.login(params);
-        const { user, meta: { accessToken } } = res.data;
-        if (!user || !accessToken) {
-          console.log("SignIn Component: user or accessToken is not defined");
-          return;
-        }
-
-        localStorage.setItem(localStorageItems.ACCESS_TOKEN.name, accessToken);
-        localStorage.setItem(localStorageItems.AUTH_USER.name, JSON.stringify(user));
-        dispatch(signIn(user));
-        dispatch(setLoading(false));
-
-        if (history.location.state) {
-          const { from } = history.location.state;
-          history.push(from);
-          return;
-        }
-
-        const firstPage = _.find(availablePages, page => page.auth && page.role === user.role);
-        dispatch(setPageBasics(firstPage));
-        history.push(firstPage.path);
-
-      } catch (error) {
-        if (error.messages && error.messages.length > 0) {
-          dispatch(setLoading(false));
-          dispatch(showNotification('error', apiMessage[error.messages[0]]));
-        }
-      }
-    }
-
     login();
   };
+
+  const handleSubmitConfirmAccount = () => {
+    login();
+  }
+
+  const handleCloseConfirmAccount = () => {
+    setConfirmAccountVisible(false);
+  }
 
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
@@ -248,7 +261,7 @@ const SignIn = props => {
           lg={7}
           xs={12}
         >
-          {!showConfirmAccount ? (
+          {!confirmAccountVisible ? (
             <div className={classes.content}>
               <div className={classes.contentHeader}>
               </div>
@@ -320,7 +333,7 @@ const SignIn = props => {
                     Chưa có tài khoản?{' '}
                     <Link
                       component={RouterLink}
-                      to="/sign-up"
+                      to={availablePages.SIGN_UP.path}
                       variant="h6"
                     >
                       Đăng ký
@@ -329,7 +342,13 @@ const SignIn = props => {
                 </form>
               </div>
             </div>
-          ) : <ConfirmAccount />}
+          ) : (
+              <ConfirmAccount
+                visible={confirmAccountVisible}
+                onSubmit={handleSubmitConfirmAccount}
+                onClose={handleCloseConfirmAccount}
+              />
+            )}
         </Grid>
       </Grid>
     </div>

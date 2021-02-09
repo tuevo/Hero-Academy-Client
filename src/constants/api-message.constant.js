@@ -1,5 +1,7 @@
 export const apiMessage = {
   CONFIRM_ACCOUNT_INVALID: 'Vui lòng nhập mã xác thực OTP',
+  INVALID_OTP_CODE: 'Mã xác thực OTP không chính xác',
+  SUCCESSFUL_AUTHENTICATION_OF_THE_OTP_CODE: 'Xác thực tài khoản thành công',
   ADD_LECTURER_INVALID: 'Vui lòng kiểm tra lại thông tin giảng viên',
   SIGN_IN_INVALID: 'Vui lòng kiếm tra lại thông tin đăng nhập',
   SIGN_UP_INVALID: 'Vui lòng kiểm tra lại thông tin đăng ký',
