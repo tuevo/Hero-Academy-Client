@@ -5,6 +5,9 @@ import { courseApi } from 'api';
 import Course from 'components/Course/Course';
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { showNotification } from 'redux/actions/app.action';
+import { apiMessage } from 'constants/api-message.constant';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,6 +23,7 @@ const useStyles = makeStyles(theme => ({
 
 const Courses = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const limit = 8;
 
   const [courseList, setCourseList] = useState([]);
@@ -27,23 +31,29 @@ const Courses = () => {
 
   const [disableBtnLoadMoreCourse, setDisableBtnLoadMoreCourse] = useState(false)
 
-  const getAllCourses = async () => {
-    setDisableBtnLoadMoreCourse(true)
-    const res = await courseApi.getAll(courseListPage, limit);
-    const courses = res.data.entries;
-    const { totalItems } = res.data.meta
-
-    const newCourseList = [...courseList, ...courses]
-    setCourseList(newCourseList);
-
-    if (newCourseList.length < totalItems) {
-      setDisableBtnLoadMoreCourse(false)
-    }
-  }
-
   useEffect(() => {
+    const getAllCourses = async () => {
+      setDisableBtnLoadMoreCourse(true);
+      try {
+        const res = await courseApi.getAll(courseListPage, limit);
+        const courses = res.data.entries;
+        const { totalItems } = res.data.meta
+
+        const newCourseList = [...courseList, ...courses]
+        setCourseList(newCourseList);
+
+        if (newCourseList.length < totalItems) {
+          setDisableBtnLoadMoreCourse(false);
+        }
+      } catch (error) {
+        if (error.messages && error.messages.length > 0) {
+          dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        }
+      }
+    }
+
     getAllCourses();
-  }, [courseListPage])
+  }, [courseListPage]);
 
   const courses = [
     {
