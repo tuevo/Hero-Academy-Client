@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ConfirmAccount = ({ visible, onSubmit, onClose }) => {
+const ConfirmAccount = ({ data, onSubmit, onClose, closeAllowed }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -129,17 +129,25 @@ const ConfirmAccount = ({ visible, onSubmit, onClose }) => {
           className={`${classes.form} animate__animated animate__fadeIn`}
           onSubmit={handleSubmit}
         >
-          <Box ml={-2}>
-            <IconButton className={classes.btnGoBack} onClick={onClose}>
-              <ArrowBackIcon />
-            </IconButton>
-          </Box>
+          {closeAllowed && (
+            <Box ml={-2}>
+              <IconButton className={classes.btnGoBack} onClick={onClose}>
+                <ArrowBackIcon />
+              </IconButton>
+            </Box>
+          )}
           <Typography
             className={classes.title}
             variant="h2"
             gutterBottom
           >
             Vui lòng xác thực tài khoản
+          </Typography>
+          <Typography
+            color="textSecondary"
+            gutterBottom
+          >
+            Mã xác thực OTP đã được gửi đến email <b>{data.email}</b>
           </Typography>
           <TextField
             className={classes.textField}

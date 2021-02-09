@@ -1,21 +1,23 @@
 import {
   Button, Grid,
-
-
-
   Link, TextField,
-
-
-
   Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { Link as RouterLink, withRouter } from 'react-router-dom';
+import { Link as RouterLink, withRouter, useHistory } from 'react-router-dom';
 import validate from 'validate.js';
 import { useDispatch } from 'react-redux';
 import { availablePages } from 'constants/global.constant';
+import { showNotification, setLoading } from 'redux/actions/app.action';
+import { apiMessage } from 'constants/api-message.constant';
+import { authApi } from 'api';
+import ConfirmAccount from 'components/ConfirmAccount/ConfirmAccount';
+import { localStorageItems } from 'constants/local-storage.constant';
+import { signIn } from 'redux/actions/user.action';
+import * as _ from 'lodash';
+import { setPageBasics } from 'redux/actions/page.action';
 
 const schema = {
   fullName: {
@@ -91,14 +93,6 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     backgroundColor: theme.palette.background.signUp,
   },
-  contentHeader: {
-    // display: 'flex',
-    // alignItems: 'center',
-    // paddingTop: theme.spacing(5),
-    // paddingBototm: theme.spacing(2),
-    // paddingLeft: theme.spacing(2),
-    // paddingRight: theme.spacing(2)
-  },
   logoImage: {
     marginLeft: theme.spacing(4)
   },
@@ -145,9 +139,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SignUp = props => {
-  const { history } = props;
   const classes = useStyles();
+  const history = useHistory();
   const dispatch = useDispatch();
+
+  const [confirmAccountVisible, setConfirmAccountVisible] = useState(false);
 
   const [formState, setFormState] = useState({
     isValid: false,
@@ -182,11 +178,55 @@ const SignUp = props => {
     }));
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    dispatch(setLoading(true));
     const params = { ...formState.values };
-    console.log(params);
+    try {
+      const res = await authApi.register(params);
+      dispatch(setLoading(false));
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+      setConfirmAccountVisible(true);
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(setLoading(false));
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
   };
+
+  const handleSubmitConfirmAccount = async () => {
+    const params = {
+      email: formState.values.email,
+      password: formState.values.password
+    }
+
+    dispatch(setLoading(true));
+    try {
+      const res = await authApi.login(params);
+      const { user, meta: { accessToken } } = res.data;
+      localStorage.setItem(localStorageItems.ACCESS_TOKEN.name, accessToken);
+      localStorage.setItem(localStorageItems.AUTH_USER.name, JSON.stringify(user));
+      dispatch(signIn(user));
+      dispatch(setLoading(false));
+
+      if (history.location.state) {
+        const { from } = history.location.state;
+        history.push(from);
+        return;
+      }
+
+      const firstPage = _.find(availablePages, page => page.auth && page.role === user.role);
+      dispatch(setPageBasics(firstPage));
+      history.push(firstPage.path);
+
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(setLoading(false));
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
+  }
 
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
@@ -209,131 +249,137 @@ const SignUp = props => {
           lg={7}
           xs={12}
         >
-          <div className={classes.content}>
-            <div className={classes.contentHeader}>
-            </div>
-            <div className={classes.contentBody}>
-              <form
-                className={`${classes.form} animate__animated animate__fadeIn`}
-                onSubmit={handleSubmit}
-              >
-                <Typography
-                  className={classes.title}
-                  variant="h2"
-                  gutterBottom
+          {!confirmAccountVisible ? (
+            <div className={classes.content}>
+              <div className={classes.contentBody}>
+                <form
+                  className={`${classes.form} animate__animated animate__fadeIn`}
+                  onSubmit={handleSubmit}
                 >
-                  Đăng ký tài khoản học viên
-                </Typography>
-                <Typography
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  Hãy sử dụng địa chỉ email của bạn để đăng ký
-                </Typography>
-                <TextField
-                  className={classes.textField}
-                  error={hasError('fullName')}
-                  fullWidth
-                  helperText={
-                    hasError('fullName') ? formState.errors.fullName[0] : null
-                  }
-                  label="Họ và tên"
-                  name="fullName"
-                  onChange={handleChange}
-                  type="text"
-                  value={formState.values.fullName || ''}
-                  variant="standard"
-                  InputProps={{
-                    classes: {
-                      underline: classes.input
-                    }
-                  }}
-                  autoFocus
-                />
-                <TextField
-                  className={classes.textField}
-                  error={hasError('email')}
-                  fullWidth
-                  helperText={
-                    hasError('email') ? formState.errors.email[0] : null
-                  }
-                  label="Địa chỉ email"
-                  name="email"
-                  onChange={handleChange}
-                  type="text"
-                  value={formState.values.email || ''}
-                  variant="standard"
-                  InputProps={{
-                    classes: {
-                      underline: classes.input
-                    }
-                  }}
-                />
-                <TextField
-                  className={classes.textField}
-                  error={hasError('password')}
-                  fullWidth
-                  helperText={
-                    hasError('password') ? formState.errors.password[0] : null
-                  }
-                  label="Mật khẩu"
-                  name="password"
-                  onChange={handleChange}
-                  type="password"
-                  value={formState.values.password || ''}
-                  variant="standard"
-                  InputProps={{
-                    classes: {
-                      underline: classes.input
-                    }
-                  }}
-                />
-                <TextField
-                  className={classes.textField}
-                  error={hasError('confirmPassword')}
-                  fullWidth
-                  helperText={
-                    hasError('confirmPassword') ? formState.errors.confirmPassword[0] : null
-                  }
-                  label="Nhập lại mật khẩu"
-                  name="confirmPassword"
-                  onChange={handleChange}
-                  type="password"
-                  value={formState.values.confirmPassword || ''}
-                  variant="standard"
-                  InputProps={{
-                    classes: {
-                      underline: classes.input
-                    }
-                  }}
-                />
-                <Button
-                  className={classes.signUpButton}
-                  color="primary"
-                  fullWidth
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                  disabled={!formState.isValid}
-                >
-                  Đăng ký
-                </Button>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Đã có tài khoản?{' '}
-                  <Link
-                    component={RouterLink}
-                    to={availablePages.SIGN_IN.path}
-                    variant="h6"
+                  <Typography
+                    className={classes.title}
+                    variant="h2"
+                    gutterBottom
                   >
-                    Đăng nhập
-                  </Link>
+                    Đăng ký tài khoản học viên
                 </Typography>
-              </form>
+                  <Typography
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    Hãy sử dụng địa chỉ email của bạn để đăng ký
+                </Typography>
+                  <TextField
+                    className={classes.textField}
+                    error={hasError('fullName')}
+                    fullWidth
+                    helperText={
+                      hasError('fullName') ? formState.errors.fullName[0] : null
+                    }
+                    label="Họ và tên"
+                    name="fullName"
+                    onChange={handleChange}
+                    type="text"
+                    value={formState.values.fullName || ''}
+                    variant="standard"
+                    InputProps={{
+                      classes: {
+                        underline: classes.input
+                      }
+                    }}
+                    autoFocus
+                  />
+                  <TextField
+                    className={classes.textField}
+                    error={hasError('email')}
+                    fullWidth
+                    helperText={
+                      hasError('email') ? formState.errors.email[0] : null
+                    }
+                    label="Địa chỉ email"
+                    name="email"
+                    onChange={handleChange}
+                    type="text"
+                    value={formState.values.email || ''}
+                    variant="standard"
+                    InputProps={{
+                      classes: {
+                        underline: classes.input
+                      }
+                    }}
+                  />
+                  <TextField
+                    className={classes.textField}
+                    error={hasError('password')}
+                    fullWidth
+                    helperText={
+                      hasError('password') ? formState.errors.password[0] : null
+                    }
+                    label="Mật khẩu"
+                    name="password"
+                    onChange={handleChange}
+                    type="password"
+                    value={formState.values.password || ''}
+                    variant="standard"
+                    InputProps={{
+                      classes: {
+                        underline: classes.input
+                      }
+                    }}
+                  />
+                  <TextField
+                    className={classes.textField}
+                    error={hasError('confirmPassword')}
+                    fullWidth
+                    helperText={
+                      hasError('confirmPassword') ? formState.errors.confirmPassword[0] : null
+                    }
+                    label="Nhập lại mật khẩu"
+                    name="confirmPassword"
+                    onChange={handleChange}
+                    type="password"
+                    value={formState.values.confirmPassword || ''}
+                    variant="standard"
+                    InputProps={{
+                      classes: {
+                        underline: classes.input
+                      }
+                    }}
+                  />
+                  <Button
+                    className={classes.signUpButton}
+                    color="primary"
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                    disabled={!formState.isValid}
+                  >
+                    Đăng ký
+                </Button>
+                  <Typography
+                    color="textSecondary"
+                    variant="body1"
+                  >
+                    Đã có tài khoản?{' '}
+                    <Link
+                      component={RouterLink}
+                      to={availablePages.SIGN_IN.path}
+                      variant="h6"
+                    >
+                      Đăng nhập
+                  </Link>
+                  </Typography>
+                </form>
+              </div>
             </div>
-          </div>
+          ) : (
+              <ConfirmAccount
+                data={{ email: formState.values.email }}
+                onSubmit={handleSubmitConfirmAccount}
+                closeAllowed={false}
+              />
+            )}
         </Grid>
       </Grid>
     </div>

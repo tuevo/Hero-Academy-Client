@@ -83,14 +83,6 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     backgroundColor: theme.palette.background.signIn,
   },
-  contentHeader: {
-    // display: 'flex',
-    // alignItems: 'center',
-    // paddingTop: theme.spacing(5),
-    // paddingBototm: theme.spacing(2),
-    // paddingLeft: theme.spacing(2),
-    // paddingRight: theme.spacing(2),
-  },
   logoImage: {
     marginLeft: theme.spacing(4)
   },
@@ -188,11 +180,6 @@ const SignIn = props => {
     try {
       const res = await authApi.login(params);
       const { user, meta: { accessToken } } = res.data;
-      if (!user || !accessToken) {
-        console.log("SignIn Component: user or accessToken is not defined");
-        return;
-      }
-
       localStorage.setItem(localStorageItems.ACCESS_TOKEN.name, accessToken);
       localStorage.setItem(localStorageItems.AUTH_USER.name, JSON.stringify(user));
       dispatch(signIn(user));
@@ -263,8 +250,6 @@ const SignIn = props => {
         >
           {!confirmAccountVisible ? (
             <div className={classes.content}>
-              <div className={classes.contentHeader}>
-              </div>
               <div className={classes.contentBody}>
                 <form
                   className={`${classes.form} animate__animated animate__fadeIn`}
@@ -344,9 +329,10 @@ const SignIn = props => {
             </div>
           ) : (
               <ConfirmAccount
-                visible={confirmAccountVisible}
+                data={{ email: formState.values.email }}
                 onSubmit={handleSubmitConfirmAccount}
                 onClose={handleCloseConfirmAccount}
+                closeAllowed={true}
               />
             )}
         </Grid>
