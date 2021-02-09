@@ -1,13 +1,11 @@
 import { Box, Button, GridList, GridListTile } from '@material-ui/core';
-import { Sync } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/styles';
 import { courseApi } from 'api';
 import Course from 'components/Course/Course';
-import React from 'react';
-import { useEffect, useState } from 'react';
+import { apiMessage } from 'constants/api-message.constant';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { showNotification } from 'redux/actions/app.action';
-import { apiMessage } from 'constants/api-message.constant';
 
 const useStyles = makeStyles(theme => ({
   root: {
