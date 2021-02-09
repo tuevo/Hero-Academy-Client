@@ -1,8 +1,13 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Box } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import React from 'react';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import validate from 'validate.js';
+
+const schema = {
+  name: {
+    presence: { allowEmpty: false, message: 'is required' },
+  }
+};
 
 const useStyles = makeStyles(theme => ({
   content: {
@@ -18,18 +23,58 @@ const useStyles = makeStyles(theme => ({
 
 export default function UpdateCategory({ data, open, onClose }) {
   const classes = useStyles();
-  const [name, setName] = useState(null);
+  const [formState, setFormState] = useState({
+    isValid: false,
+    values: {
+      name: data.name
+    },
+    touched: {},
+    errors: {}
+  });
 
   useEffect(() => {
-    setName(data.name)
-  }, [data]);
+    const errors = validate(formState.values, schema);
 
-  const handleChangeName = e => {
-    setName(e.target.value);
+    setFormState(formState => ({
+      ...formState,
+      isValid: errors ? false : true,
+      errors: errors || {}
+    }));
+  }, [formState.values]);
+
+  const handleChange = event => {
+    event.persist();
+
+    setFormState(formState => ({
+      ...formState,
+      values: {
+        ...formState.values,
+        [event.target.name]: event.target.value
+      },
+      touched: {
+        ...formState.touched,
+        [event.target.name]: true
+      }
+    }));
+  };
+
+  const hasError = field =>
+    formState.touched[field] && formState.errors[field] ? true : false;
+
+  const handleClose = (accepted, data) => {
+    onClose(accepted, data);
   }
 
-  const handleClose = (accepted) => {
-    onClose(accepted, name);
+  const handleClickBtnAdd = () => {
+    if (!formState.isValid)
+      return;
+
+    handleClose(true, { ...formState.values });
+  }
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    handleClickBtnAdd();
   }
 
   return (
@@ -41,27 +86,38 @@ export default function UpdateCategory({ data, open, onClose }) {
       >
         <DialogTitle id="form-dialog-title">Chỉnh sửa lĩnh vực</DialogTitle>
         <DialogContent>
-          <Box className={classes.content}>
+          <form className={classes.content} onSubmit={handleSubmit}>
             <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Tên lĩnh vực"
-              type="text"
+              className={classes.textField}
+              error={hasError('name')}
               fullWidth
-              value={name}
-              onChange={handleChangeName}
+              helperText={
+                hasError('name') ? formState.errors.name[0] : null
+              }
+              label="Tên lĩnh vực"
+              name="name"
+              onChange={handleChange}
+              type="text"
+              value={formState.values.name || ''}
+              variant="standard"
+              InputProps={{
+                classes: {
+                  underline: classes.input
+                }
+              }}
+              autoFocus
             />
-          </Box>
+            <button type="submit" style={{ display: 'none' }}></button>
+          </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleClose(false)} color="primary">
+          <Button onClick={() => handleClose(false, null)} color="primary">
             Hủy bỏ
           </Button>
           <Button
-            onClick={() => handleClose(true)}
+            onClick={handleClickBtnAdd}
             color="primary"
-            disabled={name === data.name}
+            disabled={!formState.isValid || formState.values.name === data.name}
             classes={{
               root: classes.root,
               disabled: classes.disabled

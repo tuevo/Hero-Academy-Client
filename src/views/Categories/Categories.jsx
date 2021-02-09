@@ -292,10 +292,26 @@ export default function Categories() {
     setOpenCategoryDetails(false);
   }
 
-  const handleCloseUpdateCategory = (accepted, name) => {
+  const handleCloseUpdateCategory = async (accepted, data) => {
     setOpenUpdateCategory(false);
     if (!accepted)
       return;
+
+    try {
+      const res = await categoryApi.update(selectedCategory._id, data);
+      const index = categoryClusterList[expandedCategoryClusterIndex].categories
+        .findIndex(c => c._id === selectedCategory._id);
+
+      if (index >= 0) {
+        categoryClusterList[expandedCategoryClusterIndex].categories[index] = res.data.category;
+      }
+
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
   }
 
   const handleCloseRemoveCategoryConfirmDialog = async (accepted) => {

@@ -1,10 +1,10 @@
-import { Card, CardActionArea, CardContent, CardMedia, Typography, Grid, Box } from '@material-ui/core';
+import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import NumberFormat from 'react-number-format';
 import Rating from '@material-ui/lab/Rating';
 import * as moment from 'moment';
+import React from 'react';
+import NumberFormat from 'react-number-format';
+import { Link as RouterLink } from 'react-router-dom';
 import './Course.style.scss';
 
 const useStyles = makeStyles((theme) => ({

@@ -20,5 +20,6 @@ export const apiMessage = {
   CATEGORY_ALREADY_EXISTS: 'Lĩnh vực này đã tồn tại',
   CATEGORY_ADDED_SUCCESSFULLY: 'Thêm lĩnh vực thành công',
   CATEGORY_NOT_FOUND: 'Không tìm thấy lĩnh vực',
-  DELETE_CATEGORY_SUCCESSFULLY: 'Xóa lĩnh vực thành công'
+  DELETE_CATEGORY_SUCCESSFULLY: 'Xóa lĩnh vực thành công',
+  UPDATE_CATEGORY_SUCCESSFULLY: 'Cập nhật lĩnh vực thành công',
 }
