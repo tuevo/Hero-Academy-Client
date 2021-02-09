@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import validate from 'validate.js';
 
 const schema = {
-  thumbnail: {
+  thumbnailUrl: {
     presence: { allowEmpty: false, message: 'is required' }
   },
   title: {
@@ -190,7 +190,7 @@ export default function UpdateCourse({ course, className }) {
   ];
 
   const originalFormData = {
-    thumbnail: course.thumbnail,
+    thumbnailUrl: course.thumbnail,
     title: course.title,
     categoryId: course.categoryCluster.category._id,
     tuition: course.tuition,

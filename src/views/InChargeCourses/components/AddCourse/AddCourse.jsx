@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import validate from 'validate.js';
 
 const schema = {
-  thumbnail: {
+  thumbnailUrl: {
     presence: { allowEmpty: false, message: 'is required' }
   },
   title: {
@@ -186,7 +186,7 @@ export default function AddCourse({ open, onClose }) {
   const [formState, setFormState] = useState({
     isValid: false,
     values: {
-      thumbnail: null,
+      thumbnailUrl: null,
       title: '',
       categoryId: categoryClusters[0].categories[0]._id,
       tuition: 0,

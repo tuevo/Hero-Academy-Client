@@ -12,7 +12,7 @@ const schema = {
   video: {
     presence: { allowEmpty: false, message: 'is required' }
   },
-  thumbnail: {
+  thumbnailUrl: {
     presence: { allowEmpty: false, message: 'is required' }
   }
 };

@@ -42,7 +42,7 @@ const InChargeCourses = () => {
   const courses = [
     {
       _id: 1,
-      thumbnail: 'https://miro.medium.com/max/3798/1*eOE7VhXBlqdIJ9weEdHbQQ.jpeg',
+      thumbnailUrl: 'https://miro.medium.com/max/3798/1*eOE7VhXBlqdIJ9weEdHbQQ.jpeg',
       title: 'Angular Cho Người Mới Bắt Đầu',
       description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                 across all continents except Antarctica.`,
@@ -64,7 +64,7 @@ const InChargeCourses = () => {
     },
     {
       _id: 2,
-      thumbnail: 'https://damminhtien.com/assets/images/reactjs.png',
+      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
       title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
       description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                 across all continents except Antarctica.`,
@@ -86,7 +86,7 @@ const InChargeCourses = () => {
     },
     {
       _id: 3,
-      thumbnail: 'https://damminhtien.com/assets/images/reactjs.png',
+      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
       title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
       description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                 across all continents except Antarctica.`,
@@ -108,7 +108,7 @@ const InChargeCourses = () => {
     },
     {
       _id: 4,
-      thumbnail: 'https://damminhtien.com/assets/images/reactjs.png',
+      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
       title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
       description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                 across all continents except Antarctica.`,
@@ -130,7 +130,7 @@ const InChargeCourses = () => {
     },
     {
       _id: 5,
-      thumbnail: 'https://damminhtien.com/assets/images/reactjs.png',
+      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
       title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
       description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                 across all continents except Antarctica.`,
@@ -152,7 +152,7 @@ const InChargeCourses = () => {
     },
     {
       _id: 6,
-      thumbnail: 'https://damminhtien.com/assets/images/reactjs.png',
+      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
       title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
       description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                 across all continents except Antarctica.`,
@@ -174,7 +174,7 @@ const InChargeCourses = () => {
     },
     {
       _id: 7,
-      thumbnail: 'https://damminhtien.com/assets/images/reactjs.png',
+      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
       title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
       description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                 across all continents except Antarctica.`,
@@ -196,7 +196,7 @@ const InChargeCourses = () => {
     },
     {
       _id: 8,
-      thumbnail: 'https://damminhtien.com/assets/images/reactjs.png',
+      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
       title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
       description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                 across all continents except Antarctica.`,
