@@ -1,14 +1,4 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Fab,
-  GridList,
-  GridListTile,
-  Tab,
-  Tabs,
-  Tooltip,
-} from '@material-ui/core';
+import { AppBar, Box, Button, Fab, GridList, GridListTile, Tab, Tabs, Tooltip } from '@material-ui/core';
 import FaceIcon from '@material-ui/icons/Face';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
@@ -22,7 +12,7 @@ import { showNotification } from 'redux/actions/app.action';
 import { studentApi } from 'api';
 import NumberFormat from 'react-number-format';
 import AddLecturer from './components/AddLecturer/AddLecturer';
-import lecturerApi from 'api/lecturers.api';
+import lecturerApi from 'api/lecturer.api';
 
 function a11yProps(index) {
   return {
@@ -31,32 +21,32 @@ function a11yProps(index) {
   };
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     minHeight: '35rem',
     width: '100%',
     overflow: 'hidden',
-    borderRadius: theme.palette.card.borderRadius,
+    borderRadius: theme.palette.card.borderRadius
   },
   tabs: {
     boxShadow: 'none',
-    backgroundColor: '#a4508b',
-    backgroundImage: 'linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)',
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
   btnAddLecturerContainer: {
     position: 'absolute',
     zIndex: 10,
     right: '5%',
-    top: '-5%',
+    top: '-5%'
   },
   btnAddLecturer: {
-    backgroundColor: '#a4508b',
-    backgroundImage: 'linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)',
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
   btnLoadMore: {
-    backgroundColor: '#a4508b',
-    backgroundImage: 'linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)',
-  },
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+  }
 }));
 
 const Users = () => {
@@ -69,16 +59,12 @@ const Users = () => {
   const [studentList, setStudentList] = useState([]);
   const [studentListPage, setStudentListPage] = useState(1);
   const [studentListTotalItems, setStudentListTotalItems] = useState(0);
-  const [disableBtnLoadMoreStudent, setDisableBtnLoadMoreStudent] = useState(
-    false
-  );
+  const [disableBtnLoadMoreStudent, setDisableBtnLoadMoreStudent] = useState(false);
 
   const [lecturerList, setLecturerList] = useState([]);
   const [lecturerListPage, setLecturerListPage] = useState(1);
   const [lecturerListTotalItems, setLecturerListTotalItems] = useState(0);
-  const [disableBtnLoadMoreLecturer, setDisableBtnLoadMoreLecturer] = useState(
-    false
-  );
+  const [disableBtnLoadMoreLecturer, setDisableBtnLoadMoreLecturer] = useState(false);
 
   const [openAddLecturer, setOpenAddLecturer] = useState(false);
 
@@ -98,12 +84,13 @@ const Users = () => {
         if (newStudentList.length < totalItems) {
           setDisableBtnLoadMoreStudent(false);
         }
+
       } catch (error) {
         if (error.messages && error.messages.length > 0) {
           dispatch(showNotification('error', apiMessage[error.messages[0]]));
         }
       }
-    };
+    }
 
     getAllStudents();
   }, [studentListPage]);
@@ -113,23 +100,24 @@ const Users = () => {
       setDisableBtnLoadMoreLecturer(true);
       try {
         const res = await lecturerApi.getAll(lecturerListPage, limit);
-        const students = res.data.entries;
+        const lecturers = res.data.entries;
 
         const { totalItems } = res.data.meta;
         setLecturerListTotalItems(totalItems);
 
-        const newLecturerList = lecturerList.concat(students);
+        const newLecturerList = lecturerList.concat(lecturers);
         setLecturerList(newLecturerList);
 
         if (newLecturerList.length < totalItems) {
           setDisableBtnLoadMoreLecturer(false);
         }
+
       } catch (error) {
         if (error.messages && error.messages.length > 0) {
           dispatch(showNotification('error', apiMessage[error.messages[0]]));
         }
       }
-    };
+    }
 
     getAllLecturers();
   }, [lecturerListPage]);
@@ -140,86 +128,86 @@ const Users = () => {
       fullName: 'Lana',
       avatarUrl: 'images/avatars/avatar_6.png',
       email: 'abc@gmail.com',
-      createdAt: new Date(),
+      createdAt: new Date()
     },
     {
       _id: 2,
       fullName: 'Lee Wei Shuan',
       avatarUrl: 'images/avatars/avatar_5.png',
       email: 'abc@gmail.com',
-      createdAt: new Date(),
+      createdAt: new Date()
     },
     {
       _id: 3,
       fullName: 'Steve Jonathan',
       avatarUrl: 'images/avatars/avatar_4.png',
       email: 'abc@gmail.com',
-      createdAt: new Date(),
+      createdAt: new Date()
     },
     {
       _id: 4,
       fullName: 'Steve Jonathan',
       avatarUrl: 'images/avatars/avatar_4.png',
       email: 'abc@gmail.com',
-      createdAt: new Date(),
+      createdAt: new Date()
     },
     {
       _id: 5,
       fullName: 'Steve Jonathan',
       avatarUrl: 'images/avatars/avatar_4.png',
       email: 'abc@gmail.com',
-      createdAt: new Date(),
+      createdAt: new Date()
     },
     {
       _id: 6,
       fullName: 'Lana',
       avatarUrl: 'images/avatars/avatar_6.png',
       email: 'abc@gmail.com',
-      createdAt: new Date(),
+      createdAt: new Date()
     },
     {
       _id: 7,
       fullName: 'Lee Wei Shuan',
       avatarUrl: 'images/avatars/avatar_5.png',
       email: 'abc@gmail.com',
-      createdAt: new Date(),
+      createdAt: new Date()
     },
     {
       _id: 8,
       fullName: 'Steve Jonathan',
       avatarUrl: 'images/avatars/avatar_4.png',
       email: 'abc@gmail.com',
-      createdAt: new Date(),
+      createdAt: new Date()
     },
     {
       _id: 9,
       fullName: 'Steve Jonathan',
       avatarUrl: 'images/avatars/avatar_4.png',
       email: 'abc@gmail.com',
-      createdAt: new Date(),
+      createdAt: new Date()
     },
     {
       _id: 10,
       fullName: 'Steve Jonathan',
       avatarUrl: 'images/avatars/avatar_4.png',
       email: 'abc@gmail.com',
-      createdAt: new Date(),
+      createdAt: new Date()
     },
     {
       _id: 11,
       fullName: 'Lana',
       avatarUrl: 'images/avatars/avatar_6.png',
       email: 'abc@gmail.com',
-      createdAt: new Date(),
+      createdAt: new Date()
     },
     {
       _id: 12,
       fullName: 'Lee Wei Shuan',
       avatarUrl: 'images/avatars/avatar_5.png',
       email: 'abc@gmail.com',
-      createdAt: new Date(),
+      createdAt: new Date()
     },
-  ];
+  ]
 
   const lecturers = [
     {
@@ -228,13 +216,12 @@ const Users = () => {
       avatarUrl: 'images/avatars/avatar_6.png',
       email: 'abc@gmail.com',
       createdAt: new Date(),
-      averageRating: 4.5,
       roleInfo: {
         averageRating: 4.5,
         numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
-        numberOfRatings: 2500,
-      },
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 2,
@@ -246,8 +233,8 @@ const Users = () => {
         averageRating: 4.5,
         numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
-        numberOfRatings: 2500,
-      },
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 3,
@@ -259,8 +246,8 @@ const Users = () => {
         averageRating: 4.5,
         numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
-        numberOfRatings: 2500,
-      },
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 4,
@@ -272,8 +259,8 @@ const Users = () => {
         averageRating: 4.5,
         numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
-        numberOfRatings: 2500,
-      },
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 5,
@@ -285,8 +272,8 @@ const Users = () => {
         averageRating: 4.5,
         numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
-        numberOfRatings: 2500,
-      },
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 6,
@@ -298,8 +285,8 @@ const Users = () => {
         averageRating: 4.5,
         numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
-        numberOfRatings: 2500,
-      },
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 7,
@@ -311,8 +298,8 @@ const Users = () => {
         averageRating: 4.5,
         numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
-        numberOfRatings: 2500,
-      },
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 8,
@@ -324,8 +311,8 @@ const Users = () => {
         averageRating: 4.5,
         numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
-        numberOfRatings: 2500,
-      },
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 9,
@@ -337,8 +324,8 @@ const Users = () => {
         averageRating: 4.5,
         numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
-        numberOfRatings: 2500,
-      },
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 10,
@@ -350,8 +337,8 @@ const Users = () => {
         averageRating: 4.5,
         numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
-        numberOfRatings: 2500,
-      },
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 11,
@@ -363,8 +350,8 @@ const Users = () => {
         averageRating: 4.5,
         numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
-        numberOfRatings: 2500,
-      },
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 12,
@@ -376,10 +363,10 @@ const Users = () => {
         averageRating: 4.5,
         numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
-        numberOfRatings: 2500,
-      },
+        numberOfRatings: 2500
+      }
     },
-  ];
+  ]
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -399,11 +386,11 @@ const Users = () => {
       default:
         break;
     }
-  };
+  }
 
   const handleClickBtnAddLecturer = () => {
     setOpenAddLecturer(true);
-  };
+  }
 
   const handleCloseAddLecturer = (accepted, data) => {
     setOpenAddLecturer(false);
@@ -411,28 +398,17 @@ const Users = () => {
     if (accepted) {
       console.log(data);
     }
-  };
+  }
 
   return (
     <div className={classes.root}>
-      <AppBar position='static' className={classes.tabs} color='primary'>
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          aria-label='simple tabs example'
-        >
+      <AppBar position="static" className={classes.tabs} color="primary">
+        <Tabs value={tabValue} onChange={handleTabChange} aria-label="simple tabs example">
           <Tab
             icon={<PersonIcon />}
             label={
               <span>
-                Học viên (
-                <NumberFormat
-                  value={studentListTotalItems}
-                  displayType={'text'}
-                  thousandSeparator={'.'}
-                  decimalSeparator={','}
-                />
-                )
+                Học viên (<NumberFormat value={studentListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} />)
               </span>
             }
             {...a11yProps(0)}
@@ -441,14 +417,7 @@ const Users = () => {
             icon={<FaceIcon />}
             label={
               <span>
-                Giảng viên (
-                <NumberFormat
-                  value={lecturerListTotalItems}
-                  displayType={'text'}
-                  thousandSeparator={'.'}
-                  decimalSeparator={','}
-                />
-                )
+                Giảng viên (<NumberFormat value={lecturerListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} />)
               </span>
             }
             {...a11yProps(1)}
@@ -458,14 +427,10 @@ const Users = () => {
 
       {tabValue === 0 && (
         <Box p={4}>
-          <GridList cellHeight='auto' cols={3}>
+          <GridList cellHeight="auto" cols={3}>
             {studentList.map((s, i) => (
               <GridListTile key={s._id}>
-                <Box
-                  m={1}
-                  className='animate__animated animate__fadeIn'
-                  style={{ animationDelay: `${0.1 * i}s` }}
-                >
+                <Box m={1} className="animate__animated animate__fadeIn" style={{ animationDelay: `${0.1 * i}s` }}>
                   <Student data={s} />
                 </Box>
               </GridListTile>
@@ -475,9 +440,9 @@ const Users = () => {
             <Button
               fullWidth
               className={classes.btnLoadMore}
-              variant='contained'
-              color='primary'
-              size='large'
+              variant="contained"
+              color="primary"
+              size="large"
               onClick={() => handleClickBtnLoadMore(1)}
               disabled={disableBtnLoadMoreStudent}
             >
@@ -488,34 +453,19 @@ const Users = () => {
       )}
 
       {tabValue === 1 && (
-        <Box p={4} position='relative'>
-          <AddLecturer
-            open={openAddLecturer}
-            onClose={handleCloseAddLecturer}
-          />
-          <Box
-            className={`${classes.btnAddLecturerContainer} animate__animated animate__bounceIn`}
-          >
-            <Tooltip title='Thêm giảng viên mới'>
-              <Fab
-                size='large'
-                color='primary'
-                aria-label='add'
-                className={classes.btnAddLecturer}
-                onClick={handleClickBtnAddLecturer}
-              >
-                <PersonAddIcon fontSize='large' />
+        <Box p={4} position="relative">
+          <AddLecturer open={openAddLecturer} onClose={handleCloseAddLecturer} />
+          <Box className={`${classes.btnAddLecturerContainer} animate__animated animate__bounceIn`}>
+            <Tooltip title="Thêm giảng viên mới">
+              <Fab size="large" color="primary" aria-label="add" className={classes.btnAddLecturer} onClick={handleClickBtnAddLecturer}>
+                <PersonAddIcon fontSize="large" />
               </Fab>
             </Tooltip>
           </Box>
-          <GridList cellHeight='auto' cols={3}>
+          <GridList cellHeight="auto" cols={3}>
             {lecturerList.map((s, i) => (
               <GridListTile key={s._id}>
-                <Box
-                  m={1}
-                  className='animate__animated animate__fadeIn'
-                  style={{ animationDelay: `${0.1 * i}s` }}
-                >
+                <Box m={1} className="animate__animated animate__fadeIn" style={{ animationDelay: `${0.1 * i}s` }}>
                   <Lecturer data={s} />
                 </Box>
               </GridListTile>
@@ -525,9 +475,9 @@ const Users = () => {
             <Button
               fullWidth
               className={classes.btnLoadMore}
-              variant='contained'
-              color='primary'
-              size='large'
+              variant="contained"
+              color="primary"
+              size="large"
               onClick={() => handleClickBtnLoadMore(2)}
               disabled={disableBtnLoadMoreLecturer}
             >
@@ -536,6 +486,7 @@ const Users = () => {
           </Box>
         </Box>
       )}
+
     </div>
   );
 };
