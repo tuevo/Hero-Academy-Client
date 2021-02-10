@@ -24,4 +24,5 @@ export const apiMessage = {
   CATEGORY_NOT_FOUND: 'Không tìm thấy lĩnh vực',
   DELETE_CATEGORY_SUCCESSFULLY: 'Xóa lĩnh vực thành công',
   UPDATE_CATEGORY_SUCCESSFULLY: 'Cập nhật lĩnh vực thành công',
+  LUCTURER_NOT_FOUND: 'Không tìm thấy giảng viên',
 }
