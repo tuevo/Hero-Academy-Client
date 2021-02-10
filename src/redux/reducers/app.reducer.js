@@ -2,6 +2,7 @@ import { actionTypes } from '../actions/action-types';
 import { localStorageItems } from 'constants/local-storage.constant';
 
 const currentDarkMode = localStorage.getItem(localStorageItems.DARK_MODE.name);
+const urlParams = new URLSearchParams(window.location.search);
 
 const initialStates = {
   darkMode: currentDarkMode ? (currentDarkMode === 'true') : false,
@@ -11,7 +12,8 @@ const initialStates = {
     message: ''
   },
   isNotificationOpened: false,
-  activePage: null
+  activePage: null,
+  courseSearchingQuery: urlParams ? urlParams.get('q') : ''
 }
 
 const appActionTypes = { ...actionTypes.app };
@@ -33,6 +35,9 @@ const appReducer = (states = initialStates, action) => {
 
     case appActionTypes.SET_ACTIVE_PAGE:
       return { ...states, activePage: action.payload }
+
+    case appActionTypes.SET_COURSE_SEARCHING_QUERY:
+      return { ...states, courseSearchingQuery: action.payload }
 
     default:
       return states;

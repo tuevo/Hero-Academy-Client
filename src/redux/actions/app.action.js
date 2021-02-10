@@ -34,3 +34,10 @@ export const setActivePage = (page) => {
     payload: page
   }
 }
+
+export const setCourseSearchingQuery = (query) => {
+  return {
+    type: appActionTypes.SET_COURSE_SEARCHING_QUERY,
+    payload: query
+  }
+}

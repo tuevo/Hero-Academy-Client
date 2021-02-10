@@ -10,6 +10,14 @@ const lecturerApi = {
       url += `?page=${page}&limit=${limit}`;
 
     return axiosClient.get(url);
+  },
+  getCourses: (page, limit) => {
+    let url = `${baseUrl}/courses`;
+
+    if (page && limit)
+      url += `?page=${page}&limit=${limit}`;
+
+    return axiosClient.get(url);
   }
 }
 

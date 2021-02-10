@@ -8,3 +8,10 @@ export const setPageBasics = (basics) => {
     payload: basics
   }
 }
+
+export const setScrollbarTop = (top) => {
+  return {
+    type: pageActionTypes.SET_SCROLLBAR_TOP,
+    payload: top
+  }
+}

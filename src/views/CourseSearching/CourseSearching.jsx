@@ -5,6 +5,14 @@ import React from 'react';
 import NumberFormat from 'react-number-format';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { shallowEqual } from 'recompose';
+import { apiMessage } from 'constants/api-message.constant';
+import { showNotification } from 'redux/actions/app.action';
+import { courseApi } from 'api';
+import { availablePages } from 'constants/global.constant';
+import { setScrollbarTop } from 'redux/actions/page.action';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -45,196 +53,95 @@ const useStyles = makeStyles(theme => ({
 
 const CourseSearching = () => {
   const classes = useStyles();
-  const query = new URLSearchParams(useLocation().search);
-  const searchTerm = query.get('q');
-
-  const [filterValue, setFilterValue] = useState(1);
-
-  const handleChange = (event) => {
-    setFilterValue(event.target.value);
-  };
-
-  const courses = [
+  const dispatch = useDispatch();
+  const limit = 8;
+  const courseListFilterCriterias = [
     {
-      _id: 1,
-      thumbnailUrl: 'https://miro.medium.com/max/3798/1*eOE7VhXBlqdIJ9weEdHbQQ.jpeg',
-      title: 'Angular Cho Người Mới Bắt Đầu',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 5.0,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 650000,
-      discountPercent: 0.3,
-      updatedAt: new Date(),
+      text: 'Điểm đánh giá giảm dần',
+      values: [false, 'averageRating']
     },
     {
-      _id: 2,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
+      text: 'Điểm đánh giá tăng dần',
+      values: [true, 'averageRating']
     },
     {
-      _id: 3,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
+      text: 'Giá tăng dần',
+      values: [true, 'tuition']
     },
     {
-      _id: 4,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 5,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 6,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 7,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 8,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
+      text: 'Giá giảm dần',
+      values: [false, 'tuition']
+    }
   ]
 
-  for (let c of courses)
-    c['href'] = `/courses/${c._id}`;
+  const appState = useSelector(states => ({
+    ...states.app
+  }), shallowEqual);
+
+  const [courseList, setCourseList] = useState([]);
+  const [courseListPage, setCourseListPage] = useState(1);
+  const [courseListTotalItems, setCourseListTotalItems] = useState(0);
+  const [btnLoadMoreCourseDisabled, setBtnLoadMoreCourseDisabled] = useState(false);
+  const [courseListFilterCriteriaIndex, setCourseListFilterCriteriaIndex] = useState(0);
+
+  const getAllCourses = async (page) => {
+    setBtnLoadMoreCourseDisabled(true);
+    try {
+      const res = await courseApi.getAll(
+        page,
+        limit,
+        appState.courseSearchingQuery,
+        courseListFilterCriterias[courseListFilterCriteriaIndex].values[0],
+        courseListFilterCriterias[courseListFilterCriteriaIndex].values[1],
+      );
+      const { totalItems } = res.data.meta;
+      const { entries } = res.data;
+
+      let newCourseList = [];
+      if (page === 1) {
+        newCourseList = entries;
+      } else {
+        newCourseList = courseList.concat(entries);
+      }
+
+      for (let c of newCourseList)
+        c.href = `${availablePages.COURSE_DETAILS.path.replace(':courseId', c._id)}`;
+
+      setCourseList(newCourseList);
+
+      if (newCourseList.length < totalItems) {
+        setBtnLoadMoreCourseDisabled(false);
+      }
+
+      setCourseList(newCourseList);
+      setCourseListTotalItems(totalItems);
+
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (courseListPage !== 1) {
+      getAllCourses(courseListPage);
+    }
+  }, [courseListPage]);
+
+  useEffect(() => {
+    getAllCourses(1);
+    setCourseListPage(1);
+    dispatch(setScrollbarTop(0));
+  }, [appState.courseSearchingQuery, courseListFilterCriteriaIndex]);
+
+  const handleChange = (event) => {
+    setCourseListFilterCriteriaIndex(event.target.value);
+  };
+
+  const handleClickBtnLoadMoreCourse = () => {
+    setCourseListPage(courseListPage + 1);
+  }
 
   return (
     <div className={classes.root}>
@@ -242,10 +149,18 @@ const CourseSearching = () => {
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Box>
             <Typography variant="h4" className={classes.sencondaryText} gutterBottom>
-              <b>Từ khóa "lập trình web"</b>
+              {appState.courseSearchingQuery ? (
+                <span><b>Từ khóa "{appState.courseSearchingQuery}"</b></span>
+              ) : (
+                  <span><b>Tất cả khóa học</b></span>
+                )}
             </Typography>
             <Typography variant="body1">
-              Tìm thấy <b><NumberFormat value={courses.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học liên quan
+              {appState.courseSearchingQuery ? (
+                <span>Có <b><NumberFormat value={courseListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học liên quan</span>
+              ) : (
+                  <span>Tổng cộng <b><NumberFormat value={courseListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học</span>
+                )}
             </Typography>
           </Box>
           <FormControl className={classes.formControl}>
@@ -253,7 +168,7 @@ const CourseSearching = () => {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={filterValue}
+              value={courseListFilterCriteriaIndex}
               onChange={handleChange}
               className={classes.input}
               inputProps={{
@@ -262,10 +177,9 @@ const CourseSearching = () => {
                 }
               }}
             >
-              <MenuItem value={1}>Điểm đánh giá giảm dần</MenuItem>
-              <MenuItem value={2}>Điểm đánh giá tăng dần</MenuItem>
-              <MenuItem value={3}>Giá tăng dần</MenuItem>
-              <MenuItem value={4}>Giá giảm dần</MenuItem>
+              {courseListFilterCriterias.map((c, i) => (
+                <MenuItem key={i} value={i}>{c.text}</MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Box>
@@ -274,7 +188,7 @@ const CourseSearching = () => {
         </Box>
         <Box ml={-2}>
           <GridList cellHeight="auto" cols={4}>
-            {courses.map((c, i) => (
+            {courseList.map((c, i) => (
               <GridListTile key={c._id}>
                 <Box p={2} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
                   <Course data={c} type="minimal" />
@@ -283,7 +197,17 @@ const CourseSearching = () => {
             ))}
           </GridList>
         </Box>
-        <Button fullWidth className={classes.btnLoadMoreCourse} variant="contained" color="primary" size="large">Xem thêm khóa học</Button>
+        <Button
+          fullWidth
+          className={classes.btnLoadMoreCourse}
+          variant="contained"
+          color="primary"
+          size="large"
+          disabled={btnLoadMoreCourseDisabled}
+          onClick={handleClickBtnLoadMoreCourse}
+        >
+          Xem thêm khóa học
+        </Button>
       </Box>
     </div >
   );

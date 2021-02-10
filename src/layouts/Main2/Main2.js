@@ -5,6 +5,11 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { CategorySidebar, Topbar } from './components';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import { useDispatch, useSelector } from 'react-redux';
+import { setScrollbarTop } from 'redux/actions/page.action';
+import { useRef } from 'react';
+import { useEffect } from 'react';
+import { shallowEqual } from 'recompose';
 
 
 const useStyles = makeStyles(theme => ({
@@ -33,11 +38,23 @@ const Main2 = props => {
 
   const classes = useStyles();
   const theme = useTheme();
+  const dispatch = useDispatch();
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
     defaultMatches: true
   });
+  const ps = useRef();
 
   const [openSidebar, setOpenSidebar] = useState(false);
+
+  const pageState = useSelector(state => ({
+    ...state.page
+  }), shallowEqual);
+
+  useEffect(() => {
+    if (ps.current) {
+      ps.current.scrollTop = pageState.scrollbarTop;
+    }
+  }, [pageState.scrollbarTop])
 
   const handleSidebarOpen = () => {
     setOpenSidebar(true);
@@ -46,6 +63,10 @@ const Main2 = props => {
   const handleSidebarClose = () => {
     setOpenSidebar(false);
   };
+
+  const handleScrollY = e => {
+    dispatch(setScrollbarTop(e.scrollTop));
+  }
 
   const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
@@ -62,7 +83,11 @@ const Main2 = props => {
         open={shouldOpenSidebar}
         variant={isDesktop ? 'persistent' : 'temporary'}
       />
-      <PerfectScrollbar className={classes.content}>
+      <PerfectScrollbar
+        className={classes.content}
+        onScrollY={handleScrollY}
+        containerRef={el => (ps.current = el)}
+      >
         {children}
       </PerfectScrollbar>
     </div>

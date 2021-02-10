@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Box, Button, GridList, GridListTile, Tooltip, Fab } from '@material-ui/core';
 import Course from 'components/Course/Course';
 import AddIcon from '@material-ui/icons/Add';
 import AddCourse from './components/AddCourse/AddCourse';
 import { useState } from 'react';
+import { lecturerApi } from 'api';
+import { apiMessage } from 'constants/api-message.constant';
+import { useDispatch } from 'react-redux';
+import { showNotification } from 'redux/actions/app.action';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,8 +32,15 @@ const useStyles = makeStyles(theme => ({
 
 const InChargeCourses = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const limit = 8;
 
   const [openAddCouse, setOpenAddCourse] = useState(false);
+
+  const [lecturerCourseList, setLecturerCourseList] = useState([]);
+  const [lecturerCourseListPage, setlecturerCourseListPage] = useState(1);
+
+  const [disableBtnLoadMoreCourse, setDisableBtnLoadMoreCourse] = useState(false);
 
   const toggleAddCourse = (event, open) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -38,6 +49,31 @@ const InChargeCourses = () => {
 
     setOpenAddCourse(open);
   };
+
+  useEffect(() => {
+    const getAllLecturerCourses = async () => {
+      setDisableBtnLoadMoreCourse(true);
+      try {
+        const res = await lecturerApi.getCourses(lecturerCourseListPage, limit);
+        const lecturerCourses = res.data.entries;
+        const { totalItems } = res.data.meta;
+
+        const newLecturerCourseList = [...lecturerCourseList, ...lecturerCourses]
+        setLecturerCourseList(newLecturerCourseList);
+
+        if (newLecturerCourseList.length < totalItems) {
+          setDisableBtnLoadMoreCourse(false);
+        }
+      } catch (error) {
+        if (error.messages && error.messages.length > 0) {
+          dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        }
+      }
+    }
+
+    getAllLecturerCourses();
+
+  }, [lecturerCourseListPage]);
 
   const courses = [
     {
@@ -218,8 +254,13 @@ const InChargeCourses = () => {
     },
   ]
 
-  for (let c of courses)
+  for (let c of lecturerCourseList)
     c['href'] = `/courses/${c._id}`;
+
+  const handleClickBtnLoadMoreCourse = () => {
+    const newPage = lecturerCourseListPage + 1;
+    setlecturerCourseListPage(newPage);
+  }
 
   return (
     <div className={classes.root}>
@@ -231,7 +272,7 @@ const InChargeCourses = () => {
       </Tooltip>
       <Box display="flex" justifyContent="center">
         <GridList cellHeight="auto" cols={4}>
-          {courses.map((c, i) => (
+          {lecturerCourseList.map((c, i) => (
             <GridListTile key={c._id}>
               <Box p={2} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
                 <Course data={c} type="minimal" />
@@ -241,7 +282,17 @@ const InChargeCourses = () => {
         </GridList>
       </Box>
       <Box p={2}>
-        <Button fullWidth className={classes.btnLoadMoreCourse} variant="contained" size="large" color="primary">Xem thêm khóa học</Button>
+        <Button
+          fullWidth
+          className={classes.btnLoadMoreCourse}
+          variant="contained"
+          size="large"
+          color="primary"
+          onClick={handleClickBtnLoadMoreCourse}
+          disabled={disableBtnLoadMoreCourse}
+        >
+          Xem thêm khóa học
+        </Button>
       </Box>
     </div >
   );
