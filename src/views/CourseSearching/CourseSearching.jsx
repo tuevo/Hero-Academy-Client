@@ -5,6 +5,7 @@ import React from 'react';
 import NumberFormat from 'react-number-format';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -49,6 +50,10 @@ const CourseSearching = () => {
   const searchTerm = query.get('q');
 
   const [filterValue, setFilterValue] = useState(1);
+
+  useEffect(() => {
+    console.log(searchTerm);
+  }, []);
 
   const handleChange = (event) => {
     setFilterValue(event.target.value);
@@ -242,7 +247,7 @@ const CourseSearching = () => {
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Box>
             <Typography variant="h4" className={classes.sencondaryText} gutterBottom>
-              <b>Từ khóa "lập trình web"</b>
+              <b>Từ khóa "{searchTerm}"</b>
             </Typography>
             <Typography variant="body1">
               Tìm thấy <b><NumberFormat value={courses.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học liên quan

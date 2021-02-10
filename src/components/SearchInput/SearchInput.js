@@ -43,7 +43,7 @@ const SearchInput = props => {
   }
 
   const handleKeyUp = e => {
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13 && term) {
       history.push(`${availablePages.COURSE_SEARCHING.path}?q=${term}`);
     }
   }
