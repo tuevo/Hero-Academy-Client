@@ -6,6 +6,13 @@ import NumberFormat from 'react-number-format';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { shallowEqual } from 'recompose';
+import { apiMessage } from 'constants/api-message.constant';
+import { showNotification } from 'redux/actions/app.action';
+import { courseApi } from 'api';
+import { availablePages } from 'constants/global.constant';
+import { setScrollbarTop } from 'redux/actions/page.action';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -46,18 +53,72 @@ const useStyles = makeStyles(theme => ({
 
 const CourseSearching = () => {
   const classes = useStyles();
-  const query = new URLSearchParams(useLocation().search);
-  const searchTerm = query.get('q');
+  const dispatch = useDispatch();
+  const limit = 8;
+
+  const appState = useSelector(states => ({
+    ...states.app
+  }), shallowEqual);
 
   const [filterValue, setFilterValue] = useState(1);
 
+  const [courseList, setCourseList] = useState([]);
+  const [courseListPage, setCourseListPage] = useState(1);
+  const [courseListTotalItems, setCourseListTotalItems] = useState(0);
+  const [btnLoadMoreCourseDisabled, setBtnLoadMoreCourseDisabled] = useState(false);
+
+  const getAllCourses = async (page) => {
+    setBtnLoadMoreCourseDisabled(true);
+    try {
+      const res = await courseApi.getAll(page, limit, appState.courseSearchingQuery);
+      const { totalItems } = res.data.meta;
+      const { entries } = res.data;
+
+      let newCourseList = [];
+      if (page === 1) {
+        newCourseList = entries;
+      } else {
+        newCourseList = courseList.concat(entries);
+      }
+
+      for (let c of newCourseList)
+        c.href = `${availablePages.COURSE_DETAILS.path.replace(':courseId', c._id)}`;
+
+      setCourseList(newCourseList);
+
+      if (newCourseList.length < totalItems) {
+        setBtnLoadMoreCourseDisabled(false);
+      }
+
+      setCourseList(newCourseList);
+      setCourseListTotalItems(totalItems);
+
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
+  }
+
   useEffect(() => {
-    console.log(searchTerm);
-  }, []);
+    if (courseListPage !== 1) {
+      getAllCourses(courseListPage);
+    }
+  }, [courseListPage])
+
+  useEffect(() => {
+    getAllCourses(1);
+    setCourseListPage(1);
+    dispatch(setScrollbarTop(0));
+  }, [appState.courseSearchingQuery]);
 
   const handleChange = (event) => {
     setFilterValue(event.target.value);
   };
+
+  const handleClickBtnLoadMoreCourse = () => {
+    setCourseListPage(courseListPage + 1);
+  }
 
   const courses = [
     {
@@ -247,10 +308,18 @@ const CourseSearching = () => {
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Box>
             <Typography variant="h4" className={classes.sencondaryText} gutterBottom>
-              <b>Từ khóa "{searchTerm}"</b>
+              {appState.courseSearchingQuery ? (
+                <span><b>Từ khóa "{appState.courseSearchingQuery}"</b></span>
+              ) : (
+                  <span><b>Tất cả khóa học</b></span>
+                )}
             </Typography>
             <Typography variant="body1">
-              Tìm thấy <b><NumberFormat value={courses.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học liên quan
+              {appState.courseSearchingQuery ? (
+                <span>Có <b><NumberFormat value={courseListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học liên quan</span>
+              ) : (
+                  <span>Tổng cộng <b><NumberFormat value={courseListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học</span>
+                )}
             </Typography>
           </Box>
           <FormControl className={classes.formControl}>
@@ -279,7 +348,7 @@ const CourseSearching = () => {
         </Box>
         <Box ml={-2}>
           <GridList cellHeight="auto" cols={4}>
-            {courses.map((c, i) => (
+            {courseList.map((c, i) => (
               <GridListTile key={c._id}>
                 <Box p={2} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
                   <Course data={c} type="minimal" />
@@ -288,7 +357,17 @@ const CourseSearching = () => {
             ))}
           </GridList>
         </Box>
-        <Button fullWidth className={classes.btnLoadMoreCourse} variant="contained" color="primary" size="large">Xem thêm khóa học</Button>
+        <Button
+          fullWidth
+          className={classes.btnLoadMoreCourse}
+          variant="contained"
+          color="primary"
+          size="large"
+          disabled={btnLoadMoreCourseDisabled}
+          onClick={handleClickBtnLoadMoreCourse}
+        >
+          Xem thêm khóa học
+        </Button>
       </Box>
     </div >
   );
