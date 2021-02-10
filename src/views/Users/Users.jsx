@@ -231,7 +231,7 @@ const Users = () => {
       averageRating: 4.5,
       roleInfo: {
         averageRating: 4.5,
-        numberOfCourses: 10,
+        numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
         numberOfRatings: 2500,
       },
@@ -244,7 +244,7 @@ const Users = () => {
       createdAt: new Date(),
       roleInfo: {
         averageRating: 4.5,
-        numberOfCourses: 10,
+        numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
         numberOfRatings: 2500,
       },
@@ -257,7 +257,7 @@ const Users = () => {
       createdAt: new Date(),
       roleInfo: {
         averageRating: 4.5,
-        numberOfCourses: 10,
+        numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
         numberOfRatings: 2500,
       },
@@ -270,7 +270,7 @@ const Users = () => {
       createdAt: new Date(),
       roleInfo: {
         averageRating: 4.5,
-        numberOfCourses: 10,
+        numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
         numberOfRatings: 2500,
       },
@@ -283,7 +283,7 @@ const Users = () => {
       createdAt: new Date(),
       roleInfo: {
         averageRating: 4.5,
-        numberOfCourses: 10,
+        numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
         numberOfRatings: 2500,
       },
@@ -296,7 +296,7 @@ const Users = () => {
       createdAt: new Date(),
       roleInfo: {
         averageRating: 4.5,
-        numberOfCourses: 10,
+        numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
         numberOfRatings: 2500,
       },
@@ -309,7 +309,7 @@ const Users = () => {
       createdAt: new Date(),
       roleInfo: {
         averageRating: 4.5,
-        numberOfCourses: 10,
+        numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
         numberOfRatings: 2500,
       },
@@ -322,7 +322,7 @@ const Users = () => {
       createdAt: new Date(),
       roleInfo: {
         averageRating: 4.5,
-        numberOfCourses: 10,
+        numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
         numberOfRatings: 2500,
       },
@@ -335,7 +335,7 @@ const Users = () => {
       createdAt: new Date(),
       roleInfo: {
         averageRating: 4.5,
-        numberOfCourses: 10,
+        numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
         numberOfRatings: 2500,
       },
@@ -348,7 +348,7 @@ const Users = () => {
       createdAt: new Date(),
       roleInfo: {
         averageRating: 4.5,
-        numberOfCourses: 10,
+        numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
         numberOfRatings: 2500,
       },
@@ -361,7 +361,7 @@ const Users = () => {
       createdAt: new Date(),
       roleInfo: {
         averageRating: 4.5,
-        numberOfCourses: 10,
+        numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
         numberOfRatings: 2500,
       },
@@ -374,7 +374,7 @@ const Users = () => {
       createdAt: new Date(),
       roleInfo: {
         averageRating: 4.5,
-        numberOfCourses: 10,
+        numberOfCoursesPosted: 10,
         numberOfStudents: 2500,
         numberOfRatings: 2500,
       },

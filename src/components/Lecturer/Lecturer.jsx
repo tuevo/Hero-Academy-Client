@@ -129,7 +129,7 @@ function Details(props) {
             <Typography variant='body2'>Số khóa học đã đăng tải</Typography>
             <Typography variant='body2' color='textPrimary'>
               <NumberFormat
-                value={data.roleInfo.numberOfCourses}
+                value={data.roleInfo.numberOfCoursesPosted}
                 displayType={'text'}
                 thousandSeparator={'.'}
                 decimalSeparator={','}
