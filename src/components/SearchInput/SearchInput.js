@@ -61,6 +61,7 @@ const SearchInput = props => {
       } else {
         history.push(`${availablePages.COURSE_SEARCHING.path}`);
       }
+
       dispatch(setCourseSearchingQuery(query));
     }
   }

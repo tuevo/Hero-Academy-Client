@@ -12,9 +12,6 @@ const courseApi = {
         if (keyword)
             url += `&keyword=${keyword}`;
 
-        console.log(isSortUpAscending);
-        console.log(sortBy);
-
         if (!isNaN(Number(isSortUpAscending)) && sortBy)
             url += `&isSortUpAscending=${isSortUpAscending}&sortBy=${sortBy}`;
 

@@ -5,7 +5,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Switch, useHistory } from 'react-router-dom';
 import { GuardProvider } from 'react-router-guards';
-import { hideNotification, setLoading } from 'redux/actions/app.action';
+import { hideNotification, setLoading, setCourseSearchingQuery } from 'redux/actions/app.action';
 import { RouteWithLayout } from './components';
 import { Main as MainLayout, Main2 as Main2Layout, Minimal as MinimalLayout } from './layouts';
 import {
@@ -35,9 +35,9 @@ const Routes = () => {
 
     const accessToken = localStorage.getItem(localStorageItems.ACCESS_TOKEN.name);
     const isAuthenticated = !!accessToken && !!authUser;
+    const toPath = to.location.pathname;
 
     if (isAuthenticated) {
-      const toPath = to.location.pathname;
       const authUserPages = _.filter(availablePages, page => page.role === userRole.GUEST.value || (page.auth && page.role === authUser.role));
 
       if ([availablePages.SIGN_IN.path, availablePages.SIGN_UP.path].includes(toPath)) {
@@ -47,6 +47,10 @@ const Routes = () => {
     } else {
       if (to.meta.auth) {
         history.push(availablePages.SIGN_IN.path, { from: from.location.pathname });
+      }
+
+      if (toPath !== availablePages.COURSE_SEARCHING.path) {
+        dispatch(setCourseSearchingQuery(''));
       }
     }
 
