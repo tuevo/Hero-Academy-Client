@@ -12,7 +12,7 @@ import { showNotification } from 'redux/actions/app.action';
 import { studentApi } from 'api';
 import NumberFormat from 'react-number-format';
 import AddLecturer from './components/AddLecturer/AddLecturer';
-import { lecturerApi } from 'api';
+import lecturerApi from 'api/lecturer.api';
 
 function a11yProps(index) {
   return {
