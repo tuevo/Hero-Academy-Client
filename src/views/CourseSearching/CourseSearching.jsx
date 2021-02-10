@@ -55,22 +55,45 @@ const CourseSearching = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const limit = 8;
+  const courseListFilterCriterias = [
+    {
+      text: 'Điểm đánh giá giảm dần',
+      values: [false, 'averageRating']
+    },
+    {
+      text: 'Điểm đánh giá tăng dần',
+      values: [true, 'averageRating']
+    },
+    {
+      text: 'Giá tăng dần',
+      values: [true, 'tuition']
+    },
+    {
+      text: 'Giá giảm dần',
+      values: [false, 'tuition']
+    }
+  ]
 
   const appState = useSelector(states => ({
     ...states.app
   }), shallowEqual);
 
-  const [filterValue, setFilterValue] = useState(1);
-
   const [courseList, setCourseList] = useState([]);
   const [courseListPage, setCourseListPage] = useState(1);
   const [courseListTotalItems, setCourseListTotalItems] = useState(0);
   const [btnLoadMoreCourseDisabled, setBtnLoadMoreCourseDisabled] = useState(false);
+  const [courseListFilterCriteriaIndex, setCourseListFilterCriteriaIndex] = useState(0);
 
   const getAllCourses = async (page) => {
     setBtnLoadMoreCourseDisabled(true);
     try {
-      const res = await courseApi.getAll(page, limit, appState.courseSearchingQuery);
+      const res = await courseApi.getAll(
+        page,
+        limit,
+        appState.courseSearchingQuery,
+        courseListFilterCriterias[courseListFilterCriteriaIndex].values[0],
+        courseListFilterCriterias[courseListFilterCriteriaIndex].values[1],
+      );
       const { totalItems } = res.data.meta;
       const { entries } = res.data;
 
@@ -104,203 +127,21 @@ const CourseSearching = () => {
     if (courseListPage !== 1) {
       getAllCourses(courseListPage);
     }
-  }, [courseListPage])
+  }, [courseListPage]);
 
   useEffect(() => {
     getAllCourses(1);
     setCourseListPage(1);
     dispatch(setScrollbarTop(0));
-  }, [appState.courseSearchingQuery]);
+  }, [appState.courseSearchingQuery, courseListFilterCriteriaIndex]);
 
   const handleChange = (event) => {
-    setFilterValue(event.target.value);
+    setCourseListFilterCriteriaIndex(event.target.value);
   };
 
   const handleClickBtnLoadMoreCourse = () => {
     setCourseListPage(courseListPage + 1);
   }
-
-  const courses = [
-    {
-      _id: 1,
-      thumbnailUrl: 'https://miro.medium.com/max/3798/1*eOE7VhXBlqdIJ9weEdHbQQ.jpeg',
-      title: 'Angular Cho Người Mới Bắt Đầu',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 5.0,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 650000,
-      discountPercent: 0.3,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 2,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 3,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 4,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 5,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 6,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 7,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 8,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-  ]
-
-  for (let c of courses)
-    c['href'] = `/courses/${c._id}`;
 
   return (
     <div className={classes.root}>
@@ -327,7 +168,7 @@ const CourseSearching = () => {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={filterValue}
+              value={courseListFilterCriteriaIndex}
               onChange={handleChange}
               className={classes.input}
               inputProps={{
@@ -336,10 +177,9 @@ const CourseSearching = () => {
                 }
               }}
             >
-              <MenuItem value={1}>Điểm đánh giá giảm dần</MenuItem>
-              <MenuItem value={2}>Điểm đánh giá tăng dần</MenuItem>
-              <MenuItem value={3}>Giá tăng dần</MenuItem>
-              <MenuItem value={4}>Giá giảm dần</MenuItem>
+              {courseListFilterCriterias.map((c, i) => (
+                <MenuItem key={i} value={i}>{c.text}</MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Box>
