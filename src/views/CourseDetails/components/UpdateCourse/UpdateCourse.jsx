@@ -190,7 +190,7 @@ export default function UpdateCourse({ course, className }) {
   ];
 
   const originalFormData = {
-    thumbnailUrl: course.thumbnail,
+    thumbnailUrl: course.thumbnailUrl,
     title: course.title,
     categoryId: course.categoryCluster.category._id,
     tuition: course.tuition,
@@ -308,7 +308,7 @@ export default function UpdateCourse({ course, className }) {
       </Box>
 
       <div className={classes.formControl}>
-        <ImageUploading uploadText="Tải ảnh bìa lên" initImageUrl={formState.values.thumbnail} onImageChange={handleImageChange} />
+        <ImageUploading uploadText="Tải ảnh bìa lên" initImageUrl={formState.values.thumbnailUrl} onImageChange={handleImageChange} />
       </div>
 
       <form>
