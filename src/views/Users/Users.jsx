@@ -12,6 +12,7 @@ import { showNotification } from 'redux/actions/app.action';
 import { studentApi } from 'api';
 import NumberFormat from 'react-number-format';
 import AddLecturer from './components/AddLecturer/AddLecturer';
+import { lecturerApi } from 'api';
 
 function a11yProps(index) {
   return {
@@ -51,7 +52,7 @@ const useStyles = makeStyles(theme => ({
 const Users = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const limit = 1;
+  const limit = 12;
 
   const [tabValue, setTabValue] = useState(1);
 
@@ -59,6 +60,11 @@ const Users = () => {
   const [studentListPage, setStudentListPage] = useState(1);
   const [studentListTotalItems, setStudentListTotalItems] = useState(0);
   const [disableBtnLoadMoreStudent, setDisableBtnLoadMoreStudent] = useState(false);
+
+  const [lecturerList, setLecturerList] = useState([]);
+  const [lecturerListPage, setLecturerListPage] = useState(1);
+  const [lecturerListTotalItems, setLecturerListTotalItems] = useState(0);
+  const [disableBtnLoadMoreLecturer, setDisableBtnLoadMoreLecturer] = useState(false);
 
   const [openAddLecturer, setOpenAddLecturer] = useState(false);
 
@@ -88,6 +94,33 @@ const Users = () => {
 
     getAllStudents();
   }, [studentListPage]);
+
+  useEffect(() => {
+    const getAllLecturers = async () => {
+      setDisableBtnLoadMoreLecturer(true);
+      try {
+        const res = await lecturerApi.getAll(lecturerListPage, limit);
+        const lecturers = res.data.entries;
+
+        const { totalItems } = res.data.meta;
+        setLecturerListTotalItems(totalItems);
+
+        const newLecturerList = lecturerList.concat(lecturers);
+        setLecturerList(newLecturerList);
+
+        if (newLecturerList.length < totalItems) {
+          setDisableBtnLoadMoreLecturer(false);
+        }
+
+      } catch (error) {
+        if (error.messages && error.messages.length > 0) {
+          dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        }
+      }
+    }
+
+    getAllLecturers();
+  }, [lecturerListPage]);
 
   const students = [
     {
@@ -183,10 +216,12 @@ const Users = () => {
       avatarUrl: 'images/avatars/avatar_6.png',
       email: 'abc@gmail.com',
       createdAt: new Date(),
-      averageRating: 4.5,
-      numberOfCourses: 10,
-      numberOfStudents: 2500,
-      numberOfRatings: 2500
+      roleInfo: {
+        averageRating: 4.5,
+        numberOfCoursesPosted: 10,
+        numberOfStudents: 2500,
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 2,
@@ -194,10 +229,12 @@ const Users = () => {
       avatarUrl: 'images/avatars/avatar_5.png',
       email: 'abc@gmail.com',
       createdAt: new Date(),
-      averageRating: 4.5,
-      numberOfCourses: 10,
-      numberOfStudents: 2500,
-      numberOfRatings: 2500
+      roleInfo: {
+        averageRating: 4.5,
+        numberOfCoursesPosted: 10,
+        numberOfStudents: 2500,
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 3,
@@ -205,10 +242,12 @@ const Users = () => {
       avatarUrl: 'images/avatars/avatar_4.png',
       email: 'abc@gmail.com',
       createdAt: new Date(),
-      averageRating: 4.5,
-      numberOfCourses: 10,
-      numberOfStudents: 2500,
-      numberOfRatings: 2500
+      roleInfo: {
+        averageRating: 4.5,
+        numberOfCoursesPosted: 10,
+        numberOfStudents: 2500,
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 4,
@@ -216,10 +255,12 @@ const Users = () => {
       avatarUrl: 'images/avatars/avatar_4.png',
       email: 'abc@gmail.com',
       createdAt: new Date(),
-      averageRating: 4.5,
-      numberOfCourses: 10,
-      numberOfStudents: 2500,
-      numberOfRatings: 2500
+      roleInfo: {
+        averageRating: 4.5,
+        numberOfCoursesPosted: 10,
+        numberOfStudents: 2500,
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 5,
@@ -227,10 +268,12 @@ const Users = () => {
       avatarUrl: 'images/avatars/avatar_4.png',
       email: 'abc@gmail.com',
       createdAt: new Date(),
-      averageRating: 4.5,
-      numberOfCourses: 10,
-      numberOfStudents: 2500,
-      numberOfRatings: 2500
+      roleInfo: {
+        averageRating: 4.5,
+        numberOfCoursesPosted: 10,
+        numberOfStudents: 2500,
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 6,
@@ -238,10 +281,12 @@ const Users = () => {
       avatarUrl: 'images/avatars/avatar_6.png',
       email: 'abc@gmail.com',
       createdAt: new Date(),
-      averageRating: 4.5,
-      numberOfCourses: 10,
-      numberOfStudents: 2500,
-      numberOfRatings: 2500
+      roleInfo: {
+        averageRating: 4.5,
+        numberOfCoursesPosted: 10,
+        numberOfStudents: 2500,
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 7,
@@ -249,10 +294,12 @@ const Users = () => {
       avatarUrl: 'images/avatars/avatar_5.png',
       email: 'abc@gmail.com',
       createdAt: new Date(),
-      averageRating: 4.5,
-      numberOfCourses: 10,
-      numberOfStudents: 2500,
-      numberOfRatings: 2500
+      roleInfo: {
+        averageRating: 4.5,
+        numberOfCoursesPosted: 10,
+        numberOfStudents: 2500,
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 8,
@@ -260,10 +307,12 @@ const Users = () => {
       avatarUrl: 'images/avatars/avatar_4.png',
       email: 'abc@gmail.com',
       createdAt: new Date(),
-      averageRating: 4.5,
-      numberOfCourses: 10,
-      numberOfStudents: 2500,
-      numberOfRatings: 2500
+      roleInfo: {
+        averageRating: 4.5,
+        numberOfCoursesPosted: 10,
+        numberOfStudents: 2500,
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 9,
@@ -271,10 +320,12 @@ const Users = () => {
       avatarUrl: 'images/avatars/avatar_4.png',
       email: 'abc@gmail.com',
       createdAt: new Date(),
-      averageRating: 4.5,
-      numberOfCourses: 10,
-      numberOfStudents: 2500,
-      numberOfRatings: 2500
+      roleInfo: {
+        averageRating: 4.5,
+        numberOfCoursesPosted: 10,
+        numberOfStudents: 2500,
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 10,
@@ -282,10 +333,12 @@ const Users = () => {
       avatarUrl: 'images/avatars/avatar_4.png',
       email: 'abc@gmail.com',
       createdAt: new Date(),
-      averageRating: 4.5,
-      numberOfCourses: 10,
-      numberOfStudents: 2500,
-      numberOfRatings: 2500
+      roleInfo: {
+        averageRating: 4.5,
+        numberOfCoursesPosted: 10,
+        numberOfStudents: 2500,
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 11,
@@ -293,10 +346,12 @@ const Users = () => {
       avatarUrl: 'images/avatars/avatar_6.png',
       email: 'abc@gmail.com',
       createdAt: new Date(),
-      averageRating: 4.5,
-      numberOfCourses: 10,
-      numberOfStudents: 2500,
-      numberOfRatings: 2500
+      roleInfo: {
+        averageRating: 4.5,
+        numberOfCoursesPosted: 10,
+        numberOfStudents: 2500,
+        numberOfRatings: 2500
+      }
     },
     {
       _id: 12,
@@ -304,10 +359,12 @@ const Users = () => {
       avatarUrl: 'images/avatars/avatar_5.png',
       email: 'abc@gmail.com',
       createdAt: new Date(),
-      averageRating: 4.5,
-      numberOfCourses: 10,
-      numberOfStudents: 2500,
-      numberOfRatings: 2500
+      roleInfo: {
+        averageRating: 4.5,
+        numberOfCoursesPosted: 10,
+        numberOfStudents: 2500,
+        numberOfRatings: 2500
+      }
     },
   ]
 
@@ -320,6 +377,10 @@ const Users = () => {
       case 1:
         const newPage = studentListPage + 1;
         setStudentListPage(newPage);
+        break;
+      case 2:
+        const newLecturerPage = lecturerListPage + 1;
+        setLecturerListPage(newLecturerPage);
         break;
 
       default:
@@ -356,7 +417,7 @@ const Users = () => {
             icon={<FaceIcon />}
             label={
               <span>
-                Giảng viên (<NumberFormat value={lecturers.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} />)
+                Giảng viên (<NumberFormat value={lecturerListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} />)
               </span>
             }
             {...a11yProps(1)}
@@ -402,7 +463,7 @@ const Users = () => {
             </Tooltip>
           </Box>
           <GridList cellHeight="auto" cols={3}>
-            {lecturers.map((s, i) => (
+            {lecturerList.map((s, i) => (
               <GridListTile key={s._id}>
                 <Box m={1} className="animate__animated animate__fadeIn" style={{ animationDelay: `${0.1 * i}s` }}>
                   <Lecturer data={s} />
@@ -418,6 +479,7 @@ const Users = () => {
               color="primary"
               size="large"
               onClick={() => handleClickBtnLoadMore(2)}
+              disabled={disableBtnLoadMoreLecturer}
             >
               Xem thêm giảng viên
             </Button>

@@ -5,7 +5,7 @@ import Course from 'components/Course/Course';
 import AddIcon from '@material-ui/icons/Add';
 import AddCourse from './components/AddCourse/AddCourse';
 import { useState } from 'react';
-import lecturerCourseApi from 'api/lecturerCourse.api';
+import { lecturerApi } from 'api';
 import { apiMessage } from 'constants/api-message.constant';
 import { useDispatch } from 'react-redux';
 import { showNotification } from 'redux/actions/app.action';
@@ -54,7 +54,7 @@ const InChargeCourses = () => {
     const getAllLecturerCourses = async () => {
       setDisableBtnLoadMoreCourse(true);
       try {
-        const res = await lecturerCourseApi.getAll(lecturerCourseListPage, limit);
+        const res = await lecturerApi.getCourses(lecturerCourseListPage, limit);
         const lecturerCourses = res.data.entries;
         const { totalItems } = res.data.meta;
 

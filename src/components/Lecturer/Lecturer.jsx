@@ -64,15 +64,15 @@ function Details(props) {
           <Typography variant="h4" gutterBottom><b>{data.fullName}</b></Typography>
           <Typography variant="body2" gutterBottom>{data.email}</Typography>
           <Box display="flex" alignItems="center">
-            <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</Typography>
+            <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(data.roleInfo.averageRating)}.${(data.roleInfo.averageRating - Math.floor(data.roleInfo.averageRating)) * 10}`}</Typography>
             <Box style={{ marginBottom: 1 }}>
-              <Rating name="read-only" value={data.averageRating} size="small" precision={0.5} readOnly />
+              <Rating name="read-only" value={data.roleInfo.averageRating} size="small" precision={0.5} readOnly />
             </Box>
           </Box>
           <Box>
             <Typography variant="body2">
               <span>(</span>
-              <NumberFormat value={data.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
+              <NumberFormat value={data.roleInfo.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
               <span>)</span>
             </Typography>
           </Box>
@@ -85,13 +85,13 @@ function Details(props) {
           <Box pb={2} display="flex" justifyContent="space-between">
             <Typography variant="body2">Số khóa học đã đăng tải</Typography>
             <Typography variant="body2" color="textPrimary">
-              <NumberFormat value={data.numberOfCourses} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} />
+              <NumberFormat value={data.roleInfo.numberOfCoursesPosted} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} />
             </Typography>
           </Box>
           <Box pb={2} display="flex" justifyContent="space-between">
             <Typography variant="body2">Số học viên đã theo học</Typography>
             <Typography variant="body2" color="textPrimary">
-              <NumberFormat value={data.numberOfStudents} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} />
+              <NumberFormat value={data.roleInfo.numberOfStudents} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} />
             </Typography>
           </Box>
         </Box>
@@ -141,7 +141,7 @@ export default function Lecturer({ data }) {
                     <Box display="flex" justifyContent="center" alignItems="center" className={classes.details__numberOfRatings}>
                       <StarIcon style={{ color: '#ffb600', fontSize: '0.875rem' }} />
                       <Typography variant="body2" color="inherit" style={{ marginLeft: 3 }}>
-                        {`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}
+                        {`${Math.floor(data.roleInfo.averageRating)}.${(data.roleInfo.averageRating - Math.floor(data.roleInfo.averageRating)) * 10}`}
                       </Typography>
                     </Box>
                   </Box>
