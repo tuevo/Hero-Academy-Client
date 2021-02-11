@@ -2,6 +2,11 @@ import { Box, Button, GridList, GridListTile } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import Course from 'components/Course/Course';
 import React from 'react';
+import { favoriteApi } from 'api';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { showNotification } from 'redux/actions/app.action';
+import { apiMessage } from 'constants/api-message.constant';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,6 +22,28 @@ const useStyles = makeStyles(theme => ({
 
 const FavoriteCourses = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const [favoriteList, setFavoriteList] = useState([]);
+
+  useEffect(() => {
+    const getAllFavorites = async () => {
+      try {
+        const res = await favoriteApi.getAll();
+        const favorites = res.data.entries;
+        const courses = [];
+        for (let c of favorites) {
+          courses.push(c.course)
+        }
+        setFavoriteList(courses);
+      } catch (error) {
+        if (error.messages && error.messages.length > 0) {
+          dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        }
+      }
+    }
+
+    getAllFavorites();
+  }, [])
 
   const courses = [
     {
@@ -197,14 +224,14 @@ const FavoriteCourses = () => {
     },
   ]
 
-  for (let c of courses)
+  for (let c of favoriteList)
     c['href'] = `/courses/${c._id}`;
 
   return (
     <div className={classes.root}>
       <Box display="flex" justifyContent="center">
         <GridList cellHeight="auto" cols={4}>
-          {courses.map((c, i) => (
+          {favoriteList.map((c, i) => (
             <GridListTile key={c._id}>
               <Box p={2} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
                 <Course data={c} type="minimal" />
