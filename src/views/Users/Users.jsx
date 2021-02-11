@@ -68,58 +68,74 @@ const Users = () => {
 
   const [openAddLecturer, setOpenAddLecturer] = useState(false);
 
-  useEffect(() => {
-    const getAllStudents = async () => {
-      setDisableBtnLoadMoreStudent(true);
-      try {
-        const res = await studentApi.getAll(studentListPage, limit);
-        const students = res.data.entries;
+  const getAllStudents = async (page) => {
+    setDisableBtnLoadMoreStudent(true);
+    try {
+      const res = await studentApi.getAll(page, limit);
+      const students = res.data.entries;
 
-        const { totalItems } = res.data.meta;
-        setStudentListTotalItems(totalItems);
+      const { totalItems } = res.data.meta;
+      setStudentListTotalItems(totalItems);
 
-        const newStudentList = studentList.concat(students);
-        setStudentList(newStudentList);
+      let newStudentList = [];
 
-        if (newStudentList.length < totalItems) {
-          setDisableBtnLoadMoreStudent(false);
-        }
+      if(page === 1){
+        newStudentList = students
+      }
+      else{
+        newStudentList = studentList.concat(students);
+      }
 
-      } catch (error) {
-        if (error.messages && error.messages.length > 0) {
-          dispatch(showNotification('error', apiMessage[error.messages[0]]));
-        }
+      setStudentList(newStudentList);
+
+      if (newStudentList.length < totalItems) {
+        setDisableBtnLoadMoreStudent(false);
+      }
+
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
       }
     }
+  };
 
-    getAllStudents();
+  const getAllLecturers = async (page) => {
+    setDisableBtnLoadMoreLecturer(true);
+    try {
+      const res = await lecturerApi.getAll(page, limit);
+      const lecturers = res.data.entries;
+
+      const { totalItems } = res.data.meta;
+      setLecturerListTotalItems(totalItems);
+
+      let newLecturerList = [];
+
+      if(page === 1){
+        newLecturerList = lecturers;
+      }
+      else{
+        newLecturerList = lecturerList.concat(lecturers);
+      }
+
+      setLecturerList(newLecturerList);
+
+      if (newLecturerList.length < totalItems) {
+        setDisableBtnLoadMoreLecturer(false);
+      }
+
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
+  };
+
+  useEffect(() => {
+    getAllStudents(studentListPage);
   }, [studentListPage]);
 
   useEffect(() => {
-    const getAllLecturers = async () => {
-      setDisableBtnLoadMoreLecturer(true);
-      try {
-        const res = await lecturerApi.getAll(lecturerListPage, limit);
-        const lecturers = res.data.entries;
-
-        const { totalItems } = res.data.meta;
-        setLecturerListTotalItems(totalItems);
-
-        const newLecturerList = lecturerList.concat(lecturers);
-        setLecturerList(newLecturerList);
-
-        if (newLecturerList.length < totalItems) {
-          setDisableBtnLoadMoreLecturer(false);
-        }
-
-      } catch (error) {
-        if (error.messages && error.messages.length > 0) {
-          dispatch(showNotification('error', apiMessage[error.messages[0]]));
-        }
-      }
-    }
-
-    getAllLecturers();
+    getAllLecturers(lecturerListPage);
   }, [lecturerListPage]);
 
   const handleTabChange = (event, newValue) => {
@@ -157,9 +173,12 @@ const Users = () => {
   const handleRemoveUser = (type, userId) => {
     switch (type) {
       case 1:
-        const newStudentList = studentList.filter(s => s._id !== userId);
-        setStudentListTotalItems(studentListTotalItems - 1);
-        setStudentList(newStudentList);
+        setStudentListPage(1);
+        getAllStudents(1);
+        break;
+      case 2:
+        setLecturerListPage(1);
+        getAllLecturers(1);
         break;
 
       default:
@@ -236,7 +255,10 @@ const Users = () => {
             {lecturerList.map((s, i) => (
               <GridListTile key={s._id}>
                 <Box m={1} className="animate__animated animate__fadeIn" style={{ animationDelay: `${0.1 * i}s` }}>
-                  <Lecturer data={s} />
+                  <Lecturer 
+                    data={s}
+                    onRemove={(lecturerId) => handleRemoveUser(2, lecturerId)} 
+                  />
                 </Box>
               </GridListTile>
             ))}

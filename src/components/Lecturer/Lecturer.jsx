@@ -6,6 +6,10 @@ import Rating from '@material-ui/lab/Rating';
 import NumberFormat from 'react-number-format';
 import StarIcon from '@material-ui/icons/Star';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
+import { lecturerApi } from 'api';
+import { useDispatch } from 'react-redux';
+import { apiMessage } from 'constants/api-message.constant';
+import { showNotification } from 'redux/actions/app.action';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -37,12 +41,24 @@ const useStyles = makeStyles(theme => ({
 
 function Details(props) {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const { onClose, data, open } = props;
   const [openRemoveAccountConfirmDialog, setOpenRemoveAccountConfirmDialog] = useState(false);
 
-  const handleCloseRemoveAccountConfirmDialog = (accepted) => {
+  const handleCloseRemoveAccountConfirmDialog = async (accepted) => {
     setOpenRemoveAccountConfirmDialog(false);
-    console.log(accepted);
+
+    if (accepted) {
+      try {
+        const res = await lecturerApi.delete(data._id);
+        dispatch(showNotification('success', apiMessage[res.messages[0]]));
+        onClose('remove');
+      } catch (error) {
+        if (error.messages && error.messages.length > 0) {
+          dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        }
+      }
+    }
   }
 
   const handleClickBtnRemoveAccount = () => {
@@ -116,7 +132,7 @@ function Details(props) {
   );
 }
 
-export default function Lecturer({ data }) {
+export default function Lecturer({ data, onRemove }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -124,8 +140,12 @@ export default function Lecturer({ data }) {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClose = (message) => {
     setOpen(false);
+
+    if (message === 'remove') {
+      onRemove(data._id);
+    }
   };
 
   return (
