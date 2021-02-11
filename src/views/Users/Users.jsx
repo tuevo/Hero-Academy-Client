@@ -80,11 +80,9 @@ const Users = () => {
       let newStudentList = [];
 
       if(studentListPage === 1){
-        console.log('done')
         newStudentList = students
       }
       else{
-        console.log('done2')
         newStudentList = studentList.concat(students);
       }
 
@@ -110,7 +108,17 @@ const Users = () => {
       const { totalItems } = res.data.meta;
       setLecturerListTotalItems(totalItems);
 
-      const newLecturerList = lecturerList.concat(lecturers);
+      let newLecturerList = [];
+
+      console.log(lecturerListPage)
+
+      if(lecturerListPage === 1){
+        newLecturerList = lecturers;
+      }
+      else{
+        newLecturerList = lecturerList.concat(lecturers);
+      }
+
       setLecturerList(newLecturerList);
 
       if (newLecturerList.length < totalItems) {
@@ -170,9 +178,9 @@ const Users = () => {
         setStudentListPage(1);
         getAllStudents(studentListPage);
         break;
-      case 1:
+      case 2:
         setLecturerListPage(1);
-        getAllStudents(lecturerListPage);
+        getAllLecturers(lecturerListPage);
         break;
 
       default:
@@ -249,7 +257,10 @@ const Users = () => {
             {lecturerList.map((s, i) => (
               <GridListTile key={s._id}>
                 <Box m={1} className="animate__animated animate__fadeIn" style={{ animationDelay: `${0.1 * i}s` }}>
-                  <Lecturer data={s} />
+                  <Lecturer 
+                    data={s}
+                    onRemove={(lecturerId) => handleRemoveUser(2, lecturerId)} 
+                  />
                 </Box>
               </GridListTile>
             ))}
