@@ -53,7 +53,7 @@ const useStyles = makeStyles(theme => ({
 const Users = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const limit = 3;
+  const limit = 12;
 
   const [tabValue, setTabValue] = useState(0);
 
