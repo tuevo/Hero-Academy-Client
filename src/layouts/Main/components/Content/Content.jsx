@@ -2,11 +2,11 @@ import { Box, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { availablePages } from 'constants/global.constant';
 import * as _ from 'lodash';
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'recompose';
-import { setPageBasics } from 'redux/actions/page.action';
+import { setPageBasics, setScrollbarTop } from 'redux/actions/page.action';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,6 +31,7 @@ const useStyles = makeStyles(theme => ({
 export default function Content({ inner }) {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const ps = useRef();
 
   const pageState = useSelector(state => ({
     ...state.page
@@ -42,9 +43,24 @@ export default function Content({ inner }) {
     dispatch(setPageBasics(page));
   }
 
+
+  useEffect(() => {
+    if (ps.current) {
+      ps.current.scrollTop = pageState.scrollbarTop;
+    }
+  }, [pageState.scrollbarTop])
+
+  const handleScrollY = e => {
+    dispatch(setScrollbarTop(e.scrollTop))
+  }
+
   return (
     pageState.basics && (
-      <PerfectScrollbar className={classes.root}>
+      <PerfectScrollbar
+        className={classes.root}
+        onScrollY={handleScrollY}
+        containerRef={el => (ps.current = el)}
+      >
         <Box pl={2} pb={4} className={classes.title}>
           <Typography variant="h3" color="inherit"><b>{pageState.basics.title}</b></Typography>
         </Box>

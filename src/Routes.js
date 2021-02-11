@@ -20,6 +20,7 @@ import {
 } from './views';
 import { userRole } from 'constants/user-role.constant';
 import { shallowEqual } from 'recompose';
+import { setScrollbarTop } from 'redux/actions/page.action';
 
 const Routes = () => {
   const history = useHistory();
@@ -48,12 +49,13 @@ const Routes = () => {
       if (to.meta.auth) {
         history.push(availablePages.SIGN_IN.path, { from: from.location.pathname });
       }
-
-      if (toPath !== availablePages.COURSE_SEARCHING.path) {
-        dispatch(setCourseSearchingQuery(''));
-      }
     }
 
+    if (toPath !== availablePages.COURSE_SEARCHING.path) {
+      dispatch(setCourseSearchingQuery(''));
+    }
+
+    dispatch(setScrollbarTop(0));
     next();
   };
 

@@ -6,7 +6,6 @@ import React, { useState } from 'react';
 import { Sidebar, Topbar } from './components';
 import Content from './components/Content/Content';
 
-
 const useStyles = makeStyles(theme => ({
   root: {
     paddingTop: '3.5rem',
