@@ -68,58 +68,68 @@ const Users = () => {
 
   const [openAddLecturer, setOpenAddLecturer] = useState(false);
 
-  useEffect(() => {
-    const getAllStudents = async () => {
-      setDisableBtnLoadMoreStudent(true);
-      try {
-        const res = await studentApi.getAll(studentListPage, limit);
-        const students = res.data.entries;
+  const getAllStudents = async (studentListPage) => {
+    setDisableBtnLoadMoreStudent(true);
+    try {
+      const res = await studentApi.getAll(studentListPage, limit);
+      const students = res.data.entries;
 
-        const { totalItems } = res.data.meta;
-        setStudentListTotalItems(totalItems);
+      const { totalItems } = res.data.meta;
+      setStudentListTotalItems(totalItems);
 
-        const newStudentList = studentList.concat(students);
-        setStudentList(newStudentList);
+      let newStudentList = [];
 
-        if (newStudentList.length < totalItems) {
-          setDisableBtnLoadMoreStudent(false);
-        }
+      if(studentListPage === 1){
+        console.log('done')
+        newStudentList = students
+      }
+      else{
+        console.log('done2')
+        newStudentList = studentList.concat(students);
+      }
 
-      } catch (error) {
-        if (error.messages && error.messages.length > 0) {
-          dispatch(showNotification('error', apiMessage[error.messages[0]]));
-        }
+      setStudentList(newStudentList);
+
+      if (newStudentList.length < totalItems) {
+        setDisableBtnLoadMoreStudent(false);
+      }
+
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
       }
     }
+  };
 
-    getAllStudents();
+  const getAllLecturers = async (lecturerListPage) => {
+    setDisableBtnLoadMoreLecturer(true);
+    try {
+      const res = await lecturerApi.getAll(lecturerListPage, limit);
+      const lecturers = res.data.entries;
+
+      const { totalItems } = res.data.meta;
+      setLecturerListTotalItems(totalItems);
+
+      const newLecturerList = lecturerList.concat(lecturers);
+      setLecturerList(newLecturerList);
+
+      if (newLecturerList.length < totalItems) {
+        setDisableBtnLoadMoreLecturer(false);
+      }
+
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
+  };
+
+  useEffect(() => {
+    getAllStudents(studentListPage);
   }, [studentListPage]);
 
   useEffect(() => {
-    const getAllLecturers = async () => {
-      setDisableBtnLoadMoreLecturer(true);
-      try {
-        const res = await lecturerApi.getAll(lecturerListPage, limit);
-        const lecturers = res.data.entries;
-
-        const { totalItems } = res.data.meta;
-        setLecturerListTotalItems(totalItems);
-
-        const newLecturerList = lecturerList.concat(lecturers);
-        setLecturerList(newLecturerList);
-
-        if (newLecturerList.length < totalItems) {
-          setDisableBtnLoadMoreLecturer(false);
-        }
-
-      } catch (error) {
-        if (error.messages && error.messages.length > 0) {
-          dispatch(showNotification('error', apiMessage[error.messages[0]]));
-        }
-      }
-    }
-
-    getAllLecturers();
+    getAllLecturers(lecturerListPage);
   }, [lecturerListPage]);
 
   const handleTabChange = (event, newValue) => {
@@ -157,9 +167,12 @@ const Users = () => {
   const handleRemoveUser = (type, userId) => {
     switch (type) {
       case 1:
-        const newStudentList = studentList.filter(s => s._id !== userId);
-        setStudentListTotalItems(studentListTotalItems - 1);
-        setStudentList(newStudentList);
+        setStudentListPage(1);
+        getAllStudents(studentListPage);
+        break;
+      case 1:
+        setLecturerListPage(1);
+        getAllStudents(lecturerListPage);
         break;
 
       default:
