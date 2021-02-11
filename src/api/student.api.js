@@ -10,7 +10,11 @@ const studentApi = {
       url += `?page=${page}&limit=${limit}`;
 
     return axiosClient.get(url);
-  }
+  },
+  delete: (id) => {
+    const url = `${baseUrl}/${id}`;
+    return axiosClient.delete(url);
+  },
 }
 
 export default studentApi;

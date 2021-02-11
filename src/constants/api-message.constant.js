@@ -25,4 +25,6 @@ export const apiMessage = {
   DELETE_CATEGORY_SUCCESSFULLY: 'Xóa lĩnh vực thành công',
   UPDATE_CATEGORY_SUCCESSFULLY: 'Cập nhật lĩnh vực thành công',
   LUCTURER_NOT_FOUND: 'Không tìm thấy giảng viên',
+  STUDENT_NOT_FOUND: "Không tìm thấy học viên",
+  DELETED_STUDENT_SUCCESSFULLY: "Xóa học viên thành công"
 }
