@@ -362,7 +362,8 @@ export default function Categories() {
 
     try {
       const res = await categoryApi.add(params);
-      const { category } = res.data;
+      let { category } = res.data;
+      category.href = availablePages.CATEGORY_COURSES.path.replace(':categoryId', category._id);
       categoryClusterList[expandedCategoryClusterIndex].categories.unshift(category);
       dispatch(showNotification('success', apiMessage[res.messages[0]]));
     } catch (error) {

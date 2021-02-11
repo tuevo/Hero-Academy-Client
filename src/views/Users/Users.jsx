@@ -52,9 +52,9 @@ const useStyles = makeStyles(theme => ({
 const Users = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const limit = 12;
+  const limit = 3;
 
-  const [tabValue, setTabValue] = useState(1);
+  const [tabValue, setTabValue] = useState(0);
 
   const [studentList, setStudentList] = useState([]);
   const [studentListPage, setStudentListPage] = useState(1);
@@ -122,252 +122,6 @@ const Users = () => {
     getAllLecturers();
   }, [lecturerListPage]);
 
-  const students = [
-    {
-      _id: 1,
-      fullName: 'Lana',
-      avatarUrl: 'images/avatars/avatar_6.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date()
-    },
-    {
-      _id: 2,
-      fullName: 'Lee Wei Shuan',
-      avatarUrl: 'images/avatars/avatar_5.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date()
-    },
-    {
-      _id: 3,
-      fullName: 'Steve Jonathan',
-      avatarUrl: 'images/avatars/avatar_4.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date()
-    },
-    {
-      _id: 4,
-      fullName: 'Steve Jonathan',
-      avatarUrl: 'images/avatars/avatar_4.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date()
-    },
-    {
-      _id: 5,
-      fullName: 'Steve Jonathan',
-      avatarUrl: 'images/avatars/avatar_4.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date()
-    },
-    {
-      _id: 6,
-      fullName: 'Lana',
-      avatarUrl: 'images/avatars/avatar_6.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date()
-    },
-    {
-      _id: 7,
-      fullName: 'Lee Wei Shuan',
-      avatarUrl: 'images/avatars/avatar_5.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date()
-    },
-    {
-      _id: 8,
-      fullName: 'Steve Jonathan',
-      avatarUrl: 'images/avatars/avatar_4.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date()
-    },
-    {
-      _id: 9,
-      fullName: 'Steve Jonathan',
-      avatarUrl: 'images/avatars/avatar_4.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date()
-    },
-    {
-      _id: 10,
-      fullName: 'Steve Jonathan',
-      avatarUrl: 'images/avatars/avatar_4.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date()
-    },
-    {
-      _id: 11,
-      fullName: 'Lana',
-      avatarUrl: 'images/avatars/avatar_6.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date()
-    },
-    {
-      _id: 12,
-      fullName: 'Lee Wei Shuan',
-      avatarUrl: 'images/avatars/avatar_5.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date()
-    },
-  ]
-
-  const lecturers = [
-    {
-      _id: 1,
-      fullName: 'Lana',
-      avatarUrl: 'images/avatars/avatar_6.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date(),
-      roleInfo: {
-        averageRating: 4.5,
-        numberOfCoursesPosted: 10,
-        numberOfStudents: 2500,
-        numberOfRatings: 2500
-      }
-    },
-    {
-      _id: 2,
-      fullName: 'Lee Wei Shuan',
-      avatarUrl: 'images/avatars/avatar_5.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date(),
-      roleInfo: {
-        averageRating: 4.5,
-        numberOfCoursesPosted: 10,
-        numberOfStudents: 2500,
-        numberOfRatings: 2500
-      }
-    },
-    {
-      _id: 3,
-      fullName: 'Steve Jonathan',
-      avatarUrl: 'images/avatars/avatar_4.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date(),
-      roleInfo: {
-        averageRating: 4.5,
-        numberOfCoursesPosted: 10,
-        numberOfStudents: 2500,
-        numberOfRatings: 2500
-      }
-    },
-    {
-      _id: 4,
-      fullName: 'Steve Jonathan',
-      avatarUrl: 'images/avatars/avatar_4.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date(),
-      roleInfo: {
-        averageRating: 4.5,
-        numberOfCoursesPosted: 10,
-        numberOfStudents: 2500,
-        numberOfRatings: 2500
-      }
-    },
-    {
-      _id: 5,
-      fullName: 'Steve Jonathan',
-      avatarUrl: 'images/avatars/avatar_4.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date(),
-      roleInfo: {
-        averageRating: 4.5,
-        numberOfCoursesPosted: 10,
-        numberOfStudents: 2500,
-        numberOfRatings: 2500
-      }
-    },
-    {
-      _id: 6,
-      fullName: 'Lana',
-      avatarUrl: 'images/avatars/avatar_6.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date(),
-      roleInfo: {
-        averageRating: 4.5,
-        numberOfCoursesPosted: 10,
-        numberOfStudents: 2500,
-        numberOfRatings: 2500
-      }
-    },
-    {
-      _id: 7,
-      fullName: 'Lee Wei Shuan',
-      avatarUrl: 'images/avatars/avatar_5.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date(),
-      roleInfo: {
-        averageRating: 4.5,
-        numberOfCoursesPosted: 10,
-        numberOfStudents: 2500,
-        numberOfRatings: 2500
-      }
-    },
-    {
-      _id: 8,
-      fullName: 'Steve Jonathan',
-      avatarUrl: 'images/avatars/avatar_4.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date(),
-      roleInfo: {
-        averageRating: 4.5,
-        numberOfCoursesPosted: 10,
-        numberOfStudents: 2500,
-        numberOfRatings: 2500
-      }
-    },
-    {
-      _id: 9,
-      fullName: 'Steve Jonathan',
-      avatarUrl: 'images/avatars/avatar_4.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date(),
-      roleInfo: {
-        averageRating: 4.5,
-        numberOfCoursesPosted: 10,
-        numberOfStudents: 2500,
-        numberOfRatings: 2500
-      }
-    },
-    {
-      _id: 10,
-      fullName: 'Steve Jonathan',
-      avatarUrl: 'images/avatars/avatar_4.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date(),
-      roleInfo: {
-        averageRating: 4.5,
-        numberOfCoursesPosted: 10,
-        numberOfStudents: 2500,
-        numberOfRatings: 2500
-      }
-    },
-    {
-      _id: 11,
-      fullName: 'Lana',
-      avatarUrl: 'images/avatars/avatar_6.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date(),
-      roleInfo: {
-        averageRating: 4.5,
-        numberOfCoursesPosted: 10,
-        numberOfStudents: 2500,
-        numberOfRatings: 2500
-      }
-    },
-    {
-      _id: 12,
-      fullName: 'Lee Wei Shuan',
-      avatarUrl: 'images/avatars/avatar_5.png',
-      email: 'abc@gmail.com',
-      createdAt: new Date(),
-      roleInfo: {
-        averageRating: 4.5,
-        numberOfCoursesPosted: 10,
-        numberOfStudents: 2500,
-        numberOfRatings: 2500
-      }
-    },
-  ]
-
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -397,6 +151,19 @@ const Users = () => {
 
     if (accepted) {
       console.log(data);
+    }
+  }
+
+  const handleRemoveUser = (type, userId) => {
+    switch (type) {
+      case 1:
+        const newStudentList = studentList.filter(s => s._id !== userId);
+        setStudentListTotalItems(studentListTotalItems - 1);
+        setStudentList(newStudentList);
+        break;
+
+      default:
+        break;
     }
   }
 
@@ -431,7 +198,10 @@ const Users = () => {
             {studentList.map((s, i) => (
               <GridListTile key={s._id}>
                 <Box m={1} className="animate__animated animate__fadeIn" style={{ animationDelay: `${0.1 * i}s` }}>
-                  <Student data={s} />
+                  <Student
+                    data={s}
+                    onRemove={(studentId) => handleRemoveUser(1, studentId)}
+                  />
                 </Box>
               </GridListTile>
             ))}

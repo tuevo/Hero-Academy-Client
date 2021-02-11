@@ -4,6 +4,10 @@ import React, { useState } from 'react';
 import * as moment from 'moment';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import NumberFormat from 'react-number-format';
+import { useDispatch } from 'react-redux';
+import { showNotification } from 'redux/actions/app.action';
+import { apiMessage } from 'constants/api-message.constant';
+import { studentApi } from 'api';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -25,12 +29,23 @@ const useStyles = makeStyles(theme => ({
 
 function Details(props) {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const { onClose, data, open } = props;
   const [openRemoveAccountConfirmDialog, setOpenRemoveAccountConfirmDialog] = useState(false);
 
-  const handleCloseRemoveAccountConfirmDialog = (accepted) => {
+  const handleCloseRemoveAccountConfirmDialog = async (accepted) => {
     setOpenRemoveAccountConfirmDialog(false);
-    console.log(accepted);
+    if (accepted) {
+      try {
+        const res = await studentApi.delete(data._id);
+        dispatch(showNotification('success', apiMessage[res.messages[0]]));
+        onClose('remove');
+      } catch (error) {
+        if (error.messages && error.messages.length > 0) {
+          dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        }
+      }
+    }
   }
 
   const handleClickBtnRemoveAccount = () => {
@@ -85,7 +100,7 @@ function Details(props) {
   );
 }
 
-export default function Student({ data }) {
+export default function Student({ data, onRemove }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -93,8 +108,12 @@ export default function Student({ data }) {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClose = (message) => {
     setOpen(false);
+
+    if (message === 'remove') {
+      onRemove(data._id);
+    }
   };
 
   return (
