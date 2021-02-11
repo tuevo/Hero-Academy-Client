@@ -13,6 +13,7 @@ import { studentApi } from 'api';
 import NumberFormat from 'react-number-format';
 import AddLecturer from './components/AddLecturer/AddLecturer';
 import lecturerApi from 'api/lecturer.api';
+import { setScrollbarTop } from 'redux/actions/page.action';
 
 function a11yProps(index) {
   return {
@@ -79,10 +80,10 @@ const Users = () => {
 
       let newStudentList = [];
 
-      if(page === 1){
+      if (page === 1) {
         newStudentList = students
       }
-      else{
+      else {
         newStudentList = studentList.concat(students);
       }
 
@@ -110,10 +111,10 @@ const Users = () => {
 
       let newLecturerList = [];
 
-      if(page === 1){
+      if (page === 1) {
         newLecturerList = lecturers;
       }
-      else{
+      else {
         newLecturerList = lecturerList.concat(lecturers);
       }
 
@@ -175,10 +176,12 @@ const Users = () => {
       case 1:
         setStudentListPage(1);
         getAllStudents(1);
+        dispatch(setScrollbarTop(0));
         break;
       case 2:
         setLecturerListPage(1);
         getAllLecturers(1);
+        dispatch(setScrollbarTop(0));
         break;
 
       default:
@@ -255,9 +258,9 @@ const Users = () => {
             {lecturerList.map((s, i) => (
               <GridListTile key={s._id}>
                 <Box m={1} className="animate__animated animate__fadeIn" style={{ animationDelay: `${0.1 * i}s` }}>
-                  <Lecturer 
+                  <Lecturer
                     data={s}
-                    onRemove={(lecturerId) => handleRemoveUser(2, lecturerId)} 
+                    onRemove={(lecturerId) => handleRemoveUser(2, lecturerId)}
                   />
                 </Box>
               </GridListTile>
