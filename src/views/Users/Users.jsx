@@ -68,10 +68,10 @@ const Users = () => {
 
   const [openAddLecturer, setOpenAddLecturer] = useState(false);
 
-  const getAllStudents = async (studentListPage) => {
+  const getAllStudents = async (page) => {
     setDisableBtnLoadMoreStudent(true);
     try {
-      const res = await studentApi.getAll(studentListPage, limit);
+      const res = await studentApi.getAll(page, limit);
       const students = res.data.entries;
 
       const { totalItems } = res.data.meta;
@@ -79,7 +79,7 @@ const Users = () => {
 
       let newStudentList = [];
 
-      if(studentListPage === 1){
+      if(page === 1){
         newStudentList = students
       }
       else{
@@ -99,10 +99,10 @@ const Users = () => {
     }
   };
 
-  const getAllLecturers = async (lecturerListPage) => {
+  const getAllLecturers = async (page) => {
     setDisableBtnLoadMoreLecturer(true);
     try {
-      const res = await lecturerApi.getAll(lecturerListPage, limit);
+      const res = await lecturerApi.getAll(page, limit);
       const lecturers = res.data.entries;
 
       const { totalItems } = res.data.meta;
@@ -110,9 +110,7 @@ const Users = () => {
 
       let newLecturerList = [];
 
-      console.log(lecturerListPage)
-
-      if(lecturerListPage === 1){
+      if(page === 1){
         newLecturerList = lecturers;
       }
       else{
@@ -176,11 +174,11 @@ const Users = () => {
     switch (type) {
       case 1:
         setStudentListPage(1);
-        getAllStudents(studentListPage);
+        getAllStudents(1);
         break;
       case 2:
         setLecturerListPage(1);
-        getAllLecturers(lecturerListPage);
+        getAllLecturers(1);
         break;
 
       default:
