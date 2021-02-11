@@ -23,18 +23,32 @@ const useStyles = makeStyles(theme => ({
 const FavoriteCourses = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const limit = 8;
+
   const [favoriteList, setFavoriteList] = useState([]);
+  const [favoriteListPage, setFavoriteListPage] = useState(1);
+
+  const [disableBtnLoadMoreCourse, setDisableBtnLoadMoreCourse] = useState(false);
 
   useEffect(() => {
     const getAllFavorites = async () => {
+      setDisableBtnLoadMoreCourse(true);
       try {
-        const res = await favoriteApi.getAll();
+        const res = await favoriteApi.getAll(favoriteListPage, limit);
         const favorites = res.data.entries;
+        const { totalItems } = res.data.meta;
+
         const courses = [];
         for (let c of favorites) {
-          courses.push(c.course)
+          courses.push(c.course);
         }
-        setFavoriteList(courses);
+
+        const newCourseList = [...favoriteList, ...courses];
+        setFavoriteList(newCourseList);
+
+        if (newCourseList.length < totalItems) {
+          setDisableBtnLoadMoreCourse(false);
+        }
       } catch (error) {
         if (error.messages && error.messages.length > 0) {
           dispatch(showNotification('error', apiMessage[error.messages[0]]));
@@ -43,7 +57,7 @@ const FavoriteCourses = () => {
     }
 
     getAllFavorites();
-  }, [])
+  }, [favoriteListPage])
 
   const courses = [
     {
@@ -227,6 +241,11 @@ const FavoriteCourses = () => {
   for (let c of favoriteList)
     c['href'] = `/courses/${c._id}`;
 
+  const handleClickBtnLoadMoreCourse = () => {
+    const newPage = favoriteListPage + 1;
+    setFavoriteListPage(newPage);
+  }
+
   return (
     <div className={classes.root}>
       <Box display="flex" justifyContent="center">
@@ -241,7 +260,17 @@ const FavoriteCourses = () => {
         </GridList>
       </Box>
       <Box p={2}>
-        <Button fullWidth className={classes.btnLoadMoreCourse} variant="contained" size="large" color="primary">Xem thêm khóa học</Button>
+        <Button
+          fullWidth
+          className={classes.btnLoadMoreCourse}
+          variant="contained"
+          size="large"
+          color="primary"
+          onClick={handleClickBtnLoadMoreCourse}
+          disabled={disableBtnLoadMoreCourse}
+        >
+          Xem thêm khóa học
+          </Button>
       </Box>
     </div >
   );
