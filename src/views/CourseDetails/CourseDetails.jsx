@@ -883,7 +883,7 @@ const CourseDetails = () => {
               <Typography variant="h3" color="inherit"><b>{course.title}</b></Typography>
               <Typography variant="body1" className={classes.description} color="inherit">{course.description}</Typography>
 
-              <Box display="flex" alignItems="flex-end" className={classes.featuredCoursesCarouselItem__ratingDetails}>
+              <Box display="flex" alignItems="center" className={classes.featuredCoursesCarouselItem__ratingDetails}>
                 <Typography variant="body2" color="inherit" style={{ marginRight: 3 }}>
                   <span className={`${classes.label} ${classes.label__bestSeller}`} style={{ marginLeft: 0 }}>Best Seller</span>
                   {course.isFinished ? (
@@ -891,7 +891,9 @@ const CourseDetails = () => {
                   ) : (<span className={`${classes.label} ${classes.label__unfinished}`} style={{ marginLeft: 9 }}>Chưa hoàn thành</span>)}
                   <span style={{ marginLeft: 9 }}>{`${Math.floor(course.averageRating)}.${(course.averageRating - Math.floor(course.averageRating)) * 10}`}</span>
                 </Typography>
-                <Rating name="read-only" value={course.averageRating} size="small" precision={0.5} readOnly />
+                <Box>
+                  <Rating name="read-only" value={course.averageRating} size="small" precision={0.5} readOnly />
+                </Box>
                 <Typography variant="body2" color="inherit" style={{ marginLeft: 3 }}>
                   <span>(</span>
                   <NumberFormat value={course.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />

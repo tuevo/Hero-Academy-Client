@@ -25,10 +25,6 @@ const useStyles = makeStyles(theme => ({
   },
   banner: {
     position: 'relative',
-    // height: '24rem',
-    // backgroundImage: 'url(https://t3.ftcdn.net/jpg/02/39/39/92/360_F_239399223_tthRTvt26El5ccmyQIck9ySsHKgX5YBo.jpg)',
-    // "backgroundSize": "100% 100%",
-    // "backgroundPosition": "center center",
     height: '16rem'
   },
   bannerCover: {
@@ -95,7 +91,7 @@ const useStyles = makeStyles(theme => ({
   featuredCoursesCarouselItemLegend: {
     textAlign: 'left !important',
     opacity: '1 !important',
-    background: 'none !important'
+    background: 'rgba(0,0,0,0.5) !important'
   },
   featuredCoursesCarouselItem__courseThumbnail: {
     width: '100%',
@@ -107,7 +103,6 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     width: '100%',
     height: '100%',
-    // boxShadow: 'inset 0 -14rem 6.25rem rgba(3, 155, 229, 0.7)'
     boxShadow: 'inset 0 -14rem 6.25rem rgba(0, 0, 0, 0.6)'
   },
   featuredCoursesCarouselItem__courseText: {
@@ -115,7 +110,7 @@ const useStyles = makeStyles(theme => ({
     textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
   },
   featuredCoursesCarouselItem__ratingDetails: {
-    margin: theme.spacing(2, 0, 2, 0)
+    margin: theme.spacing(1, 0)
   },
   featuredCoursesCarouselItem__price: {
     marginBottom: theme.spacing(2),
@@ -126,8 +121,6 @@ const useStyles = makeStyles(theme => ({
   },
   highestViewCourses: {
     ...theme.palette.card,
-    // backgroundColor: theme.palette.primary.main,
-    // "backgroundImage": "linear-gradient(to top, #4481eb 0%, #04befe 100%)",
     padding: theme.spacing(4),
   },
   highestViewCourses__title: {
@@ -183,7 +176,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.success.main,
   },
   label__saleOff: {
-    backgroundColor: 'crimson',
+    backgroundColor: 'rgba(255,255,255,0.2)',
   },
   label__bestSeller: {
     backgroundColor: '#e68a00'
@@ -218,7 +211,10 @@ const Home = () => {
             ...item,
             href: key !== 'mostRegisteredCategory'
               ? availablePages.COURSE_DETAILS.path.replace(':courseId', item._id)
-              : availablePages.CATEGORY_COURSES.path.replace(':categoryId', item._id)
+              : availablePages.CATEGORY_COURSES.path.replace(':categoryId', item._id),
+            lecturer: { name: 'Tue Vo' }, //test
+            category: { name: 'Lập trình web' },  //test
+            discountPercent: 0.5  //test
           }));
         }
 
@@ -233,285 +229,6 @@ const Home = () => {
 
     fetchData();
   }, []);
-
-  const courses = [
-    {
-      _id: 1,
-      thumbnailUrl: 'https://miro.medium.com/max/3798/1*eOE7VhXBlqdIJ9weEdHbQQ.jpeg',
-      title: 'Angular Cho Người Mới Bắt Đầu',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 5.0,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 650000,
-      discountPercent: 0.3,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 2,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 3,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 4,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 5,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 6,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 7,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 8,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 9,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 10,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-  ];
-
-  for (let c of courses)
-    c['href'] = `/courses/${c._id}`;
-
-  const categories = [
-    {
-      _id: 1,
-      name: 'Lập trình web',
-      href: '/categories/1.1/courses'
-    },
-    {
-      _id: 2,
-      name: 'Lập trình di động',
-      href: '/categories/1.1/courses'
-    },
-    {
-      _id: 3,
-      name: 'Lập trình game',
-      href: '/categories/1.1/courses'
-    },
-    {
-      _id: 4,
-      name: 'Đồ họa',
-      href: '/categories/1.1/courses'
-    },
-    {
-      _id: 5,
-      name: 'Nội thất',
-      href: '/categories/1.1/courses'
-    },
-    {
-      _id: 6,
-      name: 'Thời trang',
-      href: '/categories/1.1/courses'
-    },
-    {
-      _id: 7,
-      name: 'Tiếng Anh',
-      href: '/categories/1.1/courses'
-    },
-    {
-      _id: 8,
-      name: 'Tiếng Trung',
-      href: '/categories/1.1/courses'
-    },
-    {
-      _id: 9,
-      name: 'Tiếng Nhật',
-      href: '/categories/1.1/courses'
-    },
-    {
-      _id: 10,
-      name: 'Tiếng Pháp',
-      href: '/categories/1.1/courses'
-    }
-  ]
 
   if (!data)
     return <></>;
@@ -540,7 +257,7 @@ const Home = () => {
           </Box>
           <div className={classes.featuredCoursesCarousel}>
             <Carousel showThumbs={false} autoPlay={true} interval={2000} infiniteLoop={true} showStatus={false}>
-              {(courses || []).map(c => (
+              {(data.outstandingCourseList || []).map(c => (
                 <RouterLink key={c._id} to={c.href}>
                   <ButtonBase>
                     <div className={classes.featuredCoursesCarouselItem}>
@@ -549,22 +266,24 @@ const Home = () => {
                       <div className={`legend ${classes.featuredCoursesCarouselItemLegend}`}>
                         <Grid container alignItems="flex-end">
                           <Grid item xs={8}>
-                            <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginBottom: 9 }}>{c.categoryCluster.categories[0].name.toUpperCase()}</Typography>
+                            <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} gutterBottom>{c.category.name.toUpperCase()}</Typography>
                             <Typography variant="h4" className={classes.featuredCoursesCarouselItem__courseText} style={{ textTransform: 'uppercase' }}><b>{c.title}</b></Typography>
 
-                            <Box display="flex" alignItems="flex-end" className={classes.featuredCoursesCarouselItem__ratingDetails}>
+                            <Box display="flex" alignItems="center" className={classes.featuredCoursesCarouselItem__ratingDetails}>
                               <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginRight: 3 }}>
-                                <span className={`${classes.label} ${classes.label__bestSeller}`} style={{ marginLeft: 0 }}>Best Seller</span>
-                                <span style={{ marginLeft: 9 }}>{`${Math.floor(c.averageRating)}.${(c.averageRating - Math.floor(c.averageRating)) * 10}`}</span>
+                                {/* <span className={`${classes.label} ${classes.label__bestSeller}`} style={{ marginLeft: 0, marginRight: 9 }}>Best Seller</span> */}
+                                <span>{`${Math.floor(c.averageRating)}.${(c.averageRating - Math.floor(c.averageRating)) * 10}`}</span>
                               </Typography>
-                              <Rating name="read-only" value={c.averageRating} size="small" precision={0.5} readOnly />
+                              <Box>
+                                <Rating name="read-only" value={c.averageRating} size="small" precision={0.5} readOnly />
+                              </Box>
                               <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginLeft: 3 }}>
                                 <span>(</span>
                                 <NumberFormat value={c.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
                                 <span>)</span>
                               </Typography>
                               <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginLeft: 9 }}>
-                                <NumberFormat value={c.numberOfStudents} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
+                                <NumberFormat value={c.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
                               </Typography>
                             </Box>
 
@@ -575,12 +294,12 @@ const Home = () => {
                           </Grid>
                           <Grid item xs={4}>
                             <Box display="flex" flexDirection="column" alignItems="flex-end">
-                              <Typography variant="h4" className={`${classes.featuredCoursesCarouselItem__courseText} ${classes.featuredCoursesCarouselItem__price}`}>
+                              <Typography variant="h3" className={`${classes.featuredCoursesCarouselItem__courseText} ${classes.featuredCoursesCarouselItem__price}`}>
                                 <NumberFormat value={c.tuition - c.tuition * c.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={c.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} />
                               </Typography>
 
                               {c.discountPercent > 0 && (
-                                <Typography variant="h6" className={classes.featuredCoursesCarouselItem__courseText}>
+                                <Typography variant="h5" className={classes.featuredCoursesCarouselItem__courseText}>
                                   <strike>
                                     <NumberFormat value={c.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
                                   </strike>
@@ -612,7 +331,7 @@ const Home = () => {
             <Grid item xs={9}>
               <div className={classes.newCourses}>
                 <Typography variant="h4" className={classes.newCourses__title}><b>Khóa học mới <span className={`${classes.label} ${classes.label__new}`}>NEW</span></b></Typography>
-                {(courses || []).map(c => (
+                {(data.ListOfLatestCourses || []).map(c => (
                   <div key={c._id} className={classes.newCourses__item}>
                     <Course data={c} type="stretch" />
                   </div>

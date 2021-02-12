@@ -44,10 +44,13 @@ const useStyles = makeStyles((theme) => ({
   description: {
     margin: theme.spacing(1, 0),
     ...styles,
-    "WebkitLineClamp": "2",
+    "WebkitLineClamp": "2"
   },
   cardContent: {
     padding: '1rem !important'
+  },
+  price: {
+    height: '2.5rem'
   }
 }));
 
@@ -72,7 +75,7 @@ const Course = ({ data, type }) => {
               </Box>
               <Box display="flex" alignItems="center">
                 <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</Typography>
-                <Box style={{ marginBottom: 1 }}>
+                <Box>
                   <Rating name="read-only" value={data.averageRating} size="small" precision={0.5} readOnly />
                 </Box>
               </Box>
@@ -89,13 +92,13 @@ const Course = ({ data, type }) => {
               <Typography variant="body2" color="textSecondary" component="p" className={classes.description}>
                 {data.description}
               </Typography>
-              <Box display="flex" flexDirection="column" alignItems="flex-end">
-                <Typography variant="h5" className={`${classes.featuredCoursesCarouselItem__courseText} ${classes.featuredCoursesCarouselItem__price}`}>
+              <Box display="flex" flexDirection="column" alignItems="flex-end" justifyContent="flex-end" className={classes.price}>
+                <Typography variant="h5">
                   <b><NumberFormat value={data.tuition - data.tuition * data.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={data.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} /></b>
                 </Typography>
 
                 {data.discountPercent > 0 && (
-                  <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText}>
+                  <Typography variant="body2">
                     <strike>
                       <NumberFormat value={data.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
                     </strike>
@@ -126,9 +129,9 @@ const Course = ({ data, type }) => {
                       <b>{data.title}</b>
                     </Typography>
                   </Box>
-                  <Box display="flex" alignItems="flex-end">
+                  <Box display="flex" alignItems="center">
                     <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</Typography>
-                    <Box style={{ marginBottom: -2 }}>
+                    <Box>
                       <Rating name="read-only" value={data.averageRating} size="small" precision={0.5} readOnly />
                     </Box>
                     <Typography variant="body2" style={{ marginLeft: 3 }}>
@@ -142,20 +145,19 @@ const Course = ({ data, type }) => {
                   </Box>
                   <Box display="flex" alignItems="center">
                     <Typography variant="body2">Giảng viên: <b>{data.lecturer.name}</b></Typography>
-                    <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginLeft: 9 }}>Cập nhật lần cuối: {moment(data.updatedAt).format('DD/MM HH:mm')}</Typography>
-                    <Typography variant="body2" style={{ marginLeft: 9 }}>{data.categoryCluster.categories[0].name.toUpperCase()}</Typography>
+                    <Typography variant="body2" style={{ marginLeft: 9 }}>Cập nhật lần cuối: {moment(data.updatedAt).format('DD/MM HH:mm')}</Typography>
+                    <Typography variant="body2" style={{ marginLeft: 9 }}>{data.category.name.toUpperCase()}</Typography>
                   </Box>
                   <Typography variant="body2" color="textSecondary" component="p" className={classes.description}>
-                    Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                    across all continents except Antarctica.
+                    {data.description}
                   </Typography>
-                  <Box display="flex" flexDirection="column" alignItems="flex-end" justifyContent="flex-end">
-                    <Typography variant="h5" className={`${classes.featuredCoursesCarouselItem__courseText} ${classes.featuredCoursesCarouselItem__price}`}>
+                  <Box display="flex" flexDirection="column" alignItems="flex-end" justifyContent="flex-end" className={classes.price}>
+                    <Typography variant="h5">
                       <b><NumberFormat value={data.tuition - data.tuition * data.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={data.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} /></b>
                     </Typography>
 
                     {data.discountPercent > 0 && (
-                      <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText}>
+                      <Typography variant="body2">
                         <strike>
                           <NumberFormat value={data.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
                         </strike>
