@@ -29,6 +29,9 @@ const useStyles = makeStyles(theme => ({
   },
   item: {
     fontWeight: 'bold'
+  },
+  nested: {
+    paddingLeft: theme.spacing(2)
   }
 }));
 

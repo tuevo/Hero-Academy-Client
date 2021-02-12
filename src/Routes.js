@@ -51,6 +51,10 @@ const Routes = () => {
       }
     }
 
+    if (toPath !== availablePages.COURSE_SEARCHING.path) {
+      dispatch(setCourseSearchingQuery(''));
+    }
+
     dispatch(setScrollbarTop(0));
     next();
   };

@@ -5,6 +5,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import CategorySidebarNav from './CategorySidebarNav/CategorySidebarNav';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { showNotification } from 'redux/actions/app.action';
+import { apiMessage } from 'constants/api-message.constant';
+import { categoryClusterApi } from 'api';
+import { availablePages } from 'constants/global.constant';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -44,121 +51,28 @@ const useStyles = makeStyles(theme => ({
 
 const CategorySidebar = props => {
   const { open, variant, onClose, className, ...rest } = props;
-
   const classes = useStyles();
+  const dispatch = useDispatch();
 
-  const categoryClusters = [
-    {
-      _id: '1',
-      name: 'Công nghệ thông tin',
-      categories: [
-        {
-          _id: '1.1',
-          name: 'Lập trình web',
-          href: '/categories/1.1/courses'
-        },
-        {
-          _id: '1.2',
-          name: 'Lập trình di động',
-          href: '/categories/1.1/courses'
-        },
-        {
-          _id: '1.3',
-          name: 'Lập trình game',
-          href: '/categories/1.1/courses'
+  const [categoryClusterList, setCategoryClusterList] = useState([]);
+
+  useEffect(() => {
+    const getAllCategoryClusters = async () => {
+      try {
+        const res = await categoryClusterApi.getAll();
+        const newCategoryClusterList = res.data.entries.map(cc => ({
+          ...cc,
+          categories: cc.categories.map(c => ({ ...c, href: availablePages.CATEGORY_COURSES.path.replace(':categoryId', c._id) }))
+        }));
+        setCategoryClusterList(newCategoryClusterList);
+      } catch (error) {
+        if (error.messages && error.messages.length > 0) {
+          dispatch(showNotification('error', apiMessage[error.messages[0]]));
         }
-      ]
-    },
-    {
-      _id: '2',
-      name: 'Thiết kế',
-      categories: [
-        {
-          _id: '2.1',
-          name: 'Đồ họa',
-          href: '/categories/1.1/courses'
-        },
-        {
-          _id: '2.2',
-          name: 'Nội thất',
-          href: '/categories/1.1/courses'
-        },
-        {
-          _id: '2.3',
-          name: 'Thời trang',
-          href: '/categories/1.1/courses'
-        }
-      ]
-    },
-    {
-      _id: '3',
-      name: 'Quản trị kinh doanh',
-      categories: [
-        {
-          _id: '3.1',
-          name: 'Lập trình web',
-          href: '/categories/1.1/courses'
-        },
-        {
-          _id: '3.2',
-          name: 'Lập trình di động',
-          href: '/categories/1.1/courses'
-        },
-        {
-          _id: '3.3',
-          name: 'Lập trình game',
-          href: '/categories/1.1/courses'
-        }
-      ]
-    },
-    {
-      _id: '4',
-      name: 'Digital Marketing',
-      categories: [
-        {
-          _id: '4.1',
-          name: 'Lập trình web',
-          href: '/categories/1.1/courses'
-        },
-        {
-          _id: '4.2',
-          name: 'Lập trình di động',
-          href: '/categories/1.1/courses'
-        },
-        {
-          _id: '4.3',
-          name: 'Lập trình game',
-          href: '/categories/1.1/courses'
-        }
-      ]
-    },
-    {
-      _id: '5',
-      name: 'Ngoại ngữ',
-      categories: [
-        {
-          _id: '5.1',
-          name: 'Tiếng Anh',
-          href: '/categories/1.1/courses'
-        },
-        {
-          _id: '5.2',
-          name: 'Tiếng Trung',
-          href: '/categories/1.1/courses'
-        },
-        {
-          _id: '5.3',
-          name: 'Tiếng Nhật',
-          href: '/categories/1.1/courses'
-        },
-        {
-          _id: '5.4',
-          name: 'Tiếng Pháp',
-          href: '/categories/1.1/courses'
-        }
-      ]
-    },
-  ];
+      }
+    }
+    getAllCategoryClusters();
+  }, []);
 
   return (
     <Drawer
@@ -175,7 +89,7 @@ const CategorySidebar = props => {
         <div className={classes.darkCover}></div>
         <CategorySidebarNav
           className={classes.nav}
-          categoryClusters={categoryClusters}
+          categoryClusters={categoryClusterList}
         />
       </PerfectScrollbar>
     </Drawer>

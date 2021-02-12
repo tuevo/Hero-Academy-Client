@@ -11,10 +11,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
     maxWidth: '22.5rem'
-  },
-  nested: {
-    paddingLeft: theme.spacing(4),
-  },
+  }
 }));
 
 const CategorySidebarNav = props => {
