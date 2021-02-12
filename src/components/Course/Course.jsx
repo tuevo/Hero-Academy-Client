@@ -7,10 +7,19 @@ import NumberFormat from 'react-number-format';
 import { Link as RouterLink } from 'react-router-dom';
 import './Course.style.scss';
 
+const styles = {
+  "display": "-webkit-box",
+  "maxWidth": "100%",
+  "WebkitLineClamp": "2",
+  "WebkitBoxOrient": "vertical",
+  "overflow": "hidden"
+}
+
 const useStyles = makeStyles((theme) => ({
   card: {
     boxShadow: 'none',
-    background: theme.palette.background.course
+    background: theme.palette.background.course,
+    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px'
   },
   card__minimal: {
     width: '15.625rem'
@@ -24,13 +33,18 @@ const useStyles = makeStyles((theme) => ({
   media__stretch: {
     height: '100%'
   },
+  titleContainer: {
+    height: '2.5rem',
+  },
+  title: {
+    textTransform: 'uppercase',
+    ...styles,
+    "WebkitLineClamp": "2",
+  },
   description: {
     margin: theme.spacing(1, 0),
-    "display": "-webkit-box",
-    "maxWidth": "100%",
+    ...styles,
     "WebkitLineClamp": "2",
-    "WebkitBoxOrient": "vertical",
-    "overflow": "hidden"
   },
   cardContent: {
     padding: '1rem !important'
@@ -51,9 +65,11 @@ const Course = ({ data, type }) => {
               title="Contemplative Reptile"
             />
             <CardContent className={classes.cardContent}>
-              <Typography gutterBottom variant="h5" component="h2">
-                <b>{data.title}</b>
-              </Typography>
+              <Box display="flex" alignItems="center" className={classes.titleContainer}>
+                <Typography gutterBottom variant="h5" className={classes.title}>
+                  <b>{data.title}</b>
+                </Typography>
+              </Box>
               <Box display="flex" alignItems="center">
                 <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</Typography>
                 <Box style={{ marginBottom: 1 }}>
@@ -105,9 +121,11 @@ const Course = ({ data, type }) => {
               </Grid>
               <Grid item xs={7}>
                 <CardContent className={classes.cardContent}>
-                  <Typography gutterBottom variant="h4" component="h2">
-                    <b>{data.title}</b>
-                  </Typography>
+                  <Box display="flex" alignItems="center" className={classes.titleContainer}>
+                    <Typography gutterBottom variant="h5" className={classes.title}>
+                      <b>{data.title}</b>
+                    </Typography>
+                  </Box>
                   <Box display="flex" alignItems="flex-end">
                     <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</Typography>
                     <Box style={{ marginBottom: -2 }}>

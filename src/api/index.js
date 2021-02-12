@@ -6,3 +6,4 @@ export { default as categoryApi } from "./category.api";
 export { default as courseApi } from "./course.api";
 export { default as lecturerApi } from "./lecturer.api";
 export { default as favoriteApi } from "./favorite.api";
+export { default as homeApi } from "./home.api";

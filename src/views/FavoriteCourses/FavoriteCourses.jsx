@@ -13,6 +13,7 @@ const useStyles = makeStyles(theme => ({
     position: 'relative',
     padding: theme.spacing(4),
     minHeight: '33rem',
+    width: '100%'
   },
   btnLoadMoreCourse: {
     "backgroundColor": "#a4508b",
@@ -272,7 +273,7 @@ const FavoriteCourses = () => {
           Xem thêm khóa học
           </Button>
       </Box>
-    </div >
+    </div>
   );
 };
 

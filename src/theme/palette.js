@@ -54,7 +54,7 @@ export default {
   background: {
     default: '#f0f2f5',
     paper: white,
-    course: '#f8f8f8',
+    course: white,
     user: '#f8f8f8',
     signIn: white,
     signUp: white,

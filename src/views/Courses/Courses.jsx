@@ -12,6 +12,7 @@ const useStyles = makeStyles(theme => ({
     position: 'relative',
     padding: theme.spacing(4),
     minHeight: '33rem',
+    width: '100%'
   },
   btnLoadMoreCourse: {
     "backgroundColor": "#a4508b",

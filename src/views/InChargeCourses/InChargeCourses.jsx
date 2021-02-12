@@ -15,6 +15,7 @@ const useStyles = makeStyles(theme => ({
     zIndex: 5,
     padding: theme.spacing(4),
     minHeight: '33rem',
+    width: '100%'
   },
   btnAddCourse: {
     position: 'absolute',

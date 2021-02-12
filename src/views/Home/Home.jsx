@@ -10,7 +10,14 @@ import NumberFormat from 'react-number-format';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Link as RouterLink } from 'react-router-dom';
-import { APP_NAME } from 'constants/global.constant';
+import { APP_NAME, availablePages } from 'constants/global.constant';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { apiMessage } from 'constants/api-message.constant';
+import { showNotification, setLoading } from 'redux/actions/app.action';
+import { homeApi } from 'api';
+import * as _ from 'lodash';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -195,6 +202,37 @@ const CustomRouterLink = forwardRef((props, ref) => (
 
 const Home = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    dispatch(setLoading(true));
+    const fetchData = async () => {
+      try {
+        const res = await homeApi.getAll();
+        const newData = res.data;
+
+        for (const key in newData) {
+          newData[key] = newData[key].map(item => ({
+            ...item,
+            href: key !== 'mostRegisteredCategory'
+              ? availablePages.COURSE_DETAILS.path.replace(':courseId', item._id)
+              : availablePages.CATEGORY_COURSES.path.replace(':categoryId', item._id)
+          }));
+        }
+
+        setData(newData);
+        dispatch(setLoading(false));
+      } catch (error) {
+        if (error.messages && error.messages.length > 0) {
+          dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const courses = [
     {
@@ -475,6 +513,9 @@ const Home = () => {
     }
   ]
 
+  if (!data)
+    return <></>;
+
   return (
     <div className={classes.root}>
       <div className={classes.banner}>
@@ -499,8 +540,6 @@ const Home = () => {
           </Box>
           <div className={classes.featuredCoursesCarousel}>
             <Carousel showThumbs={false} autoPlay={true} interval={2000} infiniteLoop={true} showStatus={false}>
-              {/* <Carousel showThumbs={false} infiniteLoop={true} showStatus={false}> */}
-
               {(courses || []).map(c => (
                 <RouterLink key={c._id} to={c.href}>
                   <ButtonBase>
@@ -511,7 +550,7 @@ const Home = () => {
                         <Grid container alignItems="flex-end">
                           <Grid item xs={8}>
                             <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginBottom: 9 }}>{c.categoryCluster.categories[0].name.toUpperCase()}</Typography>
-                            <Typography variant="h4" className={classes.featuredCoursesCarouselItem__courseText}><b>{c.title}</b></Typography>
+                            <Typography variant="h4" className={classes.featuredCoursesCarouselItem__courseText} style={{ textTransform: 'uppercase' }}><b>{c.title}</b></Typography>
 
                             <Box display="flex" alignItems="flex-end" className={classes.featuredCoursesCarouselItem__ratingDetails}>
                               <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginRight: 3 }}>
@@ -537,8 +576,7 @@ const Home = () => {
                           <Grid item xs={4}>
                             <Box display="flex" flexDirection="column" alignItems="flex-end">
                               <Typography variant="h4" className={`${classes.featuredCoursesCarouselItem__courseText} ${classes.featuredCoursesCarouselItem__price}`}>
-                                <NumberFormat value={c.tuition - c.tuition * c.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={c.discountPercent > 0 ? 'Chỉ còn ' : `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`} suffix={'đ'} />
+                                <NumberFormat value={c.tuition - c.tuition * c.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={c.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} />
                               </Typography>
 
                               {c.discountPercent > 0 && (
@@ -565,7 +603,7 @@ const Home = () => {
         <div className={`${classes.section} ${classes.highestViewCourses}`}>
           <Typography variant="h4" className={classes.highestViewCourses__title}><b>Khóa học được xem nhiều <span className={`${classes.label} ${classes.label__hot}`}>HOT</span></b></Typography>
           <div className={classes.highestViewCoursesCarousel}>
-            <CourseMultiCarousel courses={courses || []} />
+            <CourseMultiCarousel courses={data.coursesListWithTheMostViews || []} />
           </div>
         </div>
 
@@ -585,7 +623,7 @@ const Home = () => {
               <div className={classes.popularCategories}>
                 <Typography variant="h5" className={classes.popularCategories__title}><b>Lĩnh vực được đăng ký nhiều</b></Typography>
                 <List component="div" disablePadding>
-                  {(categories || []).map(c => (
+                  {(data.mostRegisteredCategory || []).map(c => (
                     <ListItem
                       disableGutters
                       key={c._id}
