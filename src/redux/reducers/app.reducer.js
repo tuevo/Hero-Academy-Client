@@ -13,7 +13,8 @@ const initialStates = {
   },
   isNotificationOpened: false,
   activePage: null,
-  courseSearchingQuery: urlParams ? urlParams.get('q') : ''
+  courseSearchingQuery: urlParams ? urlParams.get('q') : '',
+  categoryClusterList: []
 }
 
 const appActionTypes = { ...actionTypes.app };
@@ -38,6 +39,9 @@ const appReducer = (states = initialStates, action) => {
 
     case appActionTypes.SET_COURSE_SEARCHING_QUERY:
       return { ...states, courseSearchingQuery: action.payload }
+
+    case appActionTypes.SET_CATEGORY_CLUSTER_LIST:
+      return { ...states, categoryClusterList: action.payload }
 
     default:
       return states;

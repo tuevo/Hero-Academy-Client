@@ -144,9 +144,9 @@ const Course = ({ data, type }) => {
                     </Typography>
                   </Box>
                   <Box display="flex" alignItems="center">
-                    <Typography variant="body2">Giảng viên: <b>{data.lecturer.name}</b></Typography>
+                    <Typography variant="body2">Giảng viên: <b>{data.lecturer.fullName}</b></Typography>
                     <Typography variant="body2" style={{ marginLeft: 9 }}>Cập nhật lần cuối: {moment(data.updatedAt).format('DD/MM HH:mm')}</Typography>
-                    <Typography variant="body2" style={{ marginLeft: 9 }}>{data.category.name.toUpperCase()}</Typography>
+                    <Typography variant="body2" style={{ marginLeft: 9 }}>{data.categoryCluster.categories[0].name.toUpperCase()}</Typography>
                   </Box>
                   <Typography variant="body2" color="textSecondary" component="p" className={classes.description}>
                     {data.description}

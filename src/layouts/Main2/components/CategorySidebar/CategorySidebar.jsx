@@ -7,11 +7,12 @@ import CategorySidebarNav from './CategorySidebarNav/CategorySidebarNav';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { showNotification } from 'redux/actions/app.action';
 import { apiMessage } from 'constants/api-message.constant';
 import { categoryClusterApi } from 'api';
 import { availablePages } from 'constants/global.constant';
+import { shallowEqual } from 'recompose';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -52,27 +53,9 @@ const useStyles = makeStyles(theme => ({
 const CategorySidebar = props => {
   const { open, variant, onClose, className, ...rest } = props;
   const classes = useStyles();
-  const dispatch = useDispatch();
-
-  const [categoryClusterList, setCategoryClusterList] = useState([]);
-
-  useEffect(() => {
-    const getAllCategoryClusters = async () => {
-      try {
-        const res = await categoryClusterApi.getAll();
-        const newCategoryClusterList = res.data.entries.map(cc => ({
-          ...cc,
-          categories: cc.categories.map(c => ({ ...c, href: availablePages.CATEGORY_COURSES.path.replace(':categoryId', c._id) }))
-        }));
-        setCategoryClusterList(newCategoryClusterList);
-      } catch (error) {
-        if (error.messages && error.messages.length > 0) {
-          dispatch(showNotification('error', apiMessage[error.messages[0]]));
-        }
-      }
-    }
-    getAllCategoryClusters();
-  }, []);
+  const appState = useSelector(state => ({
+    ...state.app
+  }), shallowEqual);
 
   return (
     <Drawer
@@ -89,7 +72,7 @@ const CategorySidebar = props => {
         <div className={classes.darkCover}></div>
         <CategorySidebarNav
           className={classes.nav}
-          categoryClusters={categoryClusterList}
+          categoryClusters={appState.categoryClusterList}
         />
       </PerfectScrollbar>
     </Drawer>

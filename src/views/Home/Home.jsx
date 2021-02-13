@@ -211,10 +211,7 @@ const Home = () => {
             ...item,
             href: key !== 'mostRegisteredCategory'
               ? availablePages.COURSE_DETAILS.path.replace(':courseId', item._id)
-              : availablePages.CATEGORY_COURSES.path.replace(':categoryId', item._id),
-            lecturer: { name: 'Tue Vo' }, //test
-            category: { name: 'Lập trình web' },  //test
-            discountPercent: 0.5  //test
+              : availablePages.CATEGORY_COURSES.path.replace(':categoryId', item._id)
           }));
         }
 
@@ -266,7 +263,7 @@ const Home = () => {
                       <div className={`legend ${classes.featuredCoursesCarouselItemLegend}`}>
                         <Grid container alignItems="flex-end">
                           <Grid item xs={8}>
-                            <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} gutterBottom>{c.category.name.toUpperCase()}</Typography>
+                            <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} gutterBottom>{c.categoryCluster.categories[0].name.toUpperCase()}</Typography>
                             <Typography variant="h4" className={classes.featuredCoursesCarouselItem__courseText} style={{ textTransform: 'uppercase' }}><b>{c.title}</b></Typography>
 
                             <Box display="flex" alignItems="center" className={classes.featuredCoursesCarouselItem__ratingDetails}>
@@ -288,7 +285,7 @@ const Home = () => {
                             </Box>
 
                             <Box display="flex" alignItems="center">
-                              <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText}>Giảng viên: <b>{c.lecturer.name}</b></Typography>
+                              <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText}>Giảng viên: <b>{c.lecturer.fullName}</b></Typography>
                               <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginLeft: 9 }}>Cập nhật lần cuối: {moment(c.updatedAt).format('DD/MM HH:mm')}</Typography>
                             </Box>
                           </Grid>
