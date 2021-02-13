@@ -16,6 +16,10 @@ const courseApi = {
             url += `&isSortUpAscending=${isSortUpAscending}&sortBy=${sortBy}`;
 
         return axiosClient.get(url);
+    },
+    single: (id) => {
+        const url = `${baseUrl}/${id}`;
+        return axiosClient.get(url);
     }
 }
 
