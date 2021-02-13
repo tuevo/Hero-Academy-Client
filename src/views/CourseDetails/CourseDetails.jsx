@@ -190,7 +190,6 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1, 0)
   },
   btnRegister: {
-    marginTop: theme.spacing(4),
     "backgroundColor": "#a4508b",
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
@@ -376,6 +375,7 @@ const CourseDetails = () => {
           }
         };
         setCourse(newCourse);
+        setIsFavorite(newCourse.isFavorite);
 
         const { mostRegisteredCourses } = res.data;
         setMostRegisteredCourseList(mostRegisteredCourses.map(c => ({
@@ -691,7 +691,7 @@ const CourseDetails = () => {
           </Box>
           <Grid container alignItems="flex-end">
             <Grid item xs={6}>
-              <Box display="flex" alignItems="center" mb={2}>
+              <Box display="flex" alignItems="center" mb={1}>
                 <Typography variant="body2" color="inherit" >
                   {course.categoryCluster.name.toUpperCase()}
                 </Typography>
@@ -736,30 +736,35 @@ const CourseDetails = () => {
             </Grid>
             <Grid item xs={6}>
               <Box display="flex" flexDirection="column" alignItems="flex-end" pb={2}>
-                <Box display="flex" alignItems="center" mb={1}>
-                  <Typography variant="h3" className={classes.featuredCoursesCarouselItem__price} color="inherit">
-                    <NumberFormat value={course.tuition - course.tuition * course.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={course.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} />
-                  </Typography>
-                </Box>
-
-                {course.discountPercent > 0 && (
-                  <Typography variant="h4" color="inherit">
-                    <strike>
-                      <NumberFormat value={course.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
-                    </strike>
-                    <span className={`${classes.label} ${classes.label__saleOff}`} style={{ marginLeft: 9 }}>Sale Off -{course.discountPercent * 100}%</span>
-                  </Typography>
+                {userState.authUser && userState.authUser.role === userRole.STUDENT.value && !course.isRegistered && (
+                  <div>
+                    <Box display="flex" alignItems="center" mb={1}>
+                      <Typography variant="h3" className={classes.featuredCoursesCarouselItem__price} color="inherit">
+                        <NumberFormat value={course.tuition - course.tuition * course.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={course.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} />
+                      </Typography>
+                    </Box>
+                    {course.discountPercent > 0 && (
+                      <Typography variant="h4" color="inherit">
+                        <strike>
+                          <NumberFormat value={course.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
+                        </strike>
+                        <span className={`${classes.label} ${classes.label__saleOff}`} style={{ marginLeft: 9 }}>Sale Off -{course.discountPercent * 100}%</span>
+                      </Typography>
+                    )}
+                  </div>
                 )}
 
-                {(userState.authUser && userState.authUser.role !== userRole.LECTURER.value && userState.authUser.role !== userRole.ADMIN.value) || !userState.authUser ? (
-                  <Button
-                    variant="contained"
-                    className={classes.btnRegister}
-                    color="primary"
-                    size="large"
-                  >
-                    ĐĂNG KÝ KHÓA HỌC
-                  </Button>
+                {(userState.authUser && userState.authUser.role !== userRole.LECTURER.value && userState.authUser.role !== userRole.ADMIN.value && !course.isRegistered) || !userState.authUser ? (
+                  <Box mt={4} className="animate__animated animate__bounceIn">
+                    <Button
+                      variant="contained"
+                      className={classes.btnRegister}
+                      color="primary"
+                      size="large"
+                    >
+                      ĐĂNG KÝ KHÓA HỌC
+                    </Button>
+                  </Box>
                 ) : <></>}
 
               </Box>
