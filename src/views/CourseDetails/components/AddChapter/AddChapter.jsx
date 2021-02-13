@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
   btnAdd: {
     height: '2.625rem',
     minWidth: '10.625rem',
-    marginLeft: 5,
     "backgroundColor": "#a4508b",
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)",
   },
@@ -70,14 +69,16 @@ const AddChapter = props => {
                 }
               }}
             />
-            <Button
-              startIcon={<AddIcon />}
-              color="primary"
-              variant="contained"
-              className={classes.btnAdd}
-            >
-              Thêm chương
+            <Box mt={1} ml={0.5}>
+              <Button
+                startIcon={<AddIcon />}
+                color="primary"
+                variant="contained"
+                className={classes.btnAdd}
+              >
+                Thêm chương
             </Button>
+            </Box>
           </Box>
         </CardContent>
       </form>

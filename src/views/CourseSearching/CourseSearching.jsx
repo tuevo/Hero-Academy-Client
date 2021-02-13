@@ -1,17 +1,14 @@
-import { Box, Button, Divider, GridList, GridListTile, Typography, Select, InputLabel, FormControl, MenuItem } from '@material-ui/core';
+import { Box, Button, Divider, FormControl, GridList, GridListTile, InputLabel, MenuItem, Select, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import Course from 'components/Course/Course';
-import React from 'react';
-import NumberFormat from 'react-number-format';
-import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { shallowEqual } from 'recompose';
-import { apiMessage } from 'constants/api-message.constant';
-import { showNotification } from 'redux/actions/app.action';
 import { courseApi } from 'api';
+import Course from 'components/Course/Course';
+import { apiMessage } from 'constants/api-message.constant';
 import { availablePages } from 'constants/global.constant';
+import React, { useEffect, useState } from 'react';
+import NumberFormat from 'react-number-format';
+import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual } from 'recompose';
+import { showNotification } from 'redux/actions/app.action';
 import { setScrollbarTop } from 'redux/actions/page.action';
 
 const useStyles = makeStyles(theme => ({
@@ -94,21 +91,16 @@ const CourseSearching = () => {
         courseListFilterCriterias[courseListFilterCriteriaIndex].values[0],
         courseListFilterCriterias[courseListFilterCriteriaIndex].values[1],
       );
-      const { totalItems } = res.data.meta;
+
       const { entries } = res.data;
-
-      let newCourseList = [];
-      if (page === 1) {
-        newCourseList = entries;
-      } else {
-        newCourseList = courseList.concat(entries);
-      }
-
-      for (let c of newCourseList)
-        c.href = `${availablePages.COURSE_DETAILS.path.replace(':courseId', c._id)}`;
-
+      const newCourseList = (page === 1 ? entries : courseList.concat(entries))
+        .map(c => ({
+          ...c,
+          href: availablePages.COURSE_DETAILS.path.replace(':courseId', c._id)
+        }));
       setCourseList(newCourseList);
 
+      const { totalItems } = res.data.meta;
       if (newCourseList.length < totalItems) {
         setBtnLoadMoreCourseDisabled(false);
       }

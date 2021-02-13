@@ -1,26 +1,28 @@
 import { availablePages } from 'constants/global.constant';
 import { localStorageItems } from 'constants/local-storage.constant';
+import { userRole } from 'constants/user-role.constant';
 import * as _ from 'lodash';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Switch, useHistory } from 'react-router-dom';
 import { GuardProvider } from 'react-router-guards';
-import { hideNotification, setLoading, setCourseSearchingQuery } from 'redux/actions/app.action';
+import { shallowEqual } from 'recompose';
+import { hideNotification, setLoading } from 'redux/actions/app.action';
+import { setScrollbarTop } from 'redux/actions/page.action';
 import { RouteWithLayout } from './components';
 import { Main as MainLayout, Main2 as Main2Layout, Minimal as MinimalLayout } from './layouts';
 import {
-  Home as HomeView,
   CategoryCourses as CategoryCoursesView,
-  CourseSearching as CourseSearchingView,
-  CourseDetails as CourseDetailsView,
-  SignUp as SignUpView,
-  SignIn as SignInView,
-  Profile as ProfileView,
-  NotFound as NotFoundView,
+
+  CourseDetails as CourseDetailsView, CourseSearching as CourseSearchingView, Home as HomeView,
+
+
+
+
+
+
+  NotFound as NotFoundView, Profile as ProfileView, SignIn as SignInView, SignUp as SignUpView
 } from './views';
-import { userRole } from 'constants/user-role.constant';
-import { shallowEqual } from 'recompose';
-import { setScrollbarTop } from 'redux/actions/page.action';
 
 const Routes = () => {
   const history = useHistory();

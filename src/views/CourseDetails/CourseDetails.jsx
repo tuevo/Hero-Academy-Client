@@ -12,29 +12,32 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FeedbackIcon from '@material-ui/icons/Feedback';
 import HistoryIcon from '@material-ui/icons/History';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
+import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
 import SchoolIcon from '@material-ui/icons/School';
 import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/styles';
+import { courseApi } from 'api';
+import clsx from 'clsx';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import CourseMultiCarousel from 'components/CourseMultiCarousel/CourseMultiCarousel';
 import { VideoPlayer } from 'components/VideoPlayer';
+import { availablePages } from 'constants/global.constant';
 import { userRole } from 'constants/user-role.constant';
 import * as moment from 'moment';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
+import { setLoading } from 'redux/actions/app.action';
 import { format } from 'timeago.js';
 import { AddChapter } from './components';
 import AddFeedback from './components/AddFeedback/AddFeedback';
-import UpdateCourse from './components/UpdateCourse/UpdateCourse';
-import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
 import AddVideo from './components/AddVideo/AddVideo';
+import UpdateCourse from './components/UpdateCourse/UpdateCourse';
 import WatchHistory from './components/WatchHistory/WatchHistory';
-import clsx from 'clsx';
 
 function a11yProps(index) {
   return {
@@ -61,7 +64,8 @@ const useStyles = makeStyles(theme => ({
     zIndex: 5,
     width: '100%',
     height: '100%',
-    boxShadow: 'inset 0 18.75rem 9.375rem rgba(0,0,0,0.6)'
+    boxShadow: 'inset 0 18.75rem 9.375rem rgba(0,0,0,0.7)',
+    backgroundColor: 'rgba(0,0,0,0.2)'
   },
   bannerContent: {
     position: 'absolute',
@@ -107,7 +111,6 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(2, 0, 2, 0)
   },
   featuredCoursesCarouselItem__price: {
-    marginBottom: theme.spacing(1),
     fontWeight: 'bold'
   },
   section: {
@@ -155,7 +158,6 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1.5)
   },
   label: {
-    marginLeft: theme.spacing(0.5),
     padding: theme.spacing(0.5, 1),
     color: '#fff',
     fontSize: '0.8125rem',
@@ -189,10 +191,8 @@ const useStyles = makeStyles(theme => ({
   },
   btnRegister: {
     marginTop: theme.spacing(4),
-    backgroundColor: theme.palette.success.main,
-    '&:hover': {
-      backgroundColor: theme.palette.success.main
-    }
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
   tabs: {
     boxShadow: 'none',
@@ -276,7 +276,6 @@ const useStyles = makeStyles(theme => ({
     maxHeight: '22rem',
     overflow: 'scroll',
     marginTop: theme.spacing(2),
-    // background: theme.palette.background.course,
   },
   feedbackItem: {
     marginTop: theme.spacing(2),
@@ -316,6 +315,7 @@ const useStyles = makeStyles(theme => ({
 const CourseDetails = () => {
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const userState = useSelector(state => ({
     authUser: state.user.authUser
@@ -325,6 +325,17 @@ const CourseDetails = () => {
   const chapterRefs = useRef();
 
   const { courseId } = useParams();
+  const [course, setCourse] = useState(null);
+  const [mostRegisteredCourseList, setMostRegisteredCourseList] = useState([]);
+
+  const [tabValue, setTabValue] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [openRemovingCourseConfirmDialog, setOpenRemovingCourseConfirmDialog] = useState(false);
+  const [expandedChapterIndex, setExpandedChapterIndex] = useState(null);
+  const [expandedChapterVideoList, setExpandedChapterVideoList] = useState([]);
+  const [openAddVideo, setOpenAddVideo] = useState(false);
+  const [openWatchHistory, setOpenWatchHistory] = useState(false);
+  const [activeVideo, setActiveVideo] = useState(null);
 
   const chapters = [
     {
@@ -347,14 +358,42 @@ const CourseDetails = () => {
     }
   ]
 
-  const [tabValue, setTabValue] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [openRemovingCourseConfirmDialog, setOpenRemovingCourseConfirmDialog] = useState(false);
-  const [expandedChapterIndex, setExpandedChapterIndex] = useState(null);
-  const [expandedChapterVideoList, setExpandedChapterVideoList] = useState([]);
-  const [openAddVideo, setOpenAddVideo] = useState(false);
-  const [openWatchHistory, setOpenWatchHistory] = useState(false);
-  const [activeVideo, setActiveVideo] = useState(null);
+  useEffect(() => {
+    const getCourseDetails = async () => {
+      dispatch(setLoading(true));
+      try {
+        const res = await courseApi.single(courseId);
+        const courseData = res.data.course;
+        const newCourse = {
+          ...courseData,
+          href: availablePages.COURSE_DETAILS.path.replace(':courseId', courseData._id),
+          categoryCluster: {
+            ...courseData.categoryCluster,
+            categories: courseData.categoryCluster.categories.map(c => ({
+              ...c,
+              href: availablePages.CATEGORY_COURSES.path.replace(':categoryId', c._id)
+            }))
+          }
+        };
+        setCourse(newCourse);
+
+        const { mostRegisteredCourses } = res.data;
+        setMostRegisteredCourseList(mostRegisteredCourses.map(c => ({
+          ...c,
+          href: availablePages.COURSE_DETAILS.path.replace(':courseId', c._id)
+        })));
+
+        dispatch(setLoading(false));
+
+      } catch (error) {
+        if (error.messages && error.messages.length > 0) {
+          history.push(availablePages.NOT_FOUND.path);
+          dispatch(setLoading(false));
+        }
+      }
+    }
+    getCourseDetails();
+  }, []);
 
   useEffect(() => {
     if (expandedChapterIndex !== null) {
@@ -483,7 +522,7 @@ const CourseDetails = () => {
   const scrollToChapter = (_id) => {
     if (chapterRefs.current && chapterRefs.current.length > 0) {
       const ref = chapterRefs.current.find(r => r._id === _id);
-      ps.current.scrollTop += ref.current.getBoundingClientRect().top - 120;
+      ps.current.scrollTop += ref.current.getBoundingClientRect().top;
     }
   }
 
@@ -539,211 +578,6 @@ const CourseDetails = () => {
     setActiveVideo(video);
     setExpandedChapterIndex(chapterIndex);
   }
-
-  const course = {
-    _id: 2,
-    thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-    title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-    description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica.`,
-    content: `<p>
-    <span style="font-size: large;">Giới thiệu tổng quan</span>
-</p>
-<p>
-    <br>
-</p>
-<p>Quill is a free,
-    <a href="https://github.com/quilljs/quill/" target="_blank">open source</a>WYSIWYG editor built for the modern web. With its
-    <a href="http://quilljs.com/docs/modules/" target="_blank">extensible architecture</a>and a
-    <a href="http://quilljs.com/docs/api/" target="_blank">expressive API</a>you can completely customize it to fulfill your needs. Some built in features include:</p>
-<p>
-    <br>
-</p>
-<ul>
-    <li>Fast and lightweight</li>
-    <li>Semantic markup</li>
-    <li>Standardized HTML between browsers</li>
-    <li>Cross browser support including Chrome, Firefox, Safari, and IE 9+</li>
-</ul>
-<p>
-    <br>
-</p>
-<p>
-    <span style="font-size: large;">Component, Prop, State</span>
-</p>
-<p>
-    <br>
-</p>
-<p>Quill is a free,
-    <a href="https://github.com/quilljs/quill/" target="_blank">open source</a>WYSIWYG editor built for the modern web. With its
-    <a href="http://quilljs.com/docs/modules/" target="_blank">extensible architecture</a>and a
-    <a href="http://quilljs.com/docs/api/" target="_blank">expressive API</a>you can completely customize it to fulfill your needs. Some built in features include:</p>
-<p>
-    <br>
-</p>
-<ul>
-    <li>Fast and lightweight</li>
-    <li>Semantic markup</li>
-    <li>Standardized HTML between browsers</li>
-    <li>Cross browser support including Chrome, Firefox, Safari, and IE 9+</li>
-</ul>
-<p>
-    <br>
-</p>
-<p>
-    <span style="font-size: large;">React Hooks</span>
-</p>
-<p>
-    <br>
-</p>
-<p>Quill is a free,
-    <a href="https://github.com/quilljs/quill/" target="_blank">open source</a>WYSIWYG editor built for the modern web. With its
-    <a href="http://quilljs.com/docs/modules/" target="_blank">extensible architecture</a>and a
-    <a href="http://quilljs.com/docs/api/" target="_blank">expressive API</a>you can completely customize it to fulfill your needs. Some built in features include:</p>
-<p>
-    <br>
-</p>
-<ul>
-    <li>Fast and lightweight</li>
-    <li>Semantic markup</li>
-    <li>Standardized HTML between browsers</li>
-    <li>Cross browser support including Chrome, Firefox, Safari, and IE 9+</li>
-</ul>`,
-    averageRating: 4.5,
-    numberOfRatings: 1500,
-    numberOfStudents: 2500,
-    lecturer: {
-      fullName: 'Tue Vo'
-    },
-    categoryCluster: {
-      _id: '1',
-      name: 'Công nghệ thông tin',
-      category: {
-        _id: '1.1',
-        name: 'Lập trình web',
-        href: '/categories/1.1/courses'
-      }
-    },
-    tuition: 350000,
-    discountPercent: 0.5,
-    updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-    isFinished: true
-  };
-
-  const courses = [
-    {
-      _id: 1,
-      thumbnailUrl: 'https://miro.medium.com/max/3798/1*eOE7VhXBlqdIJ9weEdHbQQ.jpeg',
-      title: 'Angular Cho Người Mới Bắt Đầu',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 5.0,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        fullName: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 650000,
-      discountPercent: 0.3,
-      updatedAt: new Date('2021-01-09T16:59:58.031Z')
-    },
-    {
-      _id: 2,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        fullName: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-    },
-    {
-      _id: 3,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        fullName: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-    },
-    {
-      _id: 4,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        fullName: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-    },
-    {
-      _id: 5,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        fullName: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-    },
-  ];
-
-  for (let c of courses)
-    c['href'] = `/courses/${c._id}`;
 
   const feedbacks = [
     {
@@ -803,15 +637,8 @@ const CourseDetails = () => {
     }
   ];
 
-  const lecturer = {
-    _id: 1,
-    fullName: 'Tue Vo',
-    avatarUrl: 'images/avatars/tuevo.jpg',
-    averageRating: 4.5,
-    numberOfRatings: 1200,
-    numberOfCourses: 10,
-    introduction: 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.'
-  }
+  if (!course)
+    return <></>;
 
   return (
     <PerfectScrollbar
@@ -836,7 +663,7 @@ const CourseDetails = () => {
                   Yêu thích
                 </Button>
               )}
-              {userState.authUser && userState.authUser.role === userRole.LECTURER.value && (
+              {userState.authUser && userState.authUser.role === userRole.LECTURER.value && course.lecturer._id === userState.authUser._id && (
                 <Box ml={1}>
                   <UpdateCourse course={course} className={classes.btnContrast} />
                 </Box>
@@ -862,32 +689,32 @@ const CourseDetails = () => {
               )}
             </Box>
           </Box>
-          <Grid container alignItems="center">
+          <Grid container alignItems="flex-end">
             <Grid item xs={6}>
               <Box display="flex" alignItems="center" mb={2}>
                 <Typography variant="body2" color="inherit" >
                   {course.categoryCluster.name.toUpperCase()}
                 </Typography>
                 <ArrowRightIcon color="inherit" />
-                <RouterLink to={course.categoryCluster.category.href}>
+                <RouterLink to={course.categoryCluster.categories[0].href}>
                   <Button size="small" color="primary">
                     <Typography variant="body2" style={{ color: '#fff' }}>
-                      {course.categoryCluster.category.name.toUpperCase()}
+                      {course.categoryCluster.categories[0].name.toUpperCase()}
                     </Typography>
                   </Button>
                 </RouterLink>
               </Box>
 
-              <Typography variant="h3" color="inherit"><b>{course.title}</b></Typography>
-              <Typography variant="body1" className={classes.description} color="inherit">{course.description}</Typography>
+              <Typography variant="h3" color="inherit"><b>{course.title.toUpperCase()}</b></Typography>
+              <Typography variant="body2" className={classes.description} color="inherit">{course.description}</Typography>
 
               <Box display="flex" alignItems="center" className={classes.featuredCoursesCarouselItem__ratingDetails}>
                 <Typography variant="body2" color="inherit" style={{ marginRight: 3 }}>
-                  <span className={`${classes.label} ${classes.label__bestSeller}`} style={{ marginLeft: 0 }}>Best Seller</span>
+                  {/* <span className={`${classes.label} ${classes.label__bestSeller}`} style={{ marginRight: 3 }}>Best Seller</span> */}
                   {course.isFinished ? (
-                    <span className={`${classes.label} ${classes.label__new}`} style={{ marginLeft: 9 }}>Đã hoàn thành</span>
-                  ) : (<span className={`${classes.label} ${classes.label__unfinished}`} style={{ marginLeft: 9 }}>Chưa hoàn thành</span>)}
-                  <span style={{ marginLeft: 9 }}>{`${Math.floor(course.averageRating)}.${(course.averageRating - Math.floor(course.averageRating)) * 10}`}</span>
+                    <span className={`${classes.label} ${classes.label__new}`} style={{ marginRight: 12 }}>Đã hoàn thành</span>
+                  ) : (<span className={`${classes.label} ${classes.label__unfinished}`} style={{ marginRight: 12 }}>Chưa hoàn thành</span>)}
+                  <span>{`${Math.floor(course.averageRating)}.${(course.averageRating - Math.floor(course.averageRating)) * 10}`}</span>
                 </Typography>
                 <Box>
                   <Rating name="read-only" value={course.averageRating} size="small" precision={0.5} readOnly />
@@ -898,7 +725,7 @@ const CourseDetails = () => {
                   <span>)</span>
                 </Typography>
                 <Typography variant="body2" color="inherit" style={{ marginLeft: 9 }}>
-                  <NumberFormat value={course.numberOfStudents} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
+                  <NumberFormat value={course.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
                 </Typography>
               </Box>
 
@@ -908,11 +735,12 @@ const CourseDetails = () => {
               </Box>
             </Grid>
             <Grid item xs={6}>
-              <Box display="flex" flexDirection="column" alignItems="flex-end">
-                <Typography variant="h3" className={classes.featuredCoursesCarouselItem__price} color="inherit">
-                  <NumberFormat value={course.tuition - course.tuition * course.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={course.discountPercent > 0 ? 'Chỉ còn ' : `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`} suffix={'đ'} />
-                </Typography>
+              <Box display="flex" flexDirection="column" alignItems="flex-end" pb={2}>
+                <Box display="flex" alignItems="center" mb={1}>
+                  <Typography variant="h3" className={classes.featuredCoursesCarouselItem__price} color="inherit">
+                    <NumberFormat value={course.tuition - course.tuition * course.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={course.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} />
+                  </Typography>
+                </Box>
 
                 {course.discountPercent > 0 && (
                   <Typography variant="h4" color="inherit">
@@ -1135,27 +963,27 @@ const CourseDetails = () => {
           {tabValue === 3 && (
             <Box p={6}>
               <Box display="flex">
-                <Avatar alt={lecturer.name} src={lecturer.avatarUrl} className={classes.lecturer__avatar} />
+                <Avatar alt={course.lecturer.fullName} src={course.lecturer.avatarUrl} className={classes.lecturer__avatar} />
                 <Box display="flex" flexDirection="column" pt={1}>
-                  <Typography variant="h4" className={classes.secondaryText} gutterBottom><b>{lecturer.fullName}</b></Typography>
+                  <Typography variant="h4" className={classes.secondaryText} gutterBottom><b>{course.lecturer.fullName}</b></Typography>
                   <Box display="flex">
                     <Typography variant="body1" style={{ marginRight: 3 }}>
-                      {`${Math.floor(lecturer.averageRating)}.${(lecturer.averageRating - Math.floor(lecturer.averageRating)) * 10}`}
+                      {`${Math.floor(course.lecturer.roleInfo.averageRating)}.${(course.lecturer.roleInfo.averageRating - Math.floor(course.lecturer.roleInfo.averageRating)) * 10}`}
                     </Typography>
-                    <Rating name="read-only" value={lecturer.averageRating} size="small" precision={0.5} readOnly />
+                    <Rating name="read-only" value={course.lecturer.roleInfo.averageRating} size="small" precision={0.5} readOnly />
                     <Typography variant="body1" style={{ marginLeft: 3 }}>
                       <span>(</span>
-                      <NumberFormat value={lecturer.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
+                      <NumberFormat value={course.lecturer.roleInfo.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
                       <span>)</span>
                     </Typography>
                     <Typography variant="body1" style={{ marginLeft: 9 }}>
-                      <NumberFormat value={lecturer.numberOfCourses} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' khóa học'} />
+                      <NumberFormat value={course.lecturer.roleInfo.numberOfCoursesPosted} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' khóa học'} />
                     </Typography>
                   </Box>
                 </Box>
               </Box>
               <Box pt={2}>
-                <Typography variant="body1">{lecturer.introduction}</Typography>
+                <Typography variant="body1">{course.lecturer.roleInfo.introduction || 'Chưa có giới thiệu nào.'}</Typography>
               </Box>
             </Box>
           )}
@@ -1164,7 +992,7 @@ const CourseDetails = () => {
         <div className={`${classes.section} ${classes.highestViewCourses} animate__animated animate__fadeInUp`}>
           <Typography variant="h5" className={classes.highestViewCourses__title}><b>Các khóa học liên quan</b></Typography>
           <div className={classes.highestViewCoursesCarousel}>
-            <CourseMultiCarousel courses={courses || []} />
+            <CourseMultiCarousel courses={mostRegisteredCourseList || []} />
           </div>
         </div>
 

@@ -3,16 +3,10 @@ import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React from 'react';
-import CategorySidebarNav from './CategorySidebarNav/CategorySidebarNav';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { showNotification } from 'redux/actions/app.action';
-import { apiMessage } from 'constants/api-message.constant';
-import { categoryClusterApi } from 'api';
-import { availablePages } from 'constants/global.constant';
+import { useSelector } from 'react-redux';
 import { shallowEqual } from 'recompose';
+import CategorySidebarNav from './CategorySidebarNav/CategorySidebarNav';
 
 const useStyles = makeStyles(theme => ({
   drawer: {

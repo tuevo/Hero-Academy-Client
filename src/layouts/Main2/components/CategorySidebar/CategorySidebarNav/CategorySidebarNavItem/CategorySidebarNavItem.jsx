@@ -9,9 +9,6 @@ import React, { forwardRef } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
-  nested: {
-    paddingLeft: theme.spacing(4),
-  },
   active: {
     color: theme.palette.primary.main,
     fontWeight: theme.typography.fontWeightMedium,
