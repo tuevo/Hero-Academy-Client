@@ -88,9 +88,7 @@ const useStyles = makeStyles(theme => ({
   },
   main: {
     position: 'absolute',
-    // position: 'relative',
     zIndex: 10,
-    top: '40%',
     left: '50%',
     transform: 'translate(-50%,0)',
     width: '85%',
@@ -321,6 +319,7 @@ const CourseDetails = () => {
   }));
 
   const ps = useRef();
+  const bannerContentRef = useRef();
   const chapterRefs = useRef();
 
   const { courseId } = useParams();
@@ -689,7 +688,7 @@ const CourseDetails = () => {
               )}
             </Box>
           </Box>
-          <Grid container alignItems="flex-end">
+          <Grid container alignItems="flex-end" ref={el => (bannerContentRef.current = el)}>
             <Grid item xs={6}>
               <Box display="flex" alignItems="center" mb={1}>
                 <Typography variant="body2" color="inherit" >
@@ -706,7 +705,7 @@ const CourseDetails = () => {
               </Box>
 
               <Typography variant="h3" color="inherit"><b>{course.title.toUpperCase()}</b></Typography>
-              <Typography variant="body2" className={classes.description} color="inherit">{course.description}</Typography>
+              <Typography variant="body1" className={classes.description} color="inherit">{course.description}</Typography>
 
               <Box display="flex" alignItems="center" className={classes.featuredCoursesCarouselItem__ratingDetails}>
                 <Typography variant="body2" color="inherit" style={{ marginRight: 3 }}>
@@ -773,7 +772,10 @@ const CourseDetails = () => {
         </Box>
       </div>
 
-      <main className={classes.main}>
+      <main
+        className={classes.main}
+        style={{ top: bannerContentRef.current ? `calc(${bannerContentRef.current.clientHeight}px + 5rem)` : 0 }}
+      >
         <div className={`${classes.panel} animate__animated animate__slideInUp`}>
           <AppBar position="static" className={classes.tabs} color="primary">
             <Tabs value={tabValue} onChange={handleTabChange} aria-label="simple tabs example" centered>
