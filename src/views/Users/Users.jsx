@@ -131,6 +131,21 @@ const Users = () => {
     }
   };
 
+  const addLecturer = async (data) => {
+    try {
+      const res = await lecturerApi.add(data);
+
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+
+      setLecturerListPage(1);
+      getAllLecturers(1);
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
+  };
+
   useEffect(() => {
     getAllStudents(studentListPage);
   }, [studentListPage]);
@@ -167,7 +182,7 @@ const Users = () => {
     setOpenAddLecturer(false);
 
     if (accepted) {
-      console.log(data);
+      addLecturer(data);
     }
   }
 

@@ -23,6 +23,10 @@ const lecturerApi = {
     const url = `${baseUrl}/${id}`;
     return axiosClient.delete(url);
   },
+  add: (params) => {
+    const url = `${baseUrl}/`;
+    return axiosClient.post(url, params);
+  },
 }
 
 export default lecturerApi;

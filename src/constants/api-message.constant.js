@@ -27,5 +27,6 @@ export const apiMessage = {
   LUCTURER_NOT_FOUND: 'Không tìm thấy giảng viên',
   STUDENT_NOT_FOUND: "Không tìm thấy học viên",
   DELETED_STUDENT_SUCCESSFULLY: "Xóa học viên thành công",
-  DELETED_LECTURER_SUCCESSFULLY: "Xóa giảng viên thành công"
+  DELETED_LECTURER_SUCCESSFULLY: "Xóa giảng viên thành công",
+  CREATED_LECTURER_SUCCESSFULLY: 'Thêm giảng viên thành công'
 }
