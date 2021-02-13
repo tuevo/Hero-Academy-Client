@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Box, Typography, GridList, GridListTile, Divider, Button } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import Course from 'components/Course/Course';
 import NumberFormat from 'react-number-format';
 import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { showNotification } from 'redux/actions/app.action';
+import { apiMessage } from 'constants/api-message.constant';
+import { categoryApi } from 'api';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,212 +39,75 @@ const useStyles = makeStyles(theme => ({
 
 const CategoryCourses = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const { categoryId } = useParams();
-  console.log('categoryId:', categoryId);
 
-  const category = {
-    _id: 1,
-    name: 'Lập trình web',
-    categoryCluster: {
-      _id: 1,
-      name: 'Công nghệ thông tin'
+  const limit = 12;
+
+  const [categoryCourseList, setCategoryCourseList] = useState([]);
+  const [category, setCategory] = useState(null);
+  const [categoryCourseListPage, setCategoryCourseListPage] = useState(1);
+  const [categoryCourseListTotalItems, setCategoryCourseListTotalItems] = useState(0);
+  const [disableBtnLoadMore, setDisableBtnLoadMore] = useState(false);
+
+  const getAllCategoryList = async (page) => {
+    setDisableBtnLoadMore(true);
+    try {
+      const res = await categoryApi.getCourses(categoryId, page, limit);
+      const courses = res.data.entries;
+
+      const categoryInfo = res.data.category;
+      setCategory(categoryInfo);
+
+      const { totalItems } = res.data.meta;
+      setCategoryCourseListTotalItems(totalItems);
+
+      let newCourseList = [];
+
+      if (page === 1) {
+        newCourseList = courses
+      }
+      else {
+        newCourseList = categoryCourseList.concat(courses);
+      }
+
+      setCategoryCourseList(newCourseList);
+
+      if (newCourseList.length < totalItems) {
+        setDisableBtnLoadMore(false);
+      }
+
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
     }
   };
 
-  const courses = [
-    {
-      _id: 1,
-      thumbnailUrl: 'https://miro.medium.com/max/3798/1*eOE7VhXBlqdIJ9weEdHbQQ.jpeg',
-      title: 'Angular Cho Người Mới Bắt Đầu',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 5.0,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 650000,
-      discountPercent: 0.3,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 2,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 3,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 4,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 5,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 6,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 7,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-    {
-      _id: 8,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        name: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date(),
-    },
-  ]
+  useEffect(() => {
+    getAllCategoryList(categoryCourseListPage);
+  }, [categoryCourseListPage]);
 
-  for (let c of courses)
+  const handleClickBtnLoadMore = () => {
+    const page = categoryCourseListPage + 1;
+    setCategoryCourseListPage(page);
+  };
+
+  for (let c of categoryCourseList)
     c['href'] = `/courses/${c._id}`;
 
   return (
     <div className={classes.root}>
       <Box p={4} className={classes.courses}>
         <Box display="flex" alignItems="center">
-          <Typography variant="h4" className={classes.sencondaryText}><b>{category.categoryCluster.name}</b></Typography>
+          <Typography variant="h4" className={classes.sencondaryText}><b>{category && category.categoryCluster.name}</b></Typography>
           <ArrowRightIcon className={classes.sencondaryText} />
-          <Typography variant="h4" className={classes.sencondaryText}><b>{category.name}</b></Typography>
+          <Typography variant="h4" className={classes.sencondaryText}><b>{category && category.name}</b></Typography>
         </Box>
         <Box mt={1}>
           <Typography variant="body1">
-            <b><NumberFormat value={courses.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học
+            <b><NumberFormat value={categoryCourseList.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học
           </Typography>
         </Box>
         <Box mt={3} mb={2} >
@@ -248,7 +115,7 @@ const CategoryCourses = () => {
         </Box>
         <Box ml={-2}>
           <GridList cellHeight="auto" cols={4}>
-            {courses.map((c, i) => (
+            {categoryCourseList.map((c, i) => (
               <GridListTile key={c._id}>
                 <Box p={2} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
                   <Course data={c} type="minimal" />
@@ -257,7 +124,17 @@ const CategoryCourses = () => {
             ))}
           </GridList>
         </Box>
-        <Button fullWidth className={classes.btnLoadMoreCourse} variant="contained" color="primary" size="large">Xem thêm khóa học</Button>
+        <Button 
+          fullWidth
+          className={classes.btnLoadMoreCourse}
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={() => handleClickBtnLoadMore()}
+          disabled={disableBtnLoadMore}
+        >
+          Xem thêm khóa học
+        </Button>
       </Box>
     </div >
   );

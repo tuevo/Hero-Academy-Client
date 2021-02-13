@@ -14,7 +14,15 @@ const categoryApi = {
   update: (id, params) => {
     const url = `${baseUrl}/${id}`;
     return axiosClient.put(url, params);
-  }
+  },
+  getCourses: (id, page, limit) => {
+    let url = `${baseUrl}/${id}/courses`;
+
+    if (page && limit)
+    url += `?page=${page}&limit=${limit}`;
+    
+    return axiosClient.get(url);
+  },
 }
 
 export default categoryApi;
