@@ -15,8 +15,11 @@ const studentApi = {
     const url = `${baseUrl}/${id}`;
     return axiosClient.delete(url);
   },
-  getRegistrations: () => {
+  getRegistrations: (page, limit) => {
     let url = `${baseUrl}/courses/registrations`;
+
+    if (page && limit)
+      url += `?page=${page}&limit=${limit}`;
 
     return axiosClient.get(url);
   }
