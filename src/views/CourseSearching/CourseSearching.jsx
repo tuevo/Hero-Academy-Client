@@ -155,25 +155,27 @@ const CourseSearching = () => {
                 )}
             </Typography>
           </Box>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="demo-simple-select-label">Lọc khóa học theo</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={courseListFilterCriteriaIndex}
-              onChange={handleChange}
-              className={classes.input}
-              inputProps={{
-                classes: {
-                  icon: classes.icon
-                }
-              }}
-            >
-              {courseListFilterCriterias.map((c, i) => (
-                <MenuItem key={i} value={i}>{c.text}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          {courseListTotalItems > 0 && (
+            <FormControl className={classes.formControl}>
+              <InputLabel id="demo-simple-select-label">Lọc khóa học theo</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={courseListFilterCriteriaIndex}
+                onChange={handleChange}
+                className={classes.input}
+                inputProps={{
+                  classes: {
+                    icon: classes.icon
+                  }
+                }}
+              >
+                {courseListFilterCriterias.map((c, i) => (
+                  <MenuItem key={i} value={i}>{c.text}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
         </Box>
         <Box mt={3} mb={2} >
           <Divider className={classes.divider} />
