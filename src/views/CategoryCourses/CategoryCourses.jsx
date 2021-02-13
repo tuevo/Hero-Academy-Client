@@ -43,7 +43,7 @@ const CategoryCourses = () => {
 
   const { categoryId } = useParams();
 
-  const limit = 12;
+  const limit = 8;
 
   const [categoryCourseList, setCategoryCourseList] = useState([]);
   const [category, setCategory] = useState(null);
@@ -107,7 +107,7 @@ const CategoryCourses = () => {
         </Box>
         <Box mt={1}>
           <Typography variant="body1">
-            <b><NumberFormat value={categoryCourseList.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học
+            <b><NumberFormat value={categoryCourseListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học
           </Typography>
         </Box>
         <Box mt={3} mb={2} >
