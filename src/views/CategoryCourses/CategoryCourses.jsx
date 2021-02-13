@@ -51,7 +51,7 @@ const CategoryCourses = () => {
   const [categoryCourseListTotalItems, setCategoryCourseListTotalItems] = useState(0);
   const [disableBtnLoadMore, setDisableBtnLoadMore] = useState(false);
 
-  const getAllCategoryList = async (page) => {
+  const getCoursesListOfACategory = async (page) => {
     setDisableBtnLoadMore(true);
     try {
       const res = await categoryApi.getCourses(categoryId, page, limit);
@@ -86,7 +86,7 @@ const CategoryCourses = () => {
   };
 
   useEffect(() => {
-    getAllCategoryList(categoryCourseListPage);
+    getCoursesListOfACategory(categoryCourseListPage);
   }, [categoryCourseListPage]);
 
   const handleClickBtnLoadMore = () => {
