@@ -19,7 +19,9 @@ import Rating from '@material-ui/lab/Rating';
 const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: theme.spacing(2),
-    boxShadow: 'none'
+    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px',
+    background: theme.palette.background.course,
+    borderRadius: 5
   },
   cardContent: {
     padding: '1rem !important'

@@ -203,11 +203,9 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
   videoPlayer: {
-    // ...theme.palette.card,
     width: '100%',
     overflow: 'hidden',
-    // boxShadow: '0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15)',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.video,
     borderRadius: '1.5rem'
   },
   videoPlayer__video: {
@@ -217,7 +215,7 @@ const useStyles = makeStyles(theme => ({
     height: '5.625rem',
     marginBottom: theme.spacing(1),
     boxShadow: 'none',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.video,
     borderRadius: 5
   },
   videoListItemActive: {
@@ -270,7 +268,7 @@ const useStyles = makeStyles(theme => ({
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
   feedbackListContainer: {
-    boxShadow: 'none',
+    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px',
     background: theme.palette.background.course,
     borderRadius: 5
   },
@@ -305,10 +303,10 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.icon
   },
   chapter: {
-    boxShadow: 'none',
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.course,
+    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px',
     borderRadius: 5,
-    marginTop: theme.spacing(1)
+    marginBottom: theme.spacing(1)
   },
   chapter__content: {
 
@@ -964,7 +962,7 @@ const CourseDetails = () => {
           {tabValue === 1 && (
             <Box p={6}>
               {userState.authUser && userState.authUser.role !== userRole.ADMIN.value && (
-                <Box mb={4} display="flex" alignItems="center" style={{ width: '100%' }}>
+                <Box mb={2} display="flex" alignItems="center" style={{ width: '100%' }}>
                   {userState.authUser.role === userRole.LECTURER.value && (
                     <Box style={{ flexGrow: 2 }}>
                       <AddChapter />

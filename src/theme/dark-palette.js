@@ -54,12 +54,14 @@ export default {
   },
   background: {
     default: '#212111',
-    paper: '#313131',
+    paper: '#212121',
     course: '#212121',
     user: '#212121',
     signIn: 'rgba(0,0,0,0.4)',
     signUp: 'rgba(0,0,0,0.4)',
-    searchInput: '#414141'
+    searchInput: '#414141',
+    video: '#313131',
+    addCategory: '#313131'
   },
   topbar: {
     background: '#313131',

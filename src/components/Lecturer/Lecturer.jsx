@@ -14,11 +14,11 @@ import { showNotification } from 'redux/actions/app.action';
 const useStyles = makeStyles(theme => ({
   card: {
     backgroundColor: theme.palette.background.user,
-    boxShadow: 'none'
+    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px'
   },
   avatar: {
-    width: '80px',
-    height: '80px'
+    width: '5rem',
+    height: '5rem'
   },
   details: {
     minWidth: '25rem'

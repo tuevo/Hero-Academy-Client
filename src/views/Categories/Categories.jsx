@@ -21,16 +21,16 @@ const useStyles = makeStyles(theme => ({
     width: '100%'
   },
   categoryCluster: {
-    boxShadow: 'none',
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.course,
+    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px',
     borderRadius: 5,
-    marginTop: theme.spacing(1)
+    marginBottom: theme.spacing(1)
   },
   categoryList: {
     width: '100%',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.addCategory,
     borderRadius: 5,
-    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px'
+    boxShadow: 'none'
   },
   categoryList__container: {
     // maxHeight: '18.75rem',
