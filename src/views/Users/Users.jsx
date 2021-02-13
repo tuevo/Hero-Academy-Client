@@ -139,6 +139,7 @@ const Users = () => {
 
       setLecturerListPage(1);
       getAllLecturers(1);
+      dispatch(setScrollbarTop(0));
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
