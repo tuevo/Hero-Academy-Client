@@ -19,6 +19,10 @@ const authApi = {
     const url = `${baseUrl}/refresh`;
     return axiosClient.post(url, params);
   },
+  updatePassword: (params) => {
+    const url = `${baseUrl}/password`;
+    return axiosClient.put(url, params);
+  },
 }
 
 export default authApi;

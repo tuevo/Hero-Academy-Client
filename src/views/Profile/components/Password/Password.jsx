@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Box, TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import validate from 'validate.js';
+import { authApi } from 'api';
+import { useDispatch } from 'react-redux';
+import { showNotification } from 'redux/actions/app.action';
+import { apiMessage } from 'constants/api-message.constant';
 
 const schema = {
   currentPassword: {
@@ -28,6 +32,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Password() {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [formState, setFormState] = useState({
     isValid: false,
@@ -62,12 +67,24 @@ export default function Password() {
     }));
   };
 
+  const updatePassword = async(params) => {
+    try {
+      const res = await authApi.updatePassword(params);
+    
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
+  };
+
   const handleBtnUpdateClick = () => {
     let data = {
       ...formState.values
     };
 
-    console.log(data);
+    updatePassword(data);
   }
 
   const hasError = field =>

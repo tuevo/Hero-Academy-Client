@@ -28,5 +28,8 @@ export const apiMessage = {
   STUDENT_NOT_FOUND: "Không tìm thấy học viên",
   DELETED_STUDENT_SUCCESSFULLY: "Xóa học viên thành công",
   DELETED_LECTURER_SUCCESSFULLY: "Xóa giảng viên thành công",
-  CREATED_LECTURER_SUCCESSFULLY: 'Thêm giảng viên thành công'
+  CREATED_LECTURER_SUCCESSFULLY: 'Thêm giảng viên thành công',
+  OLD_PASSWORD_INCORRECT: 'Mật khẩu cũ không đúng',
+  PASSWORD_AND_CONFIRM_PASSWORD_NOT_MATCH: 'Mật khẩu mới và mật khẩu nhập lại không khớp',
+  CHANGE_PASSWORD_SUCCESSFULLY: 'Đổi mật khẩu thành công'
 }
