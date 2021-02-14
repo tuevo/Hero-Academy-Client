@@ -28,5 +28,11 @@ export const apiMessage = {
   STUDENT_NOT_FOUND: "Không tìm thấy học viên",
   DELETED_STUDENT_SUCCESSFULLY: "Xóa học viên thành công",
   DELETED_LECTURER_SUCCESSFULLY: "Xóa giảng viên thành công",
-  COURSE_NOT_FOUND: 'Khóa học không tồn tại'
+  COURSE_NOT_FOUND: 'Khóa học không tồn tại',
+  THE_COURSE_HAS_BEEN_REGISTERED: 'Bạn đã đăng ký khóa học này',
+  SUCCESSFUL_COURSE_REGISTRATION: 'Đăng ký khóa học thành công',
+  STUDENT_HAVE_NOT_REGISTERED_FOR_THIS_COURSE: 'Bạn chưa đăng ký khóa học này',
+  CREATED_FAVORITE_COURSE_SUCCESSFULLY: 'Đã thêm vào Khóa học yêu thích',
+  THE_COURSE_IS_NOT_EXISTS_IN_FAVORITES_LIST: 'Không tìm thấy khóa học trong danh sách yêu thích',
+  REMOVE_THE_COURSE_FROM_FAVORITES_SUCCESSFULLY: 'Đã xóa khỏi Khóa học yêu thích'
 }

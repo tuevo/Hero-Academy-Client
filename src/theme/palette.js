@@ -49,7 +49,8 @@ export default {
     link: colors.blue[600],
     disabled: colors.blueGrey[300],
     topbar: colors.purple[900],
-    sidebarActive: colors.purple[800]
+    sidebarActive: colors.purple[800],
+    videoActive: colors.purple[900]
   },
   background: {
     default: '#f0f2f5',
@@ -61,7 +62,8 @@ export default {
     sidebar: white,
     searchInput: '#f0f2f5',
     video: '#f8f8f8',
-    addCategory: '#f8f8f8'
+    addCategory: '#f8f8f8',
+    comment: '#f8f8f8'
   },
   topbar: {
     background: white,

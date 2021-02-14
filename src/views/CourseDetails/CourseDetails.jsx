@@ -17,7 +17,7 @@ import SchoolIcon from '@material-ui/icons/School';
 import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/styles';
-import { courseApi } from 'api';
+import { courseApi, favoriteApi } from 'api';
 import clsx from 'clsx';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import CourseMultiCarousel from 'components/CourseMultiCarousel/CourseMultiCarousel';
@@ -31,13 +31,14 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
-import { setLoading } from 'redux/actions/app.action';
+import { setLoading, showNotification } from 'redux/actions/app.action';
 import { format } from 'timeago.js';
 import { AddChapter } from './components';
 import AddFeedback from './components/AddFeedback/AddFeedback';
 import AddVideo from './components/AddVideo/AddVideo';
 import UpdateCourse from './components/UpdateCourse/UpdateCourse';
 import WatchHistory from './components/WatchHistory/WatchHistory';
+import { apiMessage } from 'constants/api-message.constant';
 
 function a11yProps(index) {
   return {
@@ -217,7 +218,10 @@ const useStyles = makeStyles(theme => ({
   },
   videoListItemActive: {
     backgroundColor: theme.palette.primary.light,
-    color: theme.palette.primary.dark
+    color: theme.palette.text.videoActive
+  },
+  videoListItemDisabled: {
+    opacity: 0.5
   },
   videoListItem__thumbnailContainer: {
     position: 'relative',
@@ -270,7 +274,7 @@ const useStyles = makeStyles(theme => ({
     borderRadius: 5
   },
   feedbackList: {
-    maxHeight: '22rem',
+    height: '22rem',
     overflow: 'scroll',
     marginTop: theme.spacing(2),
   },
@@ -284,7 +288,7 @@ const useStyles = makeStyles(theme => ({
   feedbackItem__comment: {
     width: '100%',
     padding: theme.spacing(1, 2),
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.comment,
     borderRadius: '0.625rem'
   },
   lecturer__avatar: {
@@ -326,6 +330,12 @@ const CourseDetails = () => {
   const [course, setCourse] = useState(null);
   const [mostRegisteredCourseList, setMostRegisteredCourseList] = useState([]);
 
+  const feedbackListLimit = 10;
+  const [feedbackList, setFeedbackList] = useState([]);
+  const [feedbackListPage, setFeedbackListPage] = useState(1);
+  const [feedbackListTotalItems, setFeedbackListTotalItems] = useState(0);
+  const [feedbackListLoading, setFeedbackListLoading] = useState(false);
+
   const [tabValue, setTabValue] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const [openRemovingCourseConfirmDialog, setOpenRemovingCourseConfirmDialog] = useState(false);
@@ -356,41 +366,44 @@ const CourseDetails = () => {
     }
   ]
 
-  useEffect(() => {
-    const getCourseDetails = async () => {
-      dispatch(setLoading(true));
-      try {
-        const res = await courseApi.single(courseId);
-        const courseData = res.data.course;
-        const newCourse = {
-          ...courseData,
-          href: availablePages.COURSE_DETAILS.path.replace(':courseId', courseData._id),
-          categoryCluster: {
-            ...courseData.categoryCluster,
-            categories: courseData.categoryCluster.categories.map(c => ({
-              ...c,
-              href: availablePages.CATEGORY_COURSES.path.replace(':categoryId', c._id)
-            }))
-          }
-        };
-        setCourse(newCourse);
-        setIsFavorite(newCourse.isFavorite);
+  const getCourseDetails = async () => {
+    dispatch(setLoading(true));
+    try {
+      const res = await courseApi.single(courseId);
+      const { rating } = res.data;
+      const courseData = res.data.course;
+      const newCourse = {
+        ...courseData,
+        href: availablePages.COURSE_DETAILS.path.replace(':courseId', courseData._id),
+        categoryCluster: {
+          ...courseData.categoryCluster,
+          categories: courseData.categoryCluster.categories.map(c => ({
+            ...c,
+            href: availablePages.CATEGORY_COURSES.path.replace(':categoryId', c._id)
+          }))
+        },
+        ownedRating: rating ? rating.rating : 0
+      };
+      setCourse(newCourse);
+      setIsFavorite(newCourse.isFavorite);
 
-        const { mostRegisteredCourses } = res.data;
-        setMostRegisteredCourseList(mostRegisteredCourses.map(c => ({
-          ...c,
-          href: availablePages.COURSE_DETAILS.path.replace(':courseId', c._id)
-        })));
+      const { mostRegisteredCourses } = res.data;
+      setMostRegisteredCourseList(mostRegisteredCourses.map(c => ({
+        ...c,
+        href: availablePages.COURSE_DETAILS.path.replace(':courseId', c._id)
+      })));
 
+      dispatch(setLoading(false));
+
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        history.push(availablePages.NOT_FOUND.path);
         dispatch(setLoading(false));
-
-      } catch (error) {
-        if (error.messages && error.messages.length > 0) {
-          history.push(availablePages.NOT_FOUND.path);
-          dispatch(setLoading(false));
-        }
       }
     }
+  }
+
+  useEffect(() => {
     getCourseDetails();
   }, []);
 
@@ -407,7 +420,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://i.morioh.com/200626/3c53255f.jpg',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: false
         },
         {
           _id: 2,
@@ -416,7 +430,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 3,
@@ -425,7 +440,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 4,
@@ -434,7 +450,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 5,
@@ -443,7 +460,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 6,
@@ -452,7 +470,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 7,
@@ -461,7 +480,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 8,
@@ -470,7 +490,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 9,
@@ -479,7 +500,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 10,
@@ -488,7 +510,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 11,
@@ -497,7 +520,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 12,
@@ -506,7 +530,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         }
       ];
 
@@ -529,12 +554,48 @@ const CourseDetails = () => {
     history.goBack();
   };
 
+  const getFeedbacks = async (page) => {
+    setFeedbackListLoading(true);
+    try {
+      const res = await courseApi.getFeedbacks(course._id, page, feedbackListLimit);
+      const { entries } = res.data;
+      const newFeedbackList = page === 1 ? entries : feedbackList.concat(entries);
+      setFeedbackList(newFeedbackList);
+      setFeedbackListTotalItems(res.data.meta.totalItems);
+      setFeedbackListLoading(false);
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        setFeedbackListLoading(false);
+      }
+    }
+  }
+
   const handleTabChange = (event, tabValue) => {
     setTabValue(tabValue);
+
+    switch (tabValue) {
+      case 2:
+        setFeedbackListPage(1);
+        getFeedbacks(1);
+        break;
+
+      default:
+        break;
+    }
   };
 
-  const handleBtnFavoriteClick = () => {
-    setIsFavorite(!isFavorite);
+  const handleBtnFavoriteClick = async () => {
+    const value = !isFavorite;
+    setIsFavorite(value);
+    try {
+      const res = value ? await favoriteApi.add({ courseId: course._id }) : await favoriteApi.delete(course._id);
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
   }
 
   const handleBtnOpenRemovingCourseDialogClick = () => {
@@ -578,63 +639,22 @@ const CourseDetails = () => {
     setExpandedChapterIndex(chapterIndex);
   }
 
-  const feedbacks = [
-    {
-      _id: 1,
-      user: {
-        _id: 1,
-        fullName: 'Lana',
-        avatarUrl: 'images/avatars/avatar_6.png'
-      },
-      rating: 4,
-      comment: 'Nice course! I am looking forward to a new course.',
-      createdAt: new Date('2021-01-09T16:59:58.031Z')
-    },
-    {
-      _id: 2,
-      user: {
-        _id: 1,
-        fullName: 'Lee Wei Shuan',
-        avatarUrl: 'images/avatars/avatar_5.png'
-      },
-      rating: 5,
-      comment: 'Nice course! I am looking forward to a new course.',
-      createdAt: new Date('2021-01-09T16:59:58.031Z')
-    },
-    {
-      _id: 3,
-      user: {
-        _id: 1,
-        fullName: 'Steve Jonathan',
-        avatarUrl: 'images/avatars/avatar_4.png'
-      },
-      rating: 3,
-      comment: 'Not bad! I still found something that needed for me from this course.',
-      createdAt: new Date('2021-01-09T16:59:58.031Z')
-    },
-    {
-      _id: 4,
-      user: {
-        _id: 1,
-        fullName: 'Steve Jonathan',
-        avatarUrl: 'images/avatars/avatar_4.png'
-      },
-      rating: 3,
-      comment: 'Not bad! I still found something that needed for me from this course.',
-      createdAt: new Date('2021-01-09T16:59:58.031Z')
-    },
-    {
-      _id: 5,
-      user: {
-        _id: 1,
-        fullName: 'Steve Jonathan',
-        avatarUrl: 'images/avatars/avatar_4.png'
-      },
-      rating: 3,
-      comment: 'Not bad! I still found something that needed for me from this course.',
-      createdAt: new Date('2021-01-09T16:59:58.031Z')
+  const handleClickBtnRegister = async () => {
+    try {
+      const res = await courseApi.register(course._id);
+      getCourseDetails();
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
     }
-  ];
+  }
+
+  const handleAddComment = () => {
+    setFeedbackListPage(1);
+    getFeedbacks(1);
+  }
 
   if (!course)
     return <></>;
@@ -735,7 +755,7 @@ const CourseDetails = () => {
             </Grid>
             <Grid item xs={6}>
               <Box display="flex" flexDirection="column" alignItems="flex-end" pb={2}>
-                {userState.authUser && userState.authUser.role === userRole.STUDENT.value && !course.isRegistered && (
+                {!course.isRegistered && (
                   <div>
                     <Box display="flex" alignItems="center" mb={1}>
                       <Typography variant="h3" className={classes.featuredCoursesCarouselItem__price} color="inherit">
@@ -753,13 +773,14 @@ const CourseDetails = () => {
                   </div>
                 )}
 
-                {(userState.authUser && userState.authUser.role !== userRole.LECTURER.value && userState.authUser.role !== userRole.ADMIN.value && !course.isRegistered) || !userState.authUser ? (
+                {!userState.authUser || (userState.authUser && userState.authUser.role === userRole.STUDENT.value && !course.isRegistered) ? (
                   <Box mt={4} className="animate__animated animate__bounceIn">
                     <Button
                       variant="contained"
                       className={classes.btnRegister}
                       color="primary"
                       size="large"
+                      onClick={handleClickBtnRegister}
                     >
                       ĐĂNG KÝ KHÓA HỌC
                     </Button>
@@ -803,7 +824,7 @@ const CourseDetails = () => {
                       <AddChapter />
                     </Box>
                   )}
-                  {userState.authUser.role === userRole.STUDENT.value && (
+                  {userState.authUser.role === userRole.STUDENT.value && course.isRegistered && (
                     <Button
                       variant="outlined"
                       color="primary"
@@ -896,9 +917,10 @@ const CourseDetails = () => {
                                 <PerfectScrollbar className={classes.videoList}>
                                   {expandedChapterVideoList.map(video => (
                                     <Card key={video._id} className={clsx(classes.videoListItem, {
-                                      [classes.videoListItemActive]: video._id === activeVideo._id
+                                      [classes.videoListItemActive]: video._id === activeVideo._id,
+                                      [classes.videoListItemDisabled]: video.disabled
                                     })}>
-                                      <CardActionArea style={{ height: '100%' }}>
+                                      <CardActionArea style={{ height: '100%' }} disabled={video.disabled}>
                                         <Grid container style={{ height: '100%' }}>
                                           <Grid item xs={5}>
                                             <div className={classes.videoListItem__thumbnailContainer}>
@@ -937,26 +959,29 @@ const CourseDetails = () => {
 
           {tabValue === 2 && (
             <Box p={6}>
-              {userState.authUser && userState.authUser.role !== userRole.LECTURER.value && userState.authUser.role !== userRole.ADMIN.value && (
-                <AddFeedback />
+              {userState.authUser && userState.authUser.role === userRole.STUDENT.value && course.isRegistered && (
+                <AddFeedback
+                  course={course}
+                  onAddComment={handleAddComment}
+                />
               )}
               <Card className={classes.feedbackListContainer}>
                 <CardContent>
                   <Typography variant="h5" className={classes.secondaryText} gutterBottom>
-                    <b><NumberFormat value={2500} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' bình luận'} /></b>
+                    <b><NumberFormat value={feedbackListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' bình luận'} /></b>
                   </Typography>
                   <PerfectScrollbar className={classes.feedbackList}>
-                    {feedbacks.map(f => (
+                    {feedbackList.map(f => (
                       <Box key={f._id} display="flex" className={classes.feedbackItem}>
-                        <Avatar alt={f.user.fullName} src={f.user.avatarUrl} className={classes.feedbackItem__avatar} />
+                        <Avatar alt={f.student.fullName} src={f.student.avatarUrl} className={classes.feedbackItem__avatar} />
                         <Box display="flex" flexDirection="column" className={classes.feedbackItem__comment}>
-                          <Box display="flex" alignItems="center">
-                            <Typography variant="body1"><b>{f.user.fullName}</b></Typography>
+                          <Box display="flex" alignItems="center" mb={0.5}>
+                            <Typography variant="body1"><b>{f.student.fullName}</b></Typography>
                             <Typography variant="body2" style={{ marginLeft: 9 }}>{format(f.createdAt, 'vi')}</Typography>
                           </Box>
-                          <Rating name="read-only" value={f.rating} size="small" precision={0.5} readOnly />
+                          <Rating name="read-only" value={f.rating.rating} size="small" precision={0.5} readOnly />
                           <Box pt={1}>
-                            <Typography variant="body1">{f.comment}</Typography>
+                            <Typography variant="body1">{f.content}</Typography>
                           </Box>
                         </Box>
                       </Box>
@@ -973,31 +998,31 @@ const CourseDetails = () => {
                 <Avatar alt={course.lecturer.fullName} src={course.lecturer.avatarUrl} className={classes.lecturer__avatar} />
                 <Box display="flex" flexDirection="column" pt={1}>
                   <Typography variant="h4" className={classes.secondaryText} gutterBottom><b>{course.lecturer.fullName}</b></Typography>
-                  <Box display="flex">
-                    <Typography variant="body1" style={{ marginRight: 3 }}>
+                  <Box display="flex" mt={0.5} alignItems="flex-end">
+                    <Typography variant="body2" style={{ marginRight: 3 }}>
                       {`${Math.floor(course.lecturer.roleInfo.averageRating)}.${(course.lecturer.roleInfo.averageRating - Math.floor(course.lecturer.roleInfo.averageRating)) * 10}`}
                     </Typography>
                     <Rating name="read-only" value={course.lecturer.roleInfo.averageRating} size="small" precision={0.5} readOnly />
-                    <Typography variant="body1" style={{ marginLeft: 3 }}>
+                    <Typography variant="body2" style={{ marginLeft: 3 }}>
                       <span>(</span>
                       <NumberFormat value={course.lecturer.roleInfo.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
                       <span>)</span>
                     </Typography>
-                    <Typography variant="body1" style={{ marginLeft: 9 }}>
+                    <Typography variant="body2" style={{ marginLeft: 9 }}>
                       <NumberFormat value={course.lecturer.roleInfo.numberOfCoursesPosted} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' khóa học'} />
                     </Typography>
                   </Box>
                 </Box>
               </Box>
               <Box pt={2}>
-                <Typography variant="body1">{course.lecturer.roleInfo.introduction || 'Chưa có giới thiệu nào.'}</Typography>
+                <Typography variant="body1">{course.lecturer.roleInfo.introduction || 'Chưa có lời giới thiệu nào.'}</Typography>
               </Box>
             </Box>
           )}
 
         </div>
         <div className={`${classes.section} ${classes.highestViewCourses} animate__animated animate__fadeInUp`}>
-          <Typography variant="h5" className={classes.highestViewCourses__title}><b>Các khóa học liên quan</b></Typography>
+          <Typography variant="h5" className={classes.highestViewCourses__title}><b>Khóa học được đăng ký nhiều</b></Typography>
           <div className={classes.highestViewCoursesCarousel}>
             <CourseMultiCarousel courses={mostRegisteredCourseList || []} />
           </div>

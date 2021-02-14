@@ -50,7 +50,8 @@ export default {
     link: colors.orange['A400'],
     disabled: colors.grey[600],
     topbar: purple['A700'],
-    sidebarActive: white
+    sidebarActive: white,
+    videoActive: white
   },
   background: {
     default: '#212111',
@@ -61,7 +62,8 @@ export default {
     signUp: 'rgba(0,0,0,0.4)',
     searchInput: '#414141',
     video: '#212121',
-    addCategory: '#212121'
+    addCategory: '#212121',
+    comment: '#212121'
   },
   topbar: {
     background: '#212121',

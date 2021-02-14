@@ -4,6 +4,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import ImageUploading from 'components/ImageUploading/ImageUploading';
 import TextEditor from 'components/TextEditor/TextEditor';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { shallowEqual } from 'recompose';
 import validate from 'validate.js';
 
 const schema = {
@@ -70,125 +72,18 @@ export default function AddCourse({ open, onClose }) {
   const classes = useStyles();
   const anchor = 'right';
 
-  const categoryClusters = [
-    {
-      _id: '1',
-      name: 'Công nghệ thông tin',
-      categories: [
-        {
-          _id: '1.1',
-          name: 'Lập trình web',
-          href: '/category-courses'
-        },
-        {
-          _id: '1.2',
-          name: 'Lập trình di động',
-          href: '/category-courses'
-        },
-        {
-          _id: '1.3',
-          name: 'Lập trình game',
-          href: '/category-courses'
-        }
-      ]
-    },
-    {
-      _id: '2',
-      name: 'Thiết kế',
-      categories: [
-        {
-          _id: '2.1',
-          name: 'Đồ họa',
-          href: '/category-courses'
-        },
-        {
-          _id: '2.2',
-          name: 'Nội thất',
-          href: '/category-courses'
-        },
-        {
-          _id: '2.3',
-          name: 'Thời trang',
-          href: '/category-courses'
-        }
-      ]
-    },
-    {
-      _id: '3',
-      name: 'Quản trị kinh doanh',
-      categories: [
-        {
-          _id: '3.1',
-          name: 'Lập trình web',
-          href: '/category-courses'
-        },
-        {
-          _id: '3.2',
-          name: 'Lập trình di động',
-          href: '/category-courses'
-        },
-        {
-          _id: '3.3',
-          name: 'Lập trình game',
-          href: '/category-courses'
-        }
-      ]
-    },
-    {
-      _id: '4',
-      name: 'Digital Marketing',
-      categories: [
-        {
-          _id: '4.1',
-          name: 'Lập trình web',
-          href: '/category-courses'
-        },
-        {
-          _id: '4.2',
-          name: 'Lập trình di động',
-          href: '/category-courses'
-        },
-        {
-          _id: '4.3',
-          name: 'Lập trình game',
-          href: '/category-courses'
-        }
-      ]
-    },
-    {
-      _id: '5',
-      name: 'Ngoại ngữ',
-      categories: [
-        {
-          _id: '5.1',
-          name: 'Tiếng Anh',
-          href: '/category-courses'
-        },
-        {
-          _id: '5.2',
-          name: 'Tiếng Trung',
-          href: '/category-courses'
-        },
-        {
-          _id: '5.3',
-          name: 'Tiếng Nhật',
-          href: '/category-courses'
-        },
-        {
-          _id: '5.4',
-          name: 'Tiếng Pháp',
-          href: '/category-courses'
-        }
-      ]
-    },
-  ];
+  const appState = useSelector(state => ({
+    ...state.app
+  }), shallowEqual);
+
+  const { categoryClusterList } = appState;
 
   const [formState, setFormState] = useState({
     isValid: false,
     values: {
       thumbnailUrl: null,
       title: '',
-      categoryId: categoryClusters[0].categories[0]._id,
+      categoryId: categoryClusterList.length > 0 ? categoryClusterList[0].categories[0]._id : '',
       tuition: 0,
       discountPercent: 0,
       isFinished: false,
@@ -233,10 +128,6 @@ export default function AddCourse({ open, onClose }) {
     }));
   };
 
-  useEffect(() => {
-    console.log(formState);
-  }, [formState]);
-
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
 
@@ -271,7 +162,10 @@ export default function AddCourse({ open, onClose }) {
   }
 
   const hanldeBtnAddClick = (e) => {
-    const data = { ...formState.values };
+    const data = {
+      ...formState.values,
+      discountPercent: formState.values.discountPercent / 100
+    };
     console.log(data);
   }
 
@@ -325,7 +219,7 @@ export default function AddCourse({ open, onClose }) {
               }
             }}
           >
-            {categoryClusters.map(cc => (
+            {categoryClusterList.map(cc => (
               <optgroup key={cc._id} label={cc.name}>
                 {cc.categories.map(c => (
                   <option key={c._id} value={c._id}>{c.name}</option>
