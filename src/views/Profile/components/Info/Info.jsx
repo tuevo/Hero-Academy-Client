@@ -2,12 +2,18 @@ import { Avatar, Box, Button, ButtonBase, Grid, TextField, Typography } from '@m
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/styles';
+import { userApi } from 'api';
+import { apiMessage } from 'constants/api-message.constant';
+import { localStorageItems } from 'constants/local-storage.constant';
 import { userRole } from 'constants/user-role.constant';
 import * as _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'recompose';
+import { showNotification } from 'redux/actions/app.action';
+import { setPageLoading } from 'redux/actions/page.action';
+import { signIn } from 'redux/actions/user.action';
 import validate from 'validate.js';
 
 const schema = {
@@ -53,6 +59,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Info() {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const userState = useSelector(state => ({
     authUser: state.user.authUser
@@ -70,6 +77,8 @@ export default function Info() {
   const [showUploadingAvatar, setShowUploadingAvatar] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState(userState.authUser.avatarUrl);
   const [uploadedAvatar, setUploadedAvatar] = useState(null);
+
+  const [disableBtnUpdate, setDisableBtnUpdate] = useState(false);
 
   useEffect(() => {
     if (userState.authUser.role === userRole.LECTURER.value) {
@@ -135,7 +144,29 @@ export default function Info() {
 
   const handleAvatarMouseOut = () => {
     setShowUploadingAvatar(false);
-  }
+  };
+
+  const updateUser = async (params) => {
+    setDisableBtnUpdate(true);
+    dispatch(setPageLoading(true));
+    try {
+      const res = await userApi.update(params);
+      const { user } = res.data;
+
+      localStorage.setItem(localStorageItems.AUTH_USER.name, JSON.stringify(user));
+      
+      dispatch(signIn(user));
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+      dispatch(setPageLoading(false));
+      setDisableBtnUpdate(false);
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        dispatch(setPageLoading(false));
+        setDisableBtnUpdate(false);
+      }
+    }
+  };
 
   const handleBtnUpdateClick = () => {
     let data = {
@@ -145,8 +176,8 @@ export default function Info() {
     if (uploadedAvatar)
       data.avatar = uploadedAvatar;
 
-    console.log(data);
-  }
+    updateUser(data);
+  };
 
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
@@ -274,6 +305,7 @@ export default function Info() {
                 variant="contained"
                 className={classes.btnUpdate}
                 onClick={handleBtnUpdateClick}
+                disabled={disableBtnUpdate}
               >
                 Cập nhật thông tin
             </Button>
