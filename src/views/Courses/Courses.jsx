@@ -1,12 +1,12 @@
-import { Box, Button, GridList, GridListTile } from '@material-ui/core';
+import { Box, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { courseApi } from 'api';
 import Course from 'components/Course/Course';
 import { apiMessage } from 'constants/api-message.constant';
+import { availablePages } from 'constants/global.constant';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { showNotification } from 'redux/actions/app.action';
-import { availablePages } from 'constants/global.constant';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -64,18 +64,14 @@ const Courses = () => {
 
   return (
     <div className={classes.root}>
-      <Box display="flex" justifyContent="center">
-        <GridList cellHeight="auto" cols={4}>
-          {courseList.map((c, i) => (
-            <GridListTile key={c._id}>
-              <Box p={2} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
-                <Course data={c} type="minimal" />
-              </Box>
-            </GridListTile>
-          ))}
-        </GridList>
+      <Box display="flex" flexWrap="wrap" m={-1}>
+        {courseList.map((c, i) => (
+          <Box key={c._id} m={1} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
+            <Course data={c} type="minimal" />
+          </Box>
+        ))}
       </Box>
-      <Box p={2}>
+      <Box mt={2}>
         <Button
           fullWidth
           className={classes.btnLoadMoreCourse}

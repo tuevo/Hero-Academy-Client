@@ -1,4 +1,6 @@
 import axiosClient from './axios-client';
+import axiosClient2 from './axios-client-2';
+import { parseFormData } from 'helpers';
 
 const baseUrl = '/courses';
 
@@ -37,6 +39,10 @@ const courseApi = {
         const url = `${baseUrl}/${id}/feedbacks`;
         return axiosClient.post(url, params);
     },
+    add: (params) => {
+        const url = `${baseUrl}`;
+        return axiosClient2.post(url, parseFormData(params));
+    }
 }
 
 export default courseApi;

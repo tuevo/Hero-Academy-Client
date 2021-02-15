@@ -5,15 +5,15 @@ import authApi from './auth.api';
 
 const accessTokenName = 'accessToken';
 
-const axiosClient = axios.create({
+const axiosClient2 = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   headers: {
-    'content-type': 'application/json'
+    'Content-Type': 'multipart/form-data'
   },
   paramsSerializer: params => queryString.stringify(params)
 });
 
-axiosClient.interceptors.request.use(
+axiosClient2.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem(localStorageItems.ACCESS_TOKEN.name);
     if (accessToken) {
@@ -24,7 +24,7 @@ axiosClient.interceptors.request.use(
   }
 );
 
-axiosClient.interceptors.response.use(
+axiosClient2.interceptors.response.use(
   (response) => {
     if (response && response.data)
       return response.data;
@@ -44,7 +44,7 @@ axiosClient.interceptors.response.use(
         const { accessToken } = res.data;
         localStorage.setItem(localStorageItems.ACCESS_TOKEN.name, accessToken);
         originalRequest.headers[accessTokenName] = accessToken;
-        return await axiosClient.request(originalRequest);
+        return await axiosClient2.request(originalRequest);
       }
 
       throw error.response.data;
@@ -54,4 +54,4 @@ axiosClient.interceptors.response.use(
   }
 );
 
-export default axiosClient;
+export default axiosClient2;

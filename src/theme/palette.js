@@ -63,7 +63,8 @@ export default {
     searchInput: '#f0f2f5',
     video: '#f8f8f8',
     addCategory: '#f8f8f8',
-    comment: '#f8f8f8'
+    comment: '#f8f8f8',
+    loading: 'rgba(255,255,255,0.5)'
   },
   topbar: {
     background: white,

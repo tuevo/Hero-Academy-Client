@@ -42,7 +42,7 @@ export const setCourseSearchingQuery = (query) => {
   }
 }
 
-export const setCategoryClusterList = (list) => {
+export const setAppCategoryClusterList = (list) => {
   return {
     type: appActionTypes.SET_CATEGORY_CLUSTER_LIST,
     payload: list

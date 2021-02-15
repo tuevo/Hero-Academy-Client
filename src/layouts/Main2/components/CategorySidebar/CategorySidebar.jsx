@@ -66,7 +66,7 @@ const CategorySidebar = props => {
         <div className={classes.darkCover}></div>
         <CategorySidebarNav
           className={classes.nav}
-          categoryClusters={appState.categoryClusterList}
+          categoryClusters={appState.categoryClusterList || []}
         />
       </PerfectScrollbar>
     </Drawer>

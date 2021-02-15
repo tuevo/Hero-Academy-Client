@@ -4,21 +4,19 @@ import CloseIcon from '@material-ui/icons/Close';
 import ImageUploading from 'components/ImageUploading/ImageUploading';
 import TextEditor from 'components/TextEditor/TextEditor';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { shallowEqual } from 'recompose';
 import validate from 'validate.js';
+import { apiMessage } from 'constants/api-message.constant';
+import { showNotification } from 'redux/actions/app.action';
+import { setPageLoading } from 'redux/actions/page.action';
+import { courseApi } from 'api';
 
 const schema = {
-  thumbnailUrl: {
+  thumbnail: {
     presence: { allowEmpty: false, message: 'is required' }
   },
   title: {
-    presence: { allowEmpty: false, message: 'is required' }
-  },
-  description: {
-    presence: { allowEmpty: false, message: 'is required' }
-  },
-  content: {
     presence: { allowEmpty: false, message: 'is required' }
   },
   tuition: {
@@ -70,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AddCourse({ open, onClose }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const anchor = 'right';
 
   const appState = useSelector(state => ({
@@ -81,9 +80,9 @@ export default function AddCourse({ open, onClose }) {
   const [formState, setFormState] = useState({
     isValid: false,
     values: {
-      thumbnailUrl: null,
+      thumbnail: null,
       title: '',
-      categoryId: categoryClusterList.length > 0 ? categoryClusterList[0].categories[0]._id : '',
+      categoryId: '',
       tuition: 0,
       discountPercent: 0,
       isFinished: false,
@@ -93,6 +92,18 @@ export default function AddCourse({ open, onClose }) {
     touched: {},
     errors: {}
   });
+
+  useEffect(() => {
+    if (categoryClusterList.length > 0) {
+      setFormState({
+        ...formState,
+        values: {
+          ...formState.values,
+          categoryId: categoryClusterList[0].categories.length > 0 ? categoryClusterList[0].categories[0]._id : ''
+        }
+      });
+    }
+  }, [categoryClusterList]);
 
   useEffect(() => {
     const errors = validate(formState.values, schema);
@@ -161,12 +172,30 @@ export default function AddCourse({ open, onClose }) {
     }));
   }
 
-  const hanldeBtnAddClick = (e) => {
-    const data = {
+  const hanldeBtnAddClick = async () => {
+    if (!formState.isValid) {
+      dispatch(showNotification('error', apiMessage.ADD_COURSE_INVALID));
+      return;
+    }
+
+    dispatch(setPageLoading(true));
+    const params = {
       ...formState.values,
       discountPercent: formState.values.discountPercent / 100
     };
-    console.log(data);
+
+    try {
+      const res = await courseApi.add(params);
+      const message = apiMessage[res.messages[0]];
+      onClose(null, message);
+      dispatch(setPageLoading(false));
+      dispatch(showNotification('success', message));
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]] || error.messages[0]));
+        dispatch(setPageLoading(false));
+      }
+    }
   }
 
   const content = (anchor) => (
@@ -238,7 +267,7 @@ export default function AddCourse({ open, onClose }) {
                 name="tuition"
                 onChange={handleChange}
                 type="number"
-                value={formState.values.tuition || ''}
+                value={formState.values.tuition}
                 variant="standard"
                 endAdornment={<InputAdornment position="end">đ</InputAdornment>}
                 inputProps={{ min: 0, max: 99999999 }}
@@ -255,7 +284,7 @@ export default function AddCourse({ open, onClose }) {
                 name="discountPercent"
                 onChange={handleChange}
                 type="number"
-                value={formState.values.discountPercent || ''}
+                value={formState.values.discountPercent}
                 variant="standard"
                 endAdornment={<InputAdornment position="end">%</InputAdornment>}
                 inputProps={{ min: 0, max: 100 }}

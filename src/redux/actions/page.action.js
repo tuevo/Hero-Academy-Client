@@ -15,3 +15,10 @@ export const setScrollbarTop = (top) => {
     payload: top
   }
 }
+
+export const setPageLoading = (isLoading) => {
+  return {
+    type: pageActionTypes.SET_PAGE_LOADING,
+    payload: isLoading
+  }
+}

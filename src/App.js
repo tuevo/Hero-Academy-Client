@@ -13,7 +13,7 @@ import validators from './common/validators';
 import Routes from './Routes';
 import { Notification } from 'components/Notification';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import { hideNotification, showNotification, setCategoryClusterList } from 'redux/actions/app.action';
+import { hideNotification, showNotification, setAppCategoryClusterList } from 'redux/actions/app.action';
 import Loading from 'components/Loading/Loading';
 import darkPalette from 'theme/dark-palette';
 import darkTypography from 'theme/dark-typography';
@@ -72,7 +72,7 @@ const App = () => {
           ...cc,
           categories: cc.categories.map(c => ({ ...c, href: availablePages.CATEGORY_COURSES.path.replace(':categoryId', c._id) }))
         }));
-        dispatch(setCategoryClusterList(newCategoryClusterList));
+        dispatch(setAppCategoryClusterList(newCategoryClusterList));
       } catch (error) {
         if (error.messages && error.messages.length > 0) {
           dispatch(showNotification('error', apiMessage[error.messages[0]]));

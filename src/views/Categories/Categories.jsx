@@ -9,11 +9,12 @@ import UpdateCategory from './components/UpdateCategory/UpdateCategory';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import AddIcon from '@material-ui/icons/Add';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { showNotification } from 'redux/actions/app.action';
+import { useDispatch, useSelector } from 'react-redux';
+import { showNotification, setAppCategoryClusterList } from 'redux/actions/app.action';
 import { apiMessage } from 'constants/api-message.constant';
 import { categoryClusterApi, categoryApi } from 'api';
 import { availablePages } from 'constants/global.constant';
+import { shallowEqual } from 'recompose';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -49,6 +50,10 @@ export default function Categories() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const limit = 10;
+
+  const appState = useSelector(state => ({
+    ...state.app
+  }), shallowEqual);
 
   const [expandedCategoryClusterIndex, setExpandedCategoryClusterIndex] = useState(null);
   const [openCategoryDetails, setOpenCategoryDetails] = useState(false);
@@ -147,6 +152,16 @@ export default function Categories() {
     }
   }
 
+  const updateSelectedCategoryCluster = () => {
+    const newAppCategoryClusterList = appState.categoryClusterList.map(cc => {
+      if (cc._id === categoryClusterList[expandedCategoryClusterIndex]._id)
+        return { ...cc, categories: categoryClusterList[expandedCategoryClusterIndex].categories }
+
+      return cc;
+    });
+    dispatch(setAppCategoryClusterList(newAppCategoryClusterList));
+  }
+
   const handleCloseRemoveCategoryConfirmDialog = async (accepted) => {
     setOpenRemoveCategoryConfirmDialog(false);
     if (!accepted)
@@ -156,6 +171,7 @@ export default function Categories() {
       const res = await categoryApi.delete(selectedCategory._id);
       categoryClusterList[expandedCategoryClusterIndex].categories = categoryClusterList[expandedCategoryClusterIndex].categories
         .filter(c => c._id !== selectedCategory._id);
+      updateSelectedCategoryCluster();
       dispatch(showNotification('success', apiMessage[res.messages[0]]));
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
@@ -188,9 +204,10 @@ export default function Categories() {
   }
 
   const handleSubmitAddCategory = async (data) => {
+    const categoryClusterId = categoryClusterList[expandedCategoryClusterIndex]._id;
     const params = {
       ...data,
-      categoryClusterId: categoryClusterList[expandedCategoryClusterIndex]._id
+      categoryClusterId: categoryClusterId
     };
 
     try {
@@ -198,6 +215,7 @@ export default function Categories() {
       let { category } = res.data;
       category.href = availablePages.CATEGORY_COURSES.path.replace(':categoryId', category._id);
       categoryClusterList[expandedCategoryClusterIndex].categories.unshift(category);
+      updateSelectedCategoryCluster();
       dispatch(showNotification('success', apiMessage[res.messages[0]]));
     } catch (error) {
       if (error.messages && error.messages.length > 0) {

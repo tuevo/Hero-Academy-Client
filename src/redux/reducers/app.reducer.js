@@ -14,7 +14,7 @@ const initialStates = {
   isNotificationOpened: false,
   activePage: null,
   courseSearchingQuery: urlParams ? urlParams.get('q') : '',
-  categoryClusterList: []
+  categoryClusterList: [],
 }
 
 const appActionTypes = { ...actionTypes.app };

@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     zIndex: 10,
     right: '5%',
-    top: '-5%'
+    top: '-1.5625rem'
   },
   btnAddLecturer: {
     "backgroundColor": "#a4508b",

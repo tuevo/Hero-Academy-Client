@@ -979,7 +979,9 @@ const CourseDetails = () => {
                             <Typography variant="body1"><b>{f.student.fullName}</b></Typography>
                             <Typography variant="body2" style={{ marginLeft: 9 }}>{format(f.createdAt, 'vi')}</Typography>
                           </Box>
-                          <Rating name="read-only" value={f.rating.rating} size="small" precision={0.5} readOnly />
+                          {f.rating.rating > 0 && (
+                            <Rating name="read-only" value={f.rating.rating} size="small" precision={0.5} readOnly />
+                          )}
                           <Box pt={1}>
                             <Typography variant="body1">{f.content}</Typography>
                           </Box>

@@ -10,16 +10,16 @@ import {
 } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import SendIcon from '@material-ui/icons/Send';
-import { makeStyles } from '@material-ui/styles';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
 import Rating from '@material-ui/lab/Rating';
-import { useSelector, useDispatch } from 'react-redux';
+import { makeStyles } from '@material-ui/styles';
+import { courseApi } from 'api';
+import clsx from 'clsx';
+import { apiMessage } from 'constants/api-message.constant';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'recompose';
 import { showNotification } from 'redux/actions/app.action';
-import { apiMessage } from 'constants/api-message.constant';
-import { courseApi } from 'api';
 
 const useStyles = makeStyles((theme) => ({
   root: {
