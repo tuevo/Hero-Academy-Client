@@ -60,22 +60,30 @@ export default function Info() {
 
   const initFormState = {
     isValid: false,
-    values: {
-      fullName: userState.authUser.fullName
-    },
+    values: {},
     touched: {},
     errors: {}
   };
-
-  if (userState.authUser.role === userRole.LECTURER.value) {
-    initFormState.values.introduction = userState.authUser.roleInfo ? userState.authUser.roleInfo.introduction : null;
-  }
 
   const [formState, setFormState] = useState(initFormState);
 
   const [showUploadingAvatar, setShowUploadingAvatar] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState(userState.authUser.avatarUrl);
   const [uploadedAvatar, setUploadedAvatar] = useState(null);
+
+  useEffect(() => {
+    if (userState.authUser.role === userRole.LECTURER.value) {
+      initFormState.values.introduction = userState.authUser.roleInfo.introduction;
+    }
+
+    setFormState({
+      ...formState,
+      values: {
+        fullName: userState.authUser.fullName,
+        ...initFormState.values
+      }
+    })
+  }, [userState.authUser]);
 
   useEffect(() => {
     const errors = validate(formState.values, schema);
@@ -85,6 +93,7 @@ export default function Info() {
       isValid: errors ? false : true,
       errors: errors || {}
     }));
+
   }, [formState.values]);
 
   const handleChange = event => {
@@ -240,10 +249,15 @@ export default function Info() {
               <Box mb={4}>
                 <TextField
                   fullWidth
+                  error={hasError('introduction')}
+                  helperText={
+                    hasError('introduction') ? formState.errors.introduction[0] : null
+                  }
                   label="Tự giới thiệu"
+                  name="introduction"
+                  onChange={handleChange}
                   type="text"
-                  value={formState.values.introduction}
-                  multiline
+                  value={formState.values.introduction || ''}
                   variant="standard"
                   InputProps={{
                     classes: {
