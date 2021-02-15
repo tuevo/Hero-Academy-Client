@@ -74,20 +74,11 @@ const Users = () => {
     try {
       const res = await studentApi.getAll(page, limit);
       const students = res.data.entries;
+      const newStudentList = page === 1 ? students : studentList.concat(students);
+      setStudentList(newStudentList);
 
       const { totalItems } = res.data.meta;
       setStudentListTotalItems(totalItems);
-
-      let newStudentList = [];
-
-      if (page === 1) {
-        newStudentList = students
-      }
-      else {
-        newStudentList = studentList.concat(students);
-      }
-
-      setStudentList(newStudentList);
 
       if (newStudentList.length < totalItems) {
         setDisableBtnLoadMoreStudent(false);
@@ -105,20 +96,11 @@ const Users = () => {
     try {
       const res = await lecturerApi.getAll(page, limit);
       const lecturers = res.data.entries;
+      const newLecturerList = page === 1 ? lecturers : lecturerList.concat(lecturers);
+      setLecturerList(newLecturerList);
 
       const { totalItems } = res.data.meta;
       setLecturerListTotalItems(totalItems);
-
-      let newLecturerList = [];
-
-      if (page === 1) {
-        newLecturerList = lecturers;
-      }
-      else {
-        newLecturerList = lecturerList.concat(lecturers);
-      }
-
-      setLecturerList(newLecturerList);
 
       if (newLecturerList.length < totalItems) {
         setDisableBtnLoadMoreLecturer(false);

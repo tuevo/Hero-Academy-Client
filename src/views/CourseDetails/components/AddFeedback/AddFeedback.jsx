@@ -15,11 +15,18 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 import Rating from '@material-ui/lab/Rating';
+import { useSelector, useDispatch } from 'react-redux';
+import { shallowEqual } from 'recompose';
+import { showNotification } from 'redux/actions/app.action';
+import { apiMessage } from 'constants/api-message.constant';
+import { courseApi } from 'api';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: theme.spacing(2),
-    boxShadow: 'none'
+    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px',
+    background: theme.palette.background.course,
+    borderRadius: 5
   },
   cardContent: {
     padding: '1rem !important'
@@ -39,65 +46,91 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AddFeedback = props => {
-  const { className, ...rest } = props;
-
+  const { course, onAddComment, className, ...rest } = props;
   const classes = useStyles();
+  const dispatch = useDispatch();
 
-  const [values, setValues] = useState({
-    rating: '',
-    comment: ''
-  });
+  const userState = useSelector(state => ({
+    ...state.user
+  }), shallowEqual);
 
-  const user = {
-    _id: 1,
-    name: 'Michael',
-    avatarUrl: 'images/avatars/avatar_7.png'
+  const [rating, setRating] = useState(course.ownedRating);
+  const [comment, setComment] = useState('');
+
+  const addFeedback = async (type, params) => {
+    try {
+      await courseApi.addFeedback(course._id, params);
+
+      // case: comment added
+      if (type === 2) {
+        setComment('');
+        onAddComment();
+      }
+
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
   }
 
-  const handleChange = event => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
-  };
+  const handleChangeRating = (e) => {
+    const { value } = e.target;
+    setRating(+value);
+    addFeedback(1, { rating: +value });
+  }
 
-  useEffect(() => {
-    console.log(values);
-  }, [values]);
+  const handleChangeComment = (e) => {
+    const { value } = e.target;
+    setComment(value);
+  }
+
+  const handleClickBtnSend = () => {
+    if (comment) {
+      addFeedback(2, { content: comment });
+    }
+  }
 
   return (
     <Card
       {...rest}
       className={clsx(classes.root, className)}
     >
-      <form>
-        <CardContent className={classes.cardContent}>
-          <Typography variant="h5" gutterBottom className={classes.secondaryText}><b>Đánh giá khóa học</b></Typography>
-          <Rating
-            name="rating"
-            onChange={handleChange}
-            value={+values.rating}
+      <CardContent className={classes.cardContent}>
+        <Typography variant="h5" gutterBottom className={classes.secondaryText}><b>Đánh giá khóa học</b></Typography>
+        <Rating
+          name="rating"
+          onChange={handleChangeRating}
+          value={+rating}
+        />
+        <Box display="flex" alignItems="flex-end" className={classes.comment}>
+          <Avatar alt={userState.authUser.fullName} src={userState.authUser.avatarUrl} className={classes.avatar} />
+          <TextField
+            label={`${userState.authUser.fullName}, bạn nghĩ gì về khóa học này?`}
+            name="comment"
+            onChange={handleChangeComment}
+            onKeyUp={e => {
+              if (e.keyCode === 13)
+                handleClickBtnSend();
+            }}
+            value={comment}
+            variant="standard"
+            fullWidth
+            InputProps={{
+              classes: {
+                underline: classes.input
+              }
+            }}
           />
-          <Box display="flex" alignItems="flex-end" className={classes.comment}>
-            <Avatar alt={user.name} src={user.avatarUrl} className={classes.avatar} />
-            <TextField
-              label={`${user.name}, bạn nghĩ gì về khóa học này?`}
-              name="comment"
-              onChange={handleChange}
-              value={values.comment}
-              variant="standard"
-              fullWidth
-              multiline
-              InputProps={{
-                classes: {
-                  underline: classes.input
-                }
-              }}
-            />
-            <IconButton children={<SendIcon />} color="primary" style={{ marginLeft: 5 }} />
-          </Box>
-        </CardContent>
-      </form>
+          <IconButton
+            children={<SendIcon />}
+            color="primary"
+            style={{ marginLeft: 5 }}
+            onClick={handleClickBtnSend}
+            disabled={!comment}
+          />
+        </Box>
+      </CardContent>
     </Card>
   );
 };

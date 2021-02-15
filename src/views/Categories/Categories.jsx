@@ -21,16 +21,16 @@ const useStyles = makeStyles(theme => ({
     width: '100%'
   },
   categoryCluster: {
-    boxShadow: 'none',
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.course,
+    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px',
     borderRadius: 5,
-    marginTop: theme.spacing(1)
+    marginBottom: theme.spacing(1)
   },
   categoryList: {
     width: '100%',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.addCategory,
     borderRadius: 5,
-    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px'
+    boxShadow: 'none'
   },
   categoryList__container: {
     // maxHeight: '18.75rem',
@@ -61,180 +61,13 @@ export default function Categories() {
   const [categoryClusterListPage, setCategoryClusterListPage] = useState(1);
   const [disableBtnLoadMoreCategoryCluster, setDisableBtnLoadMoreCategoryCluster] = useState(false);
 
-  const categoryClusters = [
-    {
-      _id: '1',
-      name: 'Công nghệ thông tin',
-      categories: [
-        {
-          _id: '1.1',
-          name: 'Lập trình web',
-          href: '/categories/1.1/courses',
-          numberOfCourses: 150,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          _id: '1.2',
-          name: 'Lập trình di động',
-          href: '/categories/1.1/courses',
-          numberOfCourses: 150,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          _id: '1.3',
-          name: 'Lập trình game',
-          href: '/categories/1.1/courses',
-          numberOfCourses: 150,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-      ]
-    },
-    {
-      _id: '2',
-      name: 'Thiết kế',
-      categories: [
-        {
-          _id: '2.1',
-          name: 'Đồ họa',
-          href: '/categories/1.1/courses',
-          numberOfCourses: 150,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          _id: '2.2',
-          name: 'Nội thất',
-          href: '/categories/1.1/courses',
-          numberOfCourses: 150,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          _id: '2.3',
-          name: 'Thời trang',
-          href: '/categories/1.1/courses',
-          numberOfCourses: 150,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-      ]
-    },
-    {
-      _id: '3',
-      name: 'Quản trị kinh doanh',
-      categories: [
-        {
-          _id: '3.1',
-          name: 'Lập trình web',
-          href: '/categories/1.1/courses',
-          numberOfCourses: 150,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          _id: '3.2',
-          name: 'Lập trình di động',
-          href: '/categories/1.1/courses',
-          numberOfCourses: 150,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          _id: '3.3',
-          name: 'Lập trình game',
-          href: '/categories/1.1/courses',
-          numberOfCourses: 150,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-      ]
-    },
-    {
-      _id: '4',
-      name: 'Digital Marketing',
-      categories: [
-        {
-          _id: '4.1',
-          name: 'Lập trình web',
-          href: '/categories/1.1/courses',
-          numberOfCourses: 150,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          _id: '4.2',
-          name: 'Lập trình di động',
-          href: '/categories/1.1/courses',
-          numberOfCourses: 150,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          _id: '4.3',
-          name: 'Lập trình game',
-          href: '/categories/1.1/courses',
-          numberOfCourses: 150,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-      ]
-    },
-    {
-      _id: '5',
-      name: 'Ngoại ngữ',
-      categories: [
-        {
-          _id: '5.1',
-          name: 'Tiếng Anh',
-          href: '/categories/1.1/courses',
-          numberOfCourses: 150,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          _id: '5.2',
-          name: 'Tiếng Trung',
-          href: '/categories/1.1/courses',
-          numberOfCourses: 150,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          _id: '5.3',
-          name: 'Tiếng Nhật',
-          href: '/categories/1.1/courses',
-          numberOfCourses: 150,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          _id: '5.4',
-          name: 'Tiếng Pháp',
-          href: '/categories/1.1/courses',
-          numberOfCourses: 150,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-      ]
-    },
-  ];
-
   const getAllCategoryClusters = async (page) => {
     setDisableBtnLoadMoreCategoryCluster(true);
     try {
       const res = await categoryClusterApi.getAll(page, limit);
       const { entries } = res.data;
 
-      let newCategoryClusterList = [];
-      if (page === 1) {
-        newCategoryClusterList = entries;
-      } else {
-        newCategoryClusterList = categoryClusterList.concat(entries);
-      }
-
+      const newCategoryClusterList = page === 1 ? entries : categoryClusterList.concat(entries);
       for (let cc of newCategoryClusterList) {
         cc.categories = cc.categories.map(c => ({
           ...c,

@@ -12,7 +12,7 @@ import { studentApi } from 'api';
 const useStyles = makeStyles(theme => ({
   card: {
     backgroundColor: theme.palette.background.user,
-    boxShadow: 'none'
+    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px'
   },
   avatar: {
     width: '5rem',

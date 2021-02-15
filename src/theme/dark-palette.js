@@ -50,19 +50,23 @@ export default {
     link: colors.orange['A400'],
     disabled: colors.grey[600],
     topbar: purple['A700'],
-    sidebarActive: white
+    sidebarActive: white,
+    videoActive: white
   },
   background: {
     default: '#212111',
     paper: '#313131',
-    course: '#212121',
-    user: '#212121',
+    course: '#313131',
+    user: '#313131',
     signIn: 'rgba(0,0,0,0.4)',
     signUp: 'rgba(0,0,0,0.4)',
-    searchInput: '#414141'
+    searchInput: '#414141',
+    video: '#212121',
+    addCategory: '#212121',
+    comment: '#212121'
   },
   topbar: {
-    background: '#313131',
+    background: '#212121',
     "boxShadow": "rgba(0, 0, 0, 0.2) 0px 60px 40px -7px"
   },
   sidebar: {
@@ -73,7 +77,7 @@ export default {
     color: '#515151'
   },
   card: {
-    backgroundColor: '#313131',
+    backgroundColor: '#212121',
     borderRadius: '1.5rem',
     "boxShadow": "rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px"
   },

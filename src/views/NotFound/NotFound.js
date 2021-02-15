@@ -34,12 +34,11 @@ const NotFound = () => {
           xs={12}
         >
           <div className={classes.content}>
-            <Typography variant="h1">
-              404: The page you are looking for isn’t here
+            <Typography variant="h1" gutterBottom>
+              404: Không tìm thấy trang
             </Typography>
             <Typography variant="subtitle2">
-              You either tried some shady route or you came here by mistake.
-              Whichever it is, try using the navigation
+              Trang này không tồn tại hoặc đường dẫn đến trang có thể đã bị hỏng, vui lòng kiểm tra lại.
             </Typography>
             <img
               alt="Under development"

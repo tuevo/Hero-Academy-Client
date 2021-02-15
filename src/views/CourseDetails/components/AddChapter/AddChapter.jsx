@@ -15,16 +15,15 @@ import React, { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    boxShadow: 'none',
+    backgroundColor: theme.palette.background.course,
+    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px',
     width: '100%'
   },
   cardContent: {
-    padding: '0 !important'
   },
   btnAdd: {
     height: '2.625rem',
     minWidth: '10.625rem',
-    marginLeft: 5,
     "backgroundColor": "#a4508b",
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)",
   },
@@ -70,14 +69,16 @@ const AddChapter = props => {
                 }
               }}
             />
-            <Button
-              startIcon={<AddIcon />}
-              color="primary"
-              variant="contained"
-              className={classes.btnAdd}
-            >
-              Thêm chương
+            <Box mt={1} ml={0.5}>
+              <Button
+                startIcon={<AddIcon />}
+                color="primary"
+                variant="contained"
+                className={classes.btnAdd}
+              >
+                Thêm chương
             </Button>
+            </Box>
           </Box>
         </CardContent>
       </form>

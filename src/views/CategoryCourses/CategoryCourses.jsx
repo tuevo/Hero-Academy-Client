@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/styles';
-import { Box, Typography, GridList, GridListTile, Divider, Button } from '@material-ui/core';
+import { Box, Button, Divider, GridList, GridListTile, Typography } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import Course from 'components/Course/Course';
-import NumberFormat from 'react-number-format';
-import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { showNotification } from 'redux/actions/app.action';
-import { apiMessage } from 'constants/api-message.constant';
+import { makeStyles } from '@material-ui/styles';
 import { categoryApi } from 'api';
+import Course from 'components/Course/Course';
+import { availablePages } from 'constants/global.constant';
+import React, { useEffect, useState } from 'react';
+import NumberFormat from 'react-number-format';
+import { useHistory, useParams } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -39,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 
 const CategoryCourses = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const history = useHistory();
 
   const { categoryId } = useParams();
 
@@ -63,15 +61,7 @@ const CategoryCourses = () => {
       const { totalItems } = res.data.meta;
       setCategoryCourseListTotalItems(totalItems);
 
-      let newCourseList = [];
-
-      if (page === 1) {
-        newCourseList = courses
-      }
-      else {
-        newCourseList = categoryCourseList.concat(courses);
-      }
-
+      const newCourseList = page === 1 ? courses : categoryCourseList.concat(courses);
       setCategoryCourseList(newCourseList);
 
       if (newCourseList.length < totalItems) {
@@ -80,7 +70,7 @@ const CategoryCourses = () => {
 
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
-        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        history.push(availablePages.NOT_FOUND.path);
       }
     }
   };
@@ -124,7 +114,7 @@ const CategoryCourses = () => {
             ))}
           </GridList>
         </Box>
-        <Button 
+        <Button
           fullWidth
           className={classes.btnLoadMoreCourse}
           variant="contained"

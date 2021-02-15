@@ -192,7 +192,7 @@ export default function UpdateCourse({ course, className }) {
   const originalFormData = {
     thumbnailUrl: course.thumbnailUrl,
     title: course.title,
-    categoryId: course.categoryCluster.category._id,
+    categoryId: course.categoryCluster.categories[0]._id,
     tuition: course.tuition,
     discountPercent: course.discountPercent * 100,
     isFinished: course.isFinished,

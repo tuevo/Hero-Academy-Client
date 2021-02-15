@@ -12,29 +12,33 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FeedbackIcon from '@material-ui/icons/Feedback';
 import HistoryIcon from '@material-ui/icons/History';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
+import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
 import SchoolIcon from '@material-ui/icons/School';
 import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/styles';
+import { courseApi, favoriteApi } from 'api';
+import clsx from 'clsx';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import CourseMultiCarousel from 'components/CourseMultiCarousel/CourseMultiCarousel';
 import { VideoPlayer } from 'components/VideoPlayer';
+import { availablePages } from 'constants/global.constant';
 import { userRole } from 'constants/user-role.constant';
 import * as moment from 'moment';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
+import { setLoading, showNotification } from 'redux/actions/app.action';
 import { format } from 'timeago.js';
 import { AddChapter } from './components';
 import AddFeedback from './components/AddFeedback/AddFeedback';
-import UpdateCourse from './components/UpdateCourse/UpdateCourse';
-import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
 import AddVideo from './components/AddVideo/AddVideo';
+import UpdateCourse from './components/UpdateCourse/UpdateCourse';
 import WatchHistory from './components/WatchHistory/WatchHistory';
-import clsx from 'clsx';
+import { apiMessage } from 'constants/api-message.constant';
 
 function a11yProps(index) {
   return {
@@ -61,7 +65,8 @@ const useStyles = makeStyles(theme => ({
     zIndex: 5,
     width: '100%',
     height: '100%',
-    boxShadow: 'inset 0 18.75rem 9.375rem rgba(0,0,0,0.6)'
+    boxShadow: 'inset 0 18.75rem 9.375rem rgba(0,0,0,0.7)',
+    backgroundColor: 'rgba(0,0,0,0.2)'
   },
   bannerContent: {
     position: 'absolute',
@@ -84,9 +89,7 @@ const useStyles = makeStyles(theme => ({
   },
   main: {
     position: 'absolute',
-    // position: 'relative',
     zIndex: 10,
-    top: '40%',
     left: '50%',
     transform: 'translate(-50%,0)',
     width: '85%',
@@ -107,7 +110,6 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(2, 0, 2, 0)
   },
   featuredCoursesCarouselItem__price: {
-    marginBottom: theme.spacing(1),
     fontWeight: 'bold'
   },
   section: {
@@ -155,7 +157,6 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1.5)
   },
   label: {
-    marginLeft: theme.spacing(0.5),
     padding: theme.spacing(0.5, 1),
     color: '#fff',
     fontSize: '0.8125rem',
@@ -188,11 +189,8 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1, 0)
   },
   btnRegister: {
-    marginTop: theme.spacing(4),
-    backgroundColor: theme.palette.success.main,
-    '&:hover': {
-      backgroundColor: theme.palette.success.main
-    }
+    "backgroundColor": "#a4508b",
+    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
   tabs: {
     boxShadow: 'none',
@@ -203,11 +201,9 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
   videoPlayer: {
-    // ...theme.palette.card,
     width: '100%',
     overflow: 'hidden',
-    // boxShadow: '0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15)',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.video,
     borderRadius: '1.5rem'
   },
   videoPlayer__video: {
@@ -217,12 +213,15 @@ const useStyles = makeStyles(theme => ({
     height: '5.625rem',
     marginBottom: theme.spacing(1),
     boxShadow: 'none',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.video,
     borderRadius: 5
   },
   videoListItemActive: {
     backgroundColor: theme.palette.primary.light,
-    color: theme.palette.primary.dark
+    color: theme.palette.text.videoActive
+  },
+  videoListItemDisabled: {
+    opacity: 0.5
   },
   videoListItem__thumbnailContainer: {
     position: 'relative',
@@ -270,15 +269,14 @@ const useStyles = makeStyles(theme => ({
     "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
   },
   feedbackListContainer: {
-    boxShadow: 'none',
+    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px',
     background: theme.palette.background.course,
     borderRadius: 5
   },
   feedbackList: {
-    maxHeight: '22rem',
+    height: '22rem',
     overflow: 'scroll',
     marginTop: theme.spacing(2),
-    // background: theme.palette.background.course,
   },
   feedbackItem: {
     marginTop: theme.spacing(2),
@@ -290,7 +288,7 @@ const useStyles = makeStyles(theme => ({
   feedbackItem__comment: {
     width: '100%',
     padding: theme.spacing(1, 2),
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.comment,
     borderRadius: '0.625rem'
   },
   lecturer__avatar: {
@@ -305,10 +303,10 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.icon
   },
   chapter: {
-    boxShadow: 'none',
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.course,
+    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px',
     borderRadius: 5,
-    marginTop: theme.spacing(1)
+    marginBottom: theme.spacing(1)
   },
   chapter__content: {
 
@@ -318,15 +316,34 @@ const useStyles = makeStyles(theme => ({
 const CourseDetails = () => {
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const userState = useSelector(state => ({
     authUser: state.user.authUser
   }));
 
   const ps = useRef();
+  const bannerContentRef = useRef();
   const chapterRefs = useRef();
 
   const { courseId } = useParams();
+  const [course, setCourse] = useState(null);
+  const [mostRegisteredCourseList, setMostRegisteredCourseList] = useState([]);
+
+  const feedbackListLimit = 10;
+  const [feedbackList, setFeedbackList] = useState([]);
+  const [feedbackListPage, setFeedbackListPage] = useState(1);
+  const [feedbackListTotalItems, setFeedbackListTotalItems] = useState(0);
+  const [feedbackListLoading, setFeedbackListLoading] = useState(false);
+
+  const [tabValue, setTabValue] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [openRemovingCourseConfirmDialog, setOpenRemovingCourseConfirmDialog] = useState(false);
+  const [expandedChapterIndex, setExpandedChapterIndex] = useState(null);
+  const [expandedChapterVideoList, setExpandedChapterVideoList] = useState([]);
+  const [openAddVideo, setOpenAddVideo] = useState(false);
+  const [openWatchHistory, setOpenWatchHistory] = useState(false);
+  const [activeVideo, setActiveVideo] = useState(null);
 
   const chapters = [
     {
@@ -349,14 +366,46 @@ const CourseDetails = () => {
     }
   ]
 
-  const [tabValue, setTabValue] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [openRemovingCourseConfirmDialog, setOpenRemovingCourseConfirmDialog] = useState(false);
-  const [expandedChapterIndex, setExpandedChapterIndex] = useState(null);
-  const [expandedChapterVideoList, setExpandedChapterVideoList] = useState([]);
-  const [openAddVideo, setOpenAddVideo] = useState(false);
-  const [openWatchHistory, setOpenWatchHistory] = useState(false);
-  const [activeVideo, setActiveVideo] = useState(null);
+  const getCourseDetails = async () => {
+    dispatch(setLoading(true));
+    try {
+      const res = await courseApi.single(courseId);
+      const { rating } = res.data;
+      const courseData = res.data.course;
+      const newCourse = {
+        ...courseData,
+        href: availablePages.COURSE_DETAILS.path.replace(':courseId', courseData._id),
+        categoryCluster: {
+          ...courseData.categoryCluster,
+          categories: courseData.categoryCluster.categories.map(c => ({
+            ...c,
+            href: availablePages.CATEGORY_COURSES.path.replace(':categoryId', c._id)
+          }))
+        },
+        ownedRating: rating ? rating.rating : 0
+      };
+      setCourse(newCourse);
+      setIsFavorite(newCourse.isFavorite);
+
+      const { mostRegisteredCourses } = res.data;
+      setMostRegisteredCourseList(mostRegisteredCourses.map(c => ({
+        ...c,
+        href: availablePages.COURSE_DETAILS.path.replace(':courseId', c._id)
+      })));
+
+      dispatch(setLoading(false));
+
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        history.push(availablePages.NOT_FOUND.path);
+        dispatch(setLoading(false));
+      }
+    }
+  }
+
+  useEffect(() => {
+    getCourseDetails();
+  }, []);
 
   useEffect(() => {
     if (expandedChapterIndex !== null) {
@@ -371,7 +420,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://i.morioh.com/200626/3c53255f.jpg',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: false
         },
         {
           _id: 2,
@@ -380,7 +430,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 3,
@@ -389,7 +440,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 4,
@@ -398,7 +450,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 5,
@@ -407,7 +460,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 6,
@@ -416,7 +470,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 7,
@@ -425,7 +480,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 8,
@@ -434,7 +490,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 9,
@@ -443,7 +500,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 10,
@@ -452,7 +510,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 11,
@@ -461,7 +520,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         },
         {
           _id: 12,
@@ -470,7 +530,8 @@ const CourseDetails = () => {
           thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
           updatedAt: new Date('2021-01-09T16:59:58.031Z'),
           numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30
+          duration: 1000 * 60 * 5 + 1000 * 30,
+          disabled: true
         }
       ];
 
@@ -485,7 +546,7 @@ const CourseDetails = () => {
   const scrollToChapter = (_id) => {
     if (chapterRefs.current && chapterRefs.current.length > 0) {
       const ref = chapterRefs.current.find(r => r._id === _id);
-      ps.current.scrollTop += ref.current.getBoundingClientRect().top - 120;
+      ps.current.scrollTop += ref.current.getBoundingClientRect().top;
     }
   }
 
@@ -493,12 +554,48 @@ const CourseDetails = () => {
     history.goBack();
   };
 
+  const getFeedbacks = async (page) => {
+    setFeedbackListLoading(true);
+    try {
+      const res = await courseApi.getFeedbacks(course._id, page, feedbackListLimit);
+      const { entries } = res.data;
+      const newFeedbackList = page === 1 ? entries : feedbackList.concat(entries);
+      setFeedbackList(newFeedbackList);
+      setFeedbackListTotalItems(res.data.meta.totalItems);
+      setFeedbackListLoading(false);
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        setFeedbackListLoading(false);
+      }
+    }
+  }
+
   const handleTabChange = (event, tabValue) => {
     setTabValue(tabValue);
+
+    switch (tabValue) {
+      case 2:
+        setFeedbackListPage(1);
+        getFeedbacks(1);
+        break;
+
+      default:
+        break;
+    }
   };
 
-  const handleBtnFavoriteClick = () => {
-    setIsFavorite(!isFavorite);
+  const handleBtnFavoriteClick = async () => {
+    const value = !isFavorite;
+    setIsFavorite(value);
+    try {
+      const res = value ? await favoriteApi.add({ courseId: course._id }) : await favoriteApi.delete(course._id);
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
   }
 
   const handleBtnOpenRemovingCourseDialogClick = () => {
@@ -542,278 +639,25 @@ const CourseDetails = () => {
     setExpandedChapterIndex(chapterIndex);
   }
 
-  const course = {
-    _id: 2,
-    thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-    title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-    description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica.`,
-    content: `<p>
-    <span style="font-size: large;">Giới thiệu tổng quan</span>
-</p>
-<p>
-    <br>
-</p>
-<p>Quill is a free,
-    <a href="https://github.com/quilljs/quill/" target="_blank">open source</a>WYSIWYG editor built for the modern web. With its
-    <a href="http://quilljs.com/docs/modules/" target="_blank">extensible architecture</a>and a
-    <a href="http://quilljs.com/docs/api/" target="_blank">expressive API</a>you can completely customize it to fulfill your needs. Some built in features include:</p>
-<p>
-    <br>
-</p>
-<ul>
-    <li>Fast and lightweight</li>
-    <li>Semantic markup</li>
-    <li>Standardized HTML between browsers</li>
-    <li>Cross browser support including Chrome, Firefox, Safari, and IE 9+</li>
-</ul>
-<p>
-    <br>
-</p>
-<p>
-    <span style="font-size: large;">Component, Prop, State</span>
-</p>
-<p>
-    <br>
-</p>
-<p>Quill is a free,
-    <a href="https://github.com/quilljs/quill/" target="_blank">open source</a>WYSIWYG editor built for the modern web. With its
-    <a href="http://quilljs.com/docs/modules/" target="_blank">extensible architecture</a>and a
-    <a href="http://quilljs.com/docs/api/" target="_blank">expressive API</a>you can completely customize it to fulfill your needs. Some built in features include:</p>
-<p>
-    <br>
-</p>
-<ul>
-    <li>Fast and lightweight</li>
-    <li>Semantic markup</li>
-    <li>Standardized HTML between browsers</li>
-    <li>Cross browser support including Chrome, Firefox, Safari, and IE 9+</li>
-</ul>
-<p>
-    <br>
-</p>
-<p>
-    <span style="font-size: large;">React Hooks</span>
-</p>
-<p>
-    <br>
-</p>
-<p>Quill is a free,
-    <a href="https://github.com/quilljs/quill/" target="_blank">open source</a>WYSIWYG editor built for the modern web. With its
-    <a href="http://quilljs.com/docs/modules/" target="_blank">extensible architecture</a>and a
-    <a href="http://quilljs.com/docs/api/" target="_blank">expressive API</a>you can completely customize it to fulfill your needs. Some built in features include:</p>
-<p>
-    <br>
-</p>
-<ul>
-    <li>Fast and lightweight</li>
-    <li>Semantic markup</li>
-    <li>Standardized HTML between browsers</li>
-    <li>Cross browser support including Chrome, Firefox, Safari, and IE 9+</li>
-</ul>`,
-    averageRating: 4.5,
-    numberOfRatings: 1500,
-    numberOfStudents: 2500,
-    lecturer: {
-      fullName: 'Tue Vo'
-    },
-    categoryCluster: {
-      _id: '1',
-      name: 'Công nghệ thông tin',
-      category: {
-        _id: '1.1',
-        name: 'Lập trình web',
-        href: '/categories/1.1/courses'
+  const handleClickBtnRegister = async () => {
+    try {
+      const res = await courseApi.register(course._id);
+      getCourseDetails();
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
       }
-    },
-    tuition: 350000,
-    discountPercent: 0.5,
-    updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-    isFinished: true
-  };
-
-  const courses = [
-    {
-      _id: 1,
-      thumbnailUrl: 'https://miro.medium.com/max/3798/1*eOE7VhXBlqdIJ9weEdHbQQ.jpeg',
-      title: 'Angular Cho Người Mới Bắt Đầu',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 5.0,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        fullName: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 650000,
-      discountPercent: 0.3,
-      updatedAt: new Date('2021-01-09T16:59:58.031Z')
-    },
-    {
-      _id: 2,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        fullName: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-    },
-    {
-      _id: 3,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        fullName: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-    },
-    {
-      _id: 4,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        fullName: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-    },
-    {
-      _id: 5,
-      thumbnailUrl: 'https://damminhtien.com/assets/images/reactjs.png',
-      title: 'ReactJS Từ Cơ Bản Đến Nâng Cao',
-      description: `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`,
-      averageRating: 4.5,
-      numberOfRatings: 1500,
-      numberOfStudents: 2500,
-      lecturer: {
-        fullName: 'Tue Vo'
-      },
-      categoryCluster: {
-        name: 'Công nghệ thông tin',
-        categories: [{
-          name: 'Lập trình web'
-        }]
-      },
-      tuition: 350000,
-      discountPercent: 0.5,
-      updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-    },
-  ];
-
-  for (let c of courses)
-    c['href'] = `/courses/${c._id}`;
-
-  const feedbacks = [
-    {
-      _id: 1,
-      user: {
-        _id: 1,
-        fullName: 'Lana',
-        avatarUrl: 'images/avatars/avatar_6.png'
-      },
-      rating: 4,
-      comment: 'Nice course! I am looking forward to a new course.',
-      createdAt: new Date('2021-01-09T16:59:58.031Z')
-    },
-    {
-      _id: 2,
-      user: {
-        _id: 1,
-        fullName: 'Lee Wei Shuan',
-        avatarUrl: 'images/avatars/avatar_5.png'
-      },
-      rating: 5,
-      comment: 'Nice course! I am looking forward to a new course.',
-      createdAt: new Date('2021-01-09T16:59:58.031Z')
-    },
-    {
-      _id: 3,
-      user: {
-        _id: 1,
-        fullName: 'Steve Jonathan',
-        avatarUrl: 'images/avatars/avatar_4.png'
-      },
-      rating: 3,
-      comment: 'Not bad! I still found something that needed for me from this course.',
-      createdAt: new Date('2021-01-09T16:59:58.031Z')
-    },
-    {
-      _id: 4,
-      user: {
-        _id: 1,
-        fullName: 'Steve Jonathan',
-        avatarUrl: 'images/avatars/avatar_4.png'
-      },
-      rating: 3,
-      comment: 'Not bad! I still found something that needed for me from this course.',
-      createdAt: new Date('2021-01-09T16:59:58.031Z')
-    },
-    {
-      _id: 5,
-      user: {
-        _id: 1,
-        fullName: 'Steve Jonathan',
-        avatarUrl: 'images/avatars/avatar_4.png'
-      },
-      rating: 3,
-      comment: 'Not bad! I still found something that needed for me from this course.',
-      createdAt: new Date('2021-01-09T16:59:58.031Z')
     }
-  ];
-
-  const lecturer = {
-    _id: 1,
-    fullName: 'Tue Vo',
-    avatarUrl: 'images/avatars/tuevo.jpg',
-    averageRating: 4.5,
-    numberOfRatings: 1200,
-    numberOfCourses: 10,
-    introduction: 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.'
   }
+
+  const handleAddComment = () => {
+    setFeedbackListPage(1);
+    getFeedbacks(1);
+  }
+
+  if (!course)
+    return <></>;
 
   return (
     <PerfectScrollbar
@@ -838,7 +682,7 @@ const CourseDetails = () => {
                   Yêu thích
                 </Button>
               )}
-              {userState.authUser && userState.authUser.role === userRole.LECTURER.value && (
+              {userState.authUser && userState.authUser.role === userRole.LECTURER.value && course.lecturer._id === userState.authUser._id && (
                 <Box ml={1}>
                   <UpdateCourse course={course} className={classes.btnContrast} />
                 </Box>
@@ -864,32 +708,32 @@ const CourseDetails = () => {
               )}
             </Box>
           </Box>
-          <Grid container alignItems="center">
+          <Grid container alignItems="flex-end" ref={el => (bannerContentRef.current = el)}>
             <Grid item xs={6}>
-              <Box display="flex" alignItems="center" mb={2}>
+              <Box display="flex" alignItems="center" mb={1}>
                 <Typography variant="body2" color="inherit" >
                   {course.categoryCluster.name.toUpperCase()}
                 </Typography>
                 <ArrowRightIcon color="inherit" />
-                <RouterLink to={course.categoryCluster.category.href}>
+                <RouterLink to={course.categoryCluster.categories[0].href}>
                   <Button size="small" color="primary">
                     <Typography variant="body2" style={{ color: '#fff' }}>
-                      {course.categoryCluster.category.name.toUpperCase()}
+                      {course.categoryCluster.categories[0].name.toUpperCase()}
                     </Typography>
                   </Button>
                 </RouterLink>
               </Box>
 
-              <Typography variant="h3" color="inherit"><b>{course.title}</b></Typography>
+              <Typography variant="h3" color="inherit"><b>{course.title.toUpperCase()}</b></Typography>
               <Typography variant="body1" className={classes.description} color="inherit">{course.description}</Typography>
 
               <Box display="flex" alignItems="center" className={classes.featuredCoursesCarouselItem__ratingDetails}>
                 <Typography variant="body2" color="inherit" style={{ marginRight: 3 }}>
-                  <span className={`${classes.label} ${classes.label__bestSeller}`} style={{ marginLeft: 0 }}>Best Seller</span>
+                  {/* <span className={`${classes.label} ${classes.label__bestSeller}`} style={{ marginRight: 3 }}>Best Seller</span> */}
                   {course.isFinished ? (
-                    <span className={`${classes.label} ${classes.label__new}`} style={{ marginLeft: 9 }}>Đã hoàn thành</span>
-                  ) : (<span className={`${classes.label} ${classes.label__unfinished}`} style={{ marginLeft: 9 }}>Chưa hoàn thành</span>)}
-                  <span style={{ marginLeft: 9 }}>{`${Math.floor(course.averageRating)}.${(course.averageRating - Math.floor(course.averageRating)) * 10}`}</span>
+                    <span className={`${classes.label} ${classes.label__new}`} style={{ marginRight: 12 }}>Đã hoàn thành</span>
+                  ) : (<span className={`${classes.label} ${classes.label__unfinished}`} style={{ marginRight: 12 }}>Chưa hoàn thành</span>)}
+                  <span>{`${Math.floor(course.averageRating)}.${(course.averageRating - Math.floor(course.averageRating)) * 10}`}</span>
                 </Typography>
                 <Box>
                   <Rating name="read-only" value={course.averageRating} size="small" precision={0.5} readOnly />
@@ -900,7 +744,7 @@ const CourseDetails = () => {
                   <span>)</span>
                 </Typography>
                 <Typography variant="body2" color="inherit" style={{ marginLeft: 9 }}>
-                  <NumberFormat value={course.numberOfStudents} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
+                  <NumberFormat value={course.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
                 </Typography>
               </Box>
 
@@ -910,30 +754,37 @@ const CourseDetails = () => {
               </Box>
             </Grid>
             <Grid item xs={6}>
-              <Box display="flex" flexDirection="column" alignItems="flex-end">
-                <Typography variant="h3" className={classes.featuredCoursesCarouselItem__price} color="inherit">
-                  <NumberFormat value={course.tuition - course.tuition * course.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={course.discountPercent > 0 ? 'Chỉ còn ' : `Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica.`} suffix={'đ'} />
-                </Typography>
-
-                {course.discountPercent > 0 && (
-                  <Typography variant="h4" color="inherit">
-                    <strike>
-                      <NumberFormat value={course.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
-                    </strike>
-                    <span className={`${classes.label} ${classes.label__saleOff}`} style={{ marginLeft: 9 }}>Sale Off -{course.discountPercent * 100}%</span>
-                  </Typography>
+              <Box display="flex" flexDirection="column" alignItems="flex-end" pb={2}>
+                {!course.isRegistered && (
+                  <div>
+                    <Box display="flex" alignItems="center" mb={1}>
+                      <Typography variant="h3" className={classes.featuredCoursesCarouselItem__price} color="inherit">
+                        <NumberFormat value={course.tuition - course.tuition * course.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={course.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} />
+                      </Typography>
+                    </Box>
+                    {course.discountPercent > 0 && (
+                      <Typography variant="h4" color="inherit">
+                        <strike>
+                          <NumberFormat value={course.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
+                        </strike>
+                        <span className={`${classes.label} ${classes.label__saleOff}`} style={{ marginLeft: 9 }}>Sale Off -{course.discountPercent * 100}%</span>
+                      </Typography>
+                    )}
+                  </div>
                 )}
 
-                {(userState.authUser && userState.authUser.role !== userRole.LECTURER.value && userState.authUser.role !== userRole.ADMIN.value) || !userState.authUser ? (
-                  <Button
-                    variant="contained"
-                    className={classes.btnRegister}
-                    color="primary"
-                    size="large"
-                  >
-                    ĐĂNG KÝ KHÓA HỌC
-                  </Button>
+                {!userState.authUser || (userState.authUser && userState.authUser.role === userRole.STUDENT.value && !course.isRegistered) ? (
+                  <Box mt={4} className="animate__animated animate__bounceIn">
+                    <Button
+                      variant="contained"
+                      className={classes.btnRegister}
+                      color="primary"
+                      size="large"
+                      onClick={handleClickBtnRegister}
+                    >
+                      ĐĂNG KÝ KHÓA HỌC
+                    </Button>
+                  </Box>
                 ) : <></>}
 
               </Box>
@@ -942,7 +793,10 @@ const CourseDetails = () => {
         </Box>
       </div>
 
-      <main className={classes.main}>
+      <main
+        className={classes.main}
+        style={{ top: bannerContentRef.current ? `calc(${bannerContentRef.current.clientHeight}px + 5rem)` : 0 }}
+      >
         <div className={`${classes.panel} animate__animated animate__slideInUp`}>
           <AppBar position="static" className={classes.tabs} color="primary">
             <Tabs value={tabValue} onChange={handleTabChange} aria-label="simple tabs example" centered>
@@ -964,13 +818,13 @@ const CourseDetails = () => {
           {tabValue === 1 && (
             <Box p={6}>
               {userState.authUser && userState.authUser.role !== userRole.ADMIN.value && (
-                <Box mb={4} display="flex" alignItems="center" style={{ width: '100%' }}>
+                <Box mb={2} display="flex" alignItems="center" style={{ width: '100%' }}>
                   {userState.authUser.role === userRole.LECTURER.value && (
                     <Box style={{ flexGrow: 2 }}>
                       <AddChapter />
                     </Box>
                   )}
-                  {userState.authUser.role === userRole.STUDENT.value && (
+                  {userState.authUser.role === userRole.STUDENT.value && course.isRegistered && (
                     <Button
                       variant="outlined"
                       color="primary"
@@ -1063,9 +917,10 @@ const CourseDetails = () => {
                                 <PerfectScrollbar className={classes.videoList}>
                                   {expandedChapterVideoList.map(video => (
                                     <Card key={video._id} className={clsx(classes.videoListItem, {
-                                      [classes.videoListItemActive]: video._id === activeVideo._id
+                                      [classes.videoListItemActive]: video._id === activeVideo._id,
+                                      [classes.videoListItemDisabled]: video.disabled
                                     })}>
-                                      <CardActionArea style={{ height: '100%' }}>
+                                      <CardActionArea style={{ height: '100%' }} disabled={video.disabled}>
                                         <Grid container style={{ height: '100%' }}>
                                           <Grid item xs={5}>
                                             <div className={classes.videoListItem__thumbnailContainer}>
@@ -1104,26 +959,29 @@ const CourseDetails = () => {
 
           {tabValue === 2 && (
             <Box p={6}>
-              {userState.authUser && userState.authUser.role !== userRole.LECTURER.value && userState.authUser.role !== userRole.ADMIN.value && (
-                <AddFeedback />
+              {userState.authUser && userState.authUser.role === userRole.STUDENT.value && course.isRegistered && (
+                <AddFeedback
+                  course={course}
+                  onAddComment={handleAddComment}
+                />
               )}
               <Card className={classes.feedbackListContainer}>
                 <CardContent>
                   <Typography variant="h5" className={classes.secondaryText} gutterBottom>
-                    <b><NumberFormat value={2500} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' bình luận'} /></b>
+                    <b><NumberFormat value={feedbackListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' bình luận'} /></b>
                   </Typography>
                   <PerfectScrollbar className={classes.feedbackList}>
-                    {feedbacks.map(f => (
+                    {feedbackList.map(f => (
                       <Box key={f._id} display="flex" className={classes.feedbackItem}>
-                        <Avatar alt={f.user.fullName} src={f.user.avatarUrl} className={classes.feedbackItem__avatar} />
+                        <Avatar alt={f.student.fullName} src={f.student.avatarUrl} className={classes.feedbackItem__avatar} />
                         <Box display="flex" flexDirection="column" className={classes.feedbackItem__comment}>
-                          <Box display="flex" alignItems="center">
-                            <Typography variant="body1"><b>{f.user.fullName}</b></Typography>
+                          <Box display="flex" alignItems="center" mb={0.5}>
+                            <Typography variant="body1"><b>{f.student.fullName}</b></Typography>
                             <Typography variant="body2" style={{ marginLeft: 9 }}>{format(f.createdAt, 'vi')}</Typography>
                           </Box>
-                          <Rating name="read-only" value={f.rating} size="small" precision={0.5} readOnly />
+                          <Rating name="read-only" value={f.rating.rating} size="small" precision={0.5} readOnly />
                           <Box pt={1}>
-                            <Typography variant="body1">{f.comment}</Typography>
+                            <Typography variant="body1">{f.content}</Typography>
                           </Box>
                         </Box>
                       </Box>
@@ -1137,36 +995,36 @@ const CourseDetails = () => {
           {tabValue === 3 && (
             <Box p={6}>
               <Box display="flex">
-                <Avatar alt={lecturer.name} src={lecturer.avatarUrl} className={classes.lecturer__avatar} />
+                <Avatar alt={course.lecturer.fullName} src={course.lecturer.avatarUrl} className={classes.lecturer__avatar} />
                 <Box display="flex" flexDirection="column" pt={1}>
-                  <Typography variant="h4" className={classes.secondaryText} gutterBottom><b>{lecturer.fullName}</b></Typography>
-                  <Box display="flex">
-                    <Typography variant="body1" style={{ marginRight: 3 }}>
-                      {`${Math.floor(lecturer.averageRating)}.${(lecturer.averageRating - Math.floor(lecturer.averageRating)) * 10}`}
+                  <Typography variant="h4" className={classes.secondaryText} gutterBottom><b>{course.lecturer.fullName}</b></Typography>
+                  <Box display="flex" mt={0.5} alignItems="flex-end">
+                    <Typography variant="body2" style={{ marginRight: 3 }}>
+                      {`${Math.floor(course.lecturer.roleInfo.averageRating)}.${(course.lecturer.roleInfo.averageRating - Math.floor(course.lecturer.roleInfo.averageRating)) * 10}`}
                     </Typography>
-                    <Rating name="read-only" value={lecturer.averageRating} size="small" precision={0.5} readOnly />
-                    <Typography variant="body1" style={{ marginLeft: 3 }}>
+                    <Rating name="read-only" value={course.lecturer.roleInfo.averageRating} size="small" precision={0.5} readOnly />
+                    <Typography variant="body2" style={{ marginLeft: 3 }}>
                       <span>(</span>
-                      <NumberFormat value={lecturer.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
+                      <NumberFormat value={course.lecturer.roleInfo.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
                       <span>)</span>
                     </Typography>
-                    <Typography variant="body1" style={{ marginLeft: 9 }}>
-                      <NumberFormat value={lecturer.numberOfCourses} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' khóa học'} />
+                    <Typography variant="body2" style={{ marginLeft: 9 }}>
+                      <NumberFormat value={course.lecturer.roleInfo.numberOfCoursesPosted} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' khóa học'} />
                     </Typography>
                   </Box>
                 </Box>
               </Box>
               <Box pt={2}>
-                <Typography variant="body1">{lecturer.introduction}</Typography>
+                <Typography variant="body1">{course.lecturer.roleInfo.introduction || 'Chưa có lời giới thiệu nào.'}</Typography>
               </Box>
             </Box>
           )}
 
         </div>
         <div className={`${classes.section} ${classes.highestViewCourses} animate__animated animate__fadeInUp`}>
-          <Typography variant="h5" className={classes.highestViewCourses__title}><b>Các khóa học liên quan</b></Typography>
+          <Typography variant="h5" className={classes.highestViewCourses__title}><b>Khóa học được đăng ký nhiều</b></Typography>
           <div className={classes.highestViewCoursesCarousel}>
-            <CourseMultiCarousel courses={courses || []} />
+            <CourseMultiCarousel courses={mostRegisteredCourseList || []} />
           </div>
         </div>
 

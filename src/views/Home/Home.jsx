@@ -2,22 +2,19 @@ import { Box, ButtonBase, Grid, List, ListItem, Typography } from '@material-ui/
 import StarIcon from '@material-ui/icons/Star';
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/styles';
+import { homeApi } from 'api';
 import Course from 'components/Course/Course';
 import CourseMultiCarousel from 'components/CourseMultiCarousel/CourseMultiCarousel';
+import { apiMessage } from 'constants/api-message.constant';
+import { APP_NAME, availablePages } from 'constants/global.constant';
 import * as moment from 'moment';
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
+import { useDispatch } from 'react-redux';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Link as RouterLink } from 'react-router-dom';
-import { APP_NAME, availablePages } from 'constants/global.constant';
-import { useDispatch } from 'react-redux';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { apiMessage } from 'constants/api-message.constant';
-import { showNotification, setLoading } from 'redux/actions/app.action';
-import { homeApi } from 'api';
-import * as _ from 'lodash';
+import { setLoading, showNotification } from 'redux/actions/app.action';
 
 const useStyles = makeStyles(theme => ({
   root: {

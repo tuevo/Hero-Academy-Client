@@ -49,31 +49,35 @@ export default {
     link: colors.blue[600],
     disabled: colors.blueGrey[300],
     topbar: colors.purple[900],
-    sidebarActive: colors.purple[800]
+    sidebarActive: colors.purple[800],
+    videoActive: colors.purple[900]
   },
   background: {
     default: '#f0f2f5',
     paper: white,
     course: white,
-    user: '#f8f8f8',
+    user: white,
     signIn: white,
     signUp: white,
     sidebar: white,
-    searchInput: '#f0f2f5'
+    searchInput: '#f0f2f5',
+    video: '#f8f8f8',
+    addCategory: '#f8f8f8',
+    comment: '#f8f8f8'
   },
   topbar: {
     background: white,
     "boxShadow": "rgba(149, 157, 165, 0.2) 0px 8px 24px"
   },
   sidebar: {
-    background: white,
+    background: '#f8f8f8',
     "boxShadow": "rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px"
   },
   border: {
     color: '#dcdcdc'
   },
   card: {
-    backgroundColor: white,
+    backgroundColor: '#f8f8f8',
     boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
     borderRadius: '1.5rem'
   },

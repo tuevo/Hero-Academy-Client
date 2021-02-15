@@ -19,7 +19,8 @@ const schema = {
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
-    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px'
+    backgroundColor: theme.palette.background.addCategory,
+    boxShadow: 'none'
   },
   cardContent: {
     padding: '0 !important'

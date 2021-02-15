@@ -1,16 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/styles';
-import { Paper, Input } from '@material-ui/core';
+import { Input, Paper } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import { useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { makeStyles } from '@material-ui/styles';
+import clsx from 'clsx';
 import { availablePages } from 'constants/global.constant';
-import { setCourseSearchingQuery } from 'redux/actions/app.action';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { shallowEqual } from 'recompose';
-import { useEffect } from 'react';
+import { setCourseSearchingQuery } from 'redux/actions/app.action';
 
 const useStyles = makeStyles(theme => ({
   root: {
