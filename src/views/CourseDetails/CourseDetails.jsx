@@ -640,6 +640,11 @@ const CourseDetails = () => {
   }
 
   const handleClickBtnRegister = async () => {
+    if (!userState.authUser) {
+      history.push(availablePages.SIGN_IN.path, { from: course.href });
+      return;
+    }
+
     try {
       const res = await courseApi.register(course._id);
       getCourseDetails();
