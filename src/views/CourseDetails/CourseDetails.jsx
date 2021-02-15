@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Box, Button, Card, CardActionArea, CardContent, CardMedia, colors, Fab, Grid, IconButton, Tab, Tabs, Tooltip, Typography } from '@material-ui/core';
+import { AppBar, Avatar, Box, Button, Card, CardActionArea, CardContent, CardMedia, colors, Fab, Grid, IconButton, Tab, Tabs, Tooltip, Typography, CircularProgress } from '@material-ui/core';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -330,7 +330,7 @@ const CourseDetails = () => {
   const [course, setCourse] = useState(null);
   const [mostRegisteredCourseList, setMostRegisteredCourseList] = useState([]);
 
-  const feedbackListLimit = 10;
+  const feedbackListLimit = 5;
   const [feedbackList, setFeedbackList] = useState([]);
   const [feedbackListPage, setFeedbackListPage] = useState(1);
   const [feedbackListTotalItems, setFeedbackListTotalItems] = useState(0);
@@ -543,6 +543,10 @@ const CourseDetails = () => {
     }
   }, [expandedChapterIndex]);
 
+  useEffect(() => {
+    getFeedbacks(feedbackListPage);
+  }, [feedbackListPage])
+
   const scrollToChapter = (_id) => {
     if (chapterRefs.current && chapterRefs.current.length > 0) {
       const ref = chapterRefs.current.find(r => r._id === _id);
@@ -633,7 +637,6 @@ const CourseDetails = () => {
 
   const handleClickWatchHistoryVideo = (video) => {
     setOpenWatchHistory(false);
-
     const chapterIndex = chapters.findIndex(c => c._id === video.chapter._id);
     setActiveVideo(video);
     setExpandedChapterIndex(chapterIndex);
@@ -659,6 +662,14 @@ const CourseDetails = () => {
   const handleAddComment = () => {
     setFeedbackListPage(1);
     getFeedbacks(1);
+  }
+
+  const handleYReachEndFeedbackList = (container) => {
+    if (feedbackListLoading || feedbackList.length === feedbackListTotalItems)
+      return;
+
+    container.scrollTop -= (0.1 * container.scrollTop);
+    setFeedbackListPage(feedbackListPage + 1);
   }
 
   if (!course)
@@ -975,7 +986,10 @@ const CourseDetails = () => {
                   <Typography variant="h5" className={classes.secondaryText} gutterBottom>
                     <b><NumberFormat value={feedbackListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' bình luận'} /></b>
                   </Typography>
-                  <PerfectScrollbar className={classes.feedbackList}>
+                  <PerfectScrollbar
+                    className={classes.feedbackList}
+                    onYReachEnd={handleYReachEndFeedbackList}
+                  >
                     {feedbackList.map(f => (
                       <Box key={f._id} display="flex" className={classes.feedbackItem}>
                         <Avatar alt={f.student.fullName} src={f.student.avatarUrl} className={classes.feedbackItem__avatar} />
@@ -993,6 +1007,12 @@ const CourseDetails = () => {
                         </Box>
                       </Box>
                     ))}
+                    {feedbackListLoading && (
+                      <Box py={4} display="flex" justifyContent="center" alignItems="center" style={{ width: '100%' }}>
+                        <CircularProgress color="primary" size={12} style={{ marginRight: 5 }} />
+                        <Typography variant="body2">Đang tải...</Typography>
+                      </Box>
+                    )}
                   </PerfectScrollbar>
                 </CardContent>
               </Card>
