@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
 export default function Categories() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const limit = 10;
+  const limit = 3;
 
   const appState = useSelector(state => ({
     ...state.app
@@ -66,7 +66,7 @@ export default function Categories() {
   const [categoryClusterListPage, setCategoryClusterListPage] = useState(1);
   const [disableBtnLoadMoreCategoryCluster, setDisableBtnLoadMoreCategoryCluster] = useState(false);
 
-  const getAllCategoryClusters = async (page) => {
+  const getAllCategoryClusters = async (page, message) => {
     setDisableBtnLoadMoreCategoryCluster(true);
     try {
       const res = await categoryClusterApi.getAll(page, limit);
@@ -80,6 +80,11 @@ export default function Categories() {
         }));
       }
       setCategoryClusterList(newCategoryClusterList);
+
+      if (message === apiMessage.ADD_CATEGORY_CLUSTER_SUCCESSFULLY) {
+        const newAppCategoryClusterList = [newCategoryClusterList[0], ...appState.categoryClusterList];
+        dispatch(setAppCategoryClusterList(newAppCategoryClusterList));
+      }
 
       if (newCategoryClusterList.length < res.data.meta.totalItems) {
         setDisableBtnLoadMoreCategoryCluster(false);
@@ -193,9 +198,11 @@ export default function Categories() {
 
     try {
       const res = await categoryClusterApi.add(data);
+      const message = apiMessage[res.messages[0]];
       setOpenAddCategoryCluster(false);
-      dispatch(showNotification('success', apiMessage[res.messages[0]]));
-      getAllCategoryClusters(1);
+      dispatch(showNotification('success', message));
+      setCategoryClusterListPage(1);
+      getAllCategoryClusters(1, message);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
