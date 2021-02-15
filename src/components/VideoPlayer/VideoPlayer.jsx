@@ -4,11 +4,12 @@ import { Video } from 'cloudinary-react';
 function VideoPlayer({ data }) {
   return (
     <Video
-      cloudName="dye8sx2yk"
-      publicId="de6fyyfz69eibikughvs"
+      cloudName="dcpiiafc6"
+      publicId={data.publicIdOfVideo}
       poster={data.thumbnailUrl}
       controls
       style={{ width: '100%', height: '100%' }}
+      autoPlay
     />
   )
 }

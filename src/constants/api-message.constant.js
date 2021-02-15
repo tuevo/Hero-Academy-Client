@@ -39,5 +39,6 @@ export const apiMessage = {
   THE_COURSE_IS_NOT_EXISTS_IN_FAVORITES_LIST: 'Không tìm thấy khóa học trong danh sách yêu thích',
   REMOVE_THE_COURSE_FROM_FAVORITES_SUCCESSFULLY: 'Đã xóa khỏi Khóa học yêu thích',
   ADD_COURSE_INVALID: 'Vui lòng cung cấp đầy đủ thông tin khóa học',
-  COURSE_ADDED_SUCCESSFULLY: 'Đăng khóa học thành công'
+  COURSE_ADDED_SUCCESSFULLY: 'Đăng khóa học thành công',
+  CHAPTER_NOT_FOUND: 'Chương này không tồn tại trong khóa học'
 }

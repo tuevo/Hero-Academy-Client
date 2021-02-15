@@ -42,6 +42,14 @@ const courseApi = {
     add: (params) => {
         const url = `${baseUrl}`;
         return axiosClient2.post(url, parseFormData(params));
+    },
+    getChapters: (id) => {
+        const url = `${baseUrl}/${id}/chapters`;
+        return axiosClient.get(url);
+    },
+    getChapterVideos: (courseId, chapterId) => {
+        const url = `${baseUrl}/${courseId}/chapters/${chapterId}/videos`;
+        return axiosClient.get(url);
     }
 }
 
