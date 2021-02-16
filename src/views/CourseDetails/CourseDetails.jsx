@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Box, Button, Card, CardActionArea, CardContent, CardMedia, colors, Fab, Grid, IconButton, Tab, Tabs, Tooltip, Typography, CircularProgress } from '@material-ui/core';
+import { AppBar, Avatar, Box, Button, Card, CardActionArea, CardContent, CardMedia, CircularProgress, colors, Fab, Grid, IconButton, Tab, Tabs, Tooltip, Typography } from '@material-ui/core';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -11,6 +11,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FeedbackIcon from '@material-ui/icons/Feedback';
 import HistoryIcon from '@material-ui/icons/History';
+import MovieIcon from '@material-ui/icons/Movie';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
 import SchoolIcon from '@material-ui/icons/School';
@@ -22,6 +23,7 @@ import clsx from 'clsx';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import CourseMultiCarousel from 'components/CourseMultiCarousel/CourseMultiCarousel';
 import { VideoPlayer } from 'components/VideoPlayer';
+import { apiMessage } from 'constants/api-message.constant';
 import { availablePages } from 'constants/global.constant';
 import { userRole } from 'constants/user-role.constant';
 import * as moment from 'moment';
@@ -38,8 +40,6 @@ import AddFeedback from './components/AddFeedback/AddFeedback';
 import AddVideo from './components/AddVideo/AddVideo';
 import UpdateCourse from './components/UpdateCourse/UpdateCourse';
 import WatchHistory from './components/WatchHistory/WatchHistory';
-import { apiMessage } from 'constants/api-message.constant';
-import MovieIcon from '@material-ui/icons/Movie';
 
 function a11yProps(index) {
   return {
@@ -852,6 +852,18 @@ const CourseDetails = () => {
                       </Box>
                     </AccordionSummary>
                     <AccordionDetails>
+                      {/* <VideoLibrary
+                        classes={classes}
+                        expandedChapterIndex={expandedChapterIndex}
+                        index={index}
+                        activeVideo={activeVideo}
+                        handlePlayVideo={handlePlayVideo}
+                        userState={userState}
+                        handleClickBtnAddVideo={handleClickBtnAddVideo}
+                        expandedChapterVideoListLoading={expandedChapterVideoListLoading}
+                        expandedChapterVideoList={expandedChapterVideoList}
+                        handleClickVideoListItem={handleClickVideoListItem}
+                      /> */}
                       {expandedChapterIndex === index && (
                         <Box className={classes.chapter__content}>
                           <Grid container spacing={2}>
@@ -895,12 +907,17 @@ const CourseDetails = () => {
                                   <PlaylistPlayIcon />
                                   <span style={{ marginLeft: 3 }}><b>Danh sách video</b></span>
                                 </Typography>
-                                {!activeVideo && (
+                                {!activeVideo && !expandedChapterVideoListLoading && (
                                   <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ height: '100%' }}>
                                     <Box mb={1}>
                                       <MovieIcon className={classes.emptyVideoListIcon} fontSize="large" />
                                     </Box>
                                     <Typography variant="body2">Chưa có video nào.</Typography>
+                                  </Box>
+                                )}
+                                {expandedChapterVideoListLoading && (
+                                  <Box mt={-2} display="flex" justifyContent="center" alignItems="center" style={{ height: '100%' }}>
+                                    <CircularProgress color="primary" />
                                   </Box>
                                 )}
                                 {activeVideo && (

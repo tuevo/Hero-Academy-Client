@@ -15,7 +15,7 @@ import HistoryIcon from '@material-ui/icons/History';
 
 const useStyles = makeStyles(theme => ({
   videoListEmpty: {
-    width: '25rem',
+    width: '31.25rem',
     height: '28.125rem',
   },
   videoListEmptyIcon: {
@@ -78,7 +78,7 @@ export default function WatchHistory({ course, open, onClose, onClickVideo }) {
         createdAt: item.createdAt,
         thumbnailUrl: item.video.thumbnailUrl || 'https://wellstarthealth.com/assets/unique/well_start_default_video_image-369627cf3a7b03756d8ae22abd46a048eaa31e432404c956126e433dd02f2a30.jpg',
       }));
-      const newVideoList = videoList.concat(videos);
+      const newVideoList = page === 1 ? videos : videoList.concat(videos);
       setVideoList(newVideoList);
       setVideoListTotalItems(res.data.meta.totalItems);
       setVideoListLoading(false);
@@ -126,7 +126,7 @@ export default function WatchHistory({ course, open, onClose, onClickVideo }) {
       <DialogContent>
         <Box py={2}>
           {videoList.length > 0 ? (
-            <Timeline>
+            <Timeline style={{ padding: 0 }}>
               <PerfectScrollbar
                 className={classes.videoList}
                 onYReachEnd={handleYReachEnd}
