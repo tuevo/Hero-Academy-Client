@@ -12,6 +12,7 @@ import { showNotification } from 'redux/actions/app.action';
 import { apiMessage } from 'constants/api-message.constant';
 import { courseApi } from 'api';
 import HistoryIcon from '@material-ui/icons/History';
+import { useRef } from 'react';
 
 const useStyles = makeStyles(theme => ({
   videoListEmpty: {
@@ -66,6 +67,9 @@ export default function WatchHistory({ course, open, onClose, onClickVideo }) {
   const [videoListTotalItems, setVideoListTotalItems] = useState(0);
   const [videoListLoading, setVideoListLoading] = useState(false);
 
+  const ps = useRef();
+  const [isScrollDown, setIsScrollDown] = useState(false);
+
   const getVideos = async (page) => {
     if (videoListLoading)
       return;
@@ -100,6 +104,14 @@ export default function WatchHistory({ course, open, onClose, onClickVideo }) {
     getVideos(videoListPage);
   }, [videoListPage]);
 
+  useEffect(() => {
+    if (isScrollDown && videoListLoading) {
+      if (ps.current) {
+        ps.current.scrollTop -= 100;
+      }
+    }
+  }, [isScrollDown, videoListLoading]);
+
   const handleClose = () => {
     onClose(false);
   }
@@ -129,7 +141,10 @@ export default function WatchHistory({ course, open, onClose, onClickVideo }) {
             <Timeline style={{ padding: 0 }}>
               <PerfectScrollbar
                 className={classes.videoList}
+                containerRef={el => (ps.current = el)}
                 onYReachEnd={handleYReachEnd}
+                onScrollDown={() => setIsScrollDown(true)}
+                onScrollUp={() => setIsScrollDown(false)}
               >
                 {videoList.map((video, i) => (
                   <TimelineItem key={i}>

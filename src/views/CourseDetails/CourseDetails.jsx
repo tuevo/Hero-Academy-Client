@@ -430,16 +430,6 @@ const CourseDetails = () => {
     }
   }
 
-  const handlePlayVideo = async (video) => {
-    try {
-      await courseApi.addVideoWatching(course._id, { videoId: video._id });
-    } catch (error) {
-      if (error.messages && error.messages.length > 0) {
-        dispatch(showNotification('error', apiMessage[error.messages[0]]));
-      }
-    }
-  }
-
   const handleClickVideoListItem = (videoId) => {
     if (videoId === activeVideo._id)
       return;
@@ -852,18 +842,6 @@ const CourseDetails = () => {
                       </Box>
                     </AccordionSummary>
                     <AccordionDetails>
-                      {/* <VideoLibrary
-                        classes={classes}
-                        expandedChapterIndex={expandedChapterIndex}
-                        index={index}
-                        activeVideo={activeVideo}
-                        handlePlayVideo={handlePlayVideo}
-                        userState={userState}
-                        handleClickBtnAddVideo={handleClickBtnAddVideo}
-                        expandedChapterVideoListLoading={expandedChapterVideoListLoading}
-                        expandedChapterVideoList={expandedChapterVideoList}
-                        handleClickVideoListItem={handleClickVideoListItem}
-                      /> */}
                       {expandedChapterIndex === index && (
                         <Box className={classes.chapter__content}>
                           <Grid container spacing={2}>
@@ -872,8 +850,8 @@ const CourseDetails = () => {
                                 <div className={classes.videoPlayer}>
                                   <div className={classes.videoPlayer__video}>
                                     <VideoPlayer
+                                      course={course}
                                       video={activeVideo}
-                                      onPlay={handlePlayVideo}
                                     />
                                   </div>
                                   <Box px={2} pt={2} pb={1}>
