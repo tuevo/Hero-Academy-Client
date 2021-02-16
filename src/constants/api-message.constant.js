@@ -44,5 +44,6 @@ export const apiMessage = {
   UPDATE_USER_INFO_SUCCESSFULLY: 'Cập nhật thông tin thành công',
   CHAPTER_NOT_FOUND: 'Chương này không tồn tại trong khóa học',
   SUCCESSFUL_UPDATED_COURSE: 'Thông tin khóa học đã được cập nhật',
-  UPDATE_COURSE_INVALID: 'Vui lòng cung cấp đầy đủ thông tin khóa học'
+  UPDATE_COURSE_INVALID: 'Vui lòng cung cấp đầy đủ thông tin khóa học',
+  VIDEO_NOT_FOUND: 'Video này không tồn tại'
 }

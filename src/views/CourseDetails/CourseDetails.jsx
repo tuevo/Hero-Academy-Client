@@ -357,27 +357,6 @@ const CourseDetails = () => {
   const [openWatchHistory, setOpenWatchHistory] = useState(false);
   const [activeVideo, setActiveVideo] = useState(null);
 
-  const chapters = [
-    {
-      _id: 1,
-      index: 1,
-      title: 'Giới thiệu tổng quan',
-      totalVideos: 12,
-    },
-    {
-      _id: 2,
-      index: 2,
-      title: 'Component, Prop, State',
-      totalVideos: 12,
-    },
-    {
-      _id: 3,
-      index: 3,
-      title: 'React Hooks',
-      totalVideos: 12,
-    }
-  ]
-
   const getCourseDetails = async () => {
     dispatch(setLoading(true));
     try {
@@ -427,7 +406,7 @@ const CourseDetails = () => {
     }
   }
 
-  const getChapterVideos = async (chapterId) => {
+  const getChapterVideos = async (chapterId, defaultVideo) => {
     try {
       const res = await courseApi.getChapterVideos(course._id, chapterId);
       const newVideoList = res.data.videos.map(v => ({
@@ -437,11 +416,22 @@ const CourseDetails = () => {
       }));
       setExpandedChapterVideoList(newVideoList);
 
-      if (newVideoList.length > 0)
-        setActiveVideo(newVideoList[0]);
+      if (newVideoList.length > 0) {
+        setActiveVideo(defaultVideo || newVideoList[0]);
+      }
 
       scrollToChapter(chapterId);
 
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
+  }
+
+  const handlePlayVideo = async (video) => {
+    try {
+      await courseApi.addVideoWatching(course._id, { videoId: video._id });
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
@@ -454,7 +444,7 @@ const CourseDetails = () => {
       return;
 
     const newVideo = expandedChapterVideoList.find(v => v._id === videoId);
-    setActiveVideo(newVideo);
+    setActiveVideo({ ...newVideo, type: 'from_expanded_chapter' });
   }
 
   const handleUpdateCourse = (data) => {
@@ -473,14 +463,17 @@ const CourseDetails = () => {
   }, []);
 
   useEffect(() => {
+    if (activeVideo && activeVideo.type === 'from_expanded_chapter')
+      return;
+
     if (expandedChapterIndex !== null) {
-      getChapterVideos(chapterList[expandedChapterIndex]._id);
+      getChapterVideos(chapterList[expandedChapterIndex]._id, activeVideo);
     }
-  }, [expandedChapterIndex]);
+  }, [expandedChapterIndex, activeVideo]);
 
   useEffect(() => {
     getFeedbacks(feedbackListPage);
-  }, [feedbackListPage])
+  }, [feedbackListPage]);
 
   const scrollToChapter = (_id) => {
     if (chapterRefs.current && chapterRefs.current.length > 0) {
@@ -574,8 +567,8 @@ const CourseDetails = () => {
 
   const handleClickWatchHistoryVideo = (video) => {
     setOpenWatchHistory(false);
-    const chapterIndex = chapters.findIndex(c => c._id === video.chapter._id);
-    setActiveVideo(video);
+    const chapterIndex = chapterList.findIndex(c => c._id === video.chapter._id);
+    setActiveVideo({ ...video, type: 'from_watching_history' });
     setExpandedChapterIndex(chapterIndex);
   }
 
@@ -841,7 +834,10 @@ const CourseDetails = () => {
                               {activeVideo && (
                                 <div className={classes.videoPlayer}>
                                   <div className={classes.videoPlayer__video}>
-                                    <VideoPlayer data={activeVideo} />
+                                    <VideoPlayer
+                                      video={activeVideo}
+                                      onPlay={handlePlayVideo}
+                                    />
                                   </div>
                                   <Box px={2} pt={2} pb={1}>
                                     <Typography variant="h4" gutterBottom><b>{activeVideo.title}</b></Typography>

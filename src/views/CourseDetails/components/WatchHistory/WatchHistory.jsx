@@ -71,6 +71,7 @@ export default function WatchHistory({ course, open, onClose, onClickVideo }) {
       const res = await courseApi.getVideoWatchings(course._id, page, videoListLimit);
       const videos = res.data.entries.map(item => ({
         ...item.video,
+        createdAt: item.createdAt,
         thumbnailUrl: item.video.thumbnailUrl || 'https://wellstarthealth.com/assets/unique/well_start_default_video_image-369627cf3a7b03756d8ae22abd46a048eaa31e432404c956126e433dd02f2a30.jpg',
       }));
       const newVideoList = page === 1 ? videos : videoList.concat(videos);

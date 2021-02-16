@@ -1,14 +1,15 @@
 import React from 'react';
 import { Video } from 'cloudinary-react';
 
-function VideoPlayer({ data }) {
+function VideoPlayer({ video, onPlay }) {
   return (
     <Video
       cloudName="dcpiiafc6"
-      publicId={data.publicIdOfVideo}
-      poster={data.thumbnailUrl}
+      publicId={video.publicIdOfVideo}
+      poster={video.thumbnailUrl}
       controls
       style={{ width: '100%', height: '100%' }}
+      onPlay={() => onPlay(video)}
     />
   )
 }
