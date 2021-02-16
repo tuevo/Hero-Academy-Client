@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent, Typography, Card, CardActionArea, Grid, CardContent, CardMedia, Box } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, Typography, Card, CardActionArea, Grid, CardContent, CardMedia, Box, CircularProgress } from '@material-ui/core';
 import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/styles';
 import { format } from 'timeago.js';
@@ -26,8 +26,8 @@ const useStyles = makeStyles(theme => ({
     overflow: 'scroll'
   },
   videoListItem: {
-    width: '18.75rem',
-    height: '5.625rem',
+    width: '21.875rem',
+    height: '6.25rem',
     marginBottom: theme.spacing(1),
     boxShadow: 'none',
     backgroundColor: theme.palette.background.video,
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   },
   videoListItem__thumbnailContainer: {
     position: 'relative',
-    height: '5.625rem'
+    height: '6.25rem'
   },
   videoListItem__thumbnail: {
     height: '100%'
@@ -60,12 +60,16 @@ export default function WatchHistory({ course, open, onClose, onClickVideo }) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const videoListLimit = 10;
+  const videoListLimit = 5;
   const [videoList, setVideoList] = useState([]);
   const [videoListPage, setVideoListPage] = useState(null);
+  const [videoListTotalItems, setVideoListTotalItems] = useState(0);
   const [videoListLoading, setVideoListLoading] = useState(false);
 
   const getVideos = async (page) => {
+    if (videoListLoading)
+      return;
+
     setVideoListLoading(true);
     try {
       const res = await courseApi.getVideoWatchings(course._id, page, videoListLimit);
@@ -74,8 +78,9 @@ export default function WatchHistory({ course, open, onClose, onClickVideo }) {
         createdAt: item.createdAt,
         thumbnailUrl: item.video.thumbnailUrl || 'https://wellstarthealth.com/assets/unique/well_start_default_video_image-369627cf3a7b03756d8ae22abd46a048eaa31e432404c956126e433dd02f2a30.jpg',
       }));
-      const newVideoList = page === 1 ? videos : videoList.concat(videos);
+      const newVideoList = videoList.concat(videos);
       setVideoList(newVideoList);
+      setVideoListTotalItems(res.data.meta.totalItems);
       setVideoListLoading(false);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
@@ -103,6 +108,14 @@ export default function WatchHistory({ course, open, onClose, onClickVideo }) {
     onClickVideo(video);
   }
 
+  const handleYReachEnd = (container) => {
+    if (videoListLoading || videoList.length === videoListTotalItems)
+      return;
+
+    container.scrollTop -= (0.1 * container.scrollTop);
+    setVideoListPage(videoListPage + 1);
+  }
+
   return (
     <Dialog
       open={open}
@@ -114,7 +127,10 @@ export default function WatchHistory({ course, open, onClose, onClickVideo }) {
         <Box py={2}>
           {videoList.length > 0 ? (
             <Timeline>
-              <PerfectScrollbar className={classes.videoList}>
+              <PerfectScrollbar
+                className={classes.videoList}
+                onYReachEnd={handleYReachEnd}
+              >
                 {videoList.map((video, i) => (
                   <TimelineItem key={i}>
                     <TimelineOppositeContent>
@@ -152,6 +168,12 @@ export default function WatchHistory({ course, open, onClose, onClickVideo }) {
                     </TimelineContent>
                   </TimelineItem>
                 ))}
+                {videoListLoading && (
+                  <Box pt={4} mb={2} display="flex" justifyContent="center" alignItems="center" style={{ width: '100%' }}>
+                    <CircularProgress color="primary" size={12} style={{ marginRight: 5 }} />
+                    <Typography variant="body2">Đang tải...</Typography>
+                  </Box>
+                )}
               </PerfectScrollbar>
             </Timeline>
           ) : (

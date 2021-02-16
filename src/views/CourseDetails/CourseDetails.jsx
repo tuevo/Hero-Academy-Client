@@ -353,6 +353,7 @@ const CourseDetails = () => {
   const [chapterList, setChapterList] = useState([]);
   const [expandedChapterIndex, setExpandedChapterIndex] = useState(null);
   const [expandedChapterVideoList, setExpandedChapterVideoList] = useState([]);
+  const [expandedChapterVideoListLoading, setExpandedChapterVideoListLoading] = useState(false);
   const [openAddVideo, setOpenAddVideo] = useState(false);
   const [openWatchHistory, setOpenWatchHistory] = useState(false);
   const [activeVideo, setActiveVideo] = useState(null);
@@ -406,7 +407,11 @@ const CourseDetails = () => {
     }
   }
 
-  const getChapterVideos = async (chapterId, defaultVideo) => {
+  const getChapterVideos = async (chapterId) => {
+    if (expandedChapterVideoListLoading)
+      return;
+
+    setExpandedChapterVideoListLoading(true);
     try {
       const res = await courseApi.getChapterVideos(course._id, chapterId);
       const newVideoList = res.data.videos.map(v => ({
@@ -415,16 +420,12 @@ const CourseDetails = () => {
         disabled: v.publicIdOfVideo === null ? true : false
       }));
       setExpandedChapterVideoList(newVideoList);
-
-      if (newVideoList.length > 0) {
-        setActiveVideo(defaultVideo || newVideoList[0]);
-      }
-
+      setExpandedChapterVideoListLoading(false);
       scrollToChapter(chapterId);
-
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        setExpandedChapterVideoListLoading(false);
       }
     }
   }
@@ -463,13 +464,32 @@ const CourseDetails = () => {
   }, []);
 
   useEffect(() => {
-    if (activeVideo && activeVideo.type === 'from_expanded_chapter')
-      return;
-
     if (expandedChapterIndex !== null) {
-      getChapterVideos(chapterList[expandedChapterIndex]._id, activeVideo);
+      if (activeVideo) {
+        if (activeVideo.type === 'from_last_chapter' || activeVideo.type === 'from_watch_history') {
+          getChapterVideos(chapterList[expandedChapterIndex]._id);
+          setExpandedChapterVideoList([]);
+        }
+
+        if (activeVideo.type === 'from_last_chapter') {
+          setActiveVideo(null);
+        }
+
+      }
+      else {
+        getChapterVideos(chapterList[expandedChapterIndex]._id);
+        setExpandedChapterVideoList([]);
+      }
     }
   }, [expandedChapterIndex, activeVideo]);
+
+  useEffect(() => {
+    if (expandedChapterVideoList.length > 0) {
+      if (!activeVideo) {
+        setActiveVideo(expandedChapterVideoList[0]);
+      }
+    }
+  }, [expandedChapterVideoList, activeVideo]);
 
   useEffect(() => {
     getFeedbacks(feedbackListPage);
@@ -544,8 +564,13 @@ const CourseDetails = () => {
   const handleClickChapter = (index) => {
     if (index === expandedChapterIndex)
       setExpandedChapterIndex(null);
-    else
+    else {
       setExpandedChapterIndex(index);
+
+      if (activeVideo) {
+        setActiveVideo({ ...activeVideo, type: 'from_last_chapter' });
+      }
+    }
   }
 
   const handleCloseAddVideo = (accepted) => {
@@ -568,7 +593,7 @@ const CourseDetails = () => {
   const handleClickWatchHistoryVideo = (video) => {
     setOpenWatchHistory(false);
     const chapterIndex = chapterList.findIndex(c => c._id === video.chapter._id);
-    setActiveVideo({ ...video, type: 'from_watching_history' });
+    setActiveVideo({ ...video, type: 'from_watch_history' });
     setExpandedChapterIndex(chapterIndex);
   }
 
