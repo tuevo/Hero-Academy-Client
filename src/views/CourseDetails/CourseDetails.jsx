@@ -458,7 +458,14 @@ const CourseDetails = () => {
   }
 
   const handleUpdateCourse = (data) => {
-    setCourse({ ...course, ...data });
+    const newCourse = {
+      ...course,
+      ...data
+    };
+    newCourse.categoryCluster.categories[0].href = availablePages.CATEGORY_COURSES.path
+      .replace(':categoryId', newCourse.categoryCluster.categories[0]._id);
+
+    setCourse(newCourse);
   }
 
   useEffect(() => {

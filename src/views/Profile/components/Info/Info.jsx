@@ -289,6 +289,7 @@ export default function Info() {
                   type="text"
                   value={formState.values.introduction || ''}
                   variant="standard"
+                  multiline
                   InputProps={{
                     classes: {
                       underline: classes.input
