@@ -50,6 +50,18 @@ const courseApi = {
     getChapterVideos: (courseId, chapterId) => {
         const url = `${baseUrl}/${courseId}/chapters/${chapterId}/videos`;
         return axiosClient.get(url);
+    },
+    getVideoWatchings: (id, page, limit) => {
+        let url = `${baseUrl}/${id}/video-watchings`;
+
+        if (page && limit)
+            url += `?page=${page}&limit=${limit}`;
+
+        return axiosClient.get(url);
+    },
+    update: (id, params) => {
+        const url = `${baseUrl}/${id}`;
+        return axiosClient2.put(url, parseFormData(params));
     }
 }
 

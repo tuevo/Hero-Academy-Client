@@ -1,8 +1,8 @@
-import { Box, Typography, Backdrop, CircularProgress } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { availablePages } from 'constants/global.constant';
 import * as _ from 'lodash';
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'recompose';
@@ -25,12 +25,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     borderRadius: '1.5rem',
     "boxShadow": "rgba(0, 0, 0, 0.4) 0px 1.875rem 5.625rem"
-  },
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 999,
-    backgroundColor: theme.palette.background.loading,
-    color: theme.palette.text.primary,
-  },
+  }
 }));
 
 export default function Content({ inner }) {
@@ -74,15 +69,6 @@ export default function Content({ inner }) {
             {inner}
           </Box>
         </PerfectScrollbar>
-
-        <Backdrop className={classes.backdrop} open={pageState.isLoading}>
-          <Box display="flex" flexDirection="column" alignItems="center">
-            <CircularProgress color="primary" size={24} />
-            <Box mt={1}>
-              <Typography variant="body1" color="inherit">Đang xử lý...</Typography>
-            </Box>
-          </Box>
-        </Backdrop>
       </div>
     )
   )

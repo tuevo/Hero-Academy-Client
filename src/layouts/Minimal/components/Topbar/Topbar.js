@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
   },
   logoTitle: {
     color: theme.palette.text.topbar,
-    marginLeft: theme.spacing(1.5),
+    marginLeft: theme.spacing(1),
     fontFamily: "'Share Tech Mono', monospace",
     fontWeight: 'bold',
   },

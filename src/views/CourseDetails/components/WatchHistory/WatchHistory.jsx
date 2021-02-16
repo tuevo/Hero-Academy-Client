@@ -5,10 +5,24 @@ import { makeStyles } from '@material-ui/styles';
 import { format } from 'timeago.js';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import * as moment from 'moment';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { showNotification } from 'redux/actions/app.action';
+import { apiMessage } from 'constants/api-message.constant';
+import { courseApi } from 'api';
+import HistoryIcon from '@material-ui/icons/History';
 
 const useStyles = makeStyles(theme => ({
+  videoListEmpty: {
+    width: '25rem',
+    height: '28.125rem',
+  },
+  videoListEmptyIcon: {
+    color: theme.palette.text.disabled
+  },
   videoList: {
-    maxHeight: '28.125rem',
+    height: '28.125rem',
     overflow: 'scroll'
   },
   videoListItem: {
@@ -42,167 +56,43 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function WatchHistory({ data, open, onClose, onClickVideo }) {
+export default function WatchHistory({ course, open, onClose, onClickVideo }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
-  const videos = [
-    {
-      _id: 1,
-      title: 'JSX là gì?',
-      url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-      thumbnailUrl: 'https://i.morioh.com/200626/3c53255f.jpg',
-      updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-      numberOfView: 1500,
-      duration: 1000 * 60 * 5 + 1000 * 30,
-      chapter: {
-        _id: 1,
-        title: 'Giới thiệu tổng quan'
-      }
-    },
-    {
-      _id: 2,
-      title: 'Khái niệm Single Page Application',
-      url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-      thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-      createdAt: new Date('2021-01-09T16:59:58.031Z'),
-      numberOfView: 1500,
-      duration: 1000 * 60 * 5 + 1000 * 30,
-      chapter: {
-        _id: 1,
-        title: 'Giới thiệu tổng quan'
-      }
-    },
-    {
-      _id: 3,
-      title: 'Khái niệm Single Page Application',
-      url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-      thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-      createdAt: new Date('2021-01-09T16:59:58.031Z'),
-      numberOfView: 1500,
-      duration: 1000 * 60 * 5 + 1000 * 30,
-      chapter: {
-        _id: 1,
-        title: 'Giới thiệu tổng quan'
-      }
-    },
-    {
-      _id: 4,
-      title: 'Khái niệm Single Page Application',
-      url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-      thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-      createdAt: new Date('2021-01-09T16:59:58.031Z'),
-      numberOfView: 1500,
-      duration: 1000 * 60 * 5 + 1000 * 30,
-      chapter: {
-        _id: 2,
-        title: 'Component, Prop, State'
-      }
-    },
-    {
-      _id: 5,
-      title: 'Khái niệm Single Page Application',
-      url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-      thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-      createdAt: new Date('2021-01-09T16:59:58.031Z'),
-      numberOfView: 1500,
-      duration: 1000 * 60 * 5 + 1000 * 30,
-      chapter: {
-        _id: 2,
-        title: 'Component, Prop, State'
-      }
-    },
-    {
-      _id: 6,
-      title: 'Khái niệm Single Page Application',
-      url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-      thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-      createdAt: new Date('2021-01-09T16:59:58.031Z'),
-      numberOfView: 1500,
-      duration: 1000 * 60 * 5 + 1000 * 30,
-      chapter: {
-        _id: 2,
-        title: 'Component, Prop, State'
-      }
-    },
-    {
-      _id: 7,
-      title: 'Khái niệm Single Page Application',
-      url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-      thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-      createdAt: new Date('2021-01-09T16:59:58.031Z'),
-      numberOfView: 1500,
-      duration: 1000 * 60 * 5 + 1000 * 30,
-      chapter: {
-        _id: 3,
-        title: 'React Hooks'
-      }
-    },
-    {
-      _id: 8,
-      title: 'Khái niệm Single Page Application',
-      url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-      thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-      createdAt: new Date('2021-01-09T16:59:58.031Z'),
-      numberOfView: 1500,
-      duration: 1000 * 60 * 5 + 1000 * 30,
-      chapter: {
-        _id: 3,
-        title: 'React Hooks'
-      }
-    },
-    {
-      _id: 9,
-      title: 'Khái niệm Single Page Application',
-      url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-      thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-      createdAt: new Date('2021-01-09T16:59:58.031Z'),
-      numberOfView: 1500,
-      duration: 1000 * 60 * 5 + 1000 * 30,
-      chapter: {
-        _id: 3,
-        title: 'React Hooks'
-      }
-    },
-    {
-      _id: 10,
-      title: 'Khái niệm Single Page Application',
-      url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-      thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-      createdAt: new Date('2021-01-09T16:59:58.031Z'),
-      numberOfView: 1500,
-      duration: 1000 * 60 * 5 + 1000 * 30,
-      chapter: {
-        _id: 3,
-        title: 'React Hooks'
-      }
-    },
-    {
-      _id: 11,
-      title: 'Khái niệm Single Page Application',
-      url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-      thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-      createdAt: new Date('2021-01-09T16:59:58.031Z'),
-      numberOfView: 1500,
-      duration: 1000 * 60 * 5 + 1000 * 30,
-      chapter: {
-        _id: 3,
-        title: 'React Hooks'
-      }
-    },
-    {
-      _id: 12,
-      title: 'Khái niệm Single Page Application',
-      url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-      thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-      createdAt: new Date('2021-01-09T16:59:58.031Z'),
-      numberOfView: 1500,
-      duration: 1000 * 60 * 5 + 1000 * 30,
-      chapter: {
-        _id: 3,
-        title: 'React Hooks'
+  const videoListLimit = 10;
+  const [videoList, setVideoList] = useState([]);
+  const [videoListPage, setVideoListPage] = useState(null);
+  const [videoListLoading, setVideoListLoading] = useState(false);
+
+  const getVideos = async (page) => {
+    setVideoListLoading(true);
+    try {
+      const res = await courseApi.getVideoWatchings(course._id, page, videoListLimit);
+      const videos = res.data.entries.map(item => ({
+        ...item.video,
+        thumbnailUrl: item.video.thumbnailUrl || 'https://wellstarthealth.com/assets/unique/well_start_default_video_image-369627cf3a7b03756d8ae22abd46a048eaa31e432404c956126e433dd02f2a30.jpg',
+      }));
+      const newVideoList = page === 1 ? videos : videoList.concat(videos);
+      setVideoList(newVideoList);
+      setVideoListLoading(false);
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
       }
     }
-  ]
+  }
+
+  useEffect(() => {
+    setVideoListPage(open ? 1 : null)
+  }, [open])
+
+  useEffect(() => {
+    if (!videoListPage)
+      return;
+
+    getVideos(videoListPage);
+  }, [videoListPage]);
 
   const handleClose = () => {
     onClose(false);
@@ -221,47 +111,56 @@ export default function WatchHistory({ data, open, onClose, onClickVideo }) {
       <DialogTitle id="form-dialog-title">Lịch sử theo dõi video</DialogTitle>
       <DialogContent>
         <Box py={2}>
-          <Timeline>
-            <PerfectScrollbar className={classes.videoList}>
-              {videos.map((video, i) => (
-                <TimelineItem key={i}>
-                  <TimelineOppositeContent>
-                    <Typography color="textSecondary" variant="body2">{format(video.createdAt, 'vi')}</Typography>
-                  </TimelineOppositeContent>
-                  <TimelineSeparator>
-                    <TimelineDot />
-                    <TimelineConnector />
-                  </TimelineSeparator>
-                  <TimelineContent>
-                    <Card key={video._id} className={classes.videoListItem} onClick={() => handleClickVideo(video)}>
-                      <CardActionArea style={{ height: '100%' }}>
-                        <Grid container style={{ height: '100%' }}>
-                          <Grid item xs={5}>
-                            <div className={classes.videoListItem__thumbnailContainer}>
-                              <CardMedia
-                                className={classes.videoListItem__thumbnail}
-                                image={video.thumbnailUrl}
-                                title="Contemplative Reptile"
-                              />
-                              <Typography variant="body2" className={classes.videoListItem__duration}>
-                                {moment.utc(video.duration).format('mm:ss')}
-                              </Typography>
-                            </div>
+          {videoList.length > 0 ? (
+            <Timeline>
+              <PerfectScrollbar className={classes.videoList}>
+                {videoList.map((video, i) => (
+                  <TimelineItem key={i}>
+                    <TimelineOppositeContent>
+                      <Typography color="textSecondary" variant="body2">{format(video.createdAt, 'vi')}</Typography>
+                    </TimelineOppositeContent>
+                    <TimelineSeparator>
+                      <TimelineDot />
+                      <TimelineConnector />
+                    </TimelineSeparator>
+                    <TimelineContent>
+                      <Card key={video._id} className={classes.videoListItem} onClick={() => handleClickVideo(video)}>
+                        <CardActionArea style={{ height: '100%' }}>
+                          <Grid container style={{ height: '100%' }}>
+                            <Grid item xs={5}>
+                              <div className={classes.videoListItem__thumbnailContainer}>
+                                <CardMedia
+                                  className={classes.videoListItem__thumbnail}
+                                  image={video.thumbnailUrl}
+                                  title={video.title}
+                                />
+                                <Typography variant="body2" className={classes.videoListItem__duration}>
+                                  {moment.utc(video.duration * 1000).format('mm:ss')}
+                                </Typography>
+                              </div>
+                            </Grid>
+                            <Grid item xs={7}>
+                              <CardContent className={classes.videoListItem__details}>
+                                <Typography gutterBottom variant="h6"><b>{video.title}</b></Typography>
+                                <Typography variant="body2">{video.chapter.title}</Typography>
+                              </CardContent>
+                            </Grid>
                           </Grid>
-                          <Grid item xs={7}>
-                            <CardContent className={classes.videoListItem__details}>
-                              <Typography gutterBottom variant="h6"><b>{video.title}</b></Typography>
-                              <Typography variant="body2">{video.chapter.title}</Typography>
-                            </CardContent>
-                          </Grid>
-                        </Grid>
-                      </CardActionArea>
-                    </Card>
-                  </TimelineContent>
-                </TimelineItem>
-              ))}
-            </PerfectScrollbar>
-          </Timeline>
+                        </CardActionArea>
+                      </Card>
+                    </TimelineContent>
+                  </TimelineItem>
+                ))}
+              </PerfectScrollbar>
+            </Timeline>
+          ) : (
+              <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" className={classes.videoListEmpty}>
+                <Box mb={1}>
+                  <HistoryIcon className={classes.videoListEmptyIcon} fontSize="large" />
+                </Box>
+                <Typography variant="body2">Chưa có ghi nhận nào.</Typography>
+              </Box>
+            )}
         </Box>
       </DialogContent>
     </Dialog>

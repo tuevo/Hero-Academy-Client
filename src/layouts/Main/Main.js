@@ -1,10 +1,12 @@
-import { useMediaQuery } from '@material-ui/core';
+import { useMediaQuery, Backdrop, CircularProgress, Box, Typography } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Sidebar, Topbar } from './components';
 import Content from './components/Content/Content';
+import { useSelector } from 'react-redux';
+import { shallowEqual } from 'recompose';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,7 +25,12 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     height: '100%'
-  }
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 999,
+    backgroundColor: theme.palette.background.loading,
+    color: theme.palette.text.primary,
+  },
 }));
 
 const Main = props => {
@@ -34,6 +41,10 @@ const Main = props => {
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
     defaultMatches: true
   });
+
+  const pageState = useSelector(state => ({
+    ...state.page
+  }), shallowEqual);
 
   const [openSidebar, setOpenSidebar] = useState(false);
 
@@ -63,6 +74,14 @@ const Main = props => {
       <main className={classes.content}>
         <Content inner={children} />
       </main>
+      <Backdrop className={classes.backdrop} open={pageState.isLoading}>
+        <Box display="flex" flexDirection="column" alignItems="center">
+          <CircularProgress color="primary" size={24} />
+          <Box mt={1}>
+            <Typography variant="body1" color="inherit">Đang xử lý...</Typography>
+          </Box>
+        </Box>
+      </Backdrop>
     </div>
   );
 };

@@ -9,7 +9,6 @@ function VideoPlayer({ data }) {
       poster={data.thumbnailUrl}
       controls
       style={{ width: '100%', height: '100%' }}
-      autoPlay
     />
   )
 }

@@ -95,13 +95,23 @@ export default function AddCourse({ open, onClose }) {
 
   useEffect(() => {
     if (categoryClusterList.length > 0) {
-      setFormState({
+      let defaultCategoryId = '';
+      if (categoryClusterList.length > 0) {
+        for (const cc of categoryClusterList) {
+          if (cc.categories.length > 0) {
+            defaultCategoryId = cc.categories[0]._id;
+            break;
+          }
+        }
+      }
+
+      setFormState(formState => ({
         ...formState,
         values: {
           ...formState.values,
-          categoryId: categoryClusterList[0].categories.length > 0 ? categoryClusterList[0].categories[0]._id : ''
+          categoryId: defaultCategoryId
         }
-      });
+      }));
     }
   }, [categoryClusterList]);
 

@@ -85,13 +85,13 @@ export default function Info() {
       initFormState.values.introduction = userState.authUser.roleInfo.introduction;
     }
 
-    setFormState({
+    setFormState(formState => ({
       ...formState,
       values: {
         fullName: userState.authUser.fullName,
         ...initFormState.values
       }
-    })
+    }));
   }, [userState.authUser]);
 
   useEffect(() => {
@@ -102,7 +102,6 @@ export default function Info() {
       isValid: errors ? false : true,
       errors: errors || {}
     }));
-
   }, [formState.values]);
 
   const handleChange = event => {
@@ -154,7 +153,7 @@ export default function Info() {
       const { user } = res.data;
 
       localStorage.setItem(localStorageItems.AUTH_USER.name, JSON.stringify(user));
-      
+
       dispatch(signIn(user));
       dispatch(showNotification('success', apiMessage[res.messages[0]]));
       dispatch(setPageLoading(false));

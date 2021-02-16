@@ -46,7 +46,7 @@ function AccountMenu({ authUser, onClickItem }) {
       <Button aria-describedby={id} onClick={handleClick} className={classes.account}>
         <Box display="flex" alignItems="center" mx={2}>
           <Avatar src={authUser.avatarUrl} />
-          <Box ml={1.5} display="flex" flexDirection="column" justifyContent="center">
+          <Box ml={1} display="flex" flexDirection="column" justifyContent="center">
             <Typography variant="h5" style={{ textAlign: 'left' }}><b>{authUser.fullName}</b></Typography>
             <Typography variant="body2" style={{ textAlign: 'left' }}>{_.find(userRole, role => role.value === authUser.role).name}</Typography>
           </Box>

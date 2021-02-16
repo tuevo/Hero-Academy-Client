@@ -2,13 +2,19 @@ import { Box, Button, Drawer, Fab, FormControl, FormControlLabel, FormHelperText
 import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import EditIcon from '@material-ui/icons/Edit';
+import { courseApi } from 'api';
 import ImageUploading from 'components/ImageUploading/ImageUploading';
 import TextEditor from 'components/TextEditor/TextEditor';
-import React, { useEffect, useState } from 'react';
+import { apiMessage } from 'constants/api-message.constant';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual } from 'recompose';
+import { showNotification } from 'redux/actions/app.action';
+import { setPageLoading } from 'redux/actions/page.action';
 import validate from 'validate.js';
 
 const schema = {
-  thumbnailUrl: {
+  thumbnail: {
     presence: { allowEmpty: false, message: 'is required' }
   },
   title: {
@@ -67,8 +73,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function UpdateCourse({ course, className }) {
+export default function UpdateCourse({ course, className, onUpdate }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const drawerRef = useRef();
   const [state, setState] = useState({
     top: false,
     left: false,
@@ -76,125 +84,18 @@ export default function UpdateCourse({ course, className }) {
     right: false,
   });
 
-  const categoryClusters = [
-    {
-      _id: '1',
-      name: 'Công nghệ thông tin',
-      categories: [
-        {
-          _id: '1.1',
-          name: 'Lập trình web',
-          href: '/category-courses'
-        },
-        {
-          _id: '1.2',
-          name: 'Lập trình di động',
-          href: '/category-courses'
-        },
-        {
-          _id: '1.3',
-          name: 'Lập trình game',
-          href: '/category-courses'
-        }
-      ]
-    },
-    {
-      _id: '2',
-      name: 'Thiết kế',
-      categories: [
-        {
-          _id: '2.1',
-          name: 'Đồ họa',
-          href: '/category-courses'
-        },
-        {
-          _id: '2.2',
-          name: 'Nội thất',
-          href: '/category-courses'
-        },
-        {
-          _id: '2.3',
-          name: 'Thời trang',
-          href: '/category-courses'
-        }
-      ]
-    },
-    {
-      _id: '3',
-      name: 'Quản trị kinh doanh',
-      categories: [
-        {
-          _id: '3.1',
-          name: 'Lập trình web',
-          href: '/category-courses'
-        },
-        {
-          _id: '3.2',
-          name: 'Lập trình di động',
-          href: '/category-courses'
-        },
-        {
-          _id: '3.3',
-          name: 'Lập trình game',
-          href: '/category-courses'
-        }
-      ]
-    },
-    {
-      _id: '4',
-      name: 'Digital Marketing',
-      categories: [
-        {
-          _id: '4.1',
-          name: 'Lập trình web',
-          href: '/category-courses'
-        },
-        {
-          _id: '4.2',
-          name: 'Lập trình di động',
-          href: '/category-courses'
-        },
-        {
-          _id: '4.3',
-          name: 'Lập trình game',
-          href: '/category-courses'
-        }
-      ]
-    },
-    {
-      _id: '5',
-      name: 'Ngoại ngữ',
-      categories: [
-        {
-          _id: '5.1',
-          name: 'Tiếng Anh',
-          href: '/category-courses'
-        },
-        {
-          _id: '5.2',
-          name: 'Tiếng Trung',
-          href: '/category-courses'
-        },
-        {
-          _id: '5.3',
-          name: 'Tiếng Nhật',
-          href: '/category-courses'
-        },
-        {
-          _id: '5.4',
-          name: 'Tiếng Pháp',
-          href: '/category-courses'
-        }
-      ]
-    },
-  ];
+  const appState = useSelector(state => ({
+    ...state.app
+  }), shallowEqual);
+
+  const { categoryClusterList } = appState;
 
   const originalFormData = {
-    thumbnailUrl: course.thumbnailUrl,
+    thumbnail: course.thumbnailUrl,
     title: course.title,
     categoryId: course.categoryCluster.categories[0]._id,
     tuition: course.tuition,
-    discountPercent: course.discountPercent * 100,
+    discountPercent: course.discountPercent ? course.discountPercent * 100 : 0,
     isFinished: course.isFinished,
     description: course.description,
     content: course.content
@@ -229,6 +130,15 @@ export default function UpdateCourse({ course, className }) {
     if (value === 'false')
       value = false;
 
+    if (name === 'discountPercent' && value) {
+      if (value < 0) {
+        value = 0;
+      }
+
+      if (value > 100)
+        value = 100;
+    }
+
     setFormState(formState => ({
       ...formState,
       values: {
@@ -241,10 +151,6 @@ export default function UpdateCourse({ course, className }) {
       }
     }));
   };
-
-  useEffect(() => {
-    console.log(formState);
-  }, [formState]);
 
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
@@ -291,9 +197,34 @@ export default function UpdateCourse({ course, className }) {
     }));
   }
 
-  const hanldeBtnUpdateClick = (e) => {
-    const data = { ...formState.values };
-    console.log(data);
+  const hanldeBtnUpdateClick = async () => {
+    if (!formState.isValid) {
+      dispatch(showNotification('error', apiMessage.UPDATE_COURSE_INVALID));
+      return;
+    }
+
+    let params = {
+      ...formState.values,
+      discountPercent: formState.values.discountPercent / 100
+    };
+
+    if (typeof params.thumbnail === 'string')
+      delete params.thumbnail;
+
+    dispatch(setPageLoading(true))
+    try {
+      const res = await courseApi.update(course._id, params);
+      const updatedData = res.data.course;
+      setState({ ...state, [drawerRef.current.anchor]: false });
+      onUpdate(updatedData);
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+      dispatch(setPageLoading(false));
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]] || error.messages[0]));
+        dispatch(setPageLoading(false));
+      }
+    }
   }
 
   const content = (anchor) => (
@@ -308,7 +239,7 @@ export default function UpdateCourse({ course, className }) {
       </Box>
 
       <div className={classes.formControl}>
-        <ImageUploading uploadText="Tải ảnh bìa lên" initImageUrl={formState.values.thumbnailUrl} onImageChange={handleImageChange} />
+        <ImageUploading uploadText="Tải ảnh bìa lên" initImageUrl={formState.values.thumbnail} onImageChange={handleImageChange} />
       </div>
 
       <form>
@@ -346,7 +277,7 @@ export default function UpdateCourse({ course, className }) {
               }
             }}
           >
-            {categoryClusters.map(cc => (
+            {categoryClusterList.map(cc => (
               <optgroup key={cc._id} label={cc.name}>
                 {cc.categories.map(c => (
                   <option key={c._id} value={c._id}>{c.name}</option>
@@ -382,7 +313,7 @@ export default function UpdateCourse({ course, className }) {
                 name="discountPercent"
                 onChange={handleChange}
                 type="number"
-                value={formState.values.discountPercent || ''}
+                value={formState.values.discountPercent}
                 variant="standard"
                 endAdornment={<InputAdornment position="end">%</InputAdornment>}
                 inputProps={{ min: 0, max: 100 }}
@@ -466,7 +397,12 @@ export default function UpdateCourse({ course, className }) {
           >
             Chỉnh sửa
           </Button>
-          <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
+          <Drawer
+            anchor={anchor}
+            open={state[anchor]}
+            onClose={toggleDrawer(anchor, false)}
+            ref={el => (drawerRef.current = { anchor })}
+          >
             {content(anchor)}
           </Drawer>
         </React.Fragment>

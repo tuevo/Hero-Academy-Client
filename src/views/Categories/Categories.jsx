@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
 export default function Categories() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const limit = 3;
+  const limit = 10;
 
   const appState = useSelector(state => ({
     ...state.app
