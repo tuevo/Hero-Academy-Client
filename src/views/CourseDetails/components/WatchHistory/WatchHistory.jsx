@@ -177,11 +177,17 @@ export default function WatchHistory({ course, open, onClose, onClickVideo }) {
               </PerfectScrollbar>
             </Timeline>
           ) : (
-              <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" className={classes.videoListEmpty}>
-                <Box mb={1}>
-                  <HistoryIcon className={classes.videoListEmptyIcon} fontSize="large" />
-                </Box>
-                <Typography variant="body2">Chưa có ghi nhận nào.</Typography>
+              <Box display="flex" justifyContent="center" alignItems="center" className={classes.videoListEmpty}>
+                {videoListLoading ? (
+                  <CircularProgress color="primary" />
+                ) : (
+                    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+                      <Box mb={1}>
+                        <HistoryIcon className={classes.videoListEmptyIcon} fontSize="large" />
+                      </Box>
+                      <Typography variant="body2">Chưa có ghi nhận nào.</Typography>
+                    </Box>
+                  )}
               </Box>
             )}
         </Box>
