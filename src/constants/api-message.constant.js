@@ -41,5 +41,6 @@ export const apiMessage = {
   ADD_COURSE_INVALID: 'Vui lòng cung cấp đầy đủ thông tin khóa học',
   COURSE_ADDED_SUCCESSFULLY: 'Đăng khóa học thành công',
   USER_NOT_FOUND: 'Không tìm thấy thông tin người dùng',
-  UPDATE_USER_INFO_SUCCESSFULLY: 'Cập nhật thông tin thành công'
+  UPDATE_USER_INFO_SUCCESSFULLY: 'Cập nhật thông tin thành công',
+  CHAPTER_NOT_FOUND: 'Chương này không tồn tại trong khóa học'
 }

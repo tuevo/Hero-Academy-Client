@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Box, Button, Card, CardActionArea, CardContent, CardMedia, colors, Fab, Grid, IconButton, Tab, Tabs, Tooltip, Typography } from '@material-ui/core';
+import { AppBar, Avatar, Box, Button, Card, CardActionArea, CardContent, CardMedia, colors, Fab, Grid, IconButton, Tab, Tabs, Tooltip, Typography, CircularProgress } from '@material-ui/core';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -330,7 +330,7 @@ const CourseDetails = () => {
   const [course, setCourse] = useState(null);
   const [mostRegisteredCourseList, setMostRegisteredCourseList] = useState([]);
 
-  const feedbackListLimit = 10;
+  const feedbackListLimit = 5;
   const [feedbackList, setFeedbackList] = useState([]);
   const [feedbackListPage, setFeedbackListPage] = useState(1);
   const [feedbackListTotalItems, setFeedbackListTotalItems] = useState(0);
@@ -339,6 +339,8 @@ const CourseDetails = () => {
   const [tabValue, setTabValue] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const [openRemovingCourseConfirmDialog, setOpenRemovingCourseConfirmDialog] = useState(false);
+
+  const [chapterList, setChapterList] = useState([]);
   const [expandedChapterIndex, setExpandedChapterIndex] = useState(null);
   const [expandedChapterVideoList, setExpandedChapterVideoList] = useState([]);
   const [openAddVideo, setOpenAddVideo] = useState(false);
@@ -403,145 +405,61 @@ const CourseDetails = () => {
     }
   }
 
+  const getChapters = async () => {
+    try {
+      const res = await courseApi.getChapters(course._id);
+      const newChapterList = res.data.chapters;
+      setChapterList(newChapterList);
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
+  }
+
+  const getChapterVideos = async (chapterId) => {
+    try {
+      const res = await courseApi.getChapterVideos(course._id, chapterId);
+      const newVideoList = res.data.videos.map(v => ({
+        ...v,
+        thumbnailUrl: v.thumbnailUrl || 'https://wellstarthealth.com/assets/unique/well_start_default_video_image-369627cf3a7b03756d8ae22abd46a048eaa31e432404c956126e433dd02f2a30.jpg',
+        disabled: v.publicIdOfVideo === null ? true : false
+      }));
+      setExpandedChapterVideoList(newVideoList);
+
+      if (newVideoList.length > 0)
+        setActiveVideo(newVideoList[0]);
+
+      scrollToChapter(chapterId);
+
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+      }
+    }
+  }
+
+  const handleClickVideoListItem = (videoId) => {
+    if (videoId === activeVideo._id)
+      return;
+
+    const newVideo = expandedChapterVideoList.find(v => v._id === videoId);
+    setActiveVideo(newVideo);
+  }
+
   useEffect(() => {
     getCourseDetails();
   }, []);
 
   useEffect(() => {
     if (expandedChapterIndex !== null) {
-      const chapter = chapters[expandedChapterIndex];
-      scrollToChapter(chapter._id);
-
-      const videos = [
-        {
-          _id: 1,
-          title: 'JSX là gì?',
-          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-          thumbnailUrl: 'https://i.morioh.com/200626/3c53255f.jpg',
-          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-          numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30,
-          disabled: false
-        },
-        {
-          _id: 2,
-          title: 'Khái niệm Single Page Application',
-          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-          numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30,
-          disabled: true
-        },
-        {
-          _id: 3,
-          title: 'Khái niệm Single Page Application',
-          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-          numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30,
-          disabled: true
-        },
-        {
-          _id: 4,
-          title: 'Khái niệm Single Page Application',
-          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-          numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30,
-          disabled: true
-        },
-        {
-          _id: 5,
-          title: 'Khái niệm Single Page Application',
-          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-          numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30,
-          disabled: true
-        },
-        {
-          _id: 6,
-          title: 'Khái niệm Single Page Application',
-          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-          numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30,
-          disabled: true
-        },
-        {
-          _id: 7,
-          title: 'Khái niệm Single Page Application',
-          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-          numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30,
-          disabled: true
-        },
-        {
-          _id: 8,
-          title: 'Khái niệm Single Page Application',
-          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-          numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30,
-          disabled: true
-        },
-        {
-          _id: 9,
-          title: 'Khái niệm Single Page Application',
-          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-          numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30,
-          disabled: true
-        },
-        {
-          _id: 10,
-          title: 'Khái niệm Single Page Application',
-          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-          numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30,
-          disabled: true
-        },
-        {
-          _id: 11,
-          title: 'Khái niệm Single Page Application',
-          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-          numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30,
-          disabled: true
-        },
-        {
-          _id: 12,
-          title: 'Khái niệm Single Page Application',
-          url: 'https://www.youtube.com/watch?v=7zHaB7V5_pc&list=PLeS7aZkL6GOsPo-bFZSNuu4VhYicRjlAq',
-          thumbnailUrl: 'https://ninja-team.com/wp-content/uploads/2017/11/techtalk-reactjs-1024x576.png',
-          updatedAt: new Date('2021-01-09T16:59:58.031Z'),
-          numberOfView: 1500,
-          duration: 1000 * 60 * 5 + 1000 * 30,
-          disabled: true
-        }
-      ];
-
-      setExpandedChapterVideoList(videos);
-
-      if (!activeVideo) {
-        setActiveVideo(videos[0]);
-      }
+      getChapterVideos(chapterList[expandedChapterIndex]._id);
     }
   }, [expandedChapterIndex]);
+
+  useEffect(() => {
+    getFeedbacks(feedbackListPage);
+  }, [feedbackListPage])
 
   const scrollToChapter = (_id) => {
     if (chapterRefs.current && chapterRefs.current.length > 0) {
@@ -575,6 +493,9 @@ const CourseDetails = () => {
     setTabValue(tabValue);
 
     switch (tabValue) {
+      case 1:
+        getChapters();
+        break;
       case 2:
         setFeedbackListPage(1);
         getFeedbacks(1);
@@ -633,7 +554,6 @@ const CourseDetails = () => {
 
   const handleClickWatchHistoryVideo = (video) => {
     setOpenWatchHistory(false);
-
     const chapterIndex = chapters.findIndex(c => c._id === video.chapter._id);
     setActiveVideo(video);
     setExpandedChapterIndex(chapterIndex);
@@ -659,6 +579,14 @@ const CourseDetails = () => {
   const handleAddComment = () => {
     setFeedbackListPage(1);
     getFeedbacks(1);
+  }
+
+  const handleYReachEndFeedbackList = (container) => {
+    if (feedbackListLoading || feedbackList.length === feedbackListTotalItems)
+      return;
+
+    container.scrollTop -= (0.1 * container.scrollTop);
+    setFeedbackListPage(feedbackListPage + 1);
   }
 
   if (!course)
@@ -844,7 +772,7 @@ const CourseDetails = () => {
                 </Box>
               )}
               <Box>
-                {chapters.map((chapter, index) => (
+                {chapterList.map((chapter, index) => (
                   <Accordion
                     key={index}
                     expanded={index === expandedChapterIndex}
@@ -877,12 +805,12 @@ const CourseDetails = () => {
                       <Box display="flex" flexDirection="column">
                         <Typography variant="h5" gutterBottom><b>{chapter.title}</b></Typography>
                         <Typography variant="body1">
-                          <NumberFormat value={chapter.totalVideos} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' video'} />
+                          <NumberFormat value={chapter.numberOfVideos} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' video'} />
                         </Typography>
                       </Box>
                     </AccordionSummary>
                     <AccordionDetails>
-                      {expandedChapterIndex === index && (
+                      {expandedChapterIndex === index && activeVideo && (
                         <Box className={classes.chapter__content}>
                           <Grid container spacing={2}>
                             <Grid item xs={8}>
@@ -921,10 +849,14 @@ const CourseDetails = () => {
                                 </Typography>
                                 <PerfectScrollbar className={classes.videoList}>
                                   {expandedChapterVideoList.map(video => (
-                                    <Card key={video._id} className={clsx(classes.videoListItem, {
-                                      [classes.videoListItemActive]: video._id === activeVideo._id,
-                                      [classes.videoListItemDisabled]: video.disabled
-                                    })}>
+                                    <Card
+                                      key={video._id}
+                                      className={clsx(classes.videoListItem, {
+                                        [classes.videoListItemActive]: video._id === activeVideo._id,
+                                        [classes.videoListItemDisabled]: video.disabled
+                                      })}
+                                      onClick={() => handleClickVideoListItem(video._id)}
+                                    >
                                       <CardActionArea style={{ height: '100%' }} disabled={video.disabled}>
                                         <Grid container style={{ height: '100%' }}>
                                           <Grid item xs={5}>
@@ -932,10 +864,10 @@ const CourseDetails = () => {
                                               <CardMedia
                                                 className={classes.videoListItem__thumbnail}
                                                 image={video.thumbnailUrl}
-                                                title="Contemplative Reptile"
+                                                title={video.title}
                                               />
                                               <Typography variant="body2" className={classes.videoListItem__duration}>
-                                                {moment.utc(video.duration).format('mm:ss')}
+                                                {moment.utc(video.duration * 1000).format('mm:ss')}
                                               </Typography>
                                             </div>
                                           </Grid>
@@ -975,7 +907,10 @@ const CourseDetails = () => {
                   <Typography variant="h5" className={classes.secondaryText} gutterBottom>
                     <b><NumberFormat value={feedbackListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' bình luận'} /></b>
                   </Typography>
-                  <PerfectScrollbar className={classes.feedbackList}>
+                  <PerfectScrollbar
+                    className={classes.feedbackList}
+                    onYReachEnd={handleYReachEndFeedbackList}
+                  >
                     {feedbackList.map(f => (
                       <Box key={f._id} display="flex" className={classes.feedbackItem}>
                         <Avatar alt={f.student.fullName} src={f.student.avatarUrl} className={classes.feedbackItem__avatar} />
@@ -993,6 +928,12 @@ const CourseDetails = () => {
                         </Box>
                       </Box>
                     ))}
+                    {feedbackListLoading && (
+                      <Box py={4} display="flex" justifyContent="center" alignItems="center" style={{ width: '100%' }}>
+                        <CircularProgress color="primary" size={12} style={{ marginRight: 5 }} />
+                        <Typography variant="body2">Đang tải...</Typography>
+                      </Box>
+                    )}
                   </PerfectScrollbar>
                 </CardContent>
               </Card>
