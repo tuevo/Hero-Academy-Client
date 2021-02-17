@@ -598,6 +598,8 @@ const CourseDetails = () => {
     try {
       const res = await courseApi.addChapterVideo(course._id, chapterList[expandedChapterIndex]._id, params);
       const { video } = res.data;
+      chapterList[expandedChapterIndex].numberOfVideos++;
+      setChapterList([...chapterList]);
       setExpandedChapterVideoList([...expandedChapterVideoList, video]);
       setOpenAddVideo(false);
       dispatch(setPageLoading(false));

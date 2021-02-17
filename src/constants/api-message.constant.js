@@ -48,8 +48,8 @@ export const apiMessage = {
   VIDEO_NOT_FOUND: 'Video này không tồn tại',
   ADD_CHAPTER_INVALID: 'Vui lòng nhập tiêu đề chương',
   CHAPTER_HAS_BEEN_ADDED_SUCCESSFULLY: 'Thêm chương thành công',
-  GET_VIDEO_BY_CHAPTER_SUCCESSFULLY: 'Đăng video thành công',
   ADD_VIDEO_INVALID: 'Vui lòng cung cấp đầy đủ thông tin video',
   DELETED_COURSE_SUCCESSFULLY: 'Gỡ khóa học thành công',
   CATEGORY_ALREADY_EXISTS_REGISTERED_COURSE: 'Không thể xóa lĩnh vực đã có khóa học',
+  VIDEO_ADDED_SUCCESSFULLY: 'Đăng video thành công'
 }
