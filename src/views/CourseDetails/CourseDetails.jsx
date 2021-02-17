@@ -617,6 +617,10 @@ const CourseDetails = () => {
     setFeedbackListPage(feedbackListPage + 1);
   }
 
+  const handleAddChapter = (chapter) => {
+    setChapterList([...chapterList, chapter]);
+  }
+
   if (!course)
     return <></>;
 
@@ -786,7 +790,10 @@ const CourseDetails = () => {
                 <Box mb={2} display="flex" alignItems="center" style={{ width: '100%' }}>
                   {userState.authUser.role === userRole.LECTURER.value && (
                     <Box style={{ flexGrow: 2 }}>
-                      <AddChapter />
+                      <AddChapter
+                        course={course}
+                        onAdd={handleAddChapter}
+                      />
                     </Box>
                   )}
                   {userState.authUser.role === userRole.STUDENT.value && course.isRegistered && (

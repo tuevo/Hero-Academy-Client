@@ -45,5 +45,7 @@ export const apiMessage = {
   CHAPTER_NOT_FOUND: 'Chương này không tồn tại trong khóa học',
   SUCCESSFUL_UPDATED_COURSE: 'Thông tin khóa học đã được cập nhật',
   UPDATE_COURSE_INVALID: 'Vui lòng cung cấp đầy đủ thông tin khóa học',
-  VIDEO_NOT_FOUND: 'Video này không tồn tại'
+  VIDEO_NOT_FOUND: 'Video này không tồn tại',
+  ADD_CHAPTER_INVALID: 'Vui lòng nhập tiêu đề chương',
+  CHAPTER_HAS_BEEN_ADDED_SUCCESSFULLY: 'Thêm chương thành công'
 }

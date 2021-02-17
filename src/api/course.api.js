@@ -66,6 +66,10 @@ const courseApi = {
     addVideoWatching: (courseId, params) => {
         const url = `${baseUrl}/${courseId}/video-watchings`;
         return axiosClient.post(url, params);
+    },
+    addChapter: (courseId, params) => {
+        const url = `${baseUrl}/${courseId}/chapters`;
+        return axiosClient.post(url, params);
     }
 }
 
