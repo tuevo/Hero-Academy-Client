@@ -28,7 +28,7 @@ function VideoPlayer({ course, video }) {
 
   return (
     <Video
-      cloudName="dcpiiafc6"
+      cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
       publicId={video.publicIdOfVideo}
       poster={video.thumbnailUrl}
       controls

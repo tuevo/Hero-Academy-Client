@@ -251,6 +251,13 @@ const useStyles = makeStyles(theme => ({
   videoListItem__details: {
     padding: theme.spacing(1)
   },
+  videoListItem__details__title: {
+    "display": "-webkit-box",
+    "maxWidth": "100%",
+    "WebkitLineClamp": "2",
+    "WebkitBoxOrient": "vertical",
+    "overflow": "hidden"
+  },
   videoListContainer: {
     position: 'relative',
     height: '29.25rem',
@@ -351,6 +358,7 @@ const CourseDetails = () => {
   const [openRemovingCourseConfirmDialog, setOpenRemovingCourseConfirmDialog] = useState(false);
 
   const [chapterList, setChapterList] = useState([]);
+  const [chapterListLoading, setChapterListLoading] = useState(false);
   const [expandedChapterIndex, setExpandedChapterIndex] = useState(null);
   const [expandedChapterVideoList, setExpandedChapterVideoList] = useState([]);
   const [expandedChapterVideoListLoading, setExpandedChapterVideoListLoading] = useState(false);
@@ -396,13 +404,16 @@ const CourseDetails = () => {
   }
 
   const getChapters = async () => {
+    setChapterListLoading(true);
     try {
       const res = await courseApi.getChapters(course._id);
       const newChapterList = res.data.chapters;
       setChapterList(newChapterList);
+      setChapterListLoading(false);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        setChapterListLoading(false);
       }
     }
   }
@@ -586,8 +597,8 @@ const CourseDetails = () => {
     dispatch(setPageLoading(true));
     try {
       const res = await courseApi.addChapterVideo(course._id, chapterList[expandedChapterIndex]._id, params);
-      const newVideo = res.data.videos[0];
-      setExpandedChapterVideoList([...expandedChapterVideoList, newVideo]);
+      const { video } = res.data;
+      setExpandedChapterVideoList([...expandedChapterVideoList, video]);
       setOpenAddVideo(false);
       dispatch(setPageLoading(false));
       dispatch(showNotification('success', apiMessage[res.messages[0]]));
@@ -827,7 +838,7 @@ const CourseDetails = () => {
                       />
                     </Box>
                   )}
-                  {userState.authUser.role === userRole.STUDENT.value && course.isRegistered && (
+                  {!chapterListLoading && userState.authUser.role === userRole.STUDENT.value && course.isRegistered && (
                     <Button
                       variant="outlined"
                       color="primary"
@@ -842,11 +853,25 @@ const CourseDetails = () => {
                 </Box>
               )}
               <Box>
+                {chapterListLoading && (
+                  <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ width: '100%', height: '25rem' }}>
+                    <CircularProgress color="primary" />
+                  </Box>
+                )}
+                {!chapterListLoading && chapterList.length === 0 && userState.authUser.role === userRole.STUDENT.value && (
+                  <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ width: '100%', height: '25rem' }}>
+                    <Box mb={1}>
+                      <MovieIcon className={classes.emptyVideoListIcon} style={{ fontSize: '4.375rem' }} />
+                    </Box>
+                    <Typography variant="body1">Chưa có video nào.</Typography>
+                  </Box>
+                )}
                 {chapterList.map((chapter, index) => (
                   <Accordion
                     key={index}
                     expanded={index === expandedChapterIndex}
-                    className={classes.chapter}
+                    className={`${classes.chapter} animate__animated animate__fadeIn`}
+                    style={{ animationDelay: `${0.1 * index}s` }}
                     ref={el => {
                       if (chapterRefs.current) {
                         chapterRefs.current = [
@@ -963,7 +988,7 @@ const CourseDetails = () => {
                                             </Grid>
                                             <Grid item xs={7}>
                                               <CardContent className={classes.videoListItem__details}>
-                                                <Typography gutterBottom variant="h6" color="inherit"><b>{video.title}</b></Typography>
+                                                <Typography gutterBottom variant="h6" color="inherit" className={classes.videoListItem__details__title}><b>{video.title}</b></Typography>
                                                 <Typography variant="body2" color="inherit">{`Đăng lúc ${moment(video.updatedAt).format('DD/MM HH:mm')}`}</Typography>
                                               </CardContent>
                                             </Grid>
@@ -1002,7 +1027,7 @@ const CourseDetails = () => {
                     className={classes.feedbackList}
                     onYReachEnd={handleYReachEndFeedbackList}
                   >
-                    {feedbackList.map(f => (
+                    {feedbackList.map((f, i) => (
                       <Box key={f._id} display="flex" className={classes.feedbackItem}>
                         <Avatar alt={f.student.fullName} src={f.student.avatarUrl} className={classes.feedbackItem__avatar} />
                         <Box display="flex" flexDirection="column" className={classes.feedbackItem__comment}>
@@ -1061,7 +1086,7 @@ const CourseDetails = () => {
 
         </div>
         <div className={`${classes.section} ${classes.highestViewCourses} animate__animated animate__fadeInUp`}>
-          <Typography variant="h5" className={classes.highestViewCourses__title}><b>Khóa học được đăng ký nhiều</b></Typography>
+          <Typography variant="h5" className={classes.highestViewCourses__title}><b>🔥 Khóa học được đăng ký nhiều</b></Typography>
           <div className={classes.highestViewCoursesCarousel}>
             <CourseMultiCarousel courses={mostRegisteredCourseList || []} />
           </div>

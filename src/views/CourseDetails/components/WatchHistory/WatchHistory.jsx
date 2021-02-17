@@ -16,7 +16,7 @@ import { useRef } from 'react';
 
 const useStyles = makeStyles(theme => ({
   videoListEmpty: {
-    width: '31.25rem',
+    width: '30.625rem',
     height: '28.125rem',
   },
   videoListEmptyIcon: {
@@ -54,6 +54,13 @@ const useStyles = makeStyles(theme => ({
   },
   videoListItem__details: {
     padding: theme.spacing(1)
+  },
+  videoListItem__details__title: {
+    "display": "-webkit-box",
+    "maxWidth": "100%",
+    "WebkitLineClamp": "2",
+    "WebkitBoxOrient": "vertical",
+    "overflow": "hidden"
   },
 }))
 
@@ -173,7 +180,7 @@ export default function WatchHistory({ course, open, onClose, onClickVideo }) {
                             </Grid>
                             <Grid item xs={7}>
                               <CardContent className={classes.videoListItem__details}>
-                                <Typography gutterBottom variant="h6"><b>{video.title}</b></Typography>
+                                <Typography gutterBottom variant="h6" className={classes.videoListItem__details__title}><b>{video.title}</b></Typography>
                                 <Typography variant="body2">{video.chapter.title}</Typography>
                               </CardContent>
                             </Grid>

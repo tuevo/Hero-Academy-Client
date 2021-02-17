@@ -1,4 +1,4 @@
-import { Input, Paper } from '@material-ui/core';
+import { Input, Paper, IconButton } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual } from 'recompose';
 import { setCourseSearchingQuery } from 'redux/actions/app.action';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,6 +18,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
     display: 'flex',
     width: '18.75rem',
+    height: '3rem',
     boxShadow: 'none',
     backgroundColor: theme.palette.background.searchInput
   },
@@ -80,6 +82,11 @@ const SearchInput = props => {
         onKeyUp={handleKeyUp}
         placeholder="Tìm kiếm khóa học"
       />
+      {query && (
+        <IconButton onClick={() => setQuery('')}>
+          <CloseIcon className={classes.icon} />
+        </IconButton>
+      )}
     </Paper>
   );
 };
