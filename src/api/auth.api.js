@@ -23,6 +23,10 @@ const authApi = {
     const url = `${baseUrl}/password`;
     return axiosClient.put(url, params);
   },
+  sendOtp: (params) => {
+    const url = `${baseUrl}/otp-code`;
+    return axiosClient.post(url, params);
+  },
 }
 
 export default authApi;

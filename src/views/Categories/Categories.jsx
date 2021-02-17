@@ -251,7 +251,8 @@ export default function Categories() {
       {categoryClusterList.map((cc, i) => (
         <Accordion
           key={i}
-          className={classes.categoryCluster}
+          className={`${classes.categoryCluster} animate__animated animate__fadeIn`}
+          style={{ animationDelay: `${0.1 * i}s` }}
           expanded={i === expandedCategoryClusterIndex}
         >
           <AccordionSummary

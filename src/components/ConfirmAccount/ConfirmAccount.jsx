@@ -14,6 +14,7 @@ import { showNotification } from 'redux/actions/app.action';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import validate from 'validate.js';
 import { authApi } from 'api';
+import { setPageLoading } from 'redux/actions/page.action';
 
 const schema = {
   otpCode: {
@@ -58,7 +59,7 @@ const useStyles = makeStyles(theme => ({
     ...theme.palette.input
   },
   btnGoBack: {
-    color: theme.palette.icon.color
+    color: theme.palette.text.secondary
   }
 }));
 
@@ -114,9 +115,19 @@ const ConfirmAccount = ({ data, onSubmit, onClose, closeAllowed }) => {
     }
   };
 
-  const handleClickBtnResend = event => {
+  const handleClickBtnResend = async (event) => {
     event.preventDefault();
-    console.log('click');
+    dispatch(setPageLoading(true));
+    try {
+      const res = await authApi.sendOtp({ email: data.email });
+      dispatch(showNotification('success', `${apiMessage[res.messages[0]]} ${data.email}`));
+      dispatch(setPageLoading(false));
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        dispatch(setPageLoading(false));
+      }
+    }
   }
 
   const hasError = field =>
@@ -132,7 +143,7 @@ const ConfirmAccount = ({ data, onSubmit, onClose, closeAllowed }) => {
           {closeAllowed && (
             <Box ml={-2}>
               <IconButton className={classes.btnGoBack} onClick={onClose}>
-                <ArrowBackIcon />
+                <ArrowBackIcon color="inherit" />
               </IconButton>
             </Box>
           )}

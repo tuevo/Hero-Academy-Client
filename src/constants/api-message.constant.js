@@ -51,5 +51,8 @@ export const apiMessage = {
   ADD_VIDEO_INVALID: 'Vui lòng cung cấp đầy đủ thông tin video',
   DELETED_COURSE_SUCCESSFULLY: 'Gỡ khóa học thành công',
   CATEGORY_ALREADY_EXISTS_REGISTERED_COURSE: 'Không thể xóa lĩnh vực đã có khóa học',
-  VIDEO_ADDED_SUCCESSFULLY: 'Đăng video thành công'
+  VIDEO_ADDED_SUCCESSFULLY: 'Đăng video thành công',
+  THE_COURSE_IS_ALREADY_REGISTERED: 'Không thể gỡ khóa học đang có người học',
+  EMAIL_NOT_FOUND: 'Địa chỉ email không tồn tại',
+  SEND_OTP_CODE_SUCCESSFULLY: 'Đã gửi mã OTP đến email'
 }

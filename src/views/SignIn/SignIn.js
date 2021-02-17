@@ -8,20 +8,20 @@ import {
   Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+import { authApi } from 'api';
+import ConfirmAccount from 'components/ConfirmAccount/ConfirmAccount';
+import { apiMessage } from 'constants/api-message.constant';
+import { availablePages } from 'constants/global.constant';
+import * as _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
-import { setLoading, showNotification } from 'redux/actions/app.action';
+import { showNotification } from 'redux/actions/app.action';
+import { setPageBasics, setPageLoading } from 'redux/actions/page.action';
 import validate from 'validate.js';
 import { localStorageItems } from '../../constants/local-storage.constant';
 import { signIn } from '../../redux/actions/user.action';
-import { authApi } from 'api';
-import { apiMessage } from 'constants/api-message.constant';
-import * as _ from 'lodash';
-import { availablePages } from 'constants/global.constant';
-import { setPageBasics } from 'redux/actions/page.action';
-import ConfirmAccount from 'components/ConfirmAccount/ConfirmAccount';
 
 const schema = {
   email: {
@@ -176,14 +176,14 @@ const SignIn = props => {
       password: formState.values.password
     }
 
-    dispatch(setLoading(true));
+    dispatch(setPageLoading(true));
     try {
       const res = await authApi.login(params);
       const { user, meta: { accessToken } } = res.data;
       localStorage.setItem(localStorageItems.ACCESS_TOKEN.name, accessToken);
       localStorage.setItem(localStorageItems.AUTH_USER.name, JSON.stringify(user));
       dispatch(signIn(user));
-      dispatch(setLoading(false));
+      dispatch(setPageLoading(false));
 
       if (history.location.state) {
         const { from } = history.location.state;
@@ -197,7 +197,7 @@ const SignIn = props => {
 
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
-        dispatch(setLoading(false));
+        dispatch(setPageLoading(false));
 
         if (error.messages[0] === 'ACCOUNT_HAS_NOT_BEEN_CONFIRMED') {
           setConfirmAccountVisible(true);

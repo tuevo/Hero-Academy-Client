@@ -79,7 +79,7 @@ const Course = ({ data, type }) => {
                 </Box>
               </Box>
               <Box display="flex" alignItems="center">
-                <Typography variant="body2" style={{ marginLeft: 3 }}>
+                <Typography variant="body2">
                   <span>(</span>
                   <NumberFormat value={data.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
                   <span>)</span>

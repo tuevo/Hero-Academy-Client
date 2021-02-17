@@ -566,8 +566,10 @@ const CourseDetails = () => {
     try {
       const res = await courseApi.delete(course._id);
       dispatch(showNotification('success', apiMessage[res.messages[0]]));
-      dispatch(setPageLoading(false));
-      history.push(availablePages.COURSES.path);
+      setTimeout(() => {
+        dispatch(setPageLoading(false));
+        history.push(availablePages.COURSES.path);
+      }, 3000);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
@@ -860,7 +862,7 @@ const CourseDetails = () => {
                     <CircularProgress color="primary" />
                   </Box>
                 )}
-                {!chapterListLoading && chapterList.length === 0 && userState.authUser.role === userRole.STUDENT.value && (
+                {!chapterListLoading && chapterList.length === 0 && userState.authUser.role !== userRole.LECTURER.value && (
                   <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ width: '100%', height: '25rem' }}>
                     <Box mb={1}>
                       <MovieIcon className={classes.emptyVideoListIcon} style={{ fontSize: '4.375rem' }} />
@@ -1090,7 +1092,11 @@ const CourseDetails = () => {
         <div className={`${classes.section} ${classes.highestViewCourses} animate__animated animate__fadeInUp`}>
           <Typography variant="h5" className={classes.highestViewCourses__title}><b>🔥 Khóa học được đăng ký nhiều</b></Typography>
           <div className={classes.highestViewCoursesCarousel}>
-            <CourseMultiCarousel courses={mostRegisteredCourseList || []} />
+            {mostRegisteredCourseList.length > 0 ? (
+              <CourseMultiCarousel courses={mostRegisteredCourseList} />
+            ) : (
+                <Typography variant="body1">Không có kết quả nào.</Typography>
+              )}
           </div>
         </div>
 
