@@ -39,7 +39,7 @@ function AccountMenu({ authUser, onClickItem }) {
   }
 
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+  const id = open ? 'account-menu' : undefined;
 
   return (
     <div>
@@ -48,7 +48,7 @@ function AccountMenu({ authUser, onClickItem }) {
           <Avatar src={authUser.avatarUrl} />
           <Box ml={1} display="flex" flexDirection="column" justifyContent="center">
             <Typography variant="h5" style={{ textAlign: 'left' }}><b>{authUser.fullName}</b></Typography>
-            <Typography variant="body2" style={{ textAlign: 'left' }}>{_.find(userRole, role => role.value === authUser.role).name}</Typography>
+            <Typography variant="body2" style={{ textAlign: 'left', marginTop: 3 }}>{_.find(userRole, role => role.value === authUser.role).name}</Typography>
           </Box>
         </Box>
       </Button>

@@ -4,15 +4,15 @@ import VideoUploading from 'components/VideoUploading/VideoUploading';
 import React, { useEffect, useState } from 'react';
 import validate from 'validate.js';
 import ImageUploading from 'components/ImageUploading/ImageUploading';
+import { useDispatch } from 'react-redux';
+import { showNotification } from 'redux/actions/app.action';
+import { apiMessage } from 'constants/api-message.constant';
 
 const schema = {
   title: {
     presence: { allowEmpty: false, message: 'is required' }
   },
   video: {
-    presence: { allowEmpty: false, message: 'is required' }
-  },
-  thumbnailUrl: {
     presence: { allowEmpty: false, message: 'is required' }
   }
 };
@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function AddVideo({ open, onClose }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [formState, setFormState] = useState({
     isValid: false,
@@ -72,10 +73,6 @@ export default function AddVideo({ open, onClose }) {
     }));
   };
 
-  useEffect(() => {
-    console.log(formState);
-  }, [formState]);
-
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
 
@@ -95,7 +92,7 @@ export default function AddVideo({ open, onClose }) {
   }
 
   const handleImageChange = (image) => {
-    const name = 'image', value = image;
+    const name = 'thumbnail', value = image;
     setFormState(formState => ({
       ...formState,
       values: {
@@ -110,8 +107,18 @@ export default function AddVideo({ open, onClose }) {
   }
 
   const handleClose = (accepted) => {
-    console.log(formState.values);
-    onClose(accepted);
+    if (accepted) {
+      if (!formState.isValid) {
+        dispatch(showNotification('error', apiMessage.ADD_VIDEO_INVALID));
+        return;
+      }
+    }
+
+    let data = { ...formState.values };
+    if (!data.thumbnail)
+      delete data.thumbnail;
+
+    onClose(accepted, data);
   }
 
   return (

@@ -70,6 +70,14 @@ const courseApi = {
     addChapter: (courseId, params) => {
         const url = `${baseUrl}/${courseId}/chapters`;
         return axiosClient.post(url, params);
+    },
+    addChapterVideo: (courseId, chapterId, params) => {
+        const url = `${baseUrl}/${courseId}/chapters/${chapterId}/videos`;
+        return axiosClient2.post(url, parseFormData(params));
+    },
+    delete: (id) => {
+        const url = `${baseUrl}/${id}`;
+        return axiosClient.delete(url);
     }
 }
 

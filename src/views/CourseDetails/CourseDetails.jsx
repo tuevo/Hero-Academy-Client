@@ -40,6 +40,7 @@ import AddFeedback from './components/AddFeedback/AddFeedback';
 import AddVideo from './components/AddVideo/AddVideo';
 import UpdateCourse from './components/UpdateCourse/UpdateCourse';
 import WatchHistory from './components/WatchHistory/WatchHistory';
+import { setPageLoading } from 'redux/actions/page.action';
 
 function a11yProps(index) {
   return {
@@ -86,7 +87,8 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 'bold',
     '&:hover': {
       backgroundColor: 'rgba(255,255,255,0.2)'
-    }
+    },
+    backdropFilter: 'blur(6px)'
   },
   main: {
     position: 'absolute',
@@ -118,8 +120,6 @@ const useStyles = makeStyles(theme => ({
   },
   highestViewCourses: {
     ...theme.palette.card,
-    // backgroundColor: theme.palette.primary.main,
-    // "backgroundImage": "linear-gradient(to top, #4481eb 0%, #04befe 100%)",
     padding: theme.spacing(4),
   },
   highestViewCourses__title: {
@@ -417,7 +417,7 @@ const CourseDetails = () => {
       const newVideoList = res.data.videos.map(v => ({
         ...v,
         thumbnailUrl: v.thumbnailUrl || 'https://wellstarthealth.com/assets/unique/well_start_default_video_image-369627cf3a7b03756d8ae22abd46a048eaa31e432404c956126e433dd02f2a30.jpg',
-        disabled: v.publicIdOfVideo === null ? true : false
+        disabled: !v.publicIdOfVideo ? true : false
       }));
       setExpandedChapterVideoList(newVideoList);
       setExpandedChapterVideoListLoading(false);
@@ -430,12 +430,11 @@ const CourseDetails = () => {
     }
   }
 
-  const handleClickVideoListItem = (videoId) => {
-    if (videoId === activeVideo._id)
+  const handleClickVideoListItem = (video) => {
+    if (video._id === activeVideo._id || video.disabled)
       return;
 
-    const newVideo = expandedChapterVideoList.find(v => v._id === videoId);
-    setActiveVideo({ ...newVideo, type: 'from_expanded_chapter' });
+    setActiveVideo({ ...video, type: 'from_expanded_chapter' });
   }
 
   const handleUpdateCourse = (data) => {
@@ -546,9 +545,24 @@ const CourseDetails = () => {
     setOpenRemovingCourseConfirmDialog(true);
   }
 
-  const handleRemovingCourseDialogClose = isAccepted => {
-    console.log(isAccepted);
+  const handleRemovingCourseDialogClose = async (accepted) => {
     setOpenRemovingCourseConfirmDialog(false);
+
+    if (!accepted)
+      return;
+
+    dispatch(setPageLoading(true));
+    try {
+      const res = await courseApi.delete(course._id);
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+      dispatch(setPageLoading(false));
+      history.push(availablePages.COURSES.path);
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        dispatch(setPageLoading(false));
+      }
+    }
   }
 
   const handleClickChapter = (index) => {
@@ -563,9 +577,26 @@ const CourseDetails = () => {
     }
   }
 
-  const handleCloseAddVideo = (accepted) => {
-    setOpenAddVideo(false);
-    console.log(accepted);
+  const handleCloseAddVideo = async (accepted, params) => {
+    if (!accepted) {
+      setOpenAddVideo(false);
+      return;
+    }
+
+    dispatch(setPageLoading(true));
+    try {
+      const res = await courseApi.addChapterVideo(course._id, chapterList[expandedChapterIndex]._id, params);
+      const newVideo = res.data.videos[0];
+      setExpandedChapterVideoList([...expandedChapterVideoList, newVideo]);
+      setOpenAddVideo(false);
+      dispatch(setPageLoading(false));
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+    } catch (error) {
+      if (error.messages && error.messages.length > 0) {
+        dispatch(showNotification('error', apiMessage[error.messages[0]] || error.messages[0]));
+        dispatch(setPageLoading(false));
+      }
+    }
   }
 
   const handleClickBtnAddVideo = () => {
@@ -914,7 +945,7 @@ const CourseDetails = () => {
                                           [classes.videoListItemActive]: video._id === activeVideo._id,
                                           [classes.videoListItemDisabled]: video.disabled
                                         })}
-                                        onClick={() => handleClickVideoListItem(video._id)}
+                                        onClick={() => handleClickVideoListItem(video)}
                                       >
                                         <CardActionArea style={{ height: '100%' }} disabled={video.disabled}>
                                           <Grid container style={{ height: '100%' }}>

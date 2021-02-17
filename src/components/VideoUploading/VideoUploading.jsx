@@ -30,7 +30,15 @@ const useStyles = makeStyles((theme) => ({
   video__inner: {
     width: '95%',
     height: '95%'
-  }
+  },
+  btnContrast: {
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    fontWeight: 'bold',
+    '&:hover': {
+      backgroundColor: 'rgba(255,255,255,0.2)'
+    },
+    backdropFilter: 'blur(6px)'
+  },
 }));
 
 export default function VideoUploading({ initVideoUrl, onVideoChange }) {
@@ -85,7 +93,7 @@ export default function VideoUploading({ initVideoUrl, onVideoChange }) {
           htmlFor="video-upload"
           style={{ color: '#fff', opacity: uploadingVisible ? 1 : 0 }}
         >
-          <Button startIcon={<BackupIcon />} variant="outlined" color="inherit" component="span">
+          <Button startIcon={<BackupIcon />} className={classes.btnContrast} component="span">
             Tải video lên
           </Button>
         </label>
