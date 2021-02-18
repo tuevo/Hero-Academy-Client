@@ -14,6 +14,7 @@ import NumberFormat from 'react-number-format';
 import AddLecturer from './components/AddLecturer/AddLecturer';
 import lecturerApi from 'api/lecturer.api';
 import { setScrollbarTop } from 'redux/actions/page.action';
+import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
 
 function a11yProps(index) {
   return {
@@ -58,11 +59,13 @@ const Users = () => {
   const [tabValue, setTabValue] = useState(0);
 
   const [studentList, setStudentList] = useState([]);
+  const [studentListLoading, setStudentListLoading] = useState(true);
   const [studentListPage, setStudentListPage] = useState(1);
   const [studentListTotalItems, setStudentListTotalItems] = useState(0);
   const [disableBtnLoadMoreStudent, setDisableBtnLoadMoreStudent] = useState(false);
 
   const [lecturerList, setLecturerList] = useState([]);
+  const [lecturerListLoading, setLecturerListLoading] = useState(true);
   const [lecturerListPage, setLecturerListPage] = useState(1);
   const [lecturerListTotalItems, setLecturerListTotalItems] = useState(0);
   const [disableBtnLoadMoreLecturer, setDisableBtnLoadMoreLecturer] = useState(false);
@@ -84,9 +87,11 @@ const Users = () => {
         setDisableBtnLoadMoreStudent(false);
       }
 
+      setStudentListLoading(false);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        setStudentListLoading(false);
       }
     }
   };
@@ -106,9 +111,11 @@ const Users = () => {
         setDisableBtnLoadMoreLecturer(false);
       }
 
+      setLecturerListLoading(false);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        setLecturerListLoading(false);
       }
     }
   };
@@ -214,69 +221,80 @@ const Users = () => {
 
       {tabValue === 0 && (
         <Box p={4}>
-          <GridList cellHeight="auto" cols={3}>
-            {studentList.map((s, i) => (
-              <GridListTile key={s._id}>
-                <Box m={1} className="animate__animated animate__fadeIn" style={{ animationDelay: `${0.1 * i}s` }}>
-                  <Student
-                    data={s}
-                    onRemove={(studentId) => handleRemoveUser(1, studentId)}
-                  />
-                </Box>
-              </GridListTile>
-            ))}
-          </GridList>
-          <Box px={1} pt={3}>
-            <Button
-              fullWidth
-              className={classes.btnLoadMore}
-              variant="contained"
-              color="primary"
-              size="large"
-              onClick={() => handleClickBtnLoadMore(1)}
-              disabled={disableBtnLoadMoreStudent}
-            >
-              Xem thêm học viên
+          {studentListLoading && <CourseListLoading />}
+          {!studentListLoading && studentList.length > 0 && (
+            <div>
+              <GridList cellHeight="auto" cols={3}>
+                {studentList.map((s, i) => (
+                  <GridListTile key={s._id}>
+                    <Box m={1} className="animate__animated animate__fadeIn" style={{ animationDelay: `${0.05 * i}s` }}>
+                      <Student
+                        data={s}
+                        onRemove={(studentId) => handleRemoveUser(1, studentId)}
+                      />
+                    </Box>
+                  </GridListTile>
+                ))}
+              </GridList>
+              <Box px={1} pt={3}>
+                <Button
+                  fullWidth
+                  className={classes.btnLoadMore}
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  onClick={() => handleClickBtnLoadMore(1)}
+                  disabled={disableBtnLoadMoreStudent}
+                >
+                  Xem thêm học viên
             </Button>
-          </Box>
+              </Box>
+            </div>
+
+          )}
         </Box>
       )}
 
       {tabValue === 1 && (
         <Box p={4} position="relative">
-          <AddLecturer open={openAddLecturer} onClose={handleCloseAddLecturer} />
-          <Box className={`${classes.btnAddLecturerContainer} animate__animated animate__bounceIn`}>
-            <Tooltip title="Thêm giảng viên mới">
-              <Fab size="large" color="primary" aria-label="add" className={classes.btnAddLecturer} onClick={handleClickBtnAddLecturer}>
-                <PersonAddIcon fontSize="large" />
-              </Fab>
-            </Tooltip>
-          </Box>
-          <GridList cellHeight="auto" cols={3}>
-            {lecturerList.map((s, i) => (
-              <GridListTile key={s._id}>
-                <Box m={1} className="animate__animated animate__fadeIn" style={{ animationDelay: `${0.1 * i}s` }}>
-                  <Lecturer
-                    data={s}
-                    onRemove={(lecturerId) => handleRemoveUser(2, lecturerId)}
-                  />
-                </Box>
-              </GridListTile>
-            ))}
-          </GridList>
-          <Box px={1} pt={3}>
-            <Button
-              fullWidth
-              className={classes.btnLoadMore}
-              variant="contained"
-              color="primary"
-              size="large"
-              onClick={() => handleClickBtnLoadMore(2)}
-              disabled={disableBtnLoadMoreLecturer}
-            >
-              Xem thêm giảng viên
+          {lecturerListLoading && <CourseListLoading />}
+          {!lecturerListLoading && lecturerList.length > 0 && (
+            <div>
+              <AddLecturer open={openAddLecturer} onClose={handleCloseAddLecturer} />
+              <Box className={`${classes.btnAddLecturerContainer} animate__animated animate__bounceIn`}>
+                <Tooltip title="Thêm giảng viên mới">
+                  <Fab size="large" color="primary" aria-label="add" className={classes.btnAddLecturer} onClick={handleClickBtnAddLecturer}>
+                    <PersonAddIcon fontSize="large" />
+                  </Fab>
+                </Tooltip>
+              </Box>
+              <GridList cellHeight="auto" cols={3}>
+                {lecturerList.map((s, i) => (
+                  <GridListTile key={s._id}>
+                    <Box m={1} className="animate__animated animate__fadeIn" style={{ animationDelay: `${0.05 * i}s` }}>
+                      <Lecturer
+                        data={s}
+                        onRemove={(lecturerId) => handleRemoveUser(2, lecturerId)}
+                      />
+                    </Box>
+                  </GridListTile>
+                ))}
+              </GridList>
+              <Box px={1} pt={3}>
+                <Button
+                  fullWidth
+                  className={classes.btnLoadMore}
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  onClick={() => handleClickBtnLoadMore(2)}
+                  disabled={disableBtnLoadMoreLecturer}
+                >
+                  Xem thêm giảng viên
             </Button>
-          </Box>
+              </Box>
+            </div>
+          )}
         </Box>
       )}
 

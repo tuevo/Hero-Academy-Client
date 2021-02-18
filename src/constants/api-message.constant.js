@@ -54,5 +54,6 @@ export const apiMessage = {
   VIDEO_ADDED_SUCCESSFULLY: 'Đăng video thành công',
   THE_COURSE_IS_ALREADY_REGISTERED: 'Không thể gỡ khóa học đang có người học',
   EMAIL_NOT_FOUND: 'Địa chỉ email không tồn tại',
-  SEND_OTP_CODE_SUCCESSFULLY: 'Đã gửi mã OTP đến email'
+  SEND_OTP_CODE_SUCCESSFULLY: 'Đã gửi mã OTP đến email',
+  UPDATE_PASSWORD_INVALID: 'Vui lòng cung cấp đầy đủ thông tin'
 }

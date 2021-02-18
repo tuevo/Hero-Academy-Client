@@ -73,12 +73,9 @@ export default function Info() {
   };
 
   const [formState, setFormState] = useState(initFormState);
-
   const [showUploadingAvatar, setShowUploadingAvatar] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState(userState.authUser.avatarUrl);
   const [uploadedAvatar, setUploadedAvatar] = useState(null);
-
-  const [disableBtnUpdate, setDisableBtnUpdate] = useState(false);
 
   useEffect(() => {
     if (userState.authUser.role === userRole.LECTURER.value) {
@@ -146,23 +143,18 @@ export default function Info() {
   };
 
   const updateUser = async (params) => {
-    setDisableBtnUpdate(true);
     dispatch(setPageLoading(true));
     try {
       const res = await userApi.update(params);
       const { user } = res.data;
-
       localStorage.setItem(localStorageItems.AUTH_USER.name, JSON.stringify(user));
-
       dispatch(signIn(user));
       dispatch(showNotification('success', apiMessage[res.messages[0]]));
       dispatch(setPageLoading(false));
-      setDisableBtnUpdate(false);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
         dispatch(setPageLoading(false));
-        setDisableBtnUpdate(false);
       }
     }
   };
@@ -305,7 +297,6 @@ export default function Info() {
                 variant="contained"
                 className={classes.btnUpdate}
                 onClick={handleBtnUpdateClick}
-                disabled={disableBtnUpdate}
               >
                 Cập nhật thông tin
             </Button>

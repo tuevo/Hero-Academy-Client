@@ -6,6 +6,7 @@ import { authApi } from 'api';
 import { useDispatch } from 'react-redux';
 import { showNotification } from 'redux/actions/app.action';
 import { apiMessage } from 'constants/api-message.constant';
+import { setPageLoading } from 'redux/actions/page.action';
 
 const schema = {
   currentPassword: {
@@ -67,31 +68,39 @@ export default function Password() {
     }));
   };
 
-  const updatePassword = async(params) => {
+  const handleBtnUpdateClick = async () => {
+    if (!formState.isValid) {
+      dispatch(showNotification('error', apiMessage.UPDATE_PASSWORD_INVALID));
+      return;
+    }
+
+    const params = {
+      ...formState.values
+    };
+
+    dispatch(setPageLoading(true));
     try {
       const res = await authApi.updatePassword(params);
-    
+      dispatch(setPageLoading(false));
       dispatch(showNotification('success', apiMessage[res.messages[0]]));
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        dispatch(setPageLoading(false));
       }
     }
-  };
-
-  const handleBtnUpdateClick = () => {
-    let data = {
-      ...formState.values
-    };
-
-    updatePassword(data);
   }
 
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
 
+  const handleSubmit = e => {
+    e.preventDefault();
+    handleBtnUpdateClick();
+  }
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <Box mb={2}>
         <TextField
           fullWidth
@@ -152,6 +161,7 @@ export default function Password() {
           }}
         />
       </Box>
+      <button type="submit" hidden></button>
       <Box mt={4}>
         <Button
           color="primary"
@@ -159,9 +169,10 @@ export default function Password() {
           variant="contained"
           className={classes.btnUpdate}
           onClick={handleBtnUpdateClick}
+          disabled={!formState.isValid}
         >
           Cập nhật mật khẩu
-            </Button>
+        </Button>
       </Box>
     </form>
   )

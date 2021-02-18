@@ -10,12 +10,13 @@ import { useDispatch } from 'react-redux';
 import { showNotification } from 'redux/actions/app.action';
 import { setScrollbarTop } from 'redux/actions/page.action';
 import AddCourse from './components/AddCourse/AddCourse';
+import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
+import CourseListEmpty from 'components/CourseListEmpty/CourseListEmpty';
 
 const useStyles = makeStyles(theme => ({
   root: {
     zIndex: 5,
     padding: theme.spacing(4),
-    minHeight: '33rem',
     width: '100%'
   },
   btnAddCourse: {
@@ -41,6 +42,7 @@ const InChargeCourses = () => {
 
   const [lecturerCourseList, setLecturerCourseList] = useState([]);
   const [lecturerCourseListPage, setLecturerCourseListPage] = useState(1);
+  const [lecturerCourseListLoading, setLecturerCourseListLoading] = useState(true);
 
   const [disableBtnLoadMoreCourse, setDisableBtnLoadMoreCourse] = useState(false);
 
@@ -59,9 +61,12 @@ const InChargeCourses = () => {
       if (newLecturerCourseList.length < res.data.meta.totalItems) {
         setDisableBtnLoadMoreCourse(false);
       }
+
+      setLecturerCourseListLoading(false);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        setLecturerCourseListLoading(false);
       }
     }
   }
@@ -91,36 +96,42 @@ const InChargeCourses = () => {
 
   return (
     <div className={classes.root}>
-      <AddCourse
-        open={openAddCouse}
-        onClose={(e, message) => toggleAddCourse(e, false, message)}
-      />
-      <Tooltip title="Tạo khóa học mới" className="animate__animated animate__bounceIn">
-        <Fab size="large" color="primary" aria-label="add" className={classes.btnAddCourse} onClick={(e) => toggleAddCourse(e, true)}>
-          <AddIcon fontSize="large" />
-        </Fab>
-      </Tooltip>
-      <Box display="flex" flexWrap="wrap" m={-1} pt={2}>
-        {lecturerCourseList.map((c, i) => (
-          <Box key={c._id} m={1} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
-            <Course data={c} type="minimal" />
+      {lecturerCourseListLoading && <CourseListLoading />}
+      {!lecturerCourseListLoading && lecturerCourseList.length === 0 && <CourseListEmpty />}
+      {!lecturerCourseListLoading && lecturerCourseList.length > 0 && (
+        <div>
+          <AddCourse
+            open={openAddCouse}
+            onClose={(e, message) => toggleAddCourse(e, false, message)}
+          />
+          <Tooltip title="Tạo khóa học mới" className="animate__animated animate__bounceIn">
+            <Fab size="large" color="primary" aria-label="add" className={classes.btnAddCourse} onClick={(e) => toggleAddCourse(e, true)}>
+              <AddIcon fontSize="large" />
+            </Fab>
+          </Tooltip>
+          <Box display="flex" flexWrap="wrap" m={-1} pt={2}>
+            {lecturerCourseList.map((c, i) => (
+              <Box key={c._id} m={1} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
+                <Course data={c} type="minimal" />
+              </Box>
+            ))}
           </Box>
-        ))}
-      </Box>
-      <Box mt={2}>
-        <Button
-          fullWidth
-          className={classes.btnLoadMoreCourse}
-          variant="contained"
-          size="large"
-          color="primary"
-          onClick={handleClickBtnLoadMoreCourse}
-          disabled={disableBtnLoadMoreCourse}
-        >
-          Xem thêm khóa học
+          <Box mt={2}>
+            <Button
+              fullWidth
+              className={classes.btnLoadMoreCourse}
+              variant="contained"
+              size="large"
+              color="primary"
+              onClick={handleClickBtnLoadMoreCourse}
+              disabled={disableBtnLoadMoreCourse}
+            >
+              Xem thêm khóa học
         </Button>
-      </Box>
-    </div >
+          </Box>
+        </div>
+      )}
+    </div>
   );
 };
 

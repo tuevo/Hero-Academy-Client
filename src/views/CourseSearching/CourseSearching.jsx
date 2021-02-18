@@ -10,6 +10,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'recompose';
 import { showNotification } from 'redux/actions/app.action';
 import { setScrollbarTop } from 'redux/actions/page.action';
+import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
+import { Skeleton } from '@material-ui/lab';
+import SchoolIcon from '@material-ui/icons/School';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -45,6 +48,10 @@ const useStyles = makeStyles(theme => ({
   },
   icon: {
     color: theme.palette.icon
+  },
+  courseListEmptyIcon: {
+    fontSize: '4.375rem',
+    color: theme.palette.icon
   }
 }));
 
@@ -76,6 +83,7 @@ const CourseSearching = () => {
   }), shallowEqual);
 
   const [courseList, setCourseList] = useState([]);
+  const [courseListLoading, setCourseListLoading] = useState(true);
   const [courseListPage, setCourseListPage] = useState(1);
   const [courseListTotalItems, setCourseListTotalItems] = useState(0);
   const [btnLoadMoreCourseDisabled, setBtnLoadMoreCourseDisabled] = useState(false);
@@ -83,6 +91,7 @@ const CourseSearching = () => {
 
   const getAllCourses = async (page) => {
     setBtnLoadMoreCourseDisabled(true);
+    setCourseListLoading(true);
     try {
       const res = await courseApi.getAll(
         page,
@@ -107,10 +116,11 @@ const CourseSearching = () => {
 
       setCourseList(newCourseList);
       setCourseListTotalItems(totalItems);
-
+      setCourseListLoading(false);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        setCourseListLoading(false);
       }
     }
   }
@@ -138,66 +148,87 @@ const CourseSearching = () => {
   return (
     <div className={classes.root}>
       <Box p={4} className={classes.courses}>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
+        {courseListLoading && (
           <Box>
-            <Typography variant="h4" className={classes.sencondaryText} gutterBottom>
-              {appState.courseSearchingQuery ? (
-                <span><b>Từ khóa "{appState.courseSearchingQuery}"</b></span>
-              ) : (
-                  <span><b>Tất cả khóa học</b></span>
-                )}
-            </Typography>
-            <Typography variant="body1">
-              {appState.courseSearchingQuery ? (
-                <span>Có <b><NumberFormat value={courseListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học liên quan</span>
-              ) : (
-                  <span>Tổng cộng <b><NumberFormat value={courseListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học</span>
-                )}
-            </Typography>
-          </Box>
-          {courseListTotalItems > 0 && (
-            <FormControl className={classes.formControl}>
-              <InputLabel id="demo-simple-select-label">Lọc khóa học theo</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={courseListFilterCriteriaIndex}
-                onChange={handleChange}
-                className={classes.input}
-                inputProps={{
-                  classes: {
-                    icon: classes.icon
-                  }
-                }}
-              >
-                {courseListFilterCriterias.map((c, i) => (
-                  <MenuItem key={i} value={i}>{c.text}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          )}
-        </Box>
-        <Box mt={3} mb={2} >
-          <Divider className={classes.divider} />
-        </Box>
-        <Box display="flex" flexWrap="wrap" m={-1} mt={2}>
-          {courseList.map((c, i) => (
-            <Box key={c._id} m={1} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
-              <Course data={c} type="minimal" />
+            <Skeleton variant="text" width={300} />
+            <Box pt={1}>
+              <Skeleton variant="text" />
             </Box>
-          ))}
-        </Box>
-        <Button
-          fullWidth
-          className={classes.btnLoadMoreCourse}
-          variant="contained"
-          color="primary"
-          size="large"
-          disabled={btnLoadMoreCourseDisabled}
-          onClick={handleClickBtnLoadMoreCourse}
-        >
-          Xem thêm khóa học
-        </Button>
+          </Box>
+        )}
+        {!courseListLoading && (
+          <Box display="flex" justifyContent="space-between" alignItems="flex-end">
+            <Box>
+              <Typography variant="h4" className={classes.sencondaryText} gutterBottom>
+                {appState.courseSearchingQuery ? (
+                  <span><b>Từ khóa "{appState.courseSearchingQuery}"</b></span>
+                ) : (
+                    <span><b>Tất cả khóa học</b></span>
+                  )}
+              </Typography>
+              {courseListTotalItems > 0 && (
+                <Typography variant="body1">
+                  <b><NumberFormat value={courseListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học
+                </Typography>
+              )}
+            </Box>
+            {courseListTotalItems > 0 && (
+              <FormControl className={classes.formControl}>
+                <InputLabel id="demo-simple-select-label">Lọc khóa học theo</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={courseListFilterCriteriaIndex}
+                  onChange={handleChange}
+                  className={classes.input}
+                  inputProps={{
+                    classes: {
+                      icon: classes.icon
+                    }
+                  }}
+                >
+                  {courseListFilterCriterias.map((c, i) => (
+                    <MenuItem key={i} value={i}>{c.text}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          </Box>
+        )}
+        {/* <Box mt={3} mb={2}>
+          {!courseListLoading && <Divider className={classes.divider} />}
+        </Box> */}
+        {courseListLoading && <CourseListLoading />}
+        {!courseListLoading && courseList.length === 0 && (
+          <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ height: '31.75rem' }}>
+            <Box mb={1}>
+              <SchoolIcon className={classes.courseListEmptyIcon} />
+            </Box>
+            <Typography variant="subtitle2">Không tìm thấy khóa học nào.</Typography>
+          </Box>
+        )}
+        {!courseListLoading && courseList.length > 0 && (
+          <div>
+            <Box display="flex" flexWrap="wrap" m={-1} mt={4}>
+              {courseList.map((c, i) => (
+                <Box key={c._id} m={1} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
+                  <Course data={c} type="minimal" />
+                </Box>
+              ))}
+            </Box>
+            <Button
+              fullWidth
+              className={classes.btnLoadMoreCourse}
+              variant="contained"
+              color="primary"
+              size="large"
+              disabled={btnLoadMoreCourseDisabled}
+              onClick={handleClickBtnLoadMoreCourse}
+            >
+              Xem thêm khóa học
+            </Button>
+          </div>
+        )}
       </Box>
     </div >
   );

@@ -2,6 +2,7 @@ import { Box, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BackupIcon from '@material-ui/icons/Backup';
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,11 +54,13 @@ export default function VideoUploading({ initVideoUrl, onVideoChange }) {
     let video = e.target.files[0];
 
     reader.onloadend = () => {
-      onVideoChange(video)
-      setVideoPreviewUrl(reader.result)
+      onVideoChange(video);
+      setVideoPreviewUrl(reader.result);
     }
 
-    reader.readAsDataURL(video)
+    if (video) {
+      reader.readAsDataURL(video);
+    }
   }
 
   const handleMouseOver = (e) => {

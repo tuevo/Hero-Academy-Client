@@ -1,25 +1,27 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, Link, Box } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(4)
   },
   content: {
-    paddingTop: 150,
+    paddingTop: 100,
     textAlign: 'center'
   },
   image: {
     marginTop: 50,
     display: 'inline-block',
     maxWidth: '100%',
-    width: 560
+    width: 460
   }
 }));
 
 const NotFound = () => {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <div className={classes.root}>
@@ -40,6 +42,16 @@ const NotFound = () => {
             <Typography variant="subtitle2">
               Trang này không tồn tại hoặc đường dẫn đến trang có thể đã bị hỏng, vui lòng kiểm tra lại.
             </Typography>
+            <Box my={4}>
+              <Link
+                component="button"
+                onClick={() => history.push('/')}
+              >
+                <Typography variant="subtitle2" color="primary">
+                  Trở về trang chủ
+                </Typography>
+              </Link>
+            </Box>
             <img
               alt="Under development"
               className={classes.image}

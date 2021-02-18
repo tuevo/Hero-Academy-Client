@@ -7,6 +7,9 @@ import { availablePages } from 'constants/global.constant';
 import React, { useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useHistory, useParams } from 'react-router-dom';
+import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
+import { Skeleton } from '@material-ui/lab';
+import CourseListEmpty from 'components/CourseListEmpty/CourseListEmpty';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,6 +47,7 @@ const CategoryCourses = () => {
   const limit = 8;
 
   const [categoryCourseList, setCategoryCourseList] = useState([]);
+  const [categoryCourseListLoading, setCategoryCourseListLoading] = useState(true);
   const [category, setCategory] = useState(null);
   const [categoryCourseListPage, setCategoryCourseListPage] = useState(1);
   const [categoryCourseListTotalItems, setCategoryCourseListTotalItems] = useState(0);
@@ -51,6 +55,7 @@ const CategoryCourses = () => {
 
   const getCoursesListOfACategory = async (page) => {
     setDisableBtnLoadMore(true);
+    setCategoryCourseListLoading(true);
     try {
       const res = await categoryApi.getCourses(categoryId, page, limit);
       const courses = res.data.entries.map(item => ({
@@ -71,9 +76,11 @@ const CategoryCourses = () => {
         setDisableBtnLoadMore(false);
       }
 
+      setCategoryCourseListLoading(false);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         history.push(availablePages.NOT_FOUND.path);
+        setCategoryCourseListLoading(false);
       }
     }
   };
@@ -90,37 +97,57 @@ const CategoryCourses = () => {
   return (
     <div className={classes.root}>
       <Box p={4} className={classes.courses}>
-        <Box display="flex" alignItems="center">
-          <Typography variant="h4" className={classes.sencondaryText}><b>{category && category.categoryCluster.name}</b></Typography>
-          <ArrowRightIcon className={classes.sencondaryText} />
-          <Typography variant="h4" className={classes.sencondaryText}><b>{category && category.name}</b></Typography>
-        </Box>
-        <Box mt={1}>
-          <Typography variant="body1">
-            <b><NumberFormat value={categoryCourseListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học
-          </Typography>
-        </Box>
-        <Box mt={3} mb={2} >
-          <Divider className={classes.divider} />
-        </Box>
-        <Box display="flex" flexWrap="wrap" m={-1} mt={2}>
-          {categoryCourseList.map((c, i) => (
-            <Box key={c._id} m={1} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
-              <Course data={c} type="minimal" />
+        {categoryCourseListLoading && (
+          <Box>
+            <Skeleton variant="text" width={300} />
+            <Box pt={1}>
+              <Skeleton variant="text" />
             </Box>
-          ))}
-        </Box>
-        <Button
-          fullWidth
-          className={classes.btnLoadMoreCourse}
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={() => handleClickBtnLoadMore()}
-          disabled={disableBtnLoadMore}
-        >
-          Xem thêm khóa học
-        </Button>
+          </Box>
+        )}
+        {!categoryCourseListLoading && (
+          <div>
+            <Box display="flex" alignItems="center">
+              <Typography variant="h4" className={classes.sencondaryText}><b>{category && category.categoryCluster.name}</b></Typography>
+              <ArrowRightIcon className={classes.sencondaryText} />
+              <Typography variant="h4" className={classes.sencondaryText}><b>{category && category.name}</b></Typography>
+            </Box>
+            <Box mt={1}>
+              {categoryCourseListTotalItems > 0 && (
+                <Typography variant="body1">
+                  <b><NumberFormat value={categoryCourseListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b> khóa học
+                </Typography>
+              )}
+            </Box>
+            <Box mt={3} mb={2} >
+              {categoryCourseListTotalItems > 0 && <Divider className={classes.divider} />}
+            </Box>
+          </div>
+        )}
+        {categoryCourseListLoading && <CourseListLoading />}
+        {!categoryCourseListLoading && categoryCourseList.length === 0 && <CourseListEmpty />}
+        {!categoryCourseListLoading && categoryCourseList.length > 0 && (
+          <div>
+            <Box display="flex" flexWrap="wrap" m={-1} mt={2}>
+              {categoryCourseList.map((c, i) => (
+                <Box key={c._id} m={1} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
+                  <Course data={c} type="minimal" />
+                </Box>
+              ))}
+            </Box>
+            <Button
+              fullWidth
+              className={classes.btnLoadMoreCourse}
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={() => handleClickBtnLoadMore()}
+              disabled={disableBtnLoadMore}
+            >
+              Xem thêm khóa học
+            </Button>
+          </div>
+        )}
       </Box>
     </div >
   );

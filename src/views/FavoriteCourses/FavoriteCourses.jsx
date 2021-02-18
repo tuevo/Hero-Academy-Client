@@ -7,12 +7,13 @@ import { availablePages } from 'constants/global.constant';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { showNotification } from 'redux/actions/app.action';
+import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
+import CourseListEmpty from 'components/CourseListEmpty/CourseListEmpty';
 
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'relative',
     padding: theme.spacing(4),
-    minHeight: '33rem',
     width: '100%'
   },
   btnLoadMoreCourse: {
@@ -28,6 +29,7 @@ const FavoriteCourses = () => {
 
   const [favoriteList, setFavoriteList] = useState([]);
   const [favoriteListPage, setFavoriteListPage] = useState(1);
+  const [favoriteListLoading, setFavoriteListLoading] = useState(true);
 
   const [disableBtnLoadMoreCourse, setDisableBtnLoadMoreCourse] = useState(false);
 
@@ -47,9 +49,12 @@ const FavoriteCourses = () => {
         if (newCourseList.length < res.data.meta.totalItems) {
           setDisableBtnLoadMoreCourse(false);
         }
+
+        setFavoriteListLoading(false);
       } catch (error) {
         if (error.messages && error.messages.length > 0) {
           dispatch(showNotification('error', apiMessage[error.messages[0]]));
+          setFavoriteListLoading(false);
         }
       }
     }
@@ -64,26 +69,32 @@ const FavoriteCourses = () => {
 
   return (
     <div className={classes.root}>
-      <Box display="flex" flexWrap="wrap" m={-1}>
-        {favoriteList.map((c, i) => (
-          <Box key={c._id} m={1} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
-            <Course data={c} type="minimal" />
+      {favoriteListLoading && <CourseListLoading />}
+      {!favoriteListLoading && favoriteList.length === 0 && <CourseListEmpty />}
+      {!favoriteListLoading && favoriteList.length > 0 && (
+        <div>
+          <Box display="flex" flexWrap="wrap" m={-1}>
+            {favoriteList.map((c, i) => (
+              <Box key={c._id} m={1} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
+                <Course data={c} type="minimal" />
+              </Box>
+            ))}
           </Box>
-        ))}
-      </Box>
-      <Box mt={2}>
-        <Button
-          fullWidth
-          className={classes.btnLoadMoreCourse}
-          variant="contained"
-          size="large"
-          color="primary"
-          onClick={handleClickBtnLoadMoreCourse}
-          disabled={disableBtnLoadMoreCourse}
-        >
-          Xem thêm khóa học
+          <Box mt={2}>
+            <Button
+              fullWidth
+              className={classes.btnLoadMoreCourse}
+              variant="contained"
+              size="large"
+              color="primary"
+              onClick={handleClickBtnLoadMoreCourse}
+              disabled={disableBtnLoadMoreCourse}
+            >
+              Xem thêm khóa học
           </Button>
-      </Box>
+          </Box>
+        </div>
+      )}
     </div>
   );
 };

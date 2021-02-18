@@ -16,7 +16,7 @@ function a11yProps(index) {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    minHeight: '33rem',
+    minHeight: '34rem',
     width: '100%',
     overflow: 'hidden',
     borderRadius: theme.palette.card.borderRadius

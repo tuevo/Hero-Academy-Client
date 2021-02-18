@@ -80,7 +80,7 @@ export default function AddCourse({ open, onClose }) {
   const [formState, setFormState] = useState({
     isValid: false,
     values: {
-      thumbnail: null,
+      thumbnail: '',
       title: '',
       categoryId: '',
       tuition: 0,

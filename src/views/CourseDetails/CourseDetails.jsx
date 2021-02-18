@@ -834,7 +834,7 @@ const CourseDetails = () => {
             <Box p={6}>
               {userState.authUser && userState.authUser.role !== userRole.ADMIN.value && (
                 <Box mb={2} display="flex" alignItems="center" style={{ width: '100%' }}>
-                  {userState.authUser.role === userRole.LECTURER.value && (
+                  {!chapterListLoading && userState.authUser.role === userRole.LECTURER.value && (
                     <Box style={{ flexGrow: 2 }}>
                       <AddChapter
                         course={course}
@@ -1095,7 +1095,7 @@ const CourseDetails = () => {
             {mostRegisteredCourseList.length > 0 ? (
               <CourseMultiCarousel courses={mostRegisteredCourseList} />
             ) : (
-                <Typography variant="body1">Không có kết quả nào.</Typography>
+                <Typography variant="body1">Chưa có khóa học nào liên quan.</Typography>
               )}
           </div>
         </div>

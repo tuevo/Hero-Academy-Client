@@ -64,11 +64,13 @@ export default function ImageUploading({ uploadText, initImageUrl, onImageChange
     let image = e.target.files[0];
 
     reader.onloadend = () => {
-      onImageChange(image)
-      setImagePreviewUrl(reader.result)
+      onImageChange(image);
+      setImagePreviewUrl(reader.result);
     }
 
-    reader.readAsDataURL(image)
+    if (image) {
+      reader.readAsDataURL(image);
+    }
   }
 
   const handleMouseOver = (e) => {

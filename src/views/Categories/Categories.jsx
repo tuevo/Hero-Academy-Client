@@ -15,6 +15,7 @@ import { apiMessage } from 'constants/api-message.constant';
 import { categoryClusterApi, categoryApi } from 'api';
 import { availablePages } from 'constants/global.constant';
 import { shallowEqual } from 'recompose';
+import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -63,6 +64,7 @@ export default function Categories() {
   const [openAddCategoryCluster, setOpenAddCategoryCluster] = useState(false);
 
   const [categoryClusterList, setCategoryClusterList] = useState([]);
+  const [categoryClusterListLoading, setCategoryClusterListLoading] = useState(true);
   const [categoryClusterListPage, setCategoryClusterListPage] = useState(1);
   const [disableBtnLoadMoreCategoryCluster, setDisableBtnLoadMoreCategoryCluster] = useState(false);
 
@@ -90,9 +92,11 @@ export default function Categories() {
         setDisableBtnLoadMoreCategoryCluster(false);
       }
 
+      setCategoryClusterListLoading(false);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        setCategoryClusterListLoading(false);
       }
     }
   }
@@ -233,114 +237,118 @@ export default function Categories() {
 
   return (
     <Box p={4} pt={6} className={classes.root}>
-      <Box mb={3}>
-        <Button
-          fullWidth
-          variant="outlined"
-          color="primary"
-          startIcon={<AddIcon />}
-          onClick={handleClickBtnAddCategoryCluster}
-        >
-          Thêm nhóm lĩnh vực
+      {categoryClusterListLoading && <CourseListLoading />}
+      {!categoryClusterListLoading && categoryClusterList.length > 0 && (
+        <div>
+          <Box mb={3}>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="primary"
+              startIcon={<AddIcon />}
+              onClick={handleClickBtnAddCategoryCluster}
+            >
+              Thêm nhóm lĩnh vực
+            </Button>
+            <AddCategoryCluster
+              open={openAddCategoryCluster}
+              onClose={handleCloseAddCategoryCluster}
+            />
+          </Box>
+          {categoryClusterList.map((cc, i) => (
+            <Accordion
+              key={i}
+              className={`${classes.categoryCluster} animate__animated animate__fadeIn`}
+              style={{ animationDelay: `${0.1 * i}s` }}
+              expanded={i === expandedCategoryClusterIndex}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon className={classes.icon} />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                onClick={() => handleClickCategoryCluster(i)}
+              >
+                <Box display="flex" flexDirection="column">
+                  <Typography variant="h5" gutterBottom><b>{cc.name}</b></Typography>
+                  <Typography variant="body1">
+                    <NumberFormat value={cc.categories.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lĩnh vực'} />
+                  </Typography>
+                </Box>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Box display="flex" flexDirection="column" style={{ width: '100%' }}>
+                  <Box mb={2}>
+                    <AddCategory onSubmit={handleSubmitAddCategory} />
+                  </Box>
+                  <List className={classes.categoryList}>
+                    <PerfectScrollbar className={classes.categoryList__container}>
+                      {cc.categories.map(c => (
+                        <ListItem key={c._id} onClick={() => handleClickCategory({ ...c, categoryCluster: { name: cc.name } })}>
+                          <Box display="flex" justifyContent="space-between" alignItems="center" style={{ width: '100%' }}>
+                            <ListItemText
+                              primary={(
+                                <Typography variant="body1" gutterBottom>{c.name}</Typography>
+                              )}
+                              secondary={(
+                                <NumberFormat value={c.numberOfCourses} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' khóa học'} />
+                              )} />
+                            <CategoryMenu onClickList={handleClickCategoryMenu} />
+                          </Box>
+                        </ListItem>
+                      ))}
+
+                      {cc.categories.length === 0 && (
+                        <Box p={2}>
+                          <Typography variant="body2">Chưa có lĩnh vực nào.</Typography>
+                        </Box>
+
+                      )}
+                    </PerfectScrollbar>
+                  </List>
+                </Box>
+              </AccordionDetails>
+            </Accordion>
+          ))
+          }
+
+          <Box pt={3}>
+            <Button
+              fullWidth
+              className={classes.btnLoadMoreCategoryCluster}
+              variant="contained"
+              size="large"
+              color="primary"
+              disabled={disableBtnLoadMoreCategoryCluster}
+              onClick={() => setCategoryClusterListPage(categoryClusterListPage + 1)}
+            >
+              Xem thêm nhóm lĩnh vực
         </Button>
-        <AddCategoryCluster
-          open={openAddCategoryCluster}
-          onClose={handleCloseAddCategoryCluster}
-        />
-      </Box>
-      {categoryClusterList.map((cc, i) => (
-        <Accordion
-          key={i}
-          className={`${classes.categoryCluster} animate__animated animate__fadeIn`}
-          style={{ animationDelay: `${0.1 * i}s` }}
-          expanded={i === expandedCategoryClusterIndex}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon className={classes.icon} />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-            onClick={() => handleClickCategoryCluster(i)}
-          >
-            <Box display="flex" flexDirection="column">
-              <Typography variant="h5" gutterBottom><b>{cc.name}</b></Typography>
-              <Typography variant="body1">
-                <NumberFormat value={cc.categories.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lĩnh vực'} />
-              </Typography>
-            </Box>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box display="flex" flexDirection="column" style={{ width: '100%' }}>
-              <Box mb={2}>
-                <AddCategory onSubmit={handleSubmitAddCategory} />
-              </Box>
-              <List className={classes.categoryList}>
-                <PerfectScrollbar className={classes.categoryList__container}>
-                  {cc.categories.map(c => (
-                    <ListItem key={c._id} onClick={() => handleClickCategory({ ...c, categoryCluster: { name: cc.name } })}>
-                      <Box display="flex" justifyContent="space-between" alignItems="center" style={{ width: '100%' }}>
-                        <ListItemText
-                          primary={(
-                            <Typography variant="body1" gutterBottom>{c.name}</Typography>
-                          )}
-                          secondary={(
-                            <NumberFormat value={c.numberOfCourses} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' khóa học'} />
-                          )} />
-                        <CategoryMenu onClickList={handleClickCategoryMenu} />
-                      </Box>
-                    </ListItem>
-                  ))}
+          </Box>
 
-                  {cc.categories.length === 0 && (
-                    <Box p={2}>
-                      <Typography variant="body2">Chưa có lĩnh vực nào.</Typography>
-                    </Box>
-
-                  )}
-                </PerfectScrollbar>
-              </List>
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-      ))
-      }
-
-      <Box pt={3}>
-        <Button
-          fullWidth
-          className={classes.btnLoadMoreCategoryCluster}
-          variant="contained"
-          size="large"
-          color="primary"
-          disabled={disableBtnLoadMoreCategoryCluster}
-          onClick={() => setCategoryClusterListPage(categoryClusterListPage + 1)}
-        >
-          Xem thêm nhóm lĩnh vực
-        </Button>
-      </Box>
-
-      {
-        selectedCategory && (
-          <div>
-            <CategoryDetails
-              data={selectedCategory}
-              open={openCategoryDetails}
-              onClose={handleCloseCategoryDetails}
-            />
-            <UpdateCategory
-              data={selectedCategory}
-              open={openUpdateCategory}
-              onClose={handleCloseUpdateCategory}
-            />
-            <ConfirmDialog
-              title="Xác nhận"
-              content="Bạn thật sự muốn xóa lĩnh vực này?"
-              open={openRemoveCategoryConfirmDialog}
-              onClose={handleCloseRemoveCategoryConfirmDialog}
-            />
-          </div>
-        )
-      }
-
-    </Box >
+          {
+            selectedCategory && (
+              <div>
+                <CategoryDetails
+                  data={selectedCategory}
+                  open={openCategoryDetails}
+                  onClose={handleCloseCategoryDetails}
+                />
+                <UpdateCategory
+                  data={selectedCategory}
+                  open={openUpdateCategory}
+                  onClose={handleCloseUpdateCategory}
+                />
+                <ConfirmDialog
+                  title="Xác nhận"
+                  content="Bạn thật sự muốn xóa lĩnh vực này?"
+                  open={openRemoveCategoryConfirmDialog}
+                  onClose={handleCloseRemoveCategoryConfirmDialog}
+                />
+              </div>
+            )
+          }
+        </div>
+      )}
+    </Box>
   )
 }
