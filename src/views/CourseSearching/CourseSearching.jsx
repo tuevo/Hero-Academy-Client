@@ -195,9 +195,9 @@ const CourseSearching = () => {
             )}
           </Box>
         )}
-        {/* <Box mt={3} mb={2}>
+        <Box mt={3} mb={2}>
           {!courseListLoading && <Divider className={classes.divider} />}
-        </Box> */}
+        </Box>
         {courseListLoading && <CourseListLoading />}
         {!courseListLoading && courseList.length === 0 && (
           <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ height: '31.75rem' }}>
@@ -209,7 +209,7 @@ const CourseSearching = () => {
         )}
         {!courseListLoading && courseList.length > 0 && (
           <div>
-            <Box display="flex" flexWrap="wrap" m={-1} mt={4}>
+            <Box display="flex" flexWrap="wrap" m={-1} mt={2}>
               {courseList.map((c, i) => (
                 <Box key={c._id} m={1} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
                   <Course data={c} type="minimal" />
