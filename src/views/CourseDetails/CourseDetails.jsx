@@ -785,7 +785,7 @@ const CourseDetails = () => {
                 <Box display="flex" flexDirection="column" justifyContent="center" style={{ color: '#dcdcdc' }}>
                   <Typography variant="body1" color="inherit"><b>{course.lecturer.fullName}</b></Typography>
                   <Typography variant="body2" color="inherit" style={{ marginTop: 2, fontSize: 11 }}>
-                    Lần cập nhật cuối: <span><b>{format(course.updatedAt, 'vi')}</b></span>
+                    Lần cập nhật cuối: <span><b>{format(course.updatedAtByLecturer, 'vi')}</b></span>
                   </Typography>
                 </Box>
               </Box>

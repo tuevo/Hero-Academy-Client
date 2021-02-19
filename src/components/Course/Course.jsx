@@ -94,7 +94,7 @@ const Course = ({ data, type }) => {
                     <Avatar src={data.lecturer.avatarUrl} style={{ width: 24, height: 24, marginRight: 7 }} />
                     <Typography variant="body2" color="textPrimary"><b>{data.lecturer.fullName}</b></Typography>
                     <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
-                    <Typography variant="body2">{format(data.updatedAt, 'vi')}</Typography>
+                    <Typography variant="body2">{format(data.updatedAtByLecturer, 'vi')}</Typography>
                     <Box mx={0.5}><Typography variant="body2"></Typography></Box>
                   </Box>
 
@@ -181,7 +181,7 @@ const Course = ({ data, type }) => {
                     <Avatar src={data.lecturer.avatarUrl} style={{ width: 24, height: 24, marginRight: 7 }} />
                     <Typography variant="body2" color="textPrimary"><b>{data.lecturer.fullName}</b></Typography>
                     <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
-                    <Typography variant="body2">{format(data.updatedAt, 'vi')}</Typography>
+                    <Typography variant="body2">{format(data.updatedAtByLecturer, 'vi')}</Typography>
                     <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
                     <Typography variant="body2">{data.categoryCluster.categories[0].name.toUpperCase()}</Typography>
                   </Box>
