@@ -1,6 +1,7 @@
-import { Avatar, Box, ButtonBase, Grid, List, ListItem, Typography } from '@material-ui/core';
+import { Avatar, Box, Button, ButtonBase, Grid, List, ListItem, Typography } from '@material-ui/core';
 import EmojiEventsIcon from '@material-ui/icons/EmojiEvents';
 import SchoolIcon from '@material-ui/icons/School';
+import StarIcon from '@material-ui/icons/Star';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/styles';
@@ -11,13 +12,13 @@ import { apiMessage } from 'constants/api-message.constant';
 import { APP_LOGO_IMAGE, APP_NAME, APP_SLOGAN, availablePages } from 'constants/global.constant';
 import React, { forwardRef, useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { shallowEqual } from 'recompose';
 import { setLoading, showNotification } from 'redux/actions/app.action';
 import { format } from 'timeago.js';
-import StarIcon from '@material-ui/icons/Star';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   },
   banner: {
     position: 'relative',
-    height: '16rem'
+    height: '19rem'
   },
   bannerCover: {
     position: 'absolute',
@@ -33,7 +34,8 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     zIndex: 5,
     width: '100%',
-    height: '100%'
+    height: '100%',
+    paddingTop: theme.spacing(4)
   },
   bannerText: {
     color: '#fff',
@@ -45,7 +47,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1)
   },
   bannerSubTitle: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(1)
   },
   logoImage: {
     width: '4.5rem',
@@ -168,16 +170,23 @@ const useStyles = makeStyles(theme => ({
     textShadow: 'none'
   },
   label__hot: {
-    backgroundColor: 'crimson',
+    // backgroundColor: 'crimson',
+    ...theme.palette.secondary.gradient
   },
   label__new: {
-    backgroundColor: theme.palette.success.main,
+    ...theme.palette.primary.gradient
   },
   label__saleOff: {
     backgroundColor: 'rgba(255,255,255,0.2)',
   },
   label__bestSeller: {
     backgroundColor: '#e68a00'
+  },
+  btnSignUp: {
+    ...theme.palette.secondary.gradient,
+    '&:hover': {
+      ...theme.palette.secondary.gradient,
+    }
   }
 }));
 
@@ -193,7 +202,12 @@ const CustomRouterLink = forwardRef((props, ref) => (
 
 const Home = () => {
   const classes = useStyles();
+  const history = useHistory();
   const dispatch = useDispatch();
+
+  const userState = useSelector(state => ({
+    ...state.user
+  }), shallowEqual);
 
   const [data, setData] = useState(null);
 
@@ -241,6 +255,19 @@ const Home = () => {
             <Typography className={`${classes.bannerText} ${classes.bannerTitle}`} variant="h1">{APP_NAME}</Typography>
           </Box>
           <Typography className={`${classes.bannerText} ${classes.bannerSubTitle} animate__animated animate__fadeInLeft`} variant="h4">{APP_SLOGAN}</Typography>
+          {!userState.authUser && (
+            <Box my={3} display="flex" justifyContent="center" alignItems="center">
+              <Button
+                className={`${classes.btnSignUp} animate__animated animate__bounceIn`}
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={() => history.push(availablePages.SIGN_UP.path)}
+              >
+                Đăng ký ngay
+            </Button>
+            </Box>
+          )}
         </Box>
       </div>
 

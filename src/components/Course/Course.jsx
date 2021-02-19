@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%'
   },
   media__minimal: {
-    height: '10rem',
+    height: '8.75rem',
   },
   media__stretch: {
     height: '100%'
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     ...styles,
   },
   description__minimal: {
-    "WebkitLineClamp": "3"
+    "WebkitLineClamp": "2"
   },
   description__stretch: {
     "WebkitLineClamp": "2"
@@ -76,7 +76,7 @@ const Course = ({ data, type }) => {
               title="Contemplative Reptile"
             />
             <CardContent className={classes.cardContent}>
-              <Box display="flex" flexDirection="column" justifyContent="space-between" style={{ height: '16rem' }}>
+              <Box display="flex" flexDirection="column" justifyContent="space-between" style={{ height: '15rem' }}>
                 <Box>
                   <Box display="flex" flexDirection="column" className={classes.titleContainer}>
                     <Typography variant="body2" gutterBottom>{data.categoryCluster.categories[0].name.toUpperCase()}</Typography>
@@ -93,7 +93,7 @@ const Course = ({ data, type }) => {
                     <Box mx={0.5}><Typography variant="body2"></Typography></Box>
                   </Box>
 
-                  <Box display="flex" alignItems="center" mt={1}>
+                  <Box display="flex" alignItems="center" mt={1} flexWrap="wrap">
                     <Typography variant="body2" style={{ marginRight: 3 }} color="textPrimary">
                       <b>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</b>
                     </Typography>
@@ -103,23 +103,31 @@ const Course = ({ data, type }) => {
                     <Typography variant="body2">
                       <NumberFormat value={data.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={'('} suffix={' lượt đánh giá)'} />
                     </Typography>
+                    <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
+                    <Typography variant="body2">
+                      <NumberFormat value={data.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={''} suffix={' học viên'} />
+                    </Typography>
+                    <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
+                    <Typography variant="body2">
+                      <NumberFormat value={data.numberOfViews} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={''} suffix={' lượt xem'} />
+                    </Typography>
                   </Box>
 
-                  <Box mt={1} display="flex" alignItems="center" flexWrap="wrap">
+                  {/* <Box mt={1} display="flex" alignItems="center" flexWrap="wrap">
                     <Box display="flex" justifyContent="center" alignItems="center">
                       <SchoolIcon className={classes.icon} style={{ fontSize: 16, marginRight: 5 }} />
                       <Typography variant="body2" color="textPrimary">
                         <NumberFormat value={data.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
                       </Typography>
                     </Box>
-                    <Box mx={1}></Box>
+                    <Box mx={2}></Box>
                     <Box display="flex" justifyContent="center" alignItems="center">
                       <VisibilityIcon className={classes.icon} style={{ fontSize: 16, marginRight: 5 }} />
                       <Typography variant="body2" color="textPrimary">
                         <NumberFormat value={data.numberOfViews} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt xem'} />
                       </Typography>
                     </Box>
-                  </Box>
+                  </Box> */}
 
                   <Typography variant="body2" color="textSecondary" component="p" className={`${classes.description} ${classes.description__minimal}`}>
                     {data.description}
@@ -171,7 +179,7 @@ const Course = ({ data, type }) => {
                     <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
                     <Typography variant="body2">{format(data.updatedAt, 'vi')}</Typography>
                   </Box>
-                  <Box display="flex" alignItems="center" flexWrap="wrap" mt={1}>
+                  <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap" mt={1}>
                     <Box display="flex" alignItems="center">
                       <Typography variant="body2" style={{ marginRight: 3 }} color="textPrimary">
                         <b>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</b>
@@ -183,20 +191,23 @@ const Course = ({ data, type }) => {
                         <NumberFormat value={data.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={'('} suffix={' lượt đánh giá)'} />
                       </Typography>
                     </Box>
-                    <Box mx={1}></Box>
-                    <Box display="flex" justifyContent="center" alignItems="center">
-                      <SchoolIcon className={classes.icon} style={{ fontSize: 16, marginRight: 5 }} />
-                      <Typography variant="body2" color="textPrimary">
-                        <NumberFormat value={data.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
-                      </Typography>
+                    <Box display="flex" alignItems="center" flexWrap="wrap">
+                      <Box mx={1}></Box>
+                      <Box display="flex" justifyContent="center" alignItems="center">
+                        <SchoolIcon className={classes.icon} style={{ fontSize: 16, marginRight: 5 }} />
+                        <Typography variant="body2" color="textPrimary">
+                          <NumberFormat value={data.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
+                        </Typography>
+                      </Box>
+                      <Box mx={1}></Box>
+                      <Box display="flex" justifyContent="center" alignItems="center">
+                        <VisibilityIcon className={classes.icon} style={{ fontSize: 16, marginRight: 5 }} />
+                        <Typography variant="body2" color="textPrimary">
+                          <NumberFormat value={data.numberOfViews} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt xem'} />
+                        </Typography>
+                      </Box>
                     </Box>
-                    <Box mx={1}></Box>
-                    <Box display="flex" justifyContent="center" alignItems="center">
-                      <VisibilityIcon className={classes.icon} style={{ fontSize: 16, marginRight: 5 }} />
-                      <Typography variant="body2" color="textPrimary">
-                        <NumberFormat value={data.numberOfViews} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt xem'} />
-                      </Typography>
-                    </Box>
+
                   </Box>
                   <Typography variant="body2" color="textSecondary" component="p" className={`${classes.description} ${classes.description__stretch}`}>
                     {data.description}

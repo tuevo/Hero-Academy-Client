@@ -176,7 +176,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.success.main,
   },
   label__saleOff: {
-    backgroundColor: 'crimson',
+    backgroundColor: 'rgba(255,255,255,0.25)'
   },
   label__bestSeller: {
     backgroundColor: '#e68a00'
@@ -785,7 +785,7 @@ const CourseDetails = () => {
                 <Box display="flex" flexDirection="column" justifyContent="center" style={{ color: '#dcdcdc' }}>
                   <Typography variant="body1" color="inherit"><b>{course.lecturer.fullName}</b></Typography>
                   <Typography variant="body2" color="inherit" style={{ marginTop: 2, fontSize: 11 }}>
-                    Cập nhật lần cuối: {format(course.updatedAt, 'vi')}
+                    Lần cập nhật cuối: <span><b>{format(course.updatedAt, 'vi')}</b></span>
                   </Typography>
                 </Box>
               </Box>

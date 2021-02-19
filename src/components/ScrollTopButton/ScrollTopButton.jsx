@@ -7,7 +7,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
     bottom: '4%',
-    right: '1.5%',
+    right: '1.25%',
     zIndex: 100
   }
 }))

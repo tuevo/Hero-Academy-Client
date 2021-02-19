@@ -21,7 +21,10 @@ export default {
     contrastText: white,
     dark: colors.amber[900],
     main: colors.amber[800],
-    light: colors.amber['A400']
+    light: colors.amber['A400'],
+    gradient: {
+      "backgroundImage": "linear-gradient(-60deg, #ff5858 0%, #f09819 100%)",
+    }
   },
   success: {
     contrastText: white,

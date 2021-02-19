@@ -122,7 +122,12 @@ const Main2 = props => {
         <ScrollbarContext.Provider value={scrollbarUtils}>
           {children}
         </ScrollbarContext.Provider>
-        <MultiTaskButton position={btnScrollTopDisplay ? 'up' : 'down'} actions={btnMultiTaskActionList} />
+        {!userState.authUser && window.location.pathname !== availablePages.HOME.path && (
+          <MultiTaskButton position={btnScrollTopDisplay ? 'up' : 'down'} actions={btnMultiTaskActionList} />
+        )}
+        {userState.authUser && (
+          <MultiTaskButton position={btnScrollTopDisplay ? 'up' : 'down'} actions={btnMultiTaskActionList} />
+        )}
         {btnScrollTopDisplay && <ScrollTopButton onClick={() => scrollbarUtils.scrollTop(0)} />}
       </PerfectScrollbar>
       <Backdrop className={classes.backdrop} open={pageState.isLoading}>
