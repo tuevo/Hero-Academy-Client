@@ -3,15 +3,17 @@ import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/styles';
 import { lecturerApi } from 'api';
 import Course from 'components/Course/Course';
+import CourseListEmpty from 'components/CourseListEmpty/CourseListEmpty';
+import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
 import { apiMessage } from 'constants/api-message.constant';
 import { availablePages } from 'constants/global.constant';
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import ScrollbarContext from 'contexts/ScrollbarContext';
+import React, { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual } from 'recompose';
 import { showNotification } from 'redux/actions/app.action';
-import { setScrollbarTop } from 'redux/actions/page.action';
+import { setPageBasics } from 'redux/actions/page.action';
 import AddCourse from './components/AddCourse/AddCourse';
-import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
-import CourseListEmpty from 'components/CourseListEmpty/CourseListEmpty';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,12 +26,10 @@ const useStyles = makeStyles(theme => ({
     zIndex: 10,
     right: '5%',
     top: '-1.5625rem',
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    ...theme.palette.primary.gradient
   },
   btnLoadMoreCourse: {
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    ...theme.palette.primary.gradient
   }
 }));
 
@@ -37,6 +37,12 @@ const InChargeCourses = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const limit = 8;
+
+  const parentScrollbarUtils = useContext(ScrollbarContext);
+
+  const pageBasics = useSelector(state => ({
+    ...state.page.basics
+  }), shallowEqual);
 
   const [openAddCouse, setOpenAddCourse] = useState(false);
 
@@ -58,7 +64,10 @@ const InChargeCourses = () => {
       const newLecturerCourseList = page === 1 ? lecturerCourses : lecturerCourseList.concat(lecturerCourses);
       setLecturerCourseList(newLecturerCourseList);
 
-      if (newLecturerCourseList.length < res.data.meta.totalItems) {
+      const { totalItems } = res.data.meta;
+      dispatch(setPageBasics({ ...pageBasics, title: `${availablePages.IN_CHARGE_COURSES.title} (${totalItems})` }));
+
+      if (newLecturerCourseList.length < totalItems) {
         setDisableBtnLoadMoreCourse(false);
       }
 
@@ -79,7 +88,7 @@ const InChargeCourses = () => {
     if (message === apiMessage.COURSE_ADDED_SUCCESSFULLY) {
       setLecturerCourseListPage(1);
       getAllLecturerCourses(1);
-      dispatch(setScrollbarTop(0));
+      parentScrollbarUtils.scrollTop(0);
     }
 
     setOpenAddCourse(open);
@@ -104,7 +113,7 @@ const InChargeCourses = () => {
             open={openAddCouse}
             onClose={(e, message) => toggleAddCourse(e, false, message)}
           />
-          <Tooltip title="Tạo khóa học mới" className="animate__animated animate__bounceIn">
+          <Tooltip title="Đăng khóa học mới" className="animate__animated animate__bounceIn">
             <Fab size="large" color="primary" aria-label="add" className={classes.btnAddCourse} onClick={(e) => toggleAddCourse(e, true)}>
               <AddIcon fontSize="large" />
             </Fab>

@@ -8,7 +8,7 @@ import { Redirect, Switch, useHistory } from 'react-router-dom';
 import { GuardProvider } from 'react-router-guards';
 import { shallowEqual } from 'recompose';
 import { hideNotification, setLoading } from 'redux/actions/app.action';
-import { setScrollbarTop } from 'redux/actions/page.action';
+import { setPageBasics } from 'redux/actions/page.action';
 import { RouteWithLayout } from './components';
 import { Main as MainLayout, Main2 as Main2Layout, Minimal as MinimalLayout } from './layouts';
 import {
@@ -53,7 +53,9 @@ const Routes = () => {
       }
     }
 
-    dispatch(setScrollbarTop(0));
+    const toPage = _.find(availablePages, page => page.path === toPath);
+    dispatch(setPageBasics(toPage));
+
     next();
   };
 

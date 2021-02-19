@@ -18,8 +18,7 @@ const useStyles = makeStyles(theme => ({
       height: 'calc(100% - 4rem)'
     },
     border: 0,
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)",
+    ...theme.palette.primary.gradient,
     boxShadow: theme.palette.sidebar.boxShadow
   },
   root: {
@@ -65,12 +64,6 @@ const Sidebar = props => {
       href: page.path
     })).filter(page => page.auth && (page.role === userRole.GUEST.value || page.role === userState.authUser.role))
   }
-
-  // Testing
-  // pages = Object.keys(availablePages).map(key => ({
-  //   ...availablePages[key],
-  //   href: availablePages[key].path
-  // })).filter(page => page.auth);
 
   return (
     userState.authUser && (

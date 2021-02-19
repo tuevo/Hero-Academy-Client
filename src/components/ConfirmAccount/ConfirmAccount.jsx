@@ -52,8 +52,7 @@ const useStyles = makeStyles(theme => ({
   },
   btnSubmit: {
     margin: theme.spacing(4, 0, 2, 0),
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    ...theme.palette.primary.gradient
   },
   input: {
     ...theme.palette.input

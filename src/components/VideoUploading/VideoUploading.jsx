@@ -2,7 +2,6 @@ import { Box, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BackupIcon from '@material-ui/icons/Backup';
 import React, { useState } from 'react';
-import { useEffect } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   root: {

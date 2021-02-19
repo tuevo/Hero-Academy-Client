@@ -5,7 +5,9 @@ import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: theme.spacing(4)
+    padding: theme.spacing(4),
+    backgroundColor: theme.palette.background.default,
+    height: '100%'
   },
   content: {
     paddingTop: 100,

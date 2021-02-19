@@ -2,13 +2,15 @@ import { Box, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { courseApi } from 'api';
 import Course from 'components/Course/Course';
+import CourseListEmpty from 'components/CourseListEmpty/CourseListEmpty';
+import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
 import { apiMessage } from 'constants/api-message.constant';
 import { availablePages } from 'constants/global.constant';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual } from 'recompose';
 import { showNotification } from 'redux/actions/app.action';
-import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
-import CourseListEmpty from 'components/CourseListEmpty/CourseListEmpty';
+import { setPageBasics } from 'redux/actions/page.action';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,8 +19,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%'
   },
   btnLoadMoreCourse: {
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    ...theme.palette.primary.gradient
   }
 }));
 
@@ -26,6 +27,10 @@ const Courses = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const limit = 8;
+
+  const pageBasics = useSelector(state => ({
+    ...state.page.basics
+  }), shallowEqual);
 
   const [courseList, setCourseList] = useState([]);
   const [courseListPage, setCourseListPage] = useState(1);
@@ -46,7 +51,10 @@ const Courses = () => {
         const newCourseList = courseList.concat(courses);
         setCourseList(newCourseList);
 
-        if (newCourseList.length < res.data.meta.totalItems) {
+        const { totalItems } = res.data.meta;
+        dispatch(setPageBasics({ ...pageBasics, title: `${availablePages.COURSES.title} (${totalItems})` }));
+
+        if (newCourseList.length < totalItems) {
           setDisableBtnLoadMoreCourse(false);
         }
 

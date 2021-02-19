@@ -56,7 +56,9 @@ const UserInfo = props => {
       >
         {userState.authUser.fullName}
       </Typography>
-      <Typography variant="body2">{_.find(userRole, role => role.value === userState.authUser.role).name}</Typography>
+      <Typography variant="body2">
+        {_.find(userRole, role => role.value === userState.authUser.role).name}
+      </Typography>
     </div>
   );
 };

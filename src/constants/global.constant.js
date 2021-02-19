@@ -3,6 +3,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import PeopleIcon from '@material-ui/icons/People';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import CategoryIcon from '@material-ui/icons/Category';
+import HomeIcon from '@material-ui/icons/Home';
 import { userRole } from './user-role.constant';
 import {
   RegistrationCourses as RegistrationCoursesView,
@@ -16,9 +17,10 @@ import {
 export const availablePages = {
   HOME: {
     _id: 1,
-    title: 'Trang chủ',
+    title: '',
     path: '/',
     auth: false,
+    icon: HomeIcon,
     role: userRole.GUEST.value
   },
   SIGN_UP: {
@@ -45,21 +47,21 @@ export const availablePages = {
   },
   COURSE_DETAILS: {
     _id: 2,
-    title: 'Chi tiết khóa học',
+    title: '',
     path: '/courses/:courseId',
     auth: false,
     role: userRole.GUEST.value
   },
   CATEGORY_COURSES: {
     _id: 5,
-    title: 'Khóa học theo lĩnh vực',
+    title: '',
     path: '/categories/:categoryId/courses',
     auth: false,
     role: userRole.GUEST.value
   },
   COURSE_SEARCHING: {
     _id: 6,
-    title: 'Tìm kiếm khóa học',
+    title: '',
     path: '/search',
     auth: false,
     role: userRole.GUEST.value
@@ -130,3 +132,5 @@ export const availablePages = {
 };
 
 export const APP_NAME = 'Hero Academy';
+export const APP_SLOGAN = 'Cung cấp khóa học online chất lượng cao';
+export const APP_LOGO_IMAGE = 'https://cdn.iconscout.com/icon/free/png-256/graduation-cap-1519981-1287612.png';

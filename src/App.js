@@ -1,28 +1,27 @@
-import React, { useEffect } from 'react';
-import { Router } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
-import { Chart } from 'react-chartjs-2';
+import { createMuiTheme } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
-import validate from 'validate.js';
-
-import { chartjs } from './helpers';
-import theme from './theme';
-import 'react-perfect-scrollbar/dist/css/styles.css';
-import './assets/scss/index.scss';
-import validators from './common/validators';
-import Routes from './Routes';
-import { Notification } from 'components/Notification';
-import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import { hideNotification, showNotification, setAppCategoryClusterList } from 'redux/actions/app.action';
+import { categoryClusterApi } from 'api';
 import Loading from 'components/Loading/Loading';
+import { Notification } from 'components/Notification';
+import { apiMessage } from 'constants/api-message.constant';
+import { availablePages } from 'constants/global.constant';
+import { createBrowserHistory } from 'history';
+import React, { useEffect } from 'react';
+import { Chart } from 'react-chartjs-2';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { Router } from 'react-router-dom';
+import { hideNotification, setAppCategoryClusterList, showNotification } from 'redux/actions/app.action';
 import darkPalette from 'theme/dark-palette';
 import darkTypography from 'theme/dark-typography';
 import palette from 'theme/palette';
 import typography from 'theme/typography';
-import { createMuiTheme } from '@material-ui/core';
-import { categoryClusterApi } from 'api';
-import { availablePages } from 'constants/global.constant';
-import { apiMessage } from 'constants/api-message.constant';
+import validate from 'validate.js';
+import './assets/scss/index.scss';
+import validators from './common/validators';
+import { chartjs } from './helpers';
+import Routes from './Routes';
+import theme from './theme';
 
 const browserHistory = createBrowserHistory();
 

@@ -16,8 +16,7 @@ const useStyles = makeStyles(theme => ({
       height: 'calc(100% - 4rem)'
     },
     border: 0,
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)",
+    ...theme.palette.primary.gradient,
     boxShadow: theme.palette.sidebar.boxShadow
   },
   root: {

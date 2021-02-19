@@ -11,7 +11,11 @@ export default {
     dark: colors.purple[900],
     main: colors.purple[800],
     light: 'rgba(123, 31, 162, 0.1)',
-    light1: 'rgba(123, 31, 162, 0.15)'
+    light1: 'rgba(123, 31, 162, 0.15)',
+    gradient: {
+      "backgroundColor": "#a4508b",
+      "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    }
   },
   secondary: {
     contrastText: white,

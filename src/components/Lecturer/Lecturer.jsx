@@ -31,8 +31,7 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     bottom: 0,
     right: '20%',
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)",
+    ...theme.palette.primary.gradient,
     color: theme.palette.primary.contrastText,
     padding: '0.1563rem 0.3125rem',
     borderRadius: '0.625rem'

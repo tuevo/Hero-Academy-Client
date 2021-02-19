@@ -10,7 +10,6 @@ export const actionTypes = {
   },
   page: {
     SET_PAGE_BASICS: { type: 'SET_PAGE_BASICS' },
-    SET_SCROLLBAR_TOP: { type: 'SET_SCROLLBAR_TOP' },
     SET_PAGE_LOADING: { type: 'SET_PAGE_LOADING' }
   },
   user: {

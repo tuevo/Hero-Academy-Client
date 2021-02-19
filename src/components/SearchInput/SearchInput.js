@@ -57,12 +57,9 @@ const SearchInput = props => {
   const handleKeyUp = e => {
     if (e.keyCode === 13) {
       if (query) {
+        dispatch(setCourseSearchingQuery(query));
         history.push(`${availablePages.COURSE_SEARCHING.path}?q=${query}`);
-      } else {
-        history.push(`${availablePages.COURSE_SEARCHING.path}`);
       }
-
-      dispatch(setCourseSearchingQuery(query));
     }
   }
 

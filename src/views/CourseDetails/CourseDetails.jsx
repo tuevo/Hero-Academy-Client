@@ -16,6 +16,7 @@ import PersonPinIcon from '@material-ui/icons/PersonPin';
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
 import SchoolIcon from '@material-ui/icons/School';
 import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/styles';
 import { courseApi, favoriteApi } from 'api';
@@ -26,21 +27,23 @@ import { VideoPlayer } from 'components/VideoPlayer';
 import { apiMessage } from 'constants/api-message.constant';
 import { availablePages } from 'constants/global.constant';
 import { userRole } from 'constants/user-role.constant';
+import ScrollbarContext from 'contexts/ScrollbarContext';
 import * as moment from 'moment';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
+import { shallowEqual } from 'recompose';
 import { setLoading, showNotification } from 'redux/actions/app.action';
+import { setPageBasics, setPageLoading } from 'redux/actions/page.action';
 import { format } from 'timeago.js';
 import { AddChapter } from './components';
 import AddFeedback from './components/AddFeedback/AddFeedback';
 import AddVideo from './components/AddVideo/AddVideo';
 import UpdateCourse from './components/UpdateCourse/UpdateCourse';
 import WatchHistory from './components/WatchHistory/WatchHistory';
-import { setPageLoading } from 'redux/actions/page.action';
 
 function a11yProps(index) {
   return {
@@ -190,13 +193,11 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1, 0)
   },
   btnRegister: {
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    ...theme.palette.primary.gradient
   },
   tabs: {
     boxShadow: 'none',
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    ...theme.palette.primary.gradient
   },
   chapters: {
     width: '100%',
@@ -282,8 +283,7 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     right: '7%',
     top: '-5%',
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    ...theme.palette.primary.gradient
   },
   feedbackListContainer: {
     boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px',
@@ -335,11 +335,16 @@ const CourseDetails = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const parentScrollbarUtils = useContext(ScrollbarContext);
+
   const userState = useSelector(state => ({
     authUser: state.user.authUser
-  }));
+  }), shallowEqual);
 
-  const ps = useRef();
+  const pageBasics = useSelector(state => ({
+    ...state.page.basics
+  }), shallowEqual);
+
   const bannerContentRef = useRef();
   const chapterRefs = useRef();
 
@@ -394,7 +399,7 @@ const CourseDetails = () => {
       })));
 
       dispatch(setLoading(false));
-
+      dispatch(setPageBasics({ ...pageBasics, title: newCourse.title }));
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         history.push(availablePages.NOT_FOUND.path);
@@ -498,13 +503,10 @@ const CourseDetails = () => {
   const scrollToChapter = (_id) => {
     if (chapterRefs.current && chapterRefs.current.length > 0) {
       const ref = chapterRefs.current.find(r => r._id === _id);
-      ps.current.scrollTop += ref.current.getBoundingClientRect().top;
+      const elementTop = ref.current.getBoundingClientRect().top;
+      parentScrollbarUtils.addScrollTop(elementTop);
     }
   }
-
-  const handleBack = () => {
-    history.goBack();
-  };
 
   const getFeedbacks = async (page) => {
     setFeedbackListLoading(true);
@@ -629,6 +631,11 @@ const CourseDetails = () => {
   const handleClickWatchHistoryVideo = (video) => {
     setOpenWatchHistory(false);
     const chapterIndex = chapterList.findIndex(c => c._id === video.chapter._id);
+    if (chapterIndex === expandedChapterIndex) {
+      handleClickVideoListItem(video);
+      return;
+    }
+
     setActiveVideo({ ...video, type: 'from_watch_history' });
     setExpandedChapterIndex(chapterIndex);
   }
@@ -671,15 +678,12 @@ const CourseDetails = () => {
     return <></>;
 
   return (
-    <PerfectScrollbar
-      className={classes.root}
-      containerRef={el => (ps.current = el)}
-    >
+    <div className={classes.root}>
       <div className={classes.banner} style={{ backgroundImage: `url(${course.thumbnailUrl})` }}>
         <div className={classes.bannerCover}></div>
         <Box display="flex" flexDirection="column" className={`${classes.bannerContent} animate__animated animate__fadeIn`}>
           <Box ml={-2} mb={1} display="flex" justifyContent="space-between" alignItems="center">
-            <IconButton onClick={handleBack} color="inherit">
+            <IconButton onClick={() => history.goBack()} color="inherit">
               <ArrowBackIcon />
             </IconButton>
             <Box display="flex" color="inherit">
@@ -748,9 +752,10 @@ const CourseDetails = () => {
                   {course.isFinished ? (
                     <span className={`${classes.label} ${classes.label__new}`} style={{ marginRight: 12 }}>Đã hoàn thành</span>
                   ) : (<span className={`${classes.label} ${classes.label__unfinished}`} style={{ marginRight: 12 }}>Chưa hoàn thành</span>)}
-                  <span>{`${Math.floor(course.averageRating)}.${(course.averageRating - Math.floor(course.averageRating)) * 10}`}</span>
+
+                  <b><span>{`${Math.floor(course.averageRating)}.${(course.averageRating - Math.floor(course.averageRating)) * 10}`}</span></b>
                 </Typography>
-                <Box>
+                <Box style={{ marginBottom: -1 }}>
                   <Rating name="read-only" value={course.averageRating} size="small" precision={0.5} readOnly />
                 </Box>
                 <Typography variant="body2" color="inherit" style={{ marginLeft: 3 }}>
@@ -758,14 +763,30 @@ const CourseDetails = () => {
                   <NumberFormat value={course.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
                   <span>)</span>
                 </Typography>
-                <Typography variant="body2" color="inherit" style={{ marginLeft: 9 }}>
-                  <NumberFormat value={course.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
-                </Typography>
+                <Box mx={1}></Box>
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <SchoolIcon style={{ fontSize: 16, marginRight: 5 }} />
+                  <Typography variant="body2" color="inherit">
+                    <NumberFormat value={course.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
+                  </Typography>
+                </Box>
+                <Box mx={1}></Box>
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <VisibilityIcon style={{ fontSize: 16, marginRight: 5 }} />
+                  <Typography variant="body2" color="inherit">
+                    <NumberFormat value={course.numberOfViews} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt xem'} />
+                  </Typography>
+                </Box>
               </Box>
 
-              <Box display="flex" alignItems="center">
-                <Typography variant="body2" color="inherit">Giảng viên: <b>{course.lecturer.fullName}</b></Typography>
-                <Typography variant="body2" color="inherit" style={{ marginLeft: 9 }}>Cập nhật lần cuối: {moment(course.updatedAt).format('DD/MM HH:mm')}</Typography>
+              <Box display="flex" alignItems="center" mt={3}>
+                <Avatar src={course.lecturer.avatarUrl} style={{ width: 40, height: 40, marginRight: 10 }} />
+                <Box display="flex" flexDirection="column" justifyContent="center" style={{ color: '#dcdcdc' }}>
+                  <Typography variant="body1" color="inherit"><b>{course.lecturer.fullName}</b></Typography>
+                  <Typography variant="body2" color="inherit" style={{ marginTop: 3, fontSize: 10 }}>
+                    Cập nhật lần cuối: {format(course.updatedAt, 'vi')}
+                  </Typography>
+                </Box>
               </Box>
             </Grid>
             <Grid item xs={6}>
@@ -810,7 +831,7 @@ const CourseDetails = () => {
 
       <main
         className={classes.main}
-        style={{ top: bannerContentRef.current ? `calc(${bannerContentRef.current.clientHeight}px + 5rem)` : 0 }}
+        style={{ top: bannerContentRef.current ? `calc(${bannerContentRef.current.clientHeight}px + 5.5rem)` : 0 }}
       >
         <div className={`${classes.panel} animate__animated animate__slideInUp`}>
           <AppBar position="static" className={classes.tabs} color="primary">
@@ -1066,11 +1087,13 @@ const CourseDetails = () => {
                 <Avatar alt={course.lecturer.fullName} src={course.lecturer.avatarUrl} className={classes.lecturer__avatar} />
                 <Box display="flex" flexDirection="column" pt={1}>
                   <Typography variant="h4" className={classes.secondaryText} gutterBottom><b>{course.lecturer.fullName}</b></Typography>
-                  <Box display="flex" mt={0.5} alignItems="flex-end">
+                  <Box display="flex" mt={0.5} alignItems="center">
                     <Typography variant="body2" style={{ marginRight: 3 }}>
                       {`${Math.floor(course.lecturer.roleInfo.averageRating)}.${(course.lecturer.roleInfo.averageRating - Math.floor(course.lecturer.roleInfo.averageRating)) * 10}`}
                     </Typography>
-                    <Rating name="read-only" value={course.lecturer.roleInfo.averageRating} size="small" precision={0.5} readOnly />
+                    <Box style={{ marginBottom: -1 }}>
+                      <Rating name="read-only" value={course.lecturer.roleInfo.averageRating} size="small" precision={0.5} readOnly />
+                    </Box>
                     <Typography variant="body2" style={{ marginLeft: 3 }}>
                       <span>(</span>
                       <NumberFormat value={course.lecturer.roleInfo.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
@@ -1090,7 +1113,9 @@ const CourseDetails = () => {
 
         </div>
         <div className={`${classes.section} ${classes.highestViewCourses} animate__animated animate__fadeInUp`}>
-          <Typography variant="h5" className={classes.highestViewCourses__title}><b>🔥 Khóa học được đăng ký nhiều</b></Typography>
+          <Typography variant="h5" className={classes.highestViewCourses__title}>
+            <b><span role="img">🔥</span> Khóa học được đăng ký nhiều</b>
+          </Typography>
           <div className={classes.highestViewCoursesCarousel}>
             {mostRegisteredCourseList.length > 0 ? (
               <CourseMultiCarousel courses={mostRegisteredCourseList} />
@@ -1117,7 +1142,7 @@ const CourseDetails = () => {
         )}
 
       </main>
-    </PerfectScrollbar>
+    </div>
   );
 };
 

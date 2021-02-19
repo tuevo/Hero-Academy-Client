@@ -1,16 +1,20 @@
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+import ScrollTopButton from 'components/ScrollTopButton/ScrollTopButton';
 import { availablePages } from 'constants/global.constant';
+import ScrollbarContext from 'contexts/ScrollbarContext';
 import * as _ from 'lodash';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'recompose';
-import { setPageBasics, setScrollbarTop } from 'redux/actions/page.action';
+import { setPageBasics } from 'redux/actions/page.action';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: theme.spacing(5, 14.5)
+    padding: theme.spacing(5, 11)
   },
   title: {
     color: theme.palette.primary.contrastText
@@ -26,6 +30,7 @@ const useStyles = makeStyles(theme => ({
 export default function Content({ inner }) {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
   const ps = useRef();
 
   const pageState = useSelector(state => ({
@@ -38,33 +43,51 @@ export default function Content({ inner }) {
     dispatch(setPageBasics(page));
   }
 
+  const [btnScrollTopDisplay, setBtnScrollTopDisplay] = useState(false);
 
-  useEffect(() => {
+  const setScrollbarTop = (value) => {
     if (ps.current) {
-      ps.current.scrollTop = pageState.scrollbarTop;
+      ps.current.scrollTop = value;
     }
-  }, [pageState.scrollbarTop])
+  }
 
   const handleScrollY = e => {
-    dispatch(setScrollbarTop(e.scrollTop))
+    setBtnScrollTopDisplay(e.scrollTop > 0);
   }
+
+  const scrollbarUtils = {
+    scrollTop: (value) => {
+      setScrollbarTop(value);
+    },
+    addScrollTop: (value) => {
+      if (ps.current) {
+        setScrollbarTop(ps.current.scrollTop + value);
+      }
+    },
+  };
 
   return (
     pageState.basics && (
-      <div>
-        <PerfectScrollbar
-          className={classes.root}
-          onScrollY={handleScrollY}
-          containerRef={el => (ps.current = el)}
-        >
-          <Box pl={2} pb={4} className={classes.title}>
-            <Typography variant="h3" color="inherit"><b>{pageState.basics.title}</b></Typography>
+      <PerfectScrollbar
+        className={classes.root}
+        onScrollY={handleScrollY}
+        containerRef={el => (ps.current = el)}
+      >
+        <Box display="flex" alignItems="center" pl={2} pb={4} className={classes.title}>
+          <Box mr={1}>
+            <IconButton color="inherit" onClick={() => history.goBack()}>
+              <ArrowBackIosIcon />
+            </IconButton>
           </Box>
+          <Typography variant="h3" color="inherit"><b>{pageState.basics.title}</b></Typography>
+        </Box>
+        <ScrollbarContext.Provider value={scrollbarUtils}>
           <Box display="flex" justifyContent="center" className={`${classes.content}`}>
             {inner}
           </Box>
-        </PerfectScrollbar>
-      </div>
+        </ScrollbarContext.Provider>
+        {btnScrollTopDisplay && <ScrollTopButton onClick={() => scrollbarUtils.scrollTop(0)} />}
+      </PerfectScrollbar>
     )
   )
 }

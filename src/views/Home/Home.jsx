@@ -1,13 +1,14 @@
-import { Box, ButtonBase, Grid, List, ListItem, Typography } from '@material-ui/core';
-import StarIcon from '@material-ui/icons/Star';
+import { Avatar, Box, ButtonBase, Grid, List, ListItem, Typography } from '@material-ui/core';
+import EmojiEventsIcon from '@material-ui/icons/EmojiEvents';
+import SchoolIcon from '@material-ui/icons/School';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/styles';
 import { homeApi } from 'api';
 import Course from 'components/Course/Course';
 import CourseMultiCarousel from 'components/CourseMultiCarousel/CourseMultiCarousel';
 import { apiMessage } from 'constants/api-message.constant';
-import { APP_NAME, availablePages } from 'constants/global.constant';
-import * as moment from 'moment';
+import { APP_LOGO_IMAGE, APP_NAME, APP_SLOGAN, availablePages } from 'constants/global.constant';
 import React, { forwardRef, useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useDispatch } from 'react-redux';
@@ -15,6 +16,8 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Link as RouterLink } from 'react-router-dom';
 import { setLoading, showNotification } from 'redux/actions/app.action';
+import { format } from 'timeago.js';
+import StarIcon from '@material-ui/icons/Star';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -66,7 +69,7 @@ const useStyles = makeStyles(theme => ({
     ...theme.palette.card
   },
   featuredCourses__title: {
-    color: theme.palette.text.secondary
+    color: theme.palette.text.primary
   },
   starIcon: {
     color: '#ffb600'
@@ -76,7 +79,7 @@ const useStyles = makeStyles(theme => ({
   },
   featuredCoursesCarousel: {
     ...theme.palette.card,
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(4),
     overflow: 'hidden',
     borderRadius: '1.875rem',
     boxShadow: 'none'
@@ -88,7 +91,8 @@ const useStyles = makeStyles(theme => ({
   featuredCoursesCarouselItemLegend: {
     textAlign: 'left !important',
     opacity: '1 !important',
-    background: 'rgba(0,0,0,0.5) !important'
+    background: 'rgba(0,0,0,0.4) !important',
+    backdropFilter: 'blur(6px)'
   },
   featuredCoursesCarouselItem__courseThumbnail: {
     width: '100%',
@@ -101,10 +105,6 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     height: '100%',
     boxShadow: 'inset 0 -14rem 6.25rem rgba(0, 0, 0, 0.6)'
-  },
-  featuredCoursesCarouselItem__courseText: {
-    color: '#fff',
-    textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
   },
   featuredCoursesCarouselItem__ratingDetails: {
     margin: theme.spacing(1, 0)
@@ -119,9 +119,10 @@ const useStyles = makeStyles(theme => ({
   highestViewCourses: {
     ...theme.palette.card,
     padding: theme.spacing(4),
+    ...theme.palette.primary.gradient
   },
   highestViewCourses__title: {
-    color: theme.palette.text.secondary
+    color: theme.palette.primary.contrastText
   },
   highestViewCoursesCarousel: {
     marginTop: theme.spacing(3)
@@ -133,8 +134,7 @@ const useStyles = makeStyles(theme => ({
     ...theme.palette.card
   },
   popularCategories__title: {
-    padding: theme.spacing(0, 2, 2, 4),
-    color: theme.palette.text.secondary
+    color: theme.palette.text.primary
   },
   popularCategories__item: {
     color: theme.palette.text.primary,
@@ -143,6 +143,7 @@ const useStyles = makeStyles(theme => ({
     textTransform: 'none',
     letterSpacing: 0,
     width: '100%',
+    fontWeight: 'bold'
   },
   newCourses: {
     minHeight: '37.5rem',
@@ -152,7 +153,7 @@ const useStyles = makeStyles(theme => ({
   },
   newCourses__title: {
     marginBottom: theme.spacing(3),
-    color: theme.palette.text.secondary
+    color: theme.palette.text.primary
   },
   newCourses__item: {
     marginTop: theme.spacing(1.5),
@@ -234,12 +235,12 @@ const Home = () => {
           <Box ml={-2} display="flex" justifyContent="center" alignItems="center" className={`animate__animated animate__fadeInRight`}>
             <img
               alt="Logo"
-              src="https://cdn.iconscout.com/icon/free/png-256/graduation-cap-1519981-1287612.png"
+              src={APP_LOGO_IMAGE}
               className={classes.logoImage}
             />
             <Typography className={`${classes.bannerText} ${classes.bannerTitle}`} variant="h1">{APP_NAME}</Typography>
           </Box>
-          <Typography className={`${classes.bannerText} ${classes.bannerSubTitle} animate__animated animate__fadeInLeft`} variant="h4">Cung cấp khóa học online chất lượng cao</Typography>
+          <Typography className={`${classes.bannerText} ${classes.bannerSubTitle} animate__animated animate__fadeInLeft`} variant="h4">{APP_SLOGAN}</Typography>
         </Box>
       </div>
 
@@ -260,40 +261,51 @@ const Home = () => {
                       <div className={`legend ${classes.featuredCoursesCarouselItemLegend}`}>
                         <Grid container alignItems="flex-end">
                           <Grid item xs={8}>
-                            <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} gutterBottom>{c.categoryCluster.categories[0].name.toUpperCase()}</Typography>
-                            <Typography variant="h4" className={classes.featuredCoursesCarouselItem__courseText} style={{ textTransform: 'uppercase' }}><b>{c.title}</b></Typography>
+                            <Typography variant="body2" color="inherit" gutterBottom>{c.categoryCluster.categories[0].name.toUpperCase()}</Typography>
+                            <Typography variant="h4" color="inherit" style={{ textTransform: 'uppercase' }}><b>{c.title}</b></Typography>
 
                             <Box display="flex" alignItems="center" className={classes.featuredCoursesCarouselItem__ratingDetails}>
-                              <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginRight: 3 }}>
+                              <Typography variant="body2" color="inherit" style={{ marginRight: 3, marginTop: 1 }}>
                                 {/* <span className={`${classes.label} ${classes.label__bestSeller}`} style={{ marginLeft: 0, marginRight: 9 }}>Best Seller</span> */}
-                                <span>{`${Math.floor(c.averageRating)}.${(c.averageRating - Math.floor(c.averageRating)) * 10}`}</span>
+                                <b><span>{`${Math.floor(c.averageRating)}.${(c.averageRating - Math.floor(c.averageRating)) * 10}`}</span></b>
                               </Typography>
                               <Box>
                                 <Rating name="read-only" value={c.averageRating} size="small" precision={0.5} readOnly />
                               </Box>
-                              <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginLeft: 3 }}>
-                                <span>(</span>
-                                <NumberFormat value={c.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
-                                <span>)</span>
+                              <Typography variant="body2" color="inherit" style={{ marginLeft: 3 }}>
+                                <NumberFormat value={c.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={'('} suffix={' lượt đánh giá)'} />
                               </Typography>
-                              <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginLeft: 9 }}>
-                                <NumberFormat value={c.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
-                              </Typography>
+                              <Box mx={1}></Box>
+                              <Box display="flex" justifyContent="center" alignItems="center">
+                                <SchoolIcon className={classes.icon} style={{ fontSize: 16, marginRight: 5 }} />
+                                <Typography variant="body2" color="inherit">
+                                  <NumberFormat value={c.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
+                                </Typography>
+                              </Box>
+                              <Box mx={1}></Box>
+                              <Box display="flex" justifyContent="center" alignItems="center">
+                                <VisibilityIcon className={classes.icon} style={{ fontSize: 16, marginRight: 5 }} />
+                                <Typography variant="body2" color="inherit">
+                                  <NumberFormat value={c.numberOfViews} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt xem'} />
+                                </Typography>
+                              </Box>
                             </Box>
 
-                            <Box display="flex" alignItems="center">
-                              <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText}>Giảng viên: <b>{c.lecturer.fullName}</b></Typography>
-                              <Typography variant="body2" className={classes.featuredCoursesCarouselItem__courseText} style={{ marginLeft: 9 }}>Cập nhật lần cuối: {moment(c.updatedAt).format('DD/MM HH:mm')}</Typography>
+                            <Box display="flex" alignItems="center" mt={1}>
+                              <Avatar src={c.lecturer.avatarUrl} style={{ width: 24, height: 24, marginRight: 7 }} />
+                              <Typography variant="body2" color="inherit"><b>{c.lecturer.fullName}</b></Typography>
+                              <Box mx={0.5}><Typography variant="body2" color="inherit">•</Typography></Box>
+                              <Typography variant="body2" color="inherit">{format(c.updatedAt, 'vi')}</Typography>
                             </Box>
                           </Grid>
                           <Grid item xs={4}>
                             <Box display="flex" flexDirection="column" alignItems="flex-end">
-                              <Typography variant="h3" className={`${classes.featuredCoursesCarouselItem__courseText} ${classes.featuredCoursesCarouselItem__price}`}>
+                              <Typography variant="h3" className={classes.featuredCoursesCarouselItem__price} color="inherit">
                                 <NumberFormat value={c.tuition - c.tuition * c.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={c.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} />
                               </Typography>
 
                               {c.discountPercent > 0 && (
-                                <Typography variant="h5" className={classes.featuredCoursesCarouselItem__courseText}>
+                                <Typography variant="h5" color="inherit">
                                   <strike>
                                     <NumberFormat value={c.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
                                   </strike>
@@ -334,7 +346,10 @@ const Home = () => {
             </Grid>
             <Grid item xs={3}>
               <div className={classes.popularCategories}>
-                <Typography variant="h5" className={classes.popularCategories__title}><b>Lĩnh vực được đăng ký nhiều</b></Typography>
+                <Box display="flex" alignItems="center" pl={3} pb={1.5}>
+                  <EmojiEventsIcon color="primary" className={`${classes.starIcon} ${classes.featuredCoursesCarouselTitleIcon}`} />
+                  <Typography variant="h6" className={classes.popularCategories__title}><b>Lĩnh vực được đăng ký nhiều</b></Typography>
+                </Box>
                 <List component="div" disablePadding>
                   {(data.mostRegisteredCategory || []).map(c => (
                     <ListItem
@@ -346,12 +361,17 @@ const Home = () => {
                         component={CustomRouterLink}
                         to={c.href}
                       >
-                        <Typography
-                          variant="body2"
-                          color="inherit"
-                        >
-                          {c.name}
-                        </Typography>
+                        <Box display="flex" alignItems="center" justifyContent="space-between" style={{ width: '100%' }}>
+                          <Typography
+                            variant="body2"
+                            color="textPrimary"
+                          >
+                            {c.name}
+                          </Typography>
+                          <Typography variant="body2">
+                            <NumberFormat value={c.totalRegistration} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt'} />
+                          </Typography>
+                        </Box>
                       </ButtonBase>
                     </ListItem>
                   ))}

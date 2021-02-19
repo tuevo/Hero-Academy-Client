@@ -3,18 +3,21 @@ import FaceIcon from '@material-ui/icons/Face';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { makeStyles } from '@material-ui/styles';
+import { studentApi } from 'api';
+import lecturerApi from 'api/lecturer.api';
+import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
 import Lecturer from 'components/Lecturer/Lecturer';
 import Student from 'components/Student/Student';
 import { apiMessage } from 'constants/api-message.constant';
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { showNotification } from 'redux/actions/app.action';
-import { studentApi } from 'api';
+import { availablePages } from 'constants/global.constant';
+import ScrollbarContext from 'contexts/ScrollbarContext';
+import React, { useContext, useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
+import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual } from 'recompose';
+import { showNotification } from 'redux/actions/app.action';
+import { setPageBasics } from 'redux/actions/page.action';
 import AddLecturer from './components/AddLecturer/AddLecturer';
-import lecturerApi from 'api/lecturer.api';
-import { setScrollbarTop } from 'redux/actions/page.action';
-import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
 
 function a11yProps(index) {
   return {
@@ -32,8 +35,7 @@ const useStyles = makeStyles(theme => ({
   },
   tabs: {
     boxShadow: 'none',
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    ...theme.palette.primary.gradient
   },
   btnAddLecturerContainer: {
     position: 'absolute',
@@ -42,12 +44,10 @@ const useStyles = makeStyles(theme => ({
     top: '-1.5625rem'
   },
   btnAddLecturer: {
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    ...theme.palette.primary.gradient
   },
   btnLoadMore: {
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    ...theme.palette.primary.gradient
   }
 }));
 
@@ -55,6 +55,12 @@ const Users = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const limit = 12;
+
+  const parentScrollbarUtils = useContext(ScrollbarContext);
+
+  const pageBasics = useSelector(state => ({
+    ...state.page.basics
+  }), shallowEqual);
 
   const [tabValue, setTabValue] = useState(0);
 
@@ -128,13 +134,18 @@ const Users = () => {
 
       setLecturerListPage(1);
       getAllLecturers(1);
-      dispatch(setScrollbarTop(0));
+      parentScrollbarUtils.scrollTop(0);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
       }
     }
   };
+
+  useEffect(() => {
+    const total = studentListTotalItems + lecturerListTotalItems;
+    dispatch(setPageBasics({ ...pageBasics, title: `${availablePages.USERS.title} (${total})` }));
+  }, [studentListTotalItems, lecturerListTotalItems]);
 
   useEffect(() => {
     getAllStudents(studentListPage);
@@ -181,12 +192,12 @@ const Users = () => {
       case 1:
         setStudentListPage(1);
         getAllStudents(1);
-        dispatch(setScrollbarTop(0));
+        parentScrollbarUtils.scrollTop(0);
         break;
       case 2:
         setLecturerListPage(1);
         getAllLecturers(1);
-        dispatch(setScrollbarTop(0));
+        parentScrollbarUtils.scrollTop(0);
         break;
 
       default:

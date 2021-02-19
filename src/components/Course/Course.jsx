@@ -1,16 +1,17 @@
-import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@material-ui/core';
+import { Avatar, Box, Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import SchoolIcon from '@material-ui/icons/School';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import Rating from '@material-ui/lab/Rating';
-import * as moment from 'moment';
 import React from 'react';
 import NumberFormat from 'react-number-format';
 import { Link as RouterLink } from 'react-router-dom';
+import { format } from 'timeago.js';
 import './Course.style.scss';
 
 const styles = {
   "display": "-webkit-box",
   "maxWidth": "100%",
-  "WebkitLineClamp": "2",
   "WebkitBoxOrient": "vertical",
   "overflow": "hidden"
 }
@@ -21,19 +22,19 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px'
   },
   card__minimal: {
-    width: '15.625rem'
+    width: '16.5rem'
   },
   card__stretch: {
     width: '100%'
   },
   media__minimal: {
-    height: '7.8125rem',
+    height: '8rem',
   },
   media__stretch: {
     height: '100%'
   },
   titleContainer: {
-    height: '2.5rem',
+
   },
   title: {
     textTransform: 'uppercase',
@@ -43,13 +44,21 @@ const useStyles = makeStyles((theme) => ({
   description: {
     margin: theme.spacing(1, 0),
     ...styles,
+  },
+  description__minimal: {
+    "WebkitLineClamp": "3"
+  },
+  description__stretch: {
     "WebkitLineClamp": "2"
   },
   cardContent: {
     padding: '1rem !important'
   },
   price: {
-    height: '2.5rem'
+    height: '3rem'
+  },
+  icon: {
+    color: theme.palette.icon
   }
 }));
 
@@ -67,43 +76,69 @@ const Course = ({ data, type }) => {
               title="Contemplative Reptile"
             />
             <CardContent className={classes.cardContent}>
-              <Box display="flex" alignItems="center" className={classes.titleContainer}>
-                <Typography gutterBottom variant="h5" className={classes.title}>
-                  <b>{data.title}</b>
-                </Typography>
-              </Box>
-              <Box display="flex" alignItems="center">
-                <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</Typography>
+              <Box display="flex" flexDirection="column" justifyContent="space-between" style={{ height: '17rem' }}>
                 <Box>
-                  <Rating name="read-only" value={data.averageRating} size="small" precision={0.5} readOnly />
-                </Box>
-              </Box>
-              <Box display="flex" alignItems="center">
-                <Typography variant="body2">
-                  <span>(</span>
-                  <NumberFormat value={data.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
-                  <span>)</span>
-                </Typography>
-                <Typography variant="body2" style={{ marginLeft: 9 }}>
-                  <NumberFormat value={data.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
-                </Typography>
-              </Box>
-              <Typography variant="body2" color="textSecondary" component="p" className={classes.description}>
-                {data.description}
-              </Typography>
-              <Box display="flex" flexDirection="column" alignItems="flex-end" justifyContent="flex-end" className={classes.price}>
-                <Typography variant="h5">
-                  <b><NumberFormat value={data.tuition - data.tuition * data.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={data.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} /></b>
-                </Typography>
+                  <Box display="flex" flexDirection="column" className={classes.titleContainer}>
+                    <Typography variant="body2" gutterBottom>{data.categoryCluster.categories[0].name.toUpperCase()}</Typography>
+                    <Typography gutterBottom variant="h5" className={classes.title}>
+                      <b>{data.title}</b>
+                    </Typography>
+                  </Box>
+                  <Box display="flex" alignItems="center">
+                    <Typography variant="body2" style={{ marginRight: 3 }} color="textPrimary">
+                      <b>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</b>
+                    </Typography>
+                    <Box style={{ marginBottom: -1, marginRight: 3 }}>
+                      <Rating name="read-only" value={data.averageRating} size="small" precision={0.5} readOnly />
+                    </Box>
+                    <Typography variant="body2">
+                      <NumberFormat value={data.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={'('} suffix={' lượt đánh giá)'} />
+                    </Typography>
+                  </Box>
 
-                {data.discountPercent > 0 && (
-                  <Typography variant="body2">
-                    <strike>
-                      <NumberFormat value={data.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
-                    </strike>
-                    <span className={`${classes.label} ${classes.label__saleOff}`} style={{ marginLeft: 9 }}>Sale Off -{data.discountPercent * 100}%</span>
+                  <Box display="flex" alignItems="center" mt={1}>
+                    <Avatar src={data.lecturer.avatarUrl} style={{ width: 24, height: 24, marginRight: 7 }} />
+                    <Typography variant="body2" color="textPrimary"><b>{data.lecturer.fullName}</b></Typography>
+                    <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
+                    <Typography variant="body2">{format(data.updatedAt, 'vi')}</Typography>
+                    <Box mx={0.5}><Typography variant="body2"></Typography></Box>
+                  </Box>
+
+                  <Box mt={1} display="flex" alignItems="center" flexWrap="wrap">
+                    <Box display="flex" justifyContent="center" alignItems="center">
+                      <SchoolIcon className={classes.icon} style={{ fontSize: 16, marginRight: 5 }} />
+                      <Typography variant="body2" color="textPrimary">
+                        <NumberFormat value={data.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
+                      </Typography>
+                    </Box>
+                    <Box mx={1}></Box>
+                    <Box display="flex" justifyContent="center" alignItems="center">
+                      <VisibilityIcon className={classes.icon} style={{ fontSize: 16, marginRight: 5 }} />
+                      <Typography variant="body2" color="textPrimary">
+                        <NumberFormat value={data.numberOfViews} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt xem'} />
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Typography variant="body2" color="textSecondary" component="p" className={`${classes.description} ${classes.description__minimal}`}>
+                    {data.description}
                   </Typography>
-                )}
+                </Box>
+
+                <Box display="flex" flexDirection="column" alignItems="flex-end" justifyContent="flex-end" className={classes.price}>
+                  <Typography variant="h4">
+                    <b><NumberFormat value={data.tuition - data.tuition * data.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={data.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} /></b>
+                  </Typography>
+
+                  {data.discountPercent > 0 && (
+                    <Typography variant="body1">
+                      <strike>
+                        <NumberFormat value={data.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
+                      </strike>
+                      <span className={`${classes.label} ${classes.label__saleOff}`} style={{ marginLeft: 9 }}>Sale Off -{data.discountPercent * 100}%</span>
+                    </Typography>
+                  )}
+                </Box>
               </Box>
             </CardContent>
           </CardActionArea>
@@ -123,40 +158,56 @@ const Course = ({ data, type }) => {
               </Grid>
               <Grid item xs={7}>
                 <CardContent className={classes.cardContent}>
-                  <Box display="flex" alignItems="center" className={classes.titleContainer}>
+                  <Box display="flex" alignItems="center" className={classes.titleContainer} my={1}>
                     <Typography gutterBottom variant="h5" className={classes.title}>
                       <b>{data.title}</b>
                     </Typography>
                   </Box>
-                  <Box display="flex" alignItems="center">
-                    <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</Typography>
-                    <Box>
-                      <Rating name="read-only" value={data.averageRating} size="small" precision={0.5} readOnly />
+                  <Box display="flex" alignItems="center" flexWrap="wrap">
+                    <Box display="flex" alignItems="center">
+                      <Typography variant="body2" style={{ marginRight: 3 }} color="textPrimary">
+                        <b>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</b>
+                      </Typography>
+                      <Box style={{ marginBottom: -1 }}>
+                        <Rating name="read-only" value={data.averageRating} size="small" precision={0.5} readOnly />
+                      </Box>
+                      <Typography variant="body2" style={{ marginLeft: 3 }}>
+                        <NumberFormat value={data.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={'('} suffix={' lượt đánh giá)'} />
+                      </Typography>
                     </Box>
-                    <Typography variant="body2" style={{ marginLeft: 3 }}>
-                      <span>(</span>
-                      <NumberFormat value={data.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đánh giá'} />
-                      <span>)</span>
-                    </Typography>
-                    <Typography variant="body2" style={{ marginLeft: 9 }}>
-                      <NumberFormat value={data.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
-                    </Typography>
+                    <Box mx={1}></Box>
+                    <Box display="flex" justifyContent="center" alignItems="center">
+                      <SchoolIcon className={classes.icon} style={{ fontSize: 16, marginRight: 5 }} />
+                      <Typography variant="body2" color="textPrimary">
+                        <NumberFormat value={data.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
+                      </Typography>
+                    </Box>
+                    <Box mx={1}></Box>
+                    <Box display="flex" justifyContent="center" alignItems="center">
+                      <VisibilityIcon className={classes.icon} style={{ fontSize: 16, marginRight: 5 }} />
+                      <Typography variant="body2" color="textPrimary">
+                        <NumberFormat value={data.numberOfViews} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt xem'} />
+                      </Typography>
+                    </Box>
                   </Box>
-                  <Box display="flex" alignItems="center">
-                    <Typography variant="body2">Giảng viên: <b>{data.lecturer.fullName}</b></Typography>
-                    <Typography variant="body2" style={{ marginLeft: 9 }}>Cập nhật lần cuối: {moment(data.updatedAt).format('DD/MM HH:mm')}</Typography>
-                    <Typography variant="body2" style={{ marginLeft: 9 }}>{data.categoryCluster.categories[0].name.toUpperCase()}</Typography>
+                  <Box display="flex" alignItems="center" mt={1}>
+                    <Avatar src={data.lecturer.avatarUrl} style={{ width: 24, height: 24, marginRight: 7 }} />
+                    <Typography variant="body2" color="textPrimary"><b>{data.lecturer.fullName}</b></Typography>
+                    <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
+                    <Typography variant="body2">{format(data.updatedAt, 'vi')}</Typography>
+                    <Box mx={0.5}><Typography variant="body2"></Typography></Box>
+                    <Typography variant="body2">{data.categoryCluster.categories[0].name.toUpperCase()}</Typography>
                   </Box>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.description}>
+                  <Typography variant="body2" color="textSecondary" component="p" className={`${classes.description} ${classes.description__stretch}`}>
                     {data.description}
                   </Typography>
                   <Box display="flex" flexDirection="column" alignItems="flex-end" justifyContent="flex-end" className={classes.price}>
-                    <Typography variant="h5">
+                    <Typography variant="h4">
                       <b><NumberFormat value={data.tuition - data.tuition * data.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={data.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} /></b>
                     </Typography>
 
                     {data.discountPercent > 0 && (
-                      <Typography variant="body2">
+                      <Typography variant="body1">
                         <strike>
                           <NumberFormat value={data.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
                         </strike>

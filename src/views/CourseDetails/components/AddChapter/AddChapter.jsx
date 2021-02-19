@@ -28,8 +28,7 @@ const useStyles = makeStyles((theme) => ({
   btnAdd: {
     height: '2.625rem',
     minWidth: '10.625rem',
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)",
+    ...theme.palette.primary.gradient,
   },
   input: {
     ...theme.palette.input

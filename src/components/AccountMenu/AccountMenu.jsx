@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, List, ListItem, ListItemIcon, ListItemText, Popover, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import AppsIcon from '@material-ui/icons/Apps';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { userRole } from 'constants/user-role.constant';
 import * as _ from 'lodash';
@@ -48,7 +48,9 @@ function AccountMenu({ authUser, onClickItem }) {
           <Avatar src={authUser.avatarUrl} />
           <Box ml={1} display="flex" flexDirection="column" justifyContent="center">
             <Typography variant="h5" style={{ textAlign: 'left' }}><b>{authUser.fullName}</b></Typography>
-            <Typography variant="body2" style={{ textAlign: 'left', marginTop: 3 }}>{_.find(userRole, role => role.value === authUser.role).name}</Typography>
+            <Typography variant="body2" style={{ textAlign: 'left', marginTop: 3 }}>
+              {_.find(userRole, role => role.value === authUser.role).name}
+            </Typography>
           </Box>
         </Box>
       </Button>
@@ -73,9 +75,9 @@ function AccountMenu({ authUser, onClickItem }) {
         >
           <ListItem button onClick={() => handleClickListItem(1)}>
             <ListItemIcon className={classes.list__icon}>
-              <AppsIcon color="inherit" fontSize="small" />
+              <DashboardIcon color="inherit" fontSize="small" />
             </ListItemIcon>
-            <ListItemText primary="Bảng điều khiển" />
+            <ListItemText primary="Dashboard" />
           </ListItem>
           <ListItem button onClick={() => handleClickListItem(2)}>
             <ListItemIcon className={classes.list__icon}>

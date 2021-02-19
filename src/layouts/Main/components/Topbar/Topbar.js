@@ -3,7 +3,7 @@ import InputIcon from '@material-ui/icons/Input';
 import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
-import { availablePages } from 'constants/global.constant';
+import { availablePages, APP_NAME, APP_LOGO_IMAGE } from 'constants/global.constant';
 import { localStorageItems } from 'constants/local-storage.constant';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
@@ -86,10 +86,10 @@ const Topbar = props => {
           <Box display="flex" alignItems="center" className={classes.logo}>
             <img
               alt="Logo"
-              src="https://cdn.iconscout.com/icon/free/png-256/graduation-cap-1519981-1287612.png"
+              src={APP_LOGO_IMAGE}
               className={classes.logoImage}
             />
-            <Typography variant="h5" className={classes.logoTitle}>Hero Academy</Typography>
+            <Typography variant="h5" className={classes.logoTitle}>{APP_NAME}</Typography>
           </Box>
         </RouterLink>
         <div className={classes.flexGrow} />

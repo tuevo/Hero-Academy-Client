@@ -29,8 +29,7 @@ const useStyles = makeStyles(theme => ({
     height: '7.5rem'
   },
   btnUpdate: {
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    ...theme.palette.primary.gradient
   },
   avatarContainer: {
     position: 'relative',
@@ -212,7 +211,7 @@ export default function Info() {
               <Box display="flex" flexDirection="column" alignItems="center">
                 <Box display="flex" alignItems="center">
                   <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(userState.authUser.roleInfo.averageRating)}.${(userState.authUser.roleInfo.averageRating - Math.floor(userState.authUser.roleInfo.averageRating)) * 10}`}</Typography>
-                  <Box style={{ marginBottom: 1 }}>
+                  <Box style={{ marginBottom: -1 }}>
                     <Rating name="read-only" value={userState.authUser.roleInfo.averageRating} size="small" precision={0.5} readOnly />
                   </Box>
                 </Box>

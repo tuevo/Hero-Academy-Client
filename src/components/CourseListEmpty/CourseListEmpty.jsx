@@ -1,7 +1,7 @@
-import React from 'react';
-import { Box, CircularProgress, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import { Box, Typography } from '@material-ui/core';
 import SchoolIcon from '@material-ui/icons/School';
+import { makeStyles } from '@material-ui/styles';
+import React from 'react';
 
 const useStyles = makeStyles(theme => ({
   root: {

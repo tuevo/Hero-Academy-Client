@@ -5,10 +5,12 @@ import Course from 'components/Course/Course';
 import { apiMessage } from 'constants/api-message.constant';
 import { availablePages } from 'constants/global.constant';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { showNotification } from 'redux/actions/app.action';
 import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
 import CourseListEmpty from 'components/CourseListEmpty/CourseListEmpty';
+import { shallowEqual } from 'recompose';
+import { setPageBasics } from 'redux/actions/page.action';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,8 +19,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%'
   },
   btnLoadMoreCourse: {
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    ...theme.palette.primary.gradient
   }
 }));
 
@@ -26,6 +27,10 @@ const FavoriteCourses = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const limit = 8;
+
+  const pageBasics = useSelector(state => ({
+    ...state.page.basics
+  }), shallowEqual);
 
   const [favoriteList, setFavoriteList] = useState([]);
   const [favoriteListPage, setFavoriteListPage] = useState(1);
@@ -46,7 +51,10 @@ const FavoriteCourses = () => {
         const newCourseList = favoriteList.concat(courses);
         setFavoriteList(newCourseList);
 
-        if (newCourseList.length < res.data.meta.totalItems) {
+        const { totalItems } = res.data.meta;
+        dispatch(setPageBasics({ ...pageBasics, title: `${availablePages.FAVORITE_COURSES.title} (${totalItems})` }));
+
+        if (newCourseList.length < totalItems) {
           setDisableBtnLoadMoreCourse(false);
         }
 

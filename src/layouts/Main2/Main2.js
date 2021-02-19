@@ -1,16 +1,18 @@
-import { useMediaQuery, Backdrop, CircularProgress, Box, Typography } from '@material-ui/core';
+import { Backdrop, Box, CircularProgress, Typography, useMediaQuery } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import clsx from 'clsx';
+import ScrollTopButton from 'components/ScrollTopButton/ScrollTopButton';
+import ScrollbarContext from 'contexts/ScrollbarContext';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import { CategorySidebar, Topbar } from './components';
+import React, { useRef, useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { useDispatch, useSelector } from 'react-redux';
-import { setScrollbarTop } from 'redux/actions/page.action';
-import { useRef } from 'react';
-import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { shallowEqual } from 'recompose';
-
+import { CategorySidebar, Topbar } from './components';
+import MultiTaskButton from 'components/MultiTaskButton/MultiTaskButton';
+import { availablePages } from 'constants/global.constant';
+import { useEffect } from 'react';
+import * as _ from 'lodash';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,23 +44,43 @@ const Main2 = props => {
 
   const classes = useStyles();
   const theme = useTheme();
-  const dispatch = useDispatch();
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
     defaultMatches: true
   });
   const ps = useRef();
 
-  const [openSidebar, setOpenSidebar] = useState(false);
+  const userState = useSelector(state => ({
+    ...state.user
+  }), shallowEqual);
 
   const pageState = useSelector(state => ({
     ...state.page
   }), shallowEqual);
 
-  useEffect(() => {
+  const [openSidebar, setOpenSidebar] = useState(false);
+  const [btnScrollTopDisplay, setBtnScrollTopDisplay] = useState(false);
+  const [btnMultiTaskActionList, setBtnMultiTaskActionList] = useState([{ ...availablePages.HOME, title: 'Trang chủ' }]);
+
+  const setScrollbarTop = (value) => {
     if (ps.current) {
-      ps.current.scrollTop = pageState.scrollbarTop;
+      ps.current.scrollTop = value;
     }
-  }, [pageState.scrollbarTop])
+  }
+
+  const handleScrollY = e => {
+    setBtnScrollTopDisplay(e.scrollTop > 0);
+  }
+
+  const scrollbarUtils = {
+    scrollTop: (value) => {
+      setScrollbarTop(value);
+    },
+    addScrollTop: (value) => {
+      if (ps.current) {
+        setScrollbarTop(ps.current.scrollTop + value);
+      }
+    },
+  };
 
   const handleSidebarOpen = () => {
     setOpenSidebar(true);
@@ -68,9 +90,14 @@ const Main2 = props => {
     setOpenSidebar(false);
   };
 
-  const handleScrollY = e => {
-    dispatch(setScrollbarTop(e.scrollTop));
-  }
+  useEffect(() => {
+    const { authUser } = userState;
+    let actions = [];
+    if (authUser) {
+      actions = _.filter(availablePages, p => p.role === authUser.role);
+      setBtnMultiTaskActionList([...btnMultiTaskActionList, ...actions]);
+    }
+  }, [userState.authUser]);
 
   const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
@@ -92,7 +119,11 @@ const Main2 = props => {
         onScrollY={handleScrollY}
         containerRef={el => (ps.current = el)}
       >
-        {children}
+        <ScrollbarContext.Provider value={scrollbarUtils}>
+          {children}
+        </ScrollbarContext.Provider>
+        <MultiTaskButton position={btnScrollTopDisplay ? 'up' : 'down'} actions={btnMultiTaskActionList} />
+        {btnScrollTopDisplay && <ScrollTopButton onClick={() => scrollbarUtils.scrollTop(0)} />}
       </PerfectScrollbar>
       <Backdrop className={classes.backdrop} open={pageState.isLoading}>
         <Box display="flex" flexDirection="column" alignItems="center">

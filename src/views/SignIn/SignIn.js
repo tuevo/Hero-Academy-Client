@@ -5,7 +5,9 @@ import {
 
   Link, TextField,
 
-  Typography
+  Typography,
+  Box,
+  IconButton
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { authApi } from 'api';
@@ -22,6 +24,7 @@ import { setPageBasics, setPageLoading } from 'redux/actions/page.action';
 import validate from 'validate.js';
 import { localStorageItems } from '../../constants/local-storage.constant';
 import { signIn } from '../../redux/actions/user.action';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const schema = {
   email: {
@@ -42,8 +45,7 @@ const schema = {
 const useStyles = makeStyles(theme => ({
   root: {
     height: '100%',
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    ...theme.palette.primary.gradient
   },
   grid: {
     height: '100%'
@@ -118,14 +120,16 @@ const useStyles = makeStyles(theme => ({
   },
   signInButton: {
     margin: theme.spacing(4, 0, 2, 0),
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    ...theme.palette.primary.gradient
   },
   cover: {
     width: '25rem'
   },
   input: {
     ...theme.palette.input
+  },
+  icon: {
+    color: theme.palette.text.primary
   }
 }));
 
@@ -249,6 +253,11 @@ const SignIn = props => {
                   className={`${classes.form} animate__animated animate__fadeIn`}
                   onSubmit={handleSignIn}
                 >
+                  <Box ml={-1.5}>
+                    <IconButton onClick={() => history.goBack()} className={classes.icon}>
+                      <ArrowBackIcon />
+                    </IconButton>
+                  </Box>
                   <Typography
                     className={classes.title}
                     variant="h2"

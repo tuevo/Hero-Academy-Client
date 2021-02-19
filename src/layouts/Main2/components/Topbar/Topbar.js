@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { SearchInput } from 'components';
 import AccountMenu from 'components/AccountMenu/AccountMenu';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
-import { availablePages } from 'constants/global.constant';
+import { availablePages, APP_NAME, APP_LOGO_IMAGE } from 'constants/global.constant';
 import { localStorageItems } from 'constants/local-storage.constant';
 import * as _ from 'lodash';
 import PropTypes from 'prop-types';
@@ -42,8 +42,7 @@ const useStyles = makeStyles(theme => ({
   btnSignIn: {
   },
   btnSignUp: {
-    "backgroundColor": "#a4508b",
-    "backgroundImage": "linear-gradient(326deg, #a4508b 0%, #5f0a87 74%)"
+    ...theme.palette.primary.gradient
   },
   searchInput: {
   },
@@ -105,10 +104,10 @@ const Topbar = props => {
           <Box display="flex" alignItems="center" className={classes.logo}>
             <img
               alt="Logo"
-              src="https://cdn.iconscout.com/icon/free/png-256/graduation-cap-1519981-1287612.png"
+              src={APP_LOGO_IMAGE}
               className={classes.logoImage}
             />
-            <Typography variant="h5" className={classes.logoTitle}>Hero Academy</Typography>
+            <Typography variant="h5" className={classes.logoTitle}>{APP_NAME}</Typography>
           </Box>
         </RouterLink>
         <Grid container justify="flex-end" alignItems="center" spacing={2}>
