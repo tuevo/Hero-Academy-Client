@@ -178,7 +178,7 @@ const CourseSearching = () => {
         {!courseListLoading && (
           <Box display="flex" justifyContent="space-between" alignItems="flex-end">
             <Box>
-              <Typography variant="h4" color="textPrimary" gutterBottom>
+              <Typography variant="h4" color="textSecondary" gutterBottom>
                 <b>Từ khóa "{appState.courseSearchingQuery}"</b>
               </Typography>
               {courseListTotalItems > 0 && (

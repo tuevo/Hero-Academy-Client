@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%'
   },
   media__minimal: {
-    height: '8rem',
+    height: '10rem',
   },
   media__stretch: {
     height: '100%'
@@ -76,7 +76,7 @@ const Course = ({ data, type }) => {
               title="Contemplative Reptile"
             />
             <CardContent className={classes.cardContent}>
-              <Box display="flex" flexDirection="column" justifyContent="space-between" style={{ height: '17rem' }}>
+              <Box display="flex" flexDirection="column" justifyContent="space-between" style={{ height: '16rem' }}>
                 <Box>
                   <Box display="flex" flexDirection="column" className={classes.titleContainer}>
                     <Typography variant="body2" gutterBottom>{data.categoryCluster.categories[0].name.toUpperCase()}</Typography>
@@ -84,7 +84,16 @@ const Course = ({ data, type }) => {
                       <b>{data.title}</b>
                     </Typography>
                   </Box>
+
                   <Box display="flex" alignItems="center">
+                    <Avatar src={data.lecturer.avatarUrl} style={{ width: 24, height: 24, marginRight: 7 }} />
+                    <Typography variant="body2" color="textPrimary"><b>{data.lecturer.fullName}</b></Typography>
+                    <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
+                    <Typography variant="body2">{format(data.updatedAt, 'vi')}</Typography>
+                    <Box mx={0.5}><Typography variant="body2"></Typography></Box>
+                  </Box>
+
+                  <Box display="flex" alignItems="center" mt={1}>
                     <Typography variant="body2" style={{ marginRight: 3 }} color="textPrimary">
                       <b>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</b>
                     </Typography>
@@ -94,14 +103,6 @@ const Course = ({ data, type }) => {
                     <Typography variant="body2">
                       <NumberFormat value={data.numberOfRatings} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={'('} suffix={' lượt đánh giá)'} />
                     </Typography>
-                  </Box>
-
-                  <Box display="flex" alignItems="center" mt={1}>
-                    <Avatar src={data.lecturer.avatarUrl} style={{ width: 24, height: 24, marginRight: 7 }} />
-                    <Typography variant="body2" color="textPrimary"><b>{data.lecturer.fullName}</b></Typography>
-                    <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
-                    <Typography variant="body2">{format(data.updatedAt, 'vi')}</Typography>
-                    <Box mx={0.5}><Typography variant="body2"></Typography></Box>
                   </Box>
 
                   <Box mt={1} display="flex" alignItems="center" flexWrap="wrap">
@@ -126,7 +127,7 @@ const Course = ({ data, type }) => {
                 </Box>
 
                 <Box display="flex" flexDirection="column" alignItems="flex-end" justifyContent="flex-end" className={classes.price}>
-                  <Typography variant="h4">
+                  <Typography variant="h5">
                     <b><NumberFormat value={data.tuition - data.tuition * data.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={data.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} /></b>
                   </Typography>
 
@@ -158,12 +159,19 @@ const Course = ({ data, type }) => {
               </Grid>
               <Grid item xs={7}>
                 <CardContent className={classes.cardContent}>
-                  <Box display="flex" alignItems="center" className={classes.titleContainer} my={1}>
+                  <Box display="flex" flexDirection="column" className={classes.titleContainer}>
+                    <Typography variant="body2" gutterBottom>{data.categoryCluster.categories[0].name.toUpperCase()}</Typography>
                     <Typography gutterBottom variant="h5" className={classes.title}>
                       <b>{data.title}</b>
                     </Typography>
                   </Box>
-                  <Box display="flex" alignItems="center" flexWrap="wrap">
+                  <Box display="flex" alignItems="center">
+                    <Avatar src={data.lecturer.avatarUrl} style={{ width: 24, height: 24, marginRight: 7 }} />
+                    <Typography variant="body2" color="textPrimary"><b>{data.lecturer.fullName}</b></Typography>
+                    <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
+                    <Typography variant="body2">{format(data.updatedAt, 'vi')}</Typography>
+                  </Box>
+                  <Box display="flex" alignItems="center" flexWrap="wrap" mt={1}>
                     <Box display="flex" alignItems="center">
                       <Typography variant="body2" style={{ marginRight: 3 }} color="textPrimary">
                         <b>{`${Math.floor(data.averageRating)}.${(data.averageRating - Math.floor(data.averageRating)) * 10}`}</b>
@@ -190,19 +198,11 @@ const Course = ({ data, type }) => {
                       </Typography>
                     </Box>
                   </Box>
-                  <Box display="flex" alignItems="center" mt={1}>
-                    <Avatar src={data.lecturer.avatarUrl} style={{ width: 24, height: 24, marginRight: 7 }} />
-                    <Typography variant="body2" color="textPrimary"><b>{data.lecturer.fullName}</b></Typography>
-                    <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
-                    <Typography variant="body2">{format(data.updatedAt, 'vi')}</Typography>
-                    <Box mx={0.5}><Typography variant="body2"></Typography></Box>
-                    <Typography variant="body2">{data.categoryCluster.categories[0].name.toUpperCase()}</Typography>
-                  </Box>
                   <Typography variant="body2" color="textSecondary" component="p" className={`${classes.description} ${classes.description__stretch}`}>
                     {data.description}
                   </Typography>
                   <Box display="flex" flexDirection="column" alignItems="flex-end" justifyContent="flex-end" className={classes.price}>
-                    <Typography variant="h4">
+                    <Typography variant="h5">
                       <b><NumberFormat value={data.tuition - data.tuition * data.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={data.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} /></b>
                     </Typography>
 

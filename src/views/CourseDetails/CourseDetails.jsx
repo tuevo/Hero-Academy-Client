@@ -71,7 +71,8 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     height: '100%',
     boxShadow: 'inset 0 18.75rem 9.375rem rgba(0,0,0,0.7)',
-    backgroundColor: 'rgba(0,0,0,0.2)'
+    backgroundColor: 'rgba(0,0,0,0.25)',
+    backdropFilter: 'blur(6px)'
   },
   bannerContent: {
     position: 'absolute',
@@ -783,7 +784,7 @@ const CourseDetails = () => {
                 <Avatar src={course.lecturer.avatarUrl} style={{ width: 40, height: 40, marginRight: 10 }} />
                 <Box display="flex" flexDirection="column" justifyContent="center" style={{ color: '#dcdcdc' }}>
                   <Typography variant="body1" color="inherit"><b>{course.lecturer.fullName}</b></Typography>
-                  <Typography variant="body2" color="inherit" style={{ marginTop: 3, fontSize: 10 }}>
+                  <Typography variant="body2" color="inherit" style={{ marginTop: 2, fontSize: 11 }}>
                     Cập nhật lần cuối: {format(course.updatedAt, 'vi')}
                   </Typography>
                 </Box>
@@ -1073,6 +1074,14 @@ const CourseDetails = () => {
                       <Box pt={4} mb={2} display="flex" justifyContent="center" alignItems="center" style={{ width: '100%' }}>
                         <CircularProgress color="primary" size={12} style={{ marginRight: 5 }} />
                         <Typography variant="body2">Đang tải...</Typography>
+                      </Box>
+                    )}
+                    {feedbackListTotalItems === 0 && (
+                      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ height: '20rem' }}>
+                        <Box mb={1}>
+                          <FeedbackIcon className={classes.emptyVideoListIcon} style={{ fontSize: '3.75rem' }} />
+                        </Box>
+                        <Typography variant="body1">Chưa có bình luận nào.</Typography>
                       </Box>
                     )}
                   </PerfectScrollbar>

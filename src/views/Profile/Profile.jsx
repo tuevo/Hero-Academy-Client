@@ -19,11 +19,11 @@ const useStyles = makeStyles(theme => ({
     minHeight: '34rem',
     width: '100%',
     overflow: 'hidden',
-    borderRadius: theme.palette.card.borderRadius
+    paddingTop: theme.spacing(4)
   },
   tabs: {
     boxShadow: 'none',
-    ...theme.palette.primary.gradient
+    backgroundColor: theme.palette.card.backgroundColor
   },
 }));
 

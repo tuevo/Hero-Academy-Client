@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(5, 11)
   },
   title: {
-    color: theme.palette.primary.contrastText
+    color: theme.palette.text.secondary
   },
   content: {
     ...theme.palette.card,
@@ -73,17 +73,19 @@ export default function Content({ inner }) {
         onScrollY={handleScrollY}
         containerRef={el => (ps.current = el)}
       >
-        <Box display="flex" alignItems="center" pl={2} pb={4} className={classes.title}>
-          <Box mr={1}>
-            <IconButton color="inherit" onClick={() => history.goBack()}>
-              <ArrowBackIosIcon />
-            </IconButton>
-          </Box>
-          <Typography variant="h3" color="inherit"><b>{pageState.basics.title}</b></Typography>
-        </Box>
         <ScrollbarContext.Provider value={scrollbarUtils}>
-          <Box display="flex" justifyContent="center" className={`${classes.content}`}>
-            {inner}
+          <Box display="flex" flexDirection="column" justifyContent="center" className={`${classes.content}`}>
+            <Box display="flex" alignItems="center" p={2.5} pt={4} pb={0} className={classes.title}>
+              <Box mr={0.5}>
+                <IconButton color="inherit" onClick={() => history.goBack()}>
+                  <ArrowBackIosIcon fontSize="small" />
+                </IconButton>
+              </Box>
+              <Typography variant="h3" color="inherit"><b>{pageState.basics.title}</b></Typography>
+            </Box>
+            <Box>
+              {inner}
+            </Box>
           </Box>
         </ScrollbarContext.Provider>
         {btnScrollTopDisplay && <ScrollTopButton onClick={() => scrollbarUtils.scrollTop(0)} />}
