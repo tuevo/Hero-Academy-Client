@@ -35,13 +35,17 @@ const useStyles = makeStyles(theme => ({
   },
   tabs: {
     boxShadow: 'none',
-    backgroundColor: theme.palette.card.backgroundColor
+    backgroundColor: theme.palette.card.backgroundColor,
+    color: theme.palette.text.primary
+  },
+  tabIcon: {
+    color: theme.palette.icon
   },
   btnAddLecturerContainer: {
     position: 'absolute',
     zIndex: 10,
     right: '5%',
-    top: '-1.5625rem'
+    top: '-1.875rem'
   },
   btnAddLecturer: {
     ...theme.palette.primary.gradient
@@ -210,7 +214,7 @@ const Users = () => {
       <AppBar position="static" className={classes.tabs} color="primary">
         <Tabs value={tabValue} onChange={handleTabChange} aria-label="simple tabs example">
           <Tab
-            icon={<PersonIcon />}
+            icon={<PersonIcon className={classes.tabIcon} />}
             label={
               <span>
                 Học viên (<NumberFormat value={studentListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} />)
@@ -219,7 +223,7 @@ const Users = () => {
             {...a11yProps(0)}
           />
           <Tab
-            icon={<FaceIcon />}
+            icon={<FaceIcon className={classes.tabIcon} />}
             label={
               <span>
                 Giảng viên (<NumberFormat value={lecturerListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} />)

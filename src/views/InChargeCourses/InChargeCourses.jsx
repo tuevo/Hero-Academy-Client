@@ -19,13 +19,14 @@ const useStyles = makeStyles(theme => ({
   root: {
     zIndex: 5,
     padding: theme.spacing(4),
+    paddingTop: theme.spacing(2),
     width: '100%'
   },
   btnAddCourse: {
     position: 'absolute',
     zIndex: 10,
     right: '5%',
-    top: '-1.5625rem',
+    top: '1.5625rem',
     ...theme.palette.primary.gradient
   },
   btnLoadMoreCourse: {

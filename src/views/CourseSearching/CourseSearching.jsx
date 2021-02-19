@@ -162,13 +162,8 @@ const CourseSearching = () => {
   return (
     <div className={classes.root}>
       <Box p={4} pt={2} className={classes.courses}>
-        <Box pb={1} ml={-1}>
-          <IconButton onClick={() => history.goBack()} className={classes.icon}>
-            <ArrowBackIosIcon fontSize="small" />
-          </IconButton>
-        </Box>
         {courseListLoading && (
-          <Box>
+          <Box mt={3}>
             <Skeleton variant="text" width={300} />
             <Box pt={1}>
               <Skeleton variant="text" />
@@ -177,15 +172,22 @@ const CourseSearching = () => {
         )}
         {!courseListLoading && (
           <Box display="flex" justifyContent="space-between" alignItems="flex-end">
-            <Box>
-              <Typography variant="h4" color="textSecondary" gutterBottom>
-                <b>Từ khóa "{appState.courseSearchingQuery}"</b>
-              </Typography>
+            <Box mt={2}>
+              <Box display="flex" alignItems="center">
+                <Box ml={-1.5}>
+                  <IconButton onClick={() => history.goBack()} className={classes.icon}>
+                    <ArrowBackIosIcon fontSize="small" style={{ fontSize: 16 }} />
+                  </IconButton>
+                </Box>
+                <Typography variant="h4" color="textSecondary">
+                  <b>Từ khóa "{appState.courseSearchingQuery}"</b>
+                </Typography>
+              </Box>
               {courseListTotalItems > 0 && (
                 <Typography variant="body1" color="textSecondary">
                   <Typography variant="inherit" color="textPrimary">
-                    <b><NumberFormat value={courseListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b>
-                  </Typography> khóa học
+                    Tìm thấy <b><NumberFormat value={courseListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b>
+                  </Typography> khóa học liên quan
                 </Typography>
               )}
             </Box>

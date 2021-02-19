@@ -25,6 +25,12 @@ const useStyles = makeStyles(theme => ({
     boxShadow: 'none',
     backgroundColor: theme.palette.card.backgroundColor
   },
+  tabIcon: {
+    color: theme.palette.icon
+  },
+  content: {
+    backgroundColor: theme.palette.background.course
+  }
 }));
 
 const Profile = () => {
@@ -39,8 +45,8 @@ const Profile = () => {
     <div className={classes.root}>
       <AppBar position="static" className={classes.tabs} color="primary">
         <Tabs value={tabValue} onChange={handleTabChange} aria-label="simple tabs example">
-          <Tab icon={<PersonIcon />} label="Thông tin cá nhân" {...a11yProps(0)} />
-          <Tab icon={<LockIcon />} label="Thay đổi mật khẩu" {...a11yProps(1)} />
+          <Tab className={classes.tabIcon} icon={<PersonIcon />} label="Thông tin cá nhân" {...a11yProps(0)} />
+          <Tab className={classes.tabIcon} icon={<LockIcon />} label="Thay đổi mật khẩu" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
 

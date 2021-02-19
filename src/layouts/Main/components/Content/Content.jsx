@@ -78,10 +78,10 @@ export default function Content({ inner }) {
             <Box display="flex" alignItems="center" p={2.5} pt={4} pb={0} className={classes.title}>
               <Box mr={0.5}>
                 <IconButton color="inherit" onClick={() => history.goBack()}>
-                  <ArrowBackIosIcon fontSize="small" />
+                  <ArrowBackIosIcon fontSize="small" style={{ fontSize: 16 }} />
                 </IconButton>
               </Box>
-              <Typography variant="h3" color="inherit"><b>{pageState.basics.title}</b></Typography>
+              <Typography variant="h4" color="inherit"><b>{pageState.basics.title}</b></Typography>
             </Box>
             <Box>
               {inner}

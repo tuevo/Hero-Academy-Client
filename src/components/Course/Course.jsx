@@ -39,6 +39,11 @@ const useStyles = makeStyles((theme) => ({
   title: {
     textTransform: 'uppercase',
     ...styles,
+  },
+  title__minimal: {
+    "WebkitLineClamp": "2",
+  },
+  title__stretch: {
     "WebkitLineClamp": "2",
   },
   description: {
@@ -55,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '1rem !important'
   },
   price: {
-    height: '3rem'
+    height: '2.5rem'
   },
   icon: {
     color: theme.palette.icon
@@ -80,7 +85,7 @@ const Course = ({ data, type }) => {
                 <Box>
                   <Box display="flex" flexDirection="column" className={classes.titleContainer}>
                     <Typography variant="body2" gutterBottom>{data.categoryCluster.categories[0].name.toUpperCase()}</Typography>
-                    <Typography gutterBottom variant="h5" className={classes.title}>
+                    <Typography gutterBottom variant="h5" className={`${classes.title} ${classes.title__minimal}`}>
                       <b>{data.title}</b>
                     </Typography>
                   </Box>
@@ -168,8 +173,7 @@ const Course = ({ data, type }) => {
               <Grid item xs={7}>
                 <CardContent className={classes.cardContent}>
                   <Box display="flex" flexDirection="column" className={classes.titleContainer}>
-                    <Typography variant="body2" gutterBottom>{data.categoryCluster.categories[0].name.toUpperCase()}</Typography>
-                    <Typography gutterBottom variant="h5" className={classes.title}>
+                    <Typography gutterBottom variant="h5" className={`${classes.title} ${classes.title__stretch}`}>
                       <b>{data.title}</b>
                     </Typography>
                   </Box>
@@ -178,6 +182,8 @@ const Course = ({ data, type }) => {
                     <Typography variant="body2" color="textPrimary"><b>{data.lecturer.fullName}</b></Typography>
                     <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
                     <Typography variant="body2">{format(data.updatedAt, 'vi')}</Typography>
+                    <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
+                    <Typography variant="body2">{data.categoryCluster.categories[0].name.toUpperCase()}</Typography>
                   </Box>
                   <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap" mt={1}>
                     <Box display="flex" alignItems="center">

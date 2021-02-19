@@ -107,13 +107,8 @@ const CategoryCourses = () => {
   return (
     <div className={classes.root}>
       <Box p={4} pt={2} className={classes.courses}>
-        <Box pb={1} ml={-1}>
-          <IconButton onClick={() => history.goBack()} className={classes.icon}>
-            <ArrowBackIosIcon fontSize="small" />
-          </IconButton>
-        </Box>
         {categoryCourseListLoading && (
-          <Box>
+          <Box mt={3}>
             <Skeleton variant="text" width={300} />
             <Box pt={1}>
               <Skeleton variant="text" />
@@ -122,12 +117,17 @@ const CategoryCourses = () => {
         )}
         {!categoryCourseListLoading && (
           <div>
-            <Box display="flex" alignItems="center">
+            <Box display="flex" alignItems="center" mt={2}>
+              <Box ml={-1}>
+                <IconButton onClick={() => history.goBack()} className={classes.icon}>
+                  <ArrowBackIosIcon style={{ fontSize: 16 }} />
+                </IconButton>
+              </Box>
               <Typography variant="h4" className={classes.sencondaryText}><b>{category && category.categoryCluster.name}</b></Typography>
               <ArrowRightIcon className={classes.sencondaryText} />
               <Typography variant="h4" className={classes.sencondaryText}><b>{category && category.name}</b></Typography>
             </Box>
-            <Box mt={1}>
+            <Box>
               {categoryCourseListTotalItems > 0 && (
                 <Typography variant="body1" color="textSecondary">
                   <Typography variant="inherit" color="textPrimary">
