@@ -287,7 +287,7 @@ export default function AddCourse({ open, onClose }) {
           </Grid>
           <Grid item xs={3}>
             <FormControl className={classes.formControl} fullWidth>
-              <InputLabel htmlFor="standard-adornment-amount">Khuyễn mãi</InputLabel>
+              <InputLabel htmlFor="standard-adornment-amount">Ưu đãi</InputLabel>
               <Input
                 error={hasError('discountPercent')}
                 name="discountPercent"

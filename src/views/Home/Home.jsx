@@ -322,7 +322,7 @@ const Home = () => {
                               <Avatar src={c.lecturer.avatarUrl} style={{ width: 24, height: 24, marginRight: 7 }} />
                               <Typography variant="body2" color="inherit"><b>{c.lecturer.fullName}</b></Typography>
                               <Box mx={0.5}><Typography variant="body2" color="inherit">•</Typography></Box>
-                              <Typography variant="body2" color="inherit">{format(c.updatedAt, 'vi')}</Typography>
+                              <Typography variant="body2" color="inherit">{format(c.updatedAtByLecturer, 'vi')}</Typography>
                             </Box>
                           </Grid>
                           <Grid item xs={4}>
@@ -336,7 +336,7 @@ const Home = () => {
                                   <strike>
                                     <NumberFormat value={c.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
                                   </strike>
-                                  <span className={`${classes.label} ${classes.label__saleOff}`} style={{ marginLeft: 9 }}>Sale Off -{c.discountPercent * 100}%</span>
+                                  <span className={`${classes.label} ${classes.label__saleOff}`} style={{ marginLeft: 9 }}>Ưu đãi {c.discountPercent * 100}%</span>
                                 </Typography>
                               )}
                             </Box>

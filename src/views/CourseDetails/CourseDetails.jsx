@@ -71,7 +71,8 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     height: '100%',
     boxShadow: 'inset 0 18.75rem 9.375rem rgba(0,0,0,0.7)',
-    backgroundColor: 'rgba(0,0,0,0.25)',
+    // backgroundColor: 'rgba(0,0,0,0.25)',
+    backgroundColor: 'rgba(123, 31, 162, 0.5)',
     backdropFilter: 'blur(6px)'
   },
   bannerContent: {
@@ -793,7 +794,7 @@ const CourseDetails = () => {
             <Grid item xs={6}>
               <Box display="flex" flexDirection="column" alignItems="flex-end" pb={2}>
                 {!course.isRegistered && (
-                  <div>
+                  <Box display="flex" flexDirection="column" alignItems="flex-end">
                     <Box display="flex" alignItems="center" mb={1}>
                       <Typography variant="h3" className={classes.featuredCoursesCarouselItem__price} color="inherit">
                         <NumberFormat value={course.tuition - course.tuition * course.discountPercent} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={course.discountPercent > 0 ? 'Chỉ còn ' : ''} suffix={'đ'} />
@@ -804,10 +805,10 @@ const CourseDetails = () => {
                         <strike>
                           <NumberFormat value={course.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
                         </strike>
-                        <span className={`${classes.label} ${classes.label__saleOff}`} style={{ marginLeft: 9 }}>Sale Off -{course.discountPercent * 100}%</span>
+                        <span className={`${classes.label} ${classes.label__saleOff}`} style={{ marginLeft: 9 }}>Ưu đãi {course.discountPercent * 100}%</span>
                       </Typography>
                     )}
-                  </div>
+                  </Box>
                 )}
 
                 {!userState.authUser || (userState.authUser && userState.authUser.role === userRole.STUDENT.value && !course.isRegistered) ? (

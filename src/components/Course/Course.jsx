@@ -78,7 +78,7 @@ const Course = ({ data, type }) => {
             <CardMedia
               className={classes.media__minimal}
               image={data.thumbnailUrl}
-              title="Contemplative Reptile"
+              title={data.title.toUpperCase()}
             />
             <CardContent className={classes.cardContent}>
               <Box display="flex" flexDirection="column" justifyContent="space-between" style={{ height: '15rem' }}>
@@ -118,22 +118,6 @@ const Course = ({ data, type }) => {
                     </Typography>
                   </Box>
 
-                  {/* <Box mt={1} display="flex" alignItems="center" flexWrap="wrap">
-                    <Box display="flex" justifyContent="center" alignItems="center">
-                      <SchoolIcon className={classes.icon} style={{ fontSize: 16, marginRight: 5 }} />
-                      <Typography variant="body2" color="textPrimary">
-                        <NumberFormat value={data.numberOfRegistrations} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' học viên'} />
-                      </Typography>
-                    </Box>
-                    <Box mx={2}></Box>
-                    <Box display="flex" justifyContent="center" alignItems="center">
-                      <VisibilityIcon className={classes.icon} style={{ fontSize: 16, marginRight: 5 }} />
-                      <Typography variant="body2" color="textPrimary">
-                        <NumberFormat value={data.numberOfViews} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt xem'} />
-                      </Typography>
-                    </Box>
-                  </Box> */}
-
                   <Typography variant="body2" color="textSecondary" component="p" className={`${classes.description} ${classes.description__minimal}`}>
                     {data.description}
                   </Typography>
@@ -149,7 +133,7 @@ const Course = ({ data, type }) => {
                       <strike>
                         <NumberFormat value={data.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
                       </strike>
-                      <span className={`${classes.label} ${classes.label__saleOff}`} style={{ marginLeft: 9 }}>Sale Off -{data.discountPercent * 100}%</span>
+                      <span className={`${classes.label} ${classes.label__saleOff}`} style={{ marginLeft: 9 }}>Ưu đãi {data.discountPercent * 100}%</span>
                     </Typography>
                   )}
                 </Box>
@@ -167,7 +151,7 @@ const Course = ({ data, type }) => {
                 <CardMedia
                   className={classes.media__stretch}
                   image={data.thumbnailUrl}
-                  title="Contemplative Reptile"
+                  title={data.title.toUpperCase()}
                 />
               </Grid>
               <Grid item xs={7}>
@@ -228,7 +212,7 @@ const Course = ({ data, type }) => {
                         <strike>
                           <NumberFormat value={data.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
                         </strike>
-                        <span className={`${classes.label} ${classes.label__saleOff}`} style={{ marginLeft: 9 }}>Sale Off -{data.discountPercent * 100}%</span>
+                        <span className={`${classes.label} ${classes.label__saleOff}`} style={{ marginLeft: 9 }}>Ưu đãi {data.discountPercent * 100}%</span>
                       </Typography>
                     )}
                   </Box>
