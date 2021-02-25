@@ -6,9 +6,9 @@ import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
+    zIndex: theme.zIndex.drawer + 999,
     color: theme.palette.primary.main,
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.appLoading,
   },
   logoImage: {
     width: '4.5rem',

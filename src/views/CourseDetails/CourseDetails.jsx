@@ -71,8 +71,8 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     height: '100%',
     boxShadow: 'inset 0 18.75rem 9.375rem rgba(0,0,0,0.7)',
-    // backgroundColor: 'rgba(0,0,0,0.25)',
-    backgroundColor: 'rgba(123, 31, 162, 0.5)',
+    backgroundColor: 'rgba(0,0,0,0.25)',
+    // backgroundColor: 'rgba(123, 31, 162, 0.5)',
     backdropFilter: 'blur(6px)'
   },
   bannerContent: {
@@ -168,7 +168,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: '0.8125rem',
     borderRadius: 5,
     fontWeight: 'bold',
-    textShadow: 'none'
+    textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
   },
   label__hot: {
     backgroundColor: 'crimson',
@@ -184,7 +184,8 @@ const useStyles = makeStyles(theme => ({
   },
   label__unfinished: {
     color: 'rgba(0,0,0,0.7)',
-    backgroundColor: '#d9d9d9'
+    backgroundColor: '#d9d9d9',
+    textShadow: 'none'
   },
   panel: {
     ...theme.palette.card,
@@ -730,7 +731,7 @@ const CourseDetails = () => {
             </Box>
           </Box>
           <Grid container alignItems="flex-end" ref={el => (bannerContentRef.current = el)}>
-            <Grid item xs={6}>
+            <Grid item xs={8}>
               <Box display="flex" alignItems="center" mb={1}>
                 <Typography variant="body2" color="inherit" >
                   {course.categoryCluster.name.toUpperCase()}
@@ -749,8 +750,10 @@ const CourseDetails = () => {
               <Typography variant="body1" className={classes.description} color="inherit">{course.description}</Typography>
 
               <Box display="flex" alignItems="center" className={classes.featuredCoursesCarouselItem__ratingDetails}>
-                <Typography variant="body2" color="inherit" style={{ marginRight: 3 }}>
-                  {/* <span className={`${classes.label} ${classes.label__bestSeller}`} style={{ marginRight: 3 }}>Best Seller</span> */}
+                <Typography variant="body2" color="inherit" style={{ marginRight: 5 }}>
+                  {course.isBestSeller && (
+                    <span className={`${classes.label} ${classes.label__bestSeller}`} style={{ marginRight: 5 }}>Đăng ký nhiều</span>
+                  )}
                   {course.isFinished ? (
                     <span className={`${classes.label} ${classes.label__new}`} style={{ marginRight: 12 }}>Đã hoàn thành</span>
                   ) : (<span className={`${classes.label} ${classes.label__unfinished}`} style={{ marginRight: 12 }}>Chưa hoàn thành</span>)}
@@ -791,7 +794,7 @@ const CourseDetails = () => {
                 </Box>
               </Box>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
               <Box display="flex" flexDirection="column" alignItems="flex-end" pb={2}>
                 {!course.isRegistered && (
                   <Box display="flex" flexDirection="column" alignItems="flex-end">
@@ -1058,12 +1061,15 @@ const CourseDetails = () => {
                       <Box key={f._id} display="flex" className={classes.feedbackItem}>
                         <Avatar alt={f.student.fullName} src={f.student.avatarUrl} className={classes.feedbackItem__avatar} />
                         <Box display="flex" flexDirection="column" className={classes.feedbackItem__comment}>
-                          <Box display="flex" alignItems="center" mb={0.5}>
+                          <Box display="flex" alignItems="flex-end">
                             <Typography variant="body1"><b>{f.student.fullName}</b></Typography>
-                            <Typography variant="body2" style={{ marginLeft: 9 }}>{format(f.createdAt, 'vi')}</Typography>
+                            <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
+                            <Typography variant="body2">{format(f.createdAt, 'vi')}</Typography>
                           </Box>
                           {f.rating.rating > 0 && (
-                            <Rating name="read-only" value={f.rating.rating} size="small" precision={0.5} readOnly />
+                            <Box mt={0.5}>
+                              <Rating name="read-only" value={f.rating.rating} size="small" precision={0.5} readOnly />
+                            </Box>
                           )}
                           <Box pt={1}>
                             <Typography variant="body1">{f.content}</Typography>
@@ -1077,7 +1083,7 @@ const CourseDetails = () => {
                         <Typography variant="body2">Đang tải...</Typography>
                       </Box>
                     )}
-                    {feedbackListTotalItems === 0 && (
+                    {!feedbackListLoading && feedbackListTotalItems === 0 && (
                       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ height: '20rem' }}>
                         <Box mb={1}>
                           <FeedbackIcon className={classes.emptyVideoListIcon} style={{ fontSize: '3.75rem' }} />

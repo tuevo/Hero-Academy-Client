@@ -1,4 +1,5 @@
-import { Box, Button, Divider, FormControl, InputLabel, MenuItem, Select, Typography, IconButton } from '@material-ui/core';
+import { Box, Button, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Typography } from '@material-ui/core';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import SchoolIcon from '@material-ui/icons/School';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/styles';
@@ -11,11 +12,10 @@ import ScrollbarContext from 'contexts/ScrollbarContext';
 import React, { useContext, useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { shallowEqual } from 'recompose';
 import { showNotification } from 'redux/actions/app.action';
 import { setPageBasics } from 'redux/actions/page.action';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -98,6 +98,8 @@ const CourseSearching = () => {
   const [btnLoadMoreCourseDisabled, setBtnLoadMoreCourseDisabled] = useState(false);
   const [courseListFilterCriteriaIndex, setCourseListFilterCriteriaIndex] = useState(0);
 
+  const [categoryList, setCategoryList] = useState([]);
+
   const getAllCourses = async (page) => {
     setBtnLoadMoreCourseDisabled(true);
     try {
@@ -121,9 +123,14 @@ const CourseSearching = () => {
       if (newCourseList.length < totalItems) {
         setBtnLoadMoreCourseDisabled(false);
       }
-
-      setCourseList(newCourseList);
       setCourseListTotalItems(totalItems);
+
+      const newCategoryList = res.data.categories.map(c => ({
+        ...c,
+        href: availablePages.CATEGORY_COURSES.path.replace(':categoryId', c._id)
+      }));
+      setCategoryList(newCategoryList);
+
       setCourseListLoading(false);
       dispatch(setPageBasics({ ...pageBasics, title: `${appState.courseSearchingQuery} - Kết quả tìm kiếm` }))
     } catch (error) {
@@ -180,16 +187,34 @@ const CourseSearching = () => {
                   </IconButton>
                 </Box>
                 <Typography variant="h4" color="textSecondary">
-                  <b>Từ khóa "{appState.courseSearchingQuery}"</b>
+                  <b>
+                    <NumberFormat value={courseListTotalItems + categoryList.length} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} />
+                    <span> kết quả cho "{appState.courseSearchingQuery}"</span>
+                  </b>
                 </Typography>
               </Box>
-              {courseListTotalItems > 0 && (
-                <Typography variant="body1" color="textSecondary">
-                  <Typography variant="inherit" color="textPrimary">
-                    Tìm thấy <b><NumberFormat value={courseListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b>
-                  </Typography> khóa học liên quan
-                </Typography>
-              )}
+              <Box mt={0.5} display="flex" alignItems="center" flexWrap="wrap">
+                <Box mr={1}>
+                  <Typography variant="body1" color="textSecondary">
+                    Có thể bạn quan tâm
+                  </Typography>
+                </Box>
+                {categoryList.map((c, i) => (
+                  <Link
+                    key={i}
+                    to={c.href}
+                  >
+                    <Box mr={0.5}>
+                      <Button
+                        color="primary"
+                        size="small"
+                      >
+                        {c.name}
+                      </Button>
+                    </Box>
+                  </Link>
+                ))}
+              </Box>
             </Box>
             {courseListTotalItems > 0 && (
               <FormControl className={classes.formControl}>

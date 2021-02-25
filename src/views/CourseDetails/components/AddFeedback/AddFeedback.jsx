@@ -78,6 +78,7 @@ const AddFeedback = props => {
     const { value } = e.target;
     setRating(+value);
     addFeedback(1, { rating: +value });
+    dispatch(showNotification('success', 'Cảm ơn sự đánh giá của bạn 🥰'));
   }
 
   const handleChangeComment = (e) => {

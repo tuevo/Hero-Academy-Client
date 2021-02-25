@@ -62,6 +62,7 @@ export default {
   },
   background: {
     default: '#212111',
+    appLoading: '#313131',
     paper: '#313131',
     course: '#313131',
     user: '#313131',

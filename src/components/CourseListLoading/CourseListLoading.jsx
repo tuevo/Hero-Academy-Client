@@ -8,11 +8,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function CourseListLoading() {
+export default function CourseListLoading({ height }) {
   const classes = useStyles();
 
   return (
-    <Box className={classes.root} display="flex" justifyContent="center" alignItems="center">
+    <Box className={classes.root} style={{ height }} display="flex" justifyContent="center" alignItems="center">
       <CircularProgress color="primary" />
     </Box>
   )

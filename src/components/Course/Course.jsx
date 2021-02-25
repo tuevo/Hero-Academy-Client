@@ -18,6 +18,7 @@ const styles = {
 
 const useStyles = makeStyles((theme) => ({
   card: {
+    position: 'relative',
     background: theme.palette.background.course,
     boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px'
   },
@@ -64,6 +65,21 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     color: theme.palette.icon
+  },
+  label: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    padding: 5,
+    color: theme.palette.primary.contrastText,
+    boxShadow: 'rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px',
+    textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
+  },
+  label__bestSeller: {
+    ...theme.palette.secondary.gradient
+  },
+  label__new: {
+    ...theme.palette.primary.gradient
   }
 }));
 
@@ -81,6 +97,22 @@ const Course = ({ data, type }) => {
               title={data.title.toUpperCase()}
             />
             <CardContent className={classes.cardContent}>
+              {data.isBestSeller && (
+                <Typography
+                  variant="body2"
+                  className={`${classes.label} ${classes.label__bestSeller}`}
+                >
+                  <b>Đăng ký nhiều</b>
+                </Typography>
+              )}
+              {data.isNew && (
+                <Typography
+                  variant="body2"
+                  className={`${classes.label} ${classes.label__new}`}
+                >
+                  <b>Khóa học mới</b>
+                </Typography>
+              )}
               <Box display="flex" flexDirection="column" justifyContent="space-between" style={{ height: '15rem' }}>
                 <Box>
                   <Box display="flex" flexDirection="column" className={classes.titleContainer}>
@@ -133,7 +165,7 @@ const Course = ({ data, type }) => {
                       <strike>
                         <NumberFormat value={data.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
                       </strike>
-                      <span className={`${classes.label} ${classes.label__saleOff}`} style={{ marginLeft: 9 }}>Ưu đãi {data.discountPercent * 100}%</span>
+                      <span style={{ marginLeft: 9 }}>Ưu đãi {data.discountPercent * 100}%</span>
                     </Typography>
                   )}
                 </Box>

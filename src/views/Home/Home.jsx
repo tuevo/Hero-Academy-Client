@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   },
   banner: {
     position: 'relative',
-    height: '19rem'
+    height: '17rem'
   },
   bannerCover: {
     position: 'absolute',
@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
   },
   logoImage: {
     width: '4.5rem',
-    marginTop: theme.spacing(-1),
+    marginTop: theme.spacing(-0.5),
     marginRight: theme.spacing(2),
     filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.2))'
   },

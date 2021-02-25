@@ -61,6 +61,7 @@ export default {
   },
   background: {
     default: '#f0f2f5',
+    appLoading: '#f0f2f5',
     paper: white,
     course: white,
     user: white,

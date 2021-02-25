@@ -107,14 +107,6 @@ const CategoryCourses = () => {
   return (
     <div className={classes.root}>
       <Box p={4} pt={2} className={classes.courses}>
-        {categoryCourseListLoading && (
-          <Box mt={3}>
-            <Skeleton variant="text" width={300} />
-            <Box pt={1}>
-              <Skeleton variant="text" />
-            </Box>
-          </Box>
-        )}
         {!categoryCourseListLoading && (
           <div>
             <Box display="flex" alignItems="center" mt={2}>
@@ -125,23 +117,16 @@ const CategoryCourses = () => {
               </Box>
               <Typography variant="h4" className={classes.sencondaryText}><b>{category && category.categoryCluster.name}</b></Typography>
               <ArrowRightIcon className={classes.sencondaryText} />
-              <Typography variant="h4" className={classes.sencondaryText}><b>{category && category.name}</b></Typography>
-            </Box>
-            <Box>
-              {categoryCourseListTotalItems > 0 && (
-                <Typography variant="body1" color="textSecondary">
-                  <Typography variant="inherit" color="textPrimary">
-                    <b><NumberFormat value={categoryCourseListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} /></b>
-                  </Typography> khóa học
-                </Typography>
-              )}
-            </Box>
-            <Box mt={3} mb={2} >
-              <Divider className={classes.divider} />
+              <Typography variant="h4" className={classes.sencondaryText}>
+                <b>
+                  {category && category.name}
+                  <NumberFormat value={categoryCourseListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={' ('} suffix={' khóa học)'} />
+                </b>
+              </Typography>
             </Box>
           </div>
         )}
-        {categoryCourseListLoading && <CourseListLoading />}
+        {categoryCourseListLoading && <CourseListLoading height={'34.5rem'} />}
         {!categoryCourseListLoading && categoryCourseList.length === 0 && <CourseListEmpty />}
         {!categoryCourseListLoading && categoryCourseList.length > 0 && (
           <div>
