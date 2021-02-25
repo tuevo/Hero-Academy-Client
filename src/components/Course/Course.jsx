@@ -244,7 +244,7 @@ const Course = ({ data, type }) => {
                         <strike>
                           <NumberFormat value={data.tuition} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={'đ'} />
                         </strike>
-                        <span className={`${classes.label} ${classes.label__saleOff}`} style={{ marginLeft: 9 }}>Ưu đãi {data.discountPercent * 100}%</span>
+                        <span style={{ marginLeft: 9 }}>Ưu đãi {data.discountPercent * 100}%</span>
                       </Typography>
                     )}
                   </Box>
