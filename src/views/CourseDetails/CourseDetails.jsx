@@ -862,7 +862,7 @@ const CourseDetails = () => {
             <Box p={6}>
               {userState.authUser && userState.authUser.role !== userRole.ADMIN.value && (
                 <Box mb={2} display="flex" alignItems="center" style={{ width: '100%' }}>
-                  {!chapterListLoading && userState.authUser.role && userRole.LECTURER.value && userState.authUser.roleInfo._id === course.lecturerId && (
+                  {!chapterListLoading && userState.authUser.role === userRole.LECTURER.value && userState.authUser.roleInfo._id === course.lecturerId && (
                     <Box style={{ flexGrow: 2 }}>
                       <AddChapter
                         course={course}
@@ -893,7 +893,7 @@ const CourseDetails = () => {
                 {!chapterListLoading && chapterList.length === 0 && userState.authUser.role !== userRole.LECTURER.value && (
                   <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ width: '100%', height: '25rem' }}>
                     <Box mb={1}>
-                      <MovieIcon className={classes.emptyVideoListIcon} style={{ fontSize: '4.375rem' }} />
+                      <MovieIcon className={classes.emptyVideoListIcon} style={{ fontSize: '70px' }} />
                     </Box>
                     <Typography variant="subtitle2">Chưa có video nào.</Typography>
                   </Box>
@@ -979,7 +979,7 @@ const CourseDetails = () => {
                             </Grid>
                             <Grid item xs={4}>
                               <div className={classes.videoListContainer}>
-                                {userState.authUser.role && userRole.LECTURER.value && userState.authUser.roleInfo._id === course.lecturerId && (
+                                {userState.authUser && userState.authUser.role === userRole.LECTURER.value && userState.authUser.roleInfo._id === course.lecturerId && (
                                   <Tooltip title="Đăng tải video" className="animate__animated animate__bounceIn">
                                     <Fab
                                       size="medium"
@@ -999,7 +999,7 @@ const CourseDetails = () => {
                                 {!activeVideo && !expandedChapterVideoListLoading && (
                                   <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ height: '100%' }}>
                                     <Box mb={1}>
-                                      <MovieIcon className={classes.emptyVideoListIcon} fontSize="large" />
+                                      <MovieIcon className={classes.emptyVideoListIcon} style={{ fontSize: '4.375rem' }} />
                                     </Box>
                                     <Typography variant="subtitle2">Chưa có video nào.</Typography>
                                   </Box>
@@ -1163,7 +1163,7 @@ const CourseDetails = () => {
 
         {userState.authUser && (
           <div>
-            {userState.authUser.role && userRole.LECTURER.value && userState.authUser.roleInfo._id === course.lecturerId && (
+            {userState.authUser.role === userRole.LECTURER.value && userState.authUser.roleInfo._id === course.lecturerId && (
               <AddVideo
                 open={openAddVideo}
                 onClose={handleCloseAddVideo}

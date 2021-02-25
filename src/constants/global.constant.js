@@ -73,6 +73,7 @@ export const availablePages = {
     auth: true,
     role: userRole.STUDENT.value,
     icon: SchoolIcon,
+    type: 'FIRST_BY_ROLE',
     component: RegistrationCoursesView
   },
   FAVORITE_COURSES: {
@@ -91,6 +92,7 @@ export const availablePages = {
     auth: true,
     role: userRole.LECTURER.value,
     icon: SchoolIcon,
+    type: 'FIRST_BY_ROLE',
     component: InChargeCoursesView
   },
   CATEGORIES: {
