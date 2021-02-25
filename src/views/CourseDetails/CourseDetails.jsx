@@ -128,7 +128,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(4),
   },
   highestViewCourses__title: {
-    color: theme.palette.text.secondary
+    color: theme.palette.text.primary
   },
   highestViewCoursesCarousel: {
     marginTop: theme.spacing(3)
@@ -689,46 +689,48 @@ const CourseDetails = () => {
             <IconButton onClick={() => history.goBack()} color="inherit">
               <ArrowBackIcon />
             </IconButton>
-            <Box display="flex" color="inherit">
-              {userState.authUser && userState.authUser.role === userRole.STUDENT.value && (
-                <Button
-                  startIcon={isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                  onClick={handleBtnFavoriteClick}
-                  size="small"
-                  className={classes.btnContrast}
-                >
-                  Yêu thích
-                </Button>
-              )}
-              {userState.authUser && userState.authUser.role === userRole.LECTURER.value && course.lecturer._id === userState.authUser._id && (
-                <Box ml={1}>
-                  <UpdateCourse
-                    course={course}
-                    className={classes.btnContrast}
-                    onUpdate={handleUpdateCourse}
-                  />
-                </Box>
-              )}
-              {userState.authUser && userState.authUser.role === userRole.ADMIN.value && (
-                <Box ml={1}>
+            {userState.authUser && (
+              <Box display="flex" color="inherit">
+                {userState.authUser.role === userRole.STUDENT.value && (
                   <Button
-                    startIcon={<DeleteIcon />}
-                    color="inherit"
-                    onClick={handleBtnOpenRemovingCourseDialogClick}
+                    startIcon={isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                    onClick={handleBtnFavoriteClick}
                     size="small"
                     className={classes.btnContrast}
                   >
-                    Gỡ khóa học
+                    Yêu thích
                   </Button>
-                  <ConfirmDialog
-                    title="Xác nhận"
-                    content="Bạn thật sự muốn gỡ bỏ khóa học này?"
-                    open={openRemovingCourseConfirmDialog}
-                    onClose={isAccepted => handleRemovingCourseDialogClose(isAccepted)}
-                  />
-                </Box>
-              )}
-            </Box>
+                )}
+                {userState.authUser.role === userRole.LECTURER.value && course.lecturerId === userState.authUser.roleInfo._id && (
+                  <Box ml={1}>
+                    <UpdateCourse
+                      course={course}
+                      className={classes.btnContrast}
+                      onUpdate={handleUpdateCourse}
+                    />
+                  </Box>
+                )}
+                {userState.authUser.role === userRole.ADMIN.value && (
+                  <Box ml={1}>
+                    <Button
+                      startIcon={<DeleteIcon />}
+                      color="inherit"
+                      onClick={handleBtnOpenRemovingCourseDialogClick}
+                      size="small"
+                      className={classes.btnContrast}
+                    >
+                      Gỡ khóa học
+                  </Button>
+                    <ConfirmDialog
+                      title="Xác nhận"
+                      content="Bạn thật sự muốn gỡ bỏ khóa học này?"
+                      open={openRemovingCourseConfirmDialog}
+                      onClose={isAccepted => handleRemovingCourseDialogClose(isAccepted)}
+                    />
+                  </Box>
+                )}
+              </Box>
+            )}
           </Box>
           <Grid container alignItems="flex-end" ref={el => (bannerContentRef.current = el)}>
             <Grid item xs={8}>
@@ -814,7 +816,7 @@ const CourseDetails = () => {
                   </Box>
                 )}
 
-                {!userState.authUser || (userState.authUser && userState.authUser.role === userRole.STUDENT.value && !course.isRegistered) ? (
+                {!userState.authUser || (userState.authUser.role === userRole.STUDENT.value && !course.isRegistered) ? (
                   <Box mt={4} className="animate__animated animate__bounceIn">
                     <Button
                       variant="contained"
@@ -860,7 +862,7 @@ const CourseDetails = () => {
             <Box p={6}>
               {userState.authUser && userState.authUser.role !== userRole.ADMIN.value && (
                 <Box mb={2} display="flex" alignItems="center" style={{ width: '100%' }}>
-                  {!chapterListLoading && userState.authUser.role === userRole.LECTURER.value && (
+                  {!chapterListLoading && userState.authUser.role && userRole.LECTURER.value && userState.authUser.roleInfo._id === course.lecturerId && (
                     <Box style={{ flexGrow: 2 }}>
                       <AddChapter
                         course={course}
@@ -893,7 +895,23 @@ const CourseDetails = () => {
                     <Box mb={1}>
                       <MovieIcon className={classes.emptyVideoListIcon} style={{ fontSize: '4.375rem' }} />
                     </Box>
-                    <Typography variant="body1">Chưa có video nào.</Typography>
+                    <Typography variant="subtitle2">Chưa có video nào.</Typography>
+                  </Box>
+                )}
+                {!chapterListLoading && chapterList.length === 0 && userState.authUser.role === userRole.LECTURER.value && (
+                  <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ width: '100%', height: '25rem' }}>
+                    <Box mb={1}>
+                      <MovieIcon className={classes.emptyVideoListIcon} style={{ fontSize: '4.375rem' }} />
+                    </Box>
+                    <Typography variant="subtitle2">Hãy thêm chương cho khóa học để đăng tải video.</Typography>
+                  </Box>
+                )}
+                {!chapterListLoading && chapterList.length === 0 && !(
+                  <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ width: '100%', height: '25rem' }}>
+                    <Box mb={1}>
+                      <MovieIcon className={classes.emptyVideoListIcon} style={{ fontSize: '4.375rem' }} />
+                    </Box>
+                    <Typography variant="subtitle2">Chưa có video nào.</Typography>
                   </Box>
                 )}
                 {chapterList.map((chapter, index) => (
@@ -961,7 +979,7 @@ const CourseDetails = () => {
                             </Grid>
                             <Grid item xs={4}>
                               <div className={classes.videoListContainer}>
-                                {userState.authUser && userState.authUser.role === userRole.LECTURER.value && (
+                                {userState.authUser.role && userRole.LECTURER.value && userState.authUser.roleInfo._id === course.lecturerId && (
                                   <Tooltip title="Đăng tải video" className="animate__animated animate__bounceIn">
                                     <Fab
                                       size="medium"
@@ -983,7 +1001,7 @@ const CourseDetails = () => {
                                     <Box mb={1}>
                                       <MovieIcon className={classes.emptyVideoListIcon} fontSize="large" />
                                     </Box>
-                                    <Typography variant="body2">Chưa có video nào.</Typography>
+                                    <Typography variant="subtitle2">Chưa có video nào.</Typography>
                                   </Box>
                                 )}
                                 {expandedChapterVideoListLoading && (
@@ -1088,7 +1106,7 @@ const CourseDetails = () => {
                         <Box mb={1}>
                           <FeedbackIcon className={classes.emptyVideoListIcon} style={{ fontSize: '3.75rem' }} />
                         </Box>
-                        <Typography variant="body1">Chưa có bình luận nào.</Typography>
+                        <Typography variant="subtitle2">Chưa có bình luận nào.</Typography>
                       </Box>
                     )}
                   </PerfectScrollbar>
@@ -1122,39 +1140,45 @@ const CourseDetails = () => {
                 </Box>
               </Box>
               <Box pt={2}>
-                <Typography variant="body1">{course.lecturer.roleInfo.introduction || 'Chưa có lời giới thiệu nào.'}</Typography>
+                <Typography variant={course.lecturer.roleInfo.introduction ? 'body1' : 'subtitle2'}>
+                  {course.lecturer.roleInfo.introduction || 'Chưa có lời giới thiệu nào.'}
+                </Typography>
               </Box>
             </Box>
           )}
 
         </div>
         <div className={`${classes.section} ${classes.highestViewCourses} animate__animated animate__fadeInUp`}>
-          <Typography variant="h5" className={classes.highestViewCourses__title}>
-            <b><span role="img">🔥</span> Khóa học được đăng ký nhiều</b>
+          <Typography variant="h4" className={classes.highestViewCourses__title}>
+            <b>Khóa học liên quan</b>
           </Typography>
           <div className={classes.highestViewCoursesCarousel}>
             {mostRegisteredCourseList.length > 0 ? (
               <CourseMultiCarousel courses={mostRegisteredCourseList} />
             ) : (
-                <Typography variant="body1">Chưa có khóa học nào liên quan.</Typography>
+                <Typography variant="subtitle2">Chưa thể thống kê.</Typography>
               )}
           </div>
         </div>
 
-        {userState.authUser && userState.authUser.role === userRole.LECTURER.value && (
-          <AddVideo
-            open={openAddVideo}
-            onClose={handleCloseAddVideo}
-          />
-        )}
+        {userState.authUser && (
+          <div>
+            {userState.authUser.role && userRole.LECTURER.value && userState.authUser.roleInfo._id === course.lecturerId && (
+              <AddVideo
+                open={openAddVideo}
+                onClose={handleCloseAddVideo}
+              />
+            )}
 
-        {userState.authUser && userState.authUser.role === userRole.STUDENT.value && (
-          <WatchHistory
-            course={course}
-            open={openWatchHistory}
-            onClose={handleCloseWatchHistory}
-            onClickVideo={handleClickWatchHistoryVideo}
-          />
+            {userState.authUser.role === userRole.STUDENT.value && course.isRegistered && (
+              <WatchHistory
+                course={course}
+                open={openWatchHistory}
+                onClose={handleCloseWatchHistory}
+                onClickVideo={handleClickWatchHistoryVideo}
+              />
+            )}
+          </div>
         )}
 
       </main>

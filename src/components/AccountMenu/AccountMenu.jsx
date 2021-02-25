@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, List, ListItem, ListItemIcon, ListItemText, Popover, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import DashboardIcon from '@material-ui/icons/Dashboard';
+import AppsIcon from '@material-ui/icons/Apps';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { userRole } from 'constants/user-role.constant';
 import * as _ from 'lodash';
@@ -75,9 +75,9 @@ function AccountMenu({ authUser, onClickItem }) {
         >
           <ListItem button onClick={() => handleClickListItem(1)}>
             <ListItemIcon className={classes.list__icon}>
-              <DashboardIcon color="inherit" fontSize="small" />
+              <AppsIcon color="inherit" fontSize="small" />
             </ListItemIcon>
-            <ListItemText primary="Dashboard" />
+            <ListItemText primary="Bảng điều khiển" />
           </ListItem>
           <ListItem button onClick={() => handleClickListItem(2)}>
             <ListItemIcon className={classes.list__icon}>

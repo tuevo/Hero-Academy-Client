@@ -107,8 +107,7 @@ const InChargeCourses = () => {
   return (
     <div className={classes.root}>
       {lecturerCourseListLoading && <CourseListLoading />}
-      {!lecturerCourseListLoading && lecturerCourseList.length === 0 && <CourseListEmpty />}
-      {!lecturerCourseListLoading && lecturerCourseList.length > 0 && (
+      {!lecturerCourseListLoading && (
         <div>
           <AddCourse
             open={openAddCouse}
@@ -126,19 +125,22 @@ const InChargeCourses = () => {
               </Box>
             ))}
           </Box>
-          <Box mt={2}>
-            <Button
-              fullWidth
-              className={classes.btnLoadMoreCourse}
-              variant="contained"
-              size="large"
-              color="primary"
-              onClick={handleClickBtnLoadMoreCourse}
-              disabled={disableBtnLoadMoreCourse}
-            >
-              Xem thêm khóa học
-        </Button>
-          </Box>
+          {lecturerCourseList.length === 0 && <CourseListEmpty />}
+          {lecturerCourseList.length > 0 && (
+            <Box mt={2}>
+              <Button
+                fullWidth
+                className={classes.btnLoadMoreCourse}
+                variant="contained"
+                size="large"
+                color="primary"
+                onClick={handleClickBtnLoadMoreCourse}
+                disabled={disableBtnLoadMoreCourse}
+              >
+                Xem thêm khóa học
+              </Button>
+            </Box>
+          )}
         </div>
       )}
     </div>
