@@ -127,7 +127,9 @@ export default function Info() {
       setAvatarPreview(reader.result)
     }
 
-    reader.readAsDataURL(image)
+    if (image) {
+      reader.readAsDataURL(image);
+    }
   }
 
   const handleAvatarMouseOver = () => {
