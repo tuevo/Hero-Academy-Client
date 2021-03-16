@@ -81,7 +81,7 @@ const AddCategoryClusterButton = ({
 export default function Categories() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const limit = 5;
+  const limit = 10;
 
   const appState = useSelector(state => ({
     ...state.app
