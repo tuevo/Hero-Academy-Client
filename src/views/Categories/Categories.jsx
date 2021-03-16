@@ -372,7 +372,7 @@ export default function Categories() {
           {categoryClusterList.map((cc, i) => (
             <Accordion
               key={i}
-              className={`${classes.categoryCluster} animate__animated animate__fadeIn`}
+              className={`${classes.categoryCluster}`}
               style={{ animationDelay: `${0.1 * i}s` }}
               expanded={i === expandedCategoryClusterIndex}
               onMouseOver={() => setHoveredCategoryClusterIndex(i)}
