@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   btnAddCourse: {
     position: 'absolute',
     zIndex: 10,
-    right: '5%',
+    right: '3%',
     top: '1.5625rem',
     ...theme.palette.primary.gradient
   },

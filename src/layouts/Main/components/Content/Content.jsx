@@ -23,7 +23,6 @@ const useStyles = makeStyles(theme => ({
     ...theme.palette.card,
     position: 'relative',
     width: '100%',
-    borderRadius: '1.5rem'
   }
 }));
 

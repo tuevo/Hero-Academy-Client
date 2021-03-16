@@ -21,6 +21,7 @@ import { setLoading, showNotification } from 'redux/actions/app.action';
 import { format } from 'timeago.js';
 import clsx from 'clsx';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -76,7 +77,8 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.primary
   },
   starIcon: {
-    color: '#ffb600'
+    color: '#ffb600',
+    marginBottom: theme.spacing(0.5)
   },
   featuredCoursesCarouselTitleIcon: {
     marginRight: theme.spacing(1)
@@ -199,6 +201,9 @@ const useStyles = makeStyles(theme => ({
   finishStatusIcon__unfinished: {
     color: theme.palette.text.disabled
   },
+  bulletIcon: {
+    color: theme.palette.background.carouselBullet
+  }
 }));
 
 const CustomRouterLink = forwardRef((props, ref) => (
@@ -286,7 +291,14 @@ const Home = () => {
         <div className={classes.featuredCourses}>
           <Box display="flex" alignItems="center">
             <StarIcon color="primary" className={`${classes.starIcon} ${classes.featuredCoursesCarouselTitleIcon}`} />
-            <Typography variant="h4" className={classes.featuredCourses__title}><b>Khóa học nổi bật trong tuần qua</b></Typography>
+            <Box display="flex" justifyContent="space-between" style={{ width: '100%' }}>
+              <Typography variant="h4" className={classes.featuredCourses__title}><b>Khóa học nổi bật trong tuần qua</b></Typography>
+              <Box pr={2} display="flex" alignItems="center">
+                <Box mr={1}><FiberManualRecordIcon color="secondary" /></Box>
+                <Box mr={1}><FiberManualRecordIcon className={classes.bulletIcon} /></Box>
+                <Box><FiberManualRecordIcon className={classes.bulletIcon} /></Box>
+              </Box>
+            </Box>
           </Box>
           <div className={classes.featuredCoursesCarousel}>
             <Carousel showThumbs={false} autoPlay={true} interval={2000} infiniteLoop={true} showStatus={false}>

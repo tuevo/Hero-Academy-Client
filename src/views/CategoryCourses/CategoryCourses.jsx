@@ -24,7 +24,6 @@ const useStyles = makeStyles(theme => ({
   },
   courses: {
     ...theme.palette.card,
-    borderRadius: '1.5rem',
     "boxShadow": "rgba(0, 0, 0, 0.4) 0px 1.875rem 5.625rem",
     animationDuration: '0.75s'
   },

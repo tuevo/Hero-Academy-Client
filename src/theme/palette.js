@@ -73,7 +73,8 @@ export default {
     addCategory: '#f8f8f8',
     comment: '#f8f8f8',
     loading: 'rgba(255,255,255,0.5)',
-    btnCategory: white
+    btnCategory: white,
+    carouselBullet: '#d9d9d9'
   },
   topbar: {
     background: white,

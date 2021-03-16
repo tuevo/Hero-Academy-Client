@@ -73,7 +73,8 @@ export default {
     addCategory: '#212121',
     comment: '#212121',
     loading: 'rgba(0,0,0,0.5)',
-    btnCategory: '#313131'
+    btnCategory: '#313131',
+    carouselBullet: '#414141'
   },
   topbar: {
     background: '#212121',
@@ -88,7 +89,7 @@ export default {
   },
   card: {
     backgroundColor: '#212121',
-    borderRadius: '1.5rem',
+    borderRadius: '2.5rem',
     "boxShadow": "rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px"
   },
   input: {
