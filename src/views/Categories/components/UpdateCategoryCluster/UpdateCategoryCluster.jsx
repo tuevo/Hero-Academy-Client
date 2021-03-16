@@ -21,12 +21,12 @@ const useStyles = makeStyles(theme => ({
   disabled: {}
 }))
 
-export default function UpdateCategory({ data, open, onClose }) {
+export default function UpdateCategoryCluster({ categoryCluster, open, onClose }) {
   const classes = useStyles();
   const [formState, setFormState] = useState({
     isValid: false,
     values: {
-      name: data.name
+      name: categoryCluster.name
     },
     touched: {},
     errors: {}
@@ -84,7 +84,7 @@ export default function UpdateCategory({ data, open, onClose }) {
         onClose={() => handleClose(false)}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Chỉnh sửa lĩnh vực</DialogTitle>
+        <DialogTitle id="form-dialog-title">Chỉnh sửa nhóm lĩnh vực</DialogTitle>
         <DialogContent>
           <form className={classes.content} onSubmit={handleSubmit}>
             <TextField
@@ -94,7 +94,7 @@ export default function UpdateCategory({ data, open, onClose }) {
               helperText={
                 hasError('name') ? formState.errors.name[0] : null
               }
-              label="Tên lĩnh vực"
+              label="Tên nhóm lĩnh vực"
               name="name"
               onChange={handleChange}
               type="text"
@@ -117,7 +117,7 @@ export default function UpdateCategory({ data, open, onClose }) {
           <Button
             onClick={handleClickBtnSave}
             color="primary"
-            disabled={!formState.isValid || formState.values.name === data.name}
+            disabled={!formState.isValid || formState.values.name === categoryCluster.name}
             classes={{
               root: classes.root,
               disabled: classes.disabled

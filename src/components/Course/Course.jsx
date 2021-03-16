@@ -116,7 +116,7 @@ const Course = ({ data, type }) => {
               <Box display="flex" flexDirection="column" justifyContent="space-between" style={{ height: '15rem' }}>
                 <Box>
                   <Box display="flex" flexDirection="column" className={classes.titleContainer}>
-                    <Typography variant="body2" gutterBottom>{data.categoryCluster.categories[0].name.toUpperCase()}</Typography>
+                    <Typography variant="body2" gutterBottom>{data.categoryCluster ? data.categoryCluster.categories[0].name.toUpperCase() : 'KHÔNG XÁC ĐỊNH'}</Typography>
                     <Typography gutterBottom variant="h5" className={`${classes.title} ${classes.title__minimal}`}>
                       <b>{data.title}</b>
                     </Typography>
@@ -199,7 +199,7 @@ const Course = ({ data, type }) => {
                     <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
                     <Typography variant="body2">{format(data.updatedAtByLecturer, 'vi')}</Typography>
                     <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
-                    <Typography variant="body2">{data.categoryCluster.categories[0].name.toUpperCase()}</Typography>
+                    <Typography variant="body2">{data.categoryCluster ? data.categoryCluster.categories[0].name.toUpperCase() : 'KHÔNG XÁC ĐỊNH'}</Typography>
                   </Box>
                   <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap" mt={1}>
                     <Box display="flex" alignItems="center">

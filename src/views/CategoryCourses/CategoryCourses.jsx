@@ -1,6 +1,6 @@
-import { Box, Button, Divider, Typography, IconButton } from '@material-ui/core';
+import { Box, Button, IconButton, Typography } from '@material-ui/core';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/styles';
 import { categoryApi } from 'api';
 import Course from 'components/Course/Course';
@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { shallowEqual } from 'recompose';
 import { setPageBasics } from 'redux/actions/page.action';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 const useStyles = makeStyles(theme => ({
   root: {

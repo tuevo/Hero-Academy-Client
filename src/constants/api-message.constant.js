@@ -55,5 +55,8 @@ export const apiMessage = {
   THE_COURSE_IS_ALREADY_REGISTERED: 'Không thể gỡ khóa học đang có người học',
   EMAIL_NOT_FOUND: 'Địa chỉ email không tồn tại',
   SEND_OTP_CODE_SUCCESSFULLY: 'Đã gửi mã OTP đến email',
-  UPDATE_PASSWORD_INVALID: 'Vui lòng cung cấp đầy đủ thông tin'
+  UPDATE_PASSWORD_INVALID: 'Vui lòng cung cấp đầy đủ thông tin',
+  UPDATE_CATEGORY_CLUSTER_SUCCESSFULLY: 'Cập nhật nhóm lĩnh vực thành công',
+  CATEGORY_CLUSTER_ALREADY_EXISTS_REGISTERED_COURSE: 'Không thể xóa nhóm lĩnh vực đang có khóa học',
+  DELETE_CATEGORY_CLUSTER_SUCCESSFULLY: 'Xóa nhóm lĩnh vực thành công'
 }

@@ -44,6 +44,15 @@ export default function AddCategoryCluster({ open, onClose }) {
     }));
   }, [formState.values]);
 
+  const clearForm = () => {
+    setFormState({
+      isValid: false,
+      values: {},
+      touched: {},
+      errors: {}
+    });
+  }
+
   const handleChange = event => {
     event.persist();
 
@@ -65,6 +74,7 @@ export default function AddCategoryCluster({ open, onClose }) {
 
   const handleClose = (accepted, data) => {
     onClose(accepted, data);
+    clearForm();
   }
 
   const handleClickBtnAdd = () => {
@@ -72,6 +82,7 @@ export default function AddCategoryCluster({ open, onClose }) {
       return;
 
     handleClose(true, { ...formState.values });
+    clearForm();
   }
 
   const handleSubmit = e => {

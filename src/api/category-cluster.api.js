@@ -14,6 +14,14 @@ const categoryClusterApi = {
   add: (params) => {
     const url = `${baseUrl}`;
     return axiosClient.post(url, params);
+  },
+  update: (id, params) => {
+    const url = `${baseUrl}/${id}`;
+    return axiosClient.put(url, params);
+  },
+  delete: (id) => {
+    const url = `${baseUrl}/${id}`;
+    return axiosClient.delete(url);
   }
 }
 
