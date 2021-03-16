@@ -54,6 +54,12 @@ const useStyles = makeStyles(theme => ({
   courseListEmptyIcon: {
     fontSize: '4.375rem',
     color: theme.palette.icon
+  },
+  btnCategory: {
+    background: theme.palette.background.btnCategory,
+    borderRadius: '1.5rem',
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2)
   }
 }));
 
@@ -193,21 +199,16 @@ const CourseSearching = () => {
                   </b>
                 </Typography>
               </Box>
-              <Box mt={0.5} display="flex" alignItems="center" flexWrap="wrap">
-                <Box mr={1}>
-                  <Typography variant="body1" color="textSecondary">
-                    Có thể bạn quan tâm
-                  </Typography>
-                </Box>
+              <Box mt={1.5} display="flex" alignItems="center" flexWrap="wrap">
                 {categoryList.map((c, i) => (
                   <Link
                     key={i}
                     to={c.href}
                   >
-                    <Box mr={0.5}>
+                    <Box mr={1}>
                       <Button
-                        color="primary"
                         size="small"
+                        className={classes.btnCategory}
                       >
                         {c.name}
                       </Button>

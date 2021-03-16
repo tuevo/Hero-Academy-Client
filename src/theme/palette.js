@@ -21,7 +21,7 @@ export default {
     contrastText: white,
     dark: colors.amber[900],
     main: colors.amber[800],
-    light: colors.amber['A400'],
+    light: 'rgba(255, 143, 0, 0.1)',
     gradient: {
       "backgroundImage": "linear-gradient(-60deg, #ff5858 0%, #f09819 100%)",
     }
@@ -72,7 +72,8 @@ export default {
     video: '#f8f8f8',
     addCategory: '#f8f8f8',
     comment: '#f8f8f8',
-    loading: 'rgba(255,255,255,0.5)'
+    loading: 'rgba(255,255,255,0.5)',
+    btnCategory: white
   },
   topbar: {
     background: white,

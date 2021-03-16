@@ -22,7 +22,7 @@ export default {
     contrastText: white,
     dark: colors.amber[900],
     main: colors.amber[800],
-    light: colors.amber['A400'],
+    light: 'rgba(255, 143, 0, 0.1)',
     gradient: {
       "backgroundImage": "linear-gradient(-60deg, #ff5858 0%, #f09819 100%)",
     }
@@ -31,7 +31,7 @@ export default {
     contrastText: white,
     dark: colors.green[900],
     main: colors.green[600],
-    light: colors.green[400]
+    light: colors.green['A700']
   },
   info: {
     contrastText: white,
@@ -72,7 +72,8 @@ export default {
     video: '#212121',
     addCategory: '#212121',
     comment: '#212121',
-    loading: 'rgba(0,0,0,0.5)'
+    loading: 'rgba(0,0,0,0.5)',
+    btnCategory: '#313131'
   },
   topbar: {
     background: '#212121',

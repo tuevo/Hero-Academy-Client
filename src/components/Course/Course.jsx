@@ -1,4 +1,4 @@
-import { Avatar, Box, Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@material-ui/core';
+import { Avatar, Box, Card, CardActionArea, CardContent, CardMedia, Grid, Typography, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SchoolIcon from '@material-ui/icons/School';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -8,6 +8,8 @@ import NumberFormat from 'react-number-format';
 import { Link as RouterLink } from 'react-router-dom';
 import { format } from 'timeago.js';
 import './Course.style.scss';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import clsx from 'clsx';
 
 const styles = {
   "display": "-webkit-box",
@@ -80,7 +82,16 @@ const useStyles = makeStyles((theme) => ({
   },
   label__new: {
     ...theme.palette.primary.gradient
-  }
+  },
+  finishStatusIcon: {
+    fontSize: '1rem'
+  },
+  finishStatusIcon__finished: {
+    color: theme.palette.success.light,
+  },
+  finishStatusIcon__unfinished: {
+    color: theme.palette.text.disabled
+  },
 }));
 
 const Course = ({ data, type }) => {
@@ -116,7 +127,19 @@ const Course = ({ data, type }) => {
               <Box display="flex" flexDirection="column" justifyContent="space-between" style={{ height: '15rem' }}>
                 <Box>
                   <Box display="flex" flexDirection="column" className={classes.titleContainer}>
-                    <Typography variant="body2" gutterBottom>{data.categoryCluster ? data.categoryCluster.categories[0].name.toUpperCase() : 'KHÔNG XÁC ĐỊNH'}</Typography>
+                    <Box pb={0.5} display="flex" alignItems="center">
+                      <Typography variant="body2">
+                        {data.categoryCluster ? data.categoryCluster.categories[0].name.toUpperCase() : 'KHÔNG XÁC ĐỊNH'}
+                      </Typography>
+                      <Box mt={0.25} ml={1}>
+                        <Tooltip title={data.isFinished ? 'Đã hoàn thành' : 'Chưa hoàn thành'}>
+                          <CheckCircleIcon className={clsx(classes.finishStatusIcon, {
+                            [classes.finishStatusIcon__finished]: data.isFinished,
+                            [classes.finishStatusIcon__unfinished]: !data.isFinished
+                          })} />
+                        </Tooltip>
+                      </Box>
+                    </Box>
                     <Typography gutterBottom variant="h5" className={`${classes.title} ${classes.title__minimal}`}>
                       <b>{data.title}</b>
                     </Typography>
@@ -200,6 +223,14 @@ const Course = ({ data, type }) => {
                     <Typography variant="body2">{format(data.updatedAtByLecturer, 'vi')}</Typography>
                     <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
                     <Typography variant="body2">{data.categoryCluster ? data.categoryCluster.categories[0].name.toUpperCase() : 'KHÔNG XÁC ĐỊNH'}</Typography>
+                    <Box mt={0.25} ml={1}>
+                      <Tooltip title={data.isFinished ? 'Đã hoàn thành' : 'Chưa hoàn thành'}>
+                        <CheckCircleIcon className={clsx(classes.finishStatusIcon, {
+                          [classes.finishStatusIcon__finished]: data.isFinished,
+                          [classes.finishStatusIcon__unfinished]: !data.isFinished
+                        })} />
+                      </Tooltip>
+                    </Box>
                   </Box>
                   <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap" mt={1}>
                     <Box display="flex" alignItems="center">

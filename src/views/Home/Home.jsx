@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, ButtonBase, Grid, List, ListItem, Typography } from '@material-ui/core';
+import { Avatar, Box, Button, ButtonBase, Grid, List, ListItem, Typography, Tooltip } from '@material-ui/core';
 import EmojiEventsIcon from '@material-ui/icons/EmojiEvents';
 import SchoolIcon from '@material-ui/icons/School';
 import StarIcon from '@material-ui/icons/Star';
@@ -19,6 +19,8 @@ import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { shallowEqual } from 'recompose';
 import { setLoading, showNotification } from 'redux/actions/app.action';
 import { format } from 'timeago.js';
+import clsx from 'clsx';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -180,14 +182,23 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: 'rgba(255,255,255,0.2)',
   },
   label__bestSeller: {
-    backgroundColor: '#e68a00'
+    ...theme.palette.secondary.gradient
   },
   btnSignUp: {
     ...theme.palette.secondary.gradient,
     '&:hover': {
       ...theme.palette.secondary.gradient,
     }
-  }
+  },
+  finishStatusIcon: {
+    fontSize: '1rem'
+  },
+  finishStatusIcon__finished: {
+    color: theme.palette.success.light,
+  },
+  finishStatusIcon__unfinished: {
+    color: theme.palette.text.disabled
+  },
 }));
 
 const CustomRouterLink = forwardRef((props, ref) => (
@@ -288,12 +299,23 @@ const Home = () => {
                       <div className={`legend ${classes.featuredCoursesCarouselItemLegend}`}>
                         <Grid container alignItems="flex-end">
                           <Grid item xs={8}>
-                            <Typography variant="body2" color="inherit" gutterBottom>{c.categoryCluster.categories[0].name.toUpperCase()}</Typography>
+                            <Box display="flex">
+                              <Typography variant="body2" color="inherit" gutterBottom>{c.categoryCluster.categories[0].name.toUpperCase()}</Typography>
+                              <Box ml={1}>
+                                <Tooltip title={c.isFinished ? 'Đã hoàn thành' : 'Chưa hoàn thành'}>
+                                  <CheckCircleIcon className={clsx(classes.finishStatusIcon, {
+                                    [classes.finishStatusIcon__finished]: c.isFinished,
+                                    [classes.finishStatusIcon__unfinished]: !c.isFinished
+                                  })} />
+                                </Tooltip>
+                              </Box>
+                            </Box>
                             <Typography variant="h4" color="inherit" style={{ textTransform: 'uppercase' }}><b>{c.title}</b></Typography>
 
                             <Box display="flex" alignItems="center" className={classes.featuredCoursesCarouselItem__ratingDetails}>
                               <Typography variant="body2" color="inherit" style={{ marginRight: 3, marginTop: 1 }}>
-                                {/* <span className={`${classes.label} ${classes.label__bestSeller}`} style={{ marginLeft: 0, marginRight: 9 }}>Best Seller</span> */}
+                                {c.isBestSeller && (<span className={`${classes.label} ${classes.label__bestSeller}`} style={{ marginLeft: 0, marginRight: 9 }}>Đăng ký nhiều</span>)}
+                                {c.isNew && (<span className={`${classes.label} ${classes.label__new}`} style={{ marginLeft: 0, marginRight: 9 }}>Khóa học mới</span>)}
                                 <b><span>{`${Math.floor(c.averageRating)}.${(c.averageRating - Math.floor(c.averageRating)) * 10}`}</span></b>
                               </Typography>
                               <Box>
@@ -378,7 +400,7 @@ const Home = () => {
                   <Typography variant="h6" className={classes.popularCategories__title}><b>Lĩnh vực được đăng ký nhiều</b></Typography>
                 </Box>
                 <List component="div" disablePadding>
-                  {(data.mostRegisteredCategory || []).map(c => (
+                  {(data.mostRegisteredCategory.slice(0, 5)).map(c => (
                     <ListItem
                       disableGutters
                       key={c._id}

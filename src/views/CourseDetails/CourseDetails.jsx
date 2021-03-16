@@ -1123,7 +1123,8 @@ const CourseDetails = () => {
                   <Typography variant="h4" className={classes.secondaryText} gutterBottom><b>{course.lecturer.fullName}</b></Typography>
                   <Box display="flex" mt={0.5} alignItems="center">
                     <Typography variant="body2" style={{ marginRight: 3 }}>
-                      {`${Math.floor(course.lecturer.roleInfo.averageRating)}.${(course.lecturer.roleInfo.averageRating - Math.floor(course.lecturer.roleInfo.averageRating)) * 10}`}
+                      {/* {`${Math.floor(course.lecturer.roleInfo.averageRating)}.${(course.lecturer.roleInfo.averageRating - Math.floor(course.lecturer.roleInfo.averageRating)) * 10}`} */}
+                      {course.lecturer.roleInfo.averageRating}
                     </Typography>
                     <Box style={{ marginBottom: -1 }}>
                       <Rating name="read-only" value={course.lecturer.roleInfo.averageRating} size="small" precision={0.5} readOnly />

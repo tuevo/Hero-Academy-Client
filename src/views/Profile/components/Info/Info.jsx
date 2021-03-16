@@ -212,7 +212,10 @@ export default function Info() {
             {userState.authUser.role === userRole.LECTURER.value && (
               <Box display="flex" flexDirection="column" alignItems="center">
                 <Box display="flex" alignItems="center">
-                  <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(userState.authUser.roleInfo.averageRating)}.${(userState.authUser.roleInfo.averageRating - Math.floor(userState.authUser.roleInfo.averageRating)) * 10}`}</Typography>
+                  <Typography variant="body2" style={{ marginRight: 3 }}>
+                    {/* {`${Math.floor(userState.authUser.roleInfo.averageRating)}.${(userState.authUser.roleInfo.averageRating - Math.floor(userState.authUser.roleInfo.averageRating)) * 10}`} */}
+                    {userState.authUser.roleInfo.averageRating}
+                  </Typography>
                   <Box style={{ marginBottom: -1 }}>
                     <Rating name="read-only" value={userState.authUser.roleInfo.averageRating} size="small" precision={0.5} readOnly />
                   </Box>
