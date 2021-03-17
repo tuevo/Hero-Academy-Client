@@ -108,13 +108,13 @@ const CourseSearching = () => {
   const getAllCourses = async (page) => {
     setBtnLoadMoreCourseDisabled(true);
     try {
-      const res = await courseApi.getAll(
+      const res = await courseApi.getAll({
         page,
         limit,
-        appState.courseSearchingQuery,
-        courseListFilterCriterias[courseListFilterCriteriaIndex].values[0],
-        courseListFilterCriterias[courseListFilterCriteriaIndex].values[1],
-      );
+        keyword: appState.courseSearchingQuery,
+        isSortUpAscending: courseListFilterCriterias[courseListFilterCriteriaIndex].values[0],
+        sortBy: courseListFilterCriterias[courseListFilterCriteriaIndex].values[1],
+      });
 
       const { entries } = res.data;
       const newCourseList = (page === 1 ? entries : courseList.concat(entries))

@@ -5,7 +5,7 @@ import { parseFormData } from 'helpers';
 const baseUrl = '/courses';
 
 const courseApi = {
-    getAll: (page, limit, keyword, isSortUpAscending, sortBy) => {
+    getAll: ({ page, limit, keyword, isSortUpAscending, sortBy, categoryId }) => {
         let url = `${baseUrl}`;
 
         if (page && limit)
@@ -16,6 +16,9 @@ const courseApi = {
 
         if (!isNaN(Number(isSortUpAscending)) && sortBy)
             url += `&isSortUpAscending=${isSortUpAscending}&sortBy=${sortBy}`;
+
+        if (categoryId)
+            url += `&categoryId=${categoryId}`;
 
         return axiosClient.get(url);
     },

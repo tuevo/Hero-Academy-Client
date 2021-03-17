@@ -42,7 +42,7 @@ const Courses = () => {
     const getAllCourses = async () => {
       setDisableBtnLoadMoreCourse(true);
       try {
-        const res = await courseApi.getAll(courseListPage, limit);
+        const res = await courseApi.getAll({ page: courseListPage, limit });
         const courses = res.data.entries.map(item => ({
           ...item,
           href: availablePages.COURSE_DETAILS.path.replace(':courseId', item._id)
