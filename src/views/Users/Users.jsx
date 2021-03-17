@@ -250,6 +250,13 @@ const Users = () => {
 
         break;
       case 2:
+        const newLecturerList = lecturerList;
+        const indexLecturerList = newLecturerList.findIndex(s => s._id === userId);
+
+        if (index >= 0) {
+          newLecturerList[indexLecturerList].isBlocked = false;
+          setLecturerList(newLecturerList);
+        }
 
         break;
 
