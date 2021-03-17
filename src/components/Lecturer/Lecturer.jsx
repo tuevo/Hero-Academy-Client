@@ -79,7 +79,10 @@ function Details(props) {
           <Typography variant="h4" gutterBottom><b>{data.fullName}</b></Typography>
           <Typography variant="body2" gutterBottom>{data.email}</Typography>
           <Box display="flex" alignItems="center">
-            <Typography variant="body2" style={{ marginRight: 3 }}>{`${Math.floor(data.roleInfo.averageRating)}.${(data.roleInfo.averageRating - Math.floor(data.roleInfo.averageRating)) * 10}`}</Typography>
+            <Typography variant="body2" style={{ marginRight: 3 }}>
+              {/* {`${Math.floor(data.roleInfo.averageRating)}.${(data.roleInfo.averageRating - Math.floor(data.roleInfo.averageRating)) * 10}`} */}
+              {data.roleInfo.averageRating}
+            </Typography>
             <Box style={{ marginBottom: 1 }}>
               <Rating name="read-only" value={data.roleInfo.averageRating} size="small" precision={0.5} readOnly />
             </Box>
@@ -160,7 +163,8 @@ export default function Lecturer({ data, onRemove }) {
                     <Box display="flex" justifyContent="center" alignItems="center" className={classes.details__numberOfRatings}>
                       <StarIcon style={{ color: '#ffb600', fontSize: '0.875rem' }} />
                       <Typography variant="body2" color="inherit" style={{ marginLeft: 3 }}>
-                        {`${Math.floor(data.roleInfo.averageRating)}.${(data.roleInfo.averageRating - Math.floor(data.roleInfo.averageRating)) * 10}`}
+                        {/* {`${Math.floor(data.roleInfo.averageRating)}.${(data.roleInfo.averageRating - Math.floor(data.roleInfo.averageRating)) * 10}`} */}
+                        {data.roleInfo.averageRating}
                       </Typography>
                     </Box>
                   </Box>
