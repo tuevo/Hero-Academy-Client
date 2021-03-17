@@ -12,7 +12,11 @@ const userApi = {
   update: (params) => {
     const url = `${baseUrl}/`;
     return axiosClient2.put(url, parseFormData(params));
-  }
+  },
+  updateByAdminRole: (id, params) => {
+    const url = `${baseUrl}/${id}`;
+    return axiosClient.put(url, params);
+  },
 }
 
 export default userApi;

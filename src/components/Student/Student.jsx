@@ -7,7 +7,7 @@ import NumberFormat from 'react-number-format';
 import { useDispatch } from 'react-redux';
 import { showNotification } from 'redux/actions/app.action';
 import { apiMessage } from 'constants/api-message.constant';
-import { studentApi } from 'api';
+import { studentApi, userApi } from 'api';
 import LockIcon from '@material-ui/icons/Lock';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
@@ -69,9 +69,9 @@ function Details(props) {
     setOpenBlockAccountConfirmDialog(false);
     if (accepted) {
       try {
-        // call api block account
-        // dispatch(showNotification('success', apiMessage[res.messages[0]]));
+        const res = await userApi.updateByAdminRole(data._id, {isBlocked: true});
         onClose('block');
+        dispatch(showNotification('success', apiMessage[res.messages[0]]));        
       } catch (error) {
         if (error.messages && error.messages.length > 0) {
           dispatch(showNotification('error', apiMessage[error.messages[0]]));
@@ -88,9 +88,9 @@ function Details(props) {
     setOpenUnblockAccountConfirmDialog(false);
     if (accepted) {
       try {
-        // call api unblock account
-        // dispatch(showNotification('success', apiMessage[res.messages[0]]));
+        const res = await userApi.updateByAdminRole(data._id, {isBlocked: false});
         onClose('unblock');
+        dispatch(showNotification('success', apiMessage[res.messages[0]]));
       } catch (error) {
         if (error.messages && error.messages.length > 0) {
           dispatch(showNotification('error', apiMessage[error.messages[0]]));
