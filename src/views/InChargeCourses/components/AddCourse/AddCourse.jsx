@@ -248,7 +248,7 @@ export default function AddCourse({ open, onClose }) {
           <Select
             name="categoryId"
             native
-            alue={formState.values.categoryId}
+            value={formState.values.categoryId}
             onChange={handleChange}
             className={classes.input}
             inputProps={{

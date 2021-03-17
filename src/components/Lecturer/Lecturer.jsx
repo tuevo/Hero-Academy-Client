@@ -81,7 +81,7 @@ function Details(props) {
     setOpenBlockAccountConfirmDialog(false);
     if (accepted) {
       try {
-        const res = await userApi.updateByAdminRole(data._id, { isBlocked: true });
+        await userApi.updateByAdminRole(data._id, { isBlocked: true });
         onClose('block');
         dispatch(showNotification('success', apiMessage.BLOCK_USER_SUCCESSFULLY));
       } catch (error) {
@@ -100,7 +100,7 @@ function Details(props) {
     setOpenUnblockAccountConfirmDialog(false);
     if (accepted) {
       try {
-        const res = await userApi.updateByAdminRole(data._id, { isBlocked: false });
+        await userApi.updateByAdminRole(data._id, { isBlocked: false });
         onClose('unblock');
         dispatch(showNotification('success', apiMessage.UNBLOCK_USER_SUCCESSFULLY));
       } catch (error) {
