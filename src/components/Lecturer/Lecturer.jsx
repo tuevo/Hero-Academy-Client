@@ -6,10 +6,13 @@ import Rating from '@material-ui/lab/Rating';
 import NumberFormat from 'react-number-format';
 import StarIcon from '@material-ui/icons/Star';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
-import { lecturerApi } from 'api';
+import { lecturerApi, userApi } from 'api';
 import { useDispatch } from 'react-redux';
 import { apiMessage } from 'constants/api-message.constant';
 import { showNotification } from 'redux/actions/app.action';
+import LockIcon from '@material-ui/icons/Lock';
+import DeleteIcon from '@material-ui/icons/Delete';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -35,6 +38,14 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.primary.contrastText,
     padding: '0.1563rem 0.3125rem',
     borderRadius: '0.625rem'
+  },
+  label__blocked: {
+    background: 'rgba(223, 71, 89, 0.1)',
+    color: '#df4759',
+    fontWeight: 'bold',
+    padding: theme.spacing(0.5, 1),
+    borderRadius: '1.5rem',
+    width: 'fit-content'
   }
 }))
 
@@ -43,6 +54,8 @@ function Details(props) {
   const dispatch = useDispatch();
   const { onClose, data, open } = props;
   const [openRemoveAccountConfirmDialog, setOpenRemoveAccountConfirmDialog] = useState(false);
+  const [openBlockAccountConfirmDialog, setOpenBlockAccountConfirmDialog] = useState(false);
+  const [openUnblockAccountConfirmDialog, setOpenUnblockAccountConfirmDialog] = useState(false);
 
   const handleCloseRemoveAccountConfirmDialog = async (accepted) => {
     setOpenRemoveAccountConfirmDialog(false);
@@ -62,6 +75,44 @@ function Details(props) {
 
   const handleClickBtnRemoveAccount = () => {
     setOpenRemoveAccountConfirmDialog(true);
+  }
+
+  const handleCloseBlockAccountConfirmDialog = async (accepted) => {
+    setOpenBlockAccountConfirmDialog(false);
+    if (accepted) {
+      try {
+        const res = await userApi.updateByAdminRole(data._id, {isBlocked: true});
+        onClose('block');
+        dispatch(showNotification('success', apiMessage[res.messages[0]]));        
+      } catch (error) {
+        if (error.messages && error.messages.length > 0) {
+          dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        }
+      }
+    }
+  }
+
+  const handleClickBtnBlockAccount = () => {
+    setOpenBlockAccountConfirmDialog(true);
+  }
+
+  const handleCloseUnblockAccountConfirmDialog = async (accepted) => {
+    setOpenUnblockAccountConfirmDialog(false);
+    if (accepted) {
+      try {
+        const res = await userApi.updateByAdminRole(data._id, {isBlocked: false});
+        onClose('unblock');
+        dispatch(showNotification('success', apiMessage[res.messages[0]]));
+      } catch (error) {
+        if (error.messages && error.messages.length > 0) {
+          dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        }
+      }
+    }
+  }
+
+  const handleClickBtnUnblockAccount = () => {
+    setOpenUnblockAccountConfirmDialog(true);
   }
 
   const handleClose = () => {
@@ -113,15 +164,43 @@ function Details(props) {
             </Typography>
           </Box>
         </Box>
-        <Box pt={6} style={{ color: '	#df4759' }}>
-          <Button
-            variant="outlined"
-            fullWidth
-            color="inherit"
-            onClick={handleClickBtnRemoveAccount}
-          >
-            Xóa tài khoản
-            </Button>
+        <Box pt={6}>
+          <Box my={2}>
+            {!data.isBlocked ? (
+              <Button
+                variant="outlined"
+                fullWidth
+                color="secondary"
+                onClick={handleClickBtnBlockAccount}
+                startIcon={<LockIcon fontSize="small" />}
+              >
+                Khóa tài khoản
+              </Button>
+            ) : (
+                <div style={{ color: '#00c853' }}>
+                  <Button
+                    variant="outlined"
+                    fullWidth
+                    color="inherit"
+                    onClick={handleClickBtnUnblockAccount}
+                    startIcon={<LockOpenIcon fontSize="small" />}
+                  >
+                    Mở khóa tài khoản
+                </Button>
+                </div>
+              )}
+          </Box>
+          <Box style={{ color: '#717171' }}>
+            <Button
+              variant="outlined"
+              fullWidth
+              color="inherit"
+              onClick={handleClickBtnRemoveAccount}
+              startIcon={<DeleteIcon fontSize="small" />}
+            >
+              Xóa tài khoản
+          </Button>
+          </Box>
         </Box>
       </Box>
       <ConfirmDialog
@@ -130,11 +209,26 @@ function Details(props) {
         open={openRemoveAccountConfirmDialog}
         onClose={handleCloseRemoveAccountConfirmDialog}
       />
+      {!data.isBlocked ? (
+        <ConfirmDialog
+          title="Xác nhận"
+          content="Bạn thật sự muốn khóa tài khoản này?"
+          open={openBlockAccountConfirmDialog}
+          onClose={handleCloseBlockAccountConfirmDialog}
+        />
+      ) : (
+          <ConfirmDialog
+            title="Xác nhận"
+            content="Bạn thật sự muốn mở khóa tài khoản này?"
+            open={openUnblockAccountConfirmDialog}
+            onClose={handleCloseUnblockAccountConfirmDialog}
+          />
+        )}
     </Dialog>
   );
 }
 
-export default function Lecturer({ data, onRemove }) {
+export default function Lecturer({ data, onRemove, onBlock, onUnblock }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -145,8 +239,21 @@ export default function Lecturer({ data, onRemove }) {
   const handleClose = (message) => {
     setOpen(false);
 
-    if (message === 'remove') {
-      onRemove(data._id);
+    switch (message) {
+      case 'remove':
+        onRemove(data._id);
+        break;
+
+      case 'block':
+        onBlock(data._id);
+        break;
+
+      case 'unblock':
+        onUnblock(data._id);
+        break;
+
+      default:
+        break;
     }
   };
 
@@ -172,6 +279,7 @@ export default function Lecturer({ data, onRemove }) {
                 <Grid item xs={8}>
                   <Typography variant="h5" gutterBottom><b>{data.fullName}</b></Typography>
                   <Typography variant="body2">{data.email}</Typography>
+                  {data.isBlocked && (<Typography variant="body2" className={classes.label__blocked}>Đã bị khóa</Typography>)}
                 </Grid>
               </Grid>
             </Box>

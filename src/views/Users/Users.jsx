@@ -223,9 +223,9 @@ const Users = () => {
         break;
       case 2:
         const newLecturerList = lecturerList;
-        const indexLecturerList = newLecturerList.findIndex(s => s._id === userId);
+        const indexLecturerList = newLecturerList.findIndex(l => l._id === userId);
 
-        if (index >= 0) {
+        if (indexLecturerList >= 0) {
           newLecturerList[indexLecturerList].isBlocked = true;
           setLecturerList(newLecturerList);
         }
@@ -253,7 +253,7 @@ const Users = () => {
         const newLecturerList = lecturerList;
         const indexLecturerList = newLecturerList.findIndex(s => s._id === userId);
 
-        if (index >= 0) {
+        if (indexLecturerList >= 0) {
           newLecturerList[indexLecturerList].isBlocked = false;
           setLecturerList(newLecturerList);
         }
@@ -348,6 +348,8 @@ const Users = () => {
                       <Lecturer
                         data={s}
                         onRemove={(lecturerId) => handleRemoveUser(2, lecturerId)}
+                        onBlock={(lecturerId) => handleBlockUser(2, lecturerId)}
+                        onUnblock={(lecturerId) => handleUnblockUser(2, lecturerId)}
                       />
                     </Box>
                   </GridListTile>
