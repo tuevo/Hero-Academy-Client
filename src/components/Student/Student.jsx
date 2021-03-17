@@ -8,6 +8,9 @@ import { useDispatch } from 'react-redux';
 import { showNotification } from 'redux/actions/app.action';
 import { apiMessage } from 'constants/api-message.constant';
 import { studentApi } from 'api';
+import LockIcon from '@material-ui/icons/Lock';
+import DeleteIcon from '@material-ui/icons/Delete';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -25,6 +28,14 @@ const useStyles = makeStyles(theme => ({
     width: '7.5rem',
     height: '7.5rem'
   },
+  label__blocked: {
+    background: 'rgba(223, 71, 89, 0.1)',
+    color: '#df4759',
+    fontWeight: 'bold',
+    padding: theme.spacing(0.5, 1),
+    borderRadius: '1.5rem',
+    width: 'fit-content'
+  }
 }))
 
 function Details(props) {
@@ -32,6 +43,8 @@ function Details(props) {
   const dispatch = useDispatch();
   const { onClose, data, open } = props;
   const [openRemoveAccountConfirmDialog, setOpenRemoveAccountConfirmDialog] = useState(false);
+  const [openBlockAccountConfirmDialog, setOpenBlockAccountConfirmDialog] = useState(false);
+  const [openUnblockAccountConfirmDialog, setOpenUnblockAccountConfirmDialog] = useState(false);
 
   const handleCloseRemoveAccountConfirmDialog = async (accepted) => {
     setOpenRemoveAccountConfirmDialog(false);
@@ -50,6 +63,44 @@ function Details(props) {
 
   const handleClickBtnRemoveAccount = () => {
     setOpenRemoveAccountConfirmDialog(true);
+  }
+
+  const handleCloseBlockAccountConfirmDialog = async (accepted) => {
+    setOpenBlockAccountConfirmDialog(false);
+    if (accepted) {
+      try {
+        // call api block account
+        // dispatch(showNotification('success', apiMessage[res.messages[0]]));
+        onClose('block');
+      } catch (error) {
+        if (error.messages && error.messages.length > 0) {
+          dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        }
+      }
+    }
+  }
+
+  const handleClickBtnBlockAccount = () => {
+    setOpenBlockAccountConfirmDialog(true);
+  }
+
+  const handleCloseUnblockAccountConfirmDialog = async (accepted) => {
+    setOpenUnblockAccountConfirmDialog(false);
+    if (accepted) {
+      try {
+        // call api unblock account
+        // dispatch(showNotification('success', apiMessage[res.messages[0]]));
+        onClose('unblock');
+      } catch (error) {
+        if (error.messages && error.messages.length > 0) {
+          dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        }
+      }
+    }
+  }
+
+  const handleClickBtnUnblockAccount = () => {
+    setOpenUnblockAccountConfirmDialog(true);
   }
 
   const handleClose = () => {
@@ -79,15 +130,43 @@ function Details(props) {
             </Typography>
           </Box>
         </Box>
-        <Box pt={6} style={{ color: '	#df4759' }}>
-          <Button
-            variant="outlined"
-            fullWidth
-            color="inherit"
-            onClick={handleClickBtnRemoveAccount}
-          >
-            Xóa tài khoản
-            </Button>
+        <Box pt={6}>
+          <Box my={2}>
+            {!data.isBlocked ? (
+              <Button
+                variant="outlined"
+                fullWidth
+                color="secondary"
+                onClick={handleClickBtnBlockAccount}
+                startIcon={<LockIcon fontSize="small" />}
+              >
+                Khóa tài khoản
+              </Button>
+            ) : (
+                <div style={{ color: '#00c853' }}>
+                  <Button
+                    variant="outlined"
+                    fullWidth
+                    color="inherit"
+                    onClick={handleClickBtnUnblockAccount}
+                    startIcon={<LockOpenIcon fontSize="small" />}
+                  >
+                    Mở khóa tài khoản
+                </Button>
+                </div>
+              )}
+          </Box>
+          <Box style={{ color: '#717171' }}>
+            <Button
+              variant="outlined"
+              fullWidth
+              color="inherit"
+              onClick={handleClickBtnRemoveAccount}
+              startIcon={<DeleteIcon fontSize="small" />}
+            >
+              Xóa tài khoản
+          </Button>
+          </Box>
         </Box>
       </Box>
       <ConfirmDialog
@@ -96,11 +175,26 @@ function Details(props) {
         open={openRemoveAccountConfirmDialog}
         onClose={handleCloseRemoveAccountConfirmDialog}
       />
+      {!data.isBlocked ? (
+        <ConfirmDialog
+          title="Xác nhận"
+          content="Bạn thật sự muốn khóa tài khoản này?"
+          open={openBlockAccountConfirmDialog}
+          onClose={handleCloseBlockAccountConfirmDialog}
+        />
+      ) : (
+          <ConfirmDialog
+            title="Xác nhận"
+            content="Bạn thật sự muốn mở khóa tài khoản này?"
+            open={openUnblockAccountConfirmDialog}
+            onClose={handleCloseUnblockAccountConfirmDialog}
+          />
+        )}
     </Dialog>
   );
 }
 
-export default function Student({ data, onRemove }) {
+export default function Student({ data, onRemove, onBlock, onUnblock }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -111,8 +205,21 @@ export default function Student({ data, onRemove }) {
   const handleClose = (message) => {
     setOpen(false);
 
-    if (message === 'remove') {
-      onRemove(data._id);
+    switch (message) {
+      case 'remove':
+        onRemove(data._id);
+        break;
+
+      case 'block':
+        onBlock(data._id);
+        break;
+
+      case 'unblock':
+        onUnblock(data._id);
+        break;
+
+      default:
+        break;
     }
   };
 
@@ -128,7 +235,8 @@ export default function Student({ data, onRemove }) {
                 </Grid>
                 <Grid item xs={8}>
                   <Typography variant="h5" gutterBottom><b>{data.fullName}</b></Typography>
-                  <Typography variant="body2">{data.email}</Typography>
+                  <Typography variant="body2" gutterBottom>{data.email}</Typography>
+                  {data.isBlocked && (<Typography variant="body2" className={classes.label__blocked}>Đã bị khóa</Typography>)}
                 </Grid>
               </Grid>
             </Box>

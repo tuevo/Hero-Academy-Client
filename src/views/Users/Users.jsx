@@ -209,6 +209,48 @@ const Users = () => {
     }
   }
 
+  const handleBlockUser = (type, userId) => {
+    switch (type) {
+      case 1:
+        const newStudentList = studentList;
+        const index = newStudentList.findIndex(s => s._id === userId);
+
+        if (index >= 0) {
+          newStudentList[index].isBlocked = true;
+          setStudentList(newStudentList);
+        }
+
+        break;
+      case 2:
+
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  const handleUnblockUser = (type, userId) => {
+    switch (type) {
+      case 1:
+        const newStudentList = studentList;
+        const index = newStudentList.findIndex(s => s._id === userId);
+
+        if (index >= 0) {
+          newStudentList[index].isBlocked = false;
+          setStudentList(newStudentList);
+        }
+
+        break;
+      case 2:
+
+        break;
+
+      default:
+        break;
+    }
+  }
+
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.tabs} color="primary">
@@ -246,6 +288,8 @@ const Users = () => {
                       <Student
                         data={s}
                         onRemove={(studentId) => handleRemoveUser(1, studentId)}
+                        onBlock={(studentId) => handleBlockUser(1, studentId)}
+                        onUnblock={(studentId) => handleUnblockUser(1, studentId)}
                       />
                     </Box>
                   </GridListTile>
@@ -262,7 +306,7 @@ const Users = () => {
                   disabled={disableBtnLoadMoreStudent}
                 >
                   Xem thêm học viên
-            </Button>
+                </Button>
               </Box>
             </div>
 
