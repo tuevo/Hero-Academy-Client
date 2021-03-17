@@ -129,7 +129,7 @@ const Courses = () => {
       {courseListLoading && <CourseListLoading />}
       {!courseListLoading && courseList.length === 0 && <CourseListEmpty />}
       {!courseListLoading && courseList.length > 0 && (
-        <div>
+        <Box mt={-1}>
           <Box display="flex" flexWrap="wrap">
             <Box mr={1}>
               <Button
@@ -176,7 +176,7 @@ const Courses = () => {
               Xem thêm khóa học
             </Button>
           </Box>
-        </div>
+        </Box>
       )}
     </div >
   );
