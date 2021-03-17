@@ -81,9 +81,9 @@ function Details(props) {
     setOpenBlockAccountConfirmDialog(false);
     if (accepted) {
       try {
-        const res = await userApi.updateByAdminRole(data._id, {isBlocked: true});
+        const res = await userApi.updateByAdminRole(data._id, { isBlocked: true });
         onClose('block');
-        dispatch(showNotification('success', apiMessage[res.messages[0]]));        
+        dispatch(showNotification('success', apiMessage.BLOCK_USER_SUCCESSFULLY));
       } catch (error) {
         if (error.messages && error.messages.length > 0) {
           dispatch(showNotification('error', apiMessage[error.messages[0]]));
@@ -100,9 +100,9 @@ function Details(props) {
     setOpenUnblockAccountConfirmDialog(false);
     if (accepted) {
       try {
-        const res = await userApi.updateByAdminRole(data._id, {isBlocked: false});
+        const res = await userApi.updateByAdminRole(data._id, { isBlocked: false });
         onClose('unblock');
-        dispatch(showNotification('success', apiMessage[res.messages[0]]));
+        dispatch(showNotification('success', apiMessage.UNBLOCK_USER_SUCCESSFULLY));
       } catch (error) {
         if (error.messages && error.messages.length > 0) {
           dispatch(showNotification('error', apiMessage[error.messages[0]]));
@@ -278,7 +278,7 @@ export default function Lecturer({ data, onRemove, onBlock, onUnblock }) {
                 </Grid>
                 <Grid item xs={8}>
                   <Typography variant="h5" gutterBottom><b>{data.fullName}</b></Typography>
-                  <Typography variant="body2">{data.email}</Typography>
+                  <Typography variant="body2" gutterBottom>{data.email}</Typography>
                   {data.isBlocked && (<Typography variant="body2" className={classes.label__blocked}>Đã bị khóa</Typography>)}
                 </Grid>
               </Grid>
