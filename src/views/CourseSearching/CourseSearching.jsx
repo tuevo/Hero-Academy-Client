@@ -104,6 +104,7 @@ const CourseSearching = () => {
   const [btnLoadMoreCourseDisabled, setBtnLoadMoreCourseDisabled] = useState(false);
   const [courseListFilterCriteriaIndex, setCourseListFilterCriteriaIndex] = useState(0);
   const [btnLoadMoreCourseLoading, setBtnLoadMoreCourseLoading] = useState(false);
+  const [filteredCourseListLoading, setFilteredCourseListLoading] = useState(false);
 
   const [categoryList, setCategoryList] = useState([]);
 
@@ -141,12 +142,14 @@ const CourseSearching = () => {
 
       setCourseListLoading(false);
       setBtnLoadMoreCourseLoading(false);
+      setFilteredCourseListLoading(false);
       dispatch(setPageBasics({ ...pageBasics, title: `${appState.courseSearchingQuery} - Kết quả tìm kiếm` }));
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
-        dispatch(showNotification('error', apiMessage[error.messages[0]]));
         setCourseListLoading(false);
         setBtnLoadMoreCourseLoading(false);
+        setFilteredCourseListLoading(false);
+        dispatch(showNotification('error', apiMessage[error.messages[0]]));
       }
     }
   }
@@ -163,6 +166,7 @@ const CourseSearching = () => {
       return;
     }
 
+    setFilteredCourseListLoading(true);
     getAllCourses(1);
     setCourseListPage(1);
     parentScrollbarUtils.scrollTop(0);
@@ -256,7 +260,8 @@ const CourseSearching = () => {
             <Typography variant="subtitle2">Không tìm thấy khóa học nào.</Typography>
           </Box>
         )}
-        {!courseListLoading && courseList.length > 0 && (
+        {!courseListLoading && filteredCourseListLoading && <CourseListLoading />}
+        {!filteredCourseListLoading && courseList.length > 0 && (
           <div>
             <Box display="flex" flexWrap="wrap" m={-1} mt={2}>
               {courseList.map((c, i) => (
