@@ -451,7 +451,7 @@ const CourseDetails = () => {
   }
 
   const handleClickVideoListItem = (video) => {
-    if (video.disabled || activeVideo && video._id === activeVideo._id)
+    if (video.disabled || (activeVideo && video._id === activeVideo._id))
       return;
 
     setActiveVideo({ ...video, type: 'from_expanded_chapter' });

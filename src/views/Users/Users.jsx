@@ -1,10 +1,11 @@
-import { AppBar, Box, Button, Fab, GridList, GridListTile, Tab, Tabs, Tooltip } from '@material-ui/core';
+import { AppBar, Box, Fab, GridList, GridListTile, Tab, Tabs, Tooltip } from '@material-ui/core';
 import FaceIcon from '@material-ui/icons/Face';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { makeStyles } from '@material-ui/styles';
 import { studentApi } from 'api';
 import lecturerApi from 'api/lecturer.api';
+import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
 import Lecturer from 'components/Lecturer/Lecturer';
 import Student from 'components/Student/Student';
@@ -18,7 +19,6 @@ import { shallowEqual } from 'recompose';
 import { showNotification } from 'redux/actions/app.action';
 import { setPageBasics, setPageLoading } from 'redux/actions/page.action';
 import AddLecturer from './components/AddLecturer/AddLecturer';
-import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 
 function a11yProps(index) {
   return {

@@ -95,7 +95,7 @@ const Main2 = props => {
     let actions = [];
     if (authUser) {
       actions = _.filter(availablePages, p => p.role === authUser.role);
-      setBtnMultiTaskActionList([...btnMultiTaskActionList, ...actions]);
+      setBtnMultiTaskActionList(btnMultiTaskActionList => [...btnMultiTaskActionList, ...actions]);
     }
   }, [userState.authUser]);
 

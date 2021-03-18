@@ -1,8 +1,9 @@
-import { Box, Button, IconButton, Typography } from '@material-ui/core';
+import { Box, IconButton, Typography } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import { makeStyles } from '@material-ui/styles';
 import { categoryApi } from 'api';
+import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import Course from 'components/Course/Course';
 import CourseListEmpty from 'components/CourseListEmpty/CourseListEmpty';
 import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
@@ -13,7 +14,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { shallowEqual } from 'recompose';
 import { setPageBasics } from 'redux/actions/page.action';
-import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 
 const useStyles = makeStyles(theme => ({
   root: {
