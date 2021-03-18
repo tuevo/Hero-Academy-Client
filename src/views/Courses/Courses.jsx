@@ -127,8 +127,7 @@ const Courses = () => {
   return (
     <div className={classes.root}>
       {courseListLoading && <CourseListLoading />}
-      {!courseListLoading && courseList.length === 0 && <CourseListEmpty />}
-      {!courseListLoading && courseList.length > 0 && (
+      {!courseListLoading && (
         <Box mt={-1}>
           <Box display="flex" flexWrap="wrap">
             <Box mr={1}>
@@ -156,26 +155,30 @@ const Courses = () => {
               </Box>
             ))}
           </Box>
-          <Box mt={1} display="flex" flexWrap="wrap" m={-1}>
-            {courseList.map((c, i) => (
-              <Box key={c._id} m={1} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
-                <Course data={c} type="minimal" />
+          {courseList.length > 0 ? (
+            <div>
+              <Box mt={1} display="flex" flexWrap="wrap" m={-1}>
+                {courseList.map((c, i) => (
+                  <Box key={c._id} m={1} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
+                    <Course data={c} type="minimal" />
+                  </Box>
+                ))}
               </Box>
-            ))}
-          </Box>
-          <Box mt={2}>
-            <Button
-              fullWidth
-              className={classes.btnLoadMoreCourse}
-              variant="contained"
-              size="large"
-              color="primary"
-              onClick={handleClickBtnLoadMoreCourse}
-              disabled={disableBtnLoadMoreCourse}
-            >
-              Xem thêm khóa học
-            </Button>
-          </Box>
+              <Box mt={2}>
+                <Button
+                  fullWidth
+                  className={classes.btnLoadMoreCourse}
+                  variant="contained"
+                  size="large"
+                  color="primary"
+                  onClick={handleClickBtnLoadMoreCourse}
+                  disabled={disableBtnLoadMoreCourse}
+                >
+                  Xem thêm khóa học
+                </Button>
+              </Box>
+            </div>
+          ) : (<CourseListEmpty />)}
         </Box>
       )}
     </div >

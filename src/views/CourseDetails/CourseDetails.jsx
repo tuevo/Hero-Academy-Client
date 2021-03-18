@@ -890,7 +890,7 @@ const CourseDetails = () => {
                     <CircularProgress color="primary" />
                   </Box>
                 )}
-                {!chapterListLoading && chapterList.length === 0 && userState.authUser.role !== userRole.LECTURER.value && (
+                {!chapterListLoading && chapterList.length === 0 && !userState.authUser && (
                   <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ width: '100%', height: '25rem' }}>
                     <Box mb={1}>
                       <MovieIcon className={classes.emptyVideoListIcon} style={{ fontSize: '70px' }} />
@@ -898,7 +898,15 @@ const CourseDetails = () => {
                     <Typography variant="subtitle2">Chưa có video nào.</Typography>
                   </Box>
                 )}
-                {!chapterListLoading && chapterList.length === 0 && userState.authUser.role === userRole.LECTURER.value && (
+                {!chapterListLoading && chapterList.length === 0 && userState.authUser && userState.authUser.role !== userRole.LECTURER.value && (
+                  <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ width: '100%', height: '25rem' }}>
+                    <Box mb={1}>
+                      <MovieIcon className={classes.emptyVideoListIcon} style={{ fontSize: '70px' }} />
+                    </Box>
+                    <Typography variant="subtitle2">Chưa có video nào.</Typography>
+                  </Box>
+                )}
+                {!chapterListLoading && chapterList.length === 0 && userState.authUser && userState.authUser.role === userRole.LECTURER.value && (
                   <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ width: '100%', height: '25rem' }}>
                     <Box mb={1}>
                       <MovieIcon className={classes.emptyVideoListIcon} style={{ fontSize: '4.375rem' }} />
@@ -947,8 +955,10 @@ const CourseDetails = () => {
                     >
                       <Box display="flex" flexDirection="column">
                         <Typography variant="h5" gutterBottom><b>{chapter.title}</b></Typography>
-                        <Typography variant="body1">
-                          <NumberFormat value={chapter.numberOfVideos} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' video'} />
+                        <Typography variant="body2">
+                          {chapter.numberOfVideos > 0 ? (
+                            <NumberFormat value={chapter.numberOfVideos} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' video'} />
+                          ) : 'Chưa có video nào.'}
                         </Typography>
                       </Box>
                     </AccordionSummary>
@@ -1068,9 +1078,11 @@ const CourseDetails = () => {
               )}
               <Card className={classes.feedbackListContainer}>
                 <CardContent>
-                  <Typography variant="h5" className={classes.secondaryText} gutterBottom>
-                    <b><NumberFormat value={feedbackListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' bình luận'} /></b>
-                  </Typography>
+                  {feedbackListTotalItems > 0 && (
+                    <Typography variant="h5" className={classes.secondaryText} gutterBottom>
+                      <b><NumberFormat value={feedbackListTotalItems} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' bình luận'} /></b>
+                    </Typography>
+                  )}
                   <PerfectScrollbar
                     className={classes.feedbackList}
                     onYReachEnd={handleYReachEndFeedbackList}
