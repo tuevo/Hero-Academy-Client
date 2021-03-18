@@ -889,7 +889,7 @@ const CourseDetails = () => {
                 </Box>
               )}
               <Box>
-                {chapterListLoading && (
+                {chapterListLoading && chapterList.length === 0 && (
                   <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ width: '100%', height: '25rem' }}>
                     <CircularProgress color="primary" />
                   </Box>
