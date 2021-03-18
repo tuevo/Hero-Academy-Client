@@ -267,7 +267,7 @@ const useStyles = makeStyles(theme => ({
     height: '29.25rem',
     padding: theme.spacing(2),
     border: `1px solid ${theme.palette.border.color}`,
-    borderRadius: theme.palette.card.borderRadius
+    borderRadius: '1.5rem'
   },
   emptyVideoListIcon: {
     color: theme.palette.text.disabled
@@ -494,7 +494,10 @@ const CourseDetails = () => {
   useEffect(() => {
     if (expandedChapterVideoList.length > 0) {
       if (!activeVideo) {
-        setActiveVideo(expandedChapterVideoList[0]);
+        const video = expandedChapterVideoList[0];
+        if (video.publicIdOfVideo) {
+          setActiveVideo(video);
+        }
       }
     }
   }, [expandedChapterVideoList, activeVideo]);
