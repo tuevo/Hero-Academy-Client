@@ -44,6 +44,7 @@ import AddFeedback from './components/AddFeedback/AddFeedback';
 import AddVideo from './components/AddVideo/AddVideo';
 import UpdateCourse from './components/UpdateCourse/UpdateCourse';
 import WatchHistory from './components/WatchHistory/WatchHistory';
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 
 function a11yProps(index) {
   return {
@@ -450,7 +451,7 @@ const CourseDetails = () => {
   }
 
   const handleClickVideoListItem = (video) => {
-    if (video._id === activeVideo._id || video.disabled)
+    if (video.disabled || activeVideo && video._id === activeVideo._id)
       return;
 
     setActiveVideo({ ...video, type: 'from_expanded_chapter' });
@@ -987,7 +988,9 @@ const CourseDetails = () => {
                                 </div>
                               )}
                               {!activeVideo && (
-                                <div className={classes.videoPlayerEmpty}></div>
+                                <Box display="flex" justifyContent="center" alignItems="center" className={classes.videoPlayerEmpty}>
+                                  <PlayCircleFilledIcon className={classes.emptyVideoListIcon} style={{ fontSize: '4.375rem' }} />
+                                </Box>
                               )}
                             </Grid>
                             <Grid item xs={4}>
@@ -1009,7 +1012,7 @@ const CourseDetails = () => {
                                   <PlaylistPlayIcon />
                                   <span style={{ marginLeft: 3 }}><b>Danh sách video</b></span>
                                 </Typography>
-                                {!activeVideo && !expandedChapterVideoListLoading && (
+                                {!expandedChapterVideoListLoading && expandedChapterVideoList.length === 0 && (
                                   <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" style={{ height: '100%' }}>
                                     <Box mb={1}>
                                       <MovieIcon className={classes.emptyVideoListIcon} style={{ fontSize: '4.375rem' }} />
@@ -1022,43 +1025,41 @@ const CourseDetails = () => {
                                     <CircularProgress color="primary" />
                                   </Box>
                                 )}
-                                {activeVideo && (
-                                  <PerfectScrollbar className={classes.videoList}>
-                                    {expandedChapterVideoList.map(video => (
-                                      <Card
-                                        key={video._id}
-                                        className={clsx(classes.videoListItem, {
-                                          [classes.videoListItemActive]: video._id === activeVideo._id,
-                                          [classes.videoListItemDisabled]: video.disabled
-                                        })}
-                                        onClick={() => handleClickVideoListItem(video)}
-                                      >
-                                        <CardActionArea style={{ height: '100%' }} disabled={video.disabled}>
-                                          <Grid container style={{ height: '100%' }}>
-                                            <Grid item xs={5}>
-                                              <div className={classes.videoListItem__thumbnailContainer}>
-                                                <CardMedia
-                                                  className={classes.videoListItem__thumbnail}
-                                                  image={video.thumbnailUrl}
-                                                  title={video.title}
-                                                />
-                                                <Typography variant="body2" className={classes.videoListItem__duration}>
-                                                  {moment.utc(video.duration * 1000).format('mm:ss')}
-                                                </Typography>
-                                              </div>
-                                            </Grid>
-                                            <Grid item xs={7}>
-                                              <CardContent className={classes.videoListItem__details}>
-                                                <Typography gutterBottom variant="h6" color="inherit" className={classes.videoListItem__details__title}><b>{video.title}</b></Typography>
-                                                <Typography variant="body2" color="inherit">{`Đăng lúc ${moment(video.updatedAt).format('DD/MM HH:mm')}`}</Typography>
-                                              </CardContent>
-                                            </Grid>
+                                <PerfectScrollbar className={classes.videoList}>
+                                  {expandedChapterVideoList.map(video => (
+                                    <Card
+                                      key={video._id}
+                                      className={clsx(classes.videoListItem, {
+                                        [classes.videoListItemActive]: activeVideo && video._id === activeVideo._id,
+                                        [classes.videoListItemDisabled]: video.disabled
+                                      })}
+                                      onClick={() => handleClickVideoListItem(video)}
+                                    >
+                                      <CardActionArea style={{ height: '100%' }} disabled={video.disabled}>
+                                        <Grid container style={{ height: '100%' }}>
+                                          <Grid item xs={5}>
+                                            <div className={classes.videoListItem__thumbnailContainer}>
+                                              <CardMedia
+                                                className={classes.videoListItem__thumbnail}
+                                                image={video.thumbnailUrl}
+                                                title={video.title}
+                                              />
+                                              <Typography variant="body2" className={classes.videoListItem__duration}>
+                                                {moment.utc(video.duration * 1000).format('mm:ss')}
+                                              </Typography>
+                                            </div>
                                           </Grid>
-                                        </CardActionArea>
-                                      </Card>
-                                    ))}
-                                  </PerfectScrollbar>
-                                )}
+                                          <Grid item xs={7}>
+                                            <CardContent className={classes.videoListItem__details}>
+                                              <Typography gutterBottom variant="h6" color="inherit" className={classes.videoListItem__details__title}><b>{video.title}</b></Typography>
+                                              <Typography variant="body2" color="inherit">{`Đăng lúc ${moment(video.updatedAt).format('DD/MM HH:mm')}`}</Typography>
+                                            </CardContent>
+                                          </Grid>
+                                        </Grid>
+                                      </CardActionArea>
+                                    </Card>
+                                  ))}
+                                </PerfectScrollbar>
                               </div>
                             </Grid>
                           </Grid>

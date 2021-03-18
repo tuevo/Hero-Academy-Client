@@ -14,6 +14,7 @@ import { setPageBasics } from 'redux/actions/page.action';
 import clsx from 'clsx';
 import ScrollbarContext from 'contexts/ScrollbarContext';
 import { useContext } from 'react';
+import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,7 +35,10 @@ const useStyles = makeStyles(theme => ({
   },
   btnCategory__active: {
     background: theme.palette.secondary.main,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.main
+    }
   }
 }));
 
@@ -61,9 +65,12 @@ const Courses = () => {
   const [disableBtnLoadMoreCourse, setDisableBtnLoadMoreCourse] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categoryCourseListLoading, setCategoryCourseListLoading] = useState(false);
+  const [btnLoadMoreCourseLoading, setBtnLoadMoreCourseLoading] = useState(false);
 
   const getAllCourses = async (page) => {
     setDisableBtnLoadMoreCourse(true);
+    setBtnLoadMoreCourseLoading(true);
     try {
       let params = { page, limit };
       if (selectedCategory) {
@@ -87,10 +94,14 @@ const Courses = () => {
       }
 
       setCourseListLoading(false);
+      setCategoryCourseListLoading(false);
+      setBtnLoadMoreCourseLoading(false);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
         setCourseListLoading(false);
+        setCategoryCourseListLoading(false);
+        setBtnLoadMoreCourseLoading(false);
       }
     }
   }
@@ -106,6 +117,8 @@ const Courses = () => {
   }, [courseListPage]);
 
   useEffect(() => {
+    setCategoryCourseListLoading(true);
+
     if (courseListPage === 1) {
       getAllCourses(1);
     } else {
@@ -155,30 +168,35 @@ const Courses = () => {
               </Box>
             ))}
           </Box>
-          {courseList.length > 0 ? (
+          {!categoryCourseListLoading ? (
             <div>
-              <Box mt={1} display="flex" flexWrap="wrap" m={-1}>
-                {courseList.map((c, i) => (
-                  <Box key={c._id} m={1} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
-                    <Course data={c} type="minimal" />
+              {courseList.length > 0 ? (
+                <div>
+                  <Box mt={1} display="flex" flexWrap="wrap" m={-1}>
+                    {courseList.map((c, i) => (
+                      <Box key={c._id} m={1} className="animate__animated animate__zoomIn" style={{ animationDelay: `${0.1 * i}s` }}>
+                        <Course data={c} type="minimal" />
+                      </Box>
+                    ))}
                   </Box>
-                ))}
-              </Box>
-              <Box mt={2}>
-                <Button
-                  fullWidth
-                  className={classes.btnLoadMoreCourse}
-                  variant="contained"
-                  size="large"
-                  color="primary"
-                  onClick={handleClickBtnLoadMoreCourse}
-                  disabled={disableBtnLoadMoreCourse}
-                >
-                  Xem thêm khóa học
-                </Button>
-              </Box>
+                  <Box mt={2}>
+                    <ButtonWithLoading
+                      fullWidth
+                      className={classes.btnLoadMoreCourse}
+                      text="Xem thêm khóa học"
+                      variant="contained"
+                      color="primary"
+                      loading={btnLoadMoreCourseLoading}
+                      size="large"
+                      onClick={handleClickBtnLoadMoreCourse}
+                      progressColor="#fff"
+                      disabled={disableBtnLoadMoreCourse}
+                    />
+                  </Box>
+                </div>
+              ) : (<CourseListEmpty />)}
             </div>
-          ) : (<CourseListEmpty />)}
+          ) : <CourseListLoading />}
         </Box>
       )}
     </div >
