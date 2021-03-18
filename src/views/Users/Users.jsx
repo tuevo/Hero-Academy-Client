@@ -16,8 +16,9 @@ import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'recompose';
 import { showNotification } from 'redux/actions/app.action';
-import { setPageBasics } from 'redux/actions/page.action';
+import { setPageBasics, setPageLoading } from 'redux/actions/page.action';
 import AddLecturer from './components/AddLecturer/AddLecturer';
+import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 
 function a11yProps(index) {
   return {
@@ -73,17 +74,20 @@ const Users = () => {
   const [studentListPage, setStudentListPage] = useState(1);
   const [studentListTotalItems, setStudentListTotalItems] = useState(0);
   const [disableBtnLoadMoreStudent, setDisableBtnLoadMoreStudent] = useState(false);
+  const [btnLoadMoreStudentLoading, setBtnLoadMoreStudentLoading] = useState(false);
 
   const [lecturerList, setLecturerList] = useState([]);
   const [lecturerListLoading, setLecturerListLoading] = useState(true);
   const [lecturerListPage, setLecturerListPage] = useState(1);
   const [lecturerListTotalItems, setLecturerListTotalItems] = useState(0);
   const [disableBtnLoadMoreLecturer, setDisableBtnLoadMoreLecturer] = useState(false);
+  const [btnLoadMoreLecturerLoading, setBtnLoadMoreLecturerLoading] = useState(false);
 
   const [openAddLecturer, setOpenAddLecturer] = useState(false);
 
   const getAllStudents = async (page) => {
     setDisableBtnLoadMoreStudent(true);
+    setBtnLoadMoreStudentLoading(true);
     try {
       const res = await studentApi.getAll(page, limit);
       const students = res.data.entries;
@@ -98,16 +102,19 @@ const Users = () => {
       }
 
       setStudentListLoading(false);
+      setBtnLoadMoreStudentLoading(false);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
         setStudentListLoading(false);
+        setBtnLoadMoreStudentLoading(false);
       }
     }
   };
 
   const getAllLecturers = async (page) => {
     setDisableBtnLoadMoreLecturer(true);
+    setBtnLoadMoreLecturerLoading(true);
     try {
       const res = await lecturerApi.getAll(page, limit);
       const lecturers = res.data.entries;
@@ -122,26 +129,29 @@ const Users = () => {
       }
 
       setLecturerListLoading(false);
+      setBtnLoadMoreLecturerLoading(false);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
         setLecturerListLoading(false);
+        setBtnLoadMoreLecturerLoading(false);
       }
     }
   };
 
   const addLecturer = async (data) => {
+    dispatch(setPageLoading(true));
     try {
       const res = await lecturerApi.add(data);
-
-      dispatch(showNotification('success', apiMessage[res.messages[0]]));
-
       setLecturerListPage(1);
       getAllLecturers(1);
       parentScrollbarUtils.scrollTop(0);
+      dispatch(showNotification('success', apiMessage[res.messages[0]]));
+      dispatch(setPageLoading(false));
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        dispatch(setPageLoading(false));
       }
     }
   };
@@ -309,18 +319,19 @@ const Users = () => {
                   </GridListTile>
                 ))}
               </GridList>
-              <Box px={1} pt={3}>
-                <Button
+              <Box px={1} pt={2}>
+                <ButtonWithLoading
                   fullWidth
                   className={classes.btnLoadMore}
+                  text="Xem thêm học viên"
                   variant="contained"
-                  color="primary"
                   size="large"
+                  color="primary"
+                  progressColor="#fff"
+                  loading={btnLoadMoreStudentLoading}
                   onClick={() => handleClickBtnLoadMore(1)}
                   disabled={disableBtnLoadMoreStudent}
-                >
-                  Xem thêm học viên
-                </Button>
+                />
               </Box>
             </div>
 
@@ -355,18 +366,19 @@ const Users = () => {
                   </GridListTile>
                 ))}
               </GridList>
-              <Box px={1} pt={3}>
-                <Button
+              <Box px={1} pt={2}>
+                <ButtonWithLoading
                   fullWidth
                   className={classes.btnLoadMore}
+                  text="Xem thêm giảng viên"
                   variant="contained"
-                  color="primary"
                   size="large"
+                  color="primary"
+                  progressColor="#fff"
+                  loading={btnLoadMoreLecturerLoading}
                   onClick={() => handleClickBtnLoadMore(2)}
                   disabled={disableBtnLoadMoreLecturer}
-                >
-                  Xem thêm giảng viên
-            </Button>
+                />
               </Box>
             </div>
           )}

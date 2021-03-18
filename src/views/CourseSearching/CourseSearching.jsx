@@ -4,6 +4,7 @@ import SchoolIcon from '@material-ui/icons/School';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/styles';
 import { courseApi } from 'api';
+import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import Course from 'components/Course/Course';
 import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
 import { apiMessage } from 'constants/api-message.constant';
@@ -102,11 +103,13 @@ const CourseSearching = () => {
   const [courseListTotalItems, setCourseListTotalItems] = useState(0);
   const [btnLoadMoreCourseDisabled, setBtnLoadMoreCourseDisabled] = useState(false);
   const [courseListFilterCriteriaIndex, setCourseListFilterCriteriaIndex] = useState(0);
+  const [btnLoadMoreCourseLoading, setBtnLoadMoreCourseLoading] = useState(false);
 
   const [categoryList, setCategoryList] = useState([]);
 
   const getAllCourses = async (page) => {
     setBtnLoadMoreCourseDisabled(true);
+    setBtnLoadMoreCourseLoading(true);
     try {
       const res = await courseApi.getAll({
         page,
@@ -137,11 +140,13 @@ const CourseSearching = () => {
       setCategoryList(newCategoryList);
 
       setCourseListLoading(false);
-      dispatch(setPageBasics({ ...pageBasics, title: `${appState.courseSearchingQuery} - Kết quả tìm kiếm` }))
+      setBtnLoadMoreCourseLoading(false);
+      dispatch(setPageBasics({ ...pageBasics, title: `${appState.courseSearchingQuery} - Kết quả tìm kiếm` }));
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
         setCourseListLoading(false);
+        setBtnLoadMoreCourseLoading(false);
       }
     }
   }
@@ -260,17 +265,18 @@ const CourseSearching = () => {
                 </Box>
               ))}
             </Box>
-            <Button
+            <ButtonWithLoading
               fullWidth
+              progressColor="#fff"
+              text="Xem thêm khóa học"
               className={classes.btnLoadMoreCourse}
               variant="contained"
               color="primary"
               size="large"
               disabled={btnLoadMoreCourseDisabled}
               onClick={handleClickBtnLoadMoreCourse}
-            >
-              Xem thêm khóa học
-            </Button>
+              loading={btnLoadMoreCourseLoading}
+            />
           </div>
         )}
       </Box>

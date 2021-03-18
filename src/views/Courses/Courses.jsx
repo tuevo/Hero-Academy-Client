@@ -1,20 +1,19 @@
 import { Box, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { courseApi } from 'api';
+import clsx from 'clsx';
+import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import Course from 'components/Course/Course';
 import CourseListEmpty from 'components/CourseListEmpty/CourseListEmpty';
 import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
 import { apiMessage } from 'constants/api-message.constant';
 import { availablePages } from 'constants/global.constant';
-import React, { useEffect, useState } from 'react';
+import ScrollbarContext from 'contexts/ScrollbarContext';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'recompose';
 import { showNotification } from 'redux/actions/app.action';
 import { setPageBasics } from 'redux/actions/page.action';
-import clsx from 'clsx';
-import ScrollbarContext from 'contexts/ScrollbarContext';
-import { useContext } from 'react';
-import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -185,12 +184,12 @@ const Courses = () => {
                       className={classes.btnLoadMoreCourse}
                       text="Xem thêm khóa học"
                       variant="contained"
-                      color="primary"
-                      loading={btnLoadMoreCourseLoading}
                       size="large"
-                      onClick={handleClickBtnLoadMoreCourse}
+                      color="primary"
                       progressColor="#fff"
+                      loading={btnLoadMoreCourseLoading}
                       disabled={disableBtnLoadMoreCourse}
+                      onClick={handleClickBtnLoadMoreCourse}
                     />
                   </Box>
                 </div>

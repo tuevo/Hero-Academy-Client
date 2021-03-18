@@ -13,6 +13,7 @@ import { showNotification } from 'redux/actions/app.action';
 import LockIcon from '@material-ui/icons/Lock';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
+import { setPageLoading } from 'redux/actions/page.action';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -59,15 +60,17 @@ function Details(props) {
 
   const handleCloseRemoveAccountConfirmDialog = async (accepted) => {
     setOpenRemoveAccountConfirmDialog(false);
-
     if (accepted) {
+      dispatch(setPageLoading(true));
       try {
         const res = await lecturerApi.delete(data._id);
-        dispatch(showNotification('success', apiMessage[res.messages[0]]));
         onClose('remove');
+        dispatch(showNotification('success', apiMessage[res.messages[0]]));
+        dispatch(setPageLoading(false));
       } catch (error) {
         if (error.messages && error.messages.length > 0) {
           dispatch(showNotification('error', apiMessage[error.messages[0]]));
+          dispatch(setPageLoading(false));
         }
       }
     }
@@ -80,13 +83,16 @@ function Details(props) {
   const handleCloseBlockAccountConfirmDialog = async (accepted) => {
     setOpenBlockAccountConfirmDialog(false);
     if (accepted) {
+      dispatch(setPageLoading(true));
       try {
         await userApi.updateByAdminRole(data._id, { isBlocked: true });
         onClose('block');
         dispatch(showNotification('success', apiMessage.BLOCK_USER_SUCCESSFULLY));
+        dispatch(setPageLoading(false));
       } catch (error) {
         if (error.messages && error.messages.length > 0) {
           dispatch(showNotification('error', apiMessage[error.messages[0]]));
+          dispatch(setPageLoading(false));
         }
       }
     }
@@ -99,13 +105,16 @@ function Details(props) {
   const handleCloseUnblockAccountConfirmDialog = async (accepted) => {
     setOpenUnblockAccountConfirmDialog(false);
     if (accepted) {
+      dispatch(setPageLoading(true));
       try {
         await userApi.updateByAdminRole(data._id, { isBlocked: false });
         onClose('unblock');
         dispatch(showNotification('success', apiMessage.UNBLOCK_USER_SUCCESSFULLY));
+        dispatch(setPageLoading(false));
       } catch (error) {
         if (error.messages && error.messages.length > 0) {
           dispatch(showNotification('error', apiMessage[error.messages[0]]));
+          dispatch(setPageLoading(false));
         }
       }
     }
@@ -278,7 +287,7 @@ export default function Lecturer({ data, onRemove, onBlock, onUnblock }) {
                 </Grid>
                 <Grid item xs={8}>
                   <Typography variant="h5" gutterBottom><b>{data.fullName}</b></Typography>
-                  <Typography variant="body2" gutterBottom>{data.email}</Typography>
+                  <Typography variant="body2" gutterBottom={data.isBlocked}>{data.email}</Typography>
                   {data.isBlocked && (<Typography variant="body2" className={classes.label__blocked}>Đã bị khóa</Typography>)}
                 </Grid>
               </Grid>

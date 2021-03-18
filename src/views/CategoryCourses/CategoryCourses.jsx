@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { shallowEqual } from 'recompose';
 import { setPageBasics } from 'redux/actions/page.action';
+import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -59,10 +60,12 @@ const CategoryCourses = () => {
   const [categoryCourseListPage, setCategoryCourseListPage] = useState(1);
   const [categoryCourseListTotalItems, setCategoryCourseListTotalItems] = useState(0);
   const [disableBtnLoadMore, setDisableBtnLoadMore] = useState(false);
+  const [btnLoadMoreCourseLoading, setBtnLoadMoreCourseLoading] = useState(false);
 
   const getCoursesListOfACategory = async (page) => {
     setDisableBtnLoadMore(true);
     setCategoryCourseListLoading(true);
+    setBtnLoadMoreCourseLoading(true);
     try {
       const res = await categoryApi.getCourses(categoryId, page, limit);
       const courses = res.data.entries.map(item => ({
@@ -85,10 +88,12 @@ const CategoryCourses = () => {
       }
 
       setCategoryCourseListLoading(false);
+      setBtnLoadMoreCourseLoading(false);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         history.push(availablePages.NOT_FOUND.path);
         setCategoryCourseListLoading(false);
+        setBtnLoadMoreCourseLoading(false);
       }
     }
   };
@@ -135,17 +140,18 @@ const CategoryCourses = () => {
                 </Box>
               ))}
             </Box>
-            <Button
+            <ButtonWithLoading
               fullWidth
+              progressColor="#fff"
+              text="Xem thêm khóa học"
               className={classes.btnLoadMoreCourse}
               variant="contained"
               color="primary"
               size="large"
               onClick={() => handleClickBtnLoadMore()}
               disabled={disableBtnLoadMore}
-            >
-              Xem thêm khóa học
-            </Button>
+              loading={btnLoadMoreCourseLoading}
+            />
           </div>
         )}
       </Box>

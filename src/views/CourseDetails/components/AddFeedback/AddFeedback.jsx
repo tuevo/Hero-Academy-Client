@@ -56,8 +56,10 @@ const AddFeedback = props => {
 
   const [rating, setRating] = useState(course.ownedRating);
   const [comment, setComment] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const addFeedback = async (type, params) => {
+    setLoading(true);
     try {
       await courseApi.addFeedback(course._id, params);
 
@@ -67,9 +69,11 @@ const AddFeedback = props => {
         onAddComment();
       }
 
+      setLoading(false);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        setLoading(false);
       }
     }
   }
@@ -88,6 +92,7 @@ const AddFeedback = props => {
 
   const handleClickBtnSend = () => {
     if (comment) {
+      setComment('');
       addFeedback(2, { content: comment });
     }
   }
@@ -111,7 +116,7 @@ const AddFeedback = props => {
             name="comment"
             onChange={handleChangeComment}
             onKeyUp={e => {
-              if (e.keyCode === 13)
+              if (e.keyCode === 13 && !loading)
                 handleClickBtnSend();
             }}
             value={comment}

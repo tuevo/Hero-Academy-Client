@@ -1,15 +1,16 @@
-import { Box, Button } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { favoriteApi } from 'api';
+import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import Course from 'components/Course/Course';
+import CourseListEmpty from 'components/CourseListEmpty/CourseListEmpty';
+import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
 import { apiMessage } from 'constants/api-message.constant';
 import { availablePages } from 'constants/global.constant';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { showNotification } from 'redux/actions/app.action';
-import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
-import CourseListEmpty from 'components/CourseListEmpty/CourseListEmpty';
 import { shallowEqual } from 'recompose';
+import { showNotification } from 'redux/actions/app.action';
 import { setPageBasics } from 'redux/actions/page.action';
 
 const useStyles = makeStyles(theme => ({
@@ -37,10 +38,12 @@ const FavoriteCourses = () => {
   const [favoriteListLoading, setFavoriteListLoading] = useState(true);
 
   const [disableBtnLoadMoreCourse, setDisableBtnLoadMoreCourse] = useState(false);
+  const [btnLoadMoreCourseLoading, setBtnLoadMoreCourseLoading] = useState(false);
 
   useEffect(() => {
     const getAllFavorites = async () => {
       setDisableBtnLoadMoreCourse(true);
+      setBtnLoadMoreCourseLoading(true);
       try {
         const res = await favoriteApi.getAll(favoriteListPage, limit);
         const courses = res.data.entries.map(item => ({
@@ -59,10 +62,12 @@ const FavoriteCourses = () => {
         }
 
         setFavoriteListLoading(false);
+        setBtnLoadMoreCourseLoading(false);
       } catch (error) {
         if (error.messages && error.messages.length > 0) {
           dispatch(showNotification('error', apiMessage[error.messages[0]]));
           setFavoriteListLoading(false);
+          setBtnLoadMoreCourseLoading(false);
         }
       }
     }
@@ -89,17 +94,18 @@ const FavoriteCourses = () => {
             ))}
           </Box>
           <Box mt={2}>
-            <Button
+            <ButtonWithLoading
               fullWidth
+              progressColor="#fff"
+              text="Xem thêm khóa học"
               className={classes.btnLoadMoreCourse}
               variant="contained"
               size="large"
               color="primary"
               onClick={handleClickBtnLoadMoreCourse}
               disabled={disableBtnLoadMoreCourse}
-            >
-              Xem thêm khóa học
-          </Button>
+              loading={btnLoadMoreCourseLoading}
+            />
           </Box>
         </div>
       )}

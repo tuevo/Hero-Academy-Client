@@ -113,7 +113,7 @@ const useStyles = makeStyles(theme => ({
     boxShadow: 'inset 0 -14rem 6.25rem rgba(0, 0, 0, 0.6)'
   },
   featuredCoursesCarouselItem__ratingDetails: {
-    margin: theme.spacing(1, 0)
+    margin: theme.spacing(1.5, 0)
   },
   featuredCoursesCarouselItem__price: {
     marginBottom: theme.spacing(2),

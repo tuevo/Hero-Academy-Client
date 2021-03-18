@@ -1,10 +1,12 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, IconButton, List, ListItem, ListItemText, Tooltip, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import CategoryIcon from '@material-ui/icons/Category';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/styles';
 import { categoryApi, categoryClusterApi } from 'api';
+import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
 import { apiMessage } from 'constants/api-message.constant';
@@ -18,7 +20,7 @@ import { setAppCategoryClusterList, showNotification } from 'redux/actions/app.a
 import { AddCategory, AddCategoryCluster, CategoryDetails, CategoryMenu } from './components';
 import UpdateCategory from './components/UpdateCategory/UpdateCategory';
 import UpdateCategoryCluster from './components/UpdateCategoryCluster/UpdateCategoryCluster';
-import CategoryIcon from '@material-ui/icons/Category';
+import { setPageLoading } from 'redux/actions/page.action';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -81,7 +83,7 @@ const AddCategoryClusterButton = ({
 export default function Categories() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const limit = 10;
+  const limit = 5;
 
   const appState = useSelector(state => ({
     ...state.app
@@ -102,9 +104,11 @@ export default function Categories() {
   const [categoryClusterListLoading, setCategoryClusterListLoading] = useState(true);
   const [categoryClusterListPage, setCategoryClusterListPage] = useState(1);
   const [disableBtnLoadMoreCategoryCluster, setDisableBtnLoadMoreCategoryCluster] = useState(false);
+  const [btnLoadMoreCategoryClusterLoading, setBtnLoadMoreCategoryClusterLoading] = useState(false);
 
   const getAllCategoryClusters = async (page) => {
     setDisableBtnLoadMoreCategoryCluster(true);
+    setBtnLoadMoreCategoryClusterLoading(true);
     try {
       const res = await categoryClusterApi.getAll(page, limit);
       const { entries } = res.data;
@@ -123,10 +127,12 @@ export default function Categories() {
       }
 
       setCategoryClusterListLoading(false);
+      setBtnLoadMoreCategoryClusterLoading(false);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
         setCategoryClusterListLoading(false);
+        setBtnLoadMoreCategoryClusterLoading(false);
       }
     }
   }
@@ -174,6 +180,7 @@ export default function Categories() {
     if (!accepted)
       return;
 
+    dispatch(setPageLoading(true));
     const selectedCategoryCluster = categoryClusterList[expandedCategoryClusterIndex];
     try {
       const res = await categoryApi.update(selectedCategory._id, data);
@@ -203,9 +210,11 @@ export default function Categories() {
       }
 
       dispatch(showNotification('success', apiMessage[res.messages[0]]));
+      dispatch(setPageLoading(false));
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        dispatch(setPageLoading(false));
       }
     }
   }
@@ -215,6 +224,7 @@ export default function Categories() {
     if (!accepted)
       return;
 
+    dispatch(setPageLoading(true));
     const categoryClusterToUpdate = categoryClusterList[hoveredCategoryClusterIndex];
     try {
       const res = await categoryClusterApi.update(categoryClusterToUpdate._id, data);
@@ -233,9 +243,11 @@ export default function Categories() {
       }
 
       dispatch(showNotification('success', apiMessage[res.messages[0]]));
+      dispatch(setPageLoading(false));
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        dispatch(setPageLoading(false));
       }
     }
   }
@@ -255,15 +267,18 @@ export default function Categories() {
     if (!accepted)
       return;
 
+    dispatch(setPageLoading(true));
     try {
       const res = await categoryApi.delete(selectedCategory._id);
       categoryClusterList[expandedCategoryClusterIndex].categories = categoryClusterList[expandedCategoryClusterIndex].categories
         .filter(c => c._id !== selectedCategory._id);
       updateSelectedCategoryCluster();
       dispatch(showNotification('success', apiMessage[res.messages[0]]));
+      dispatch(setPageLoading(false));
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        dispatch(setPageLoading(false));
       }
     }
   }
@@ -273,6 +288,7 @@ export default function Categories() {
     if (!accepted)
       return;
 
+    dispatch(setPageLoading(true));
     const categoryClusterToRemove = categoryClusterList[hoveredCategoryClusterIndex];
     try {
       const res = await categoryClusterApi.delete(categoryClusterToRemove._id);
@@ -288,9 +304,11 @@ export default function Categories() {
       dispatch(setAppCategoryClusterList(newAppCategoryClusterList));
 
       dispatch(showNotification('success', apiMessage[res.messages[0]]));
+      dispatch(setPageLoading(false));
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        dispatch(setPageLoading(false));
       }
     }
   }
@@ -305,6 +323,7 @@ export default function Categories() {
       return;
     }
 
+    dispatch(setPageLoading(true));
     try {
       const res = await categoryClusterApi.add(data);
       const newCategoryCluster = { ...res.data.categoryCluster, categories: [] };
@@ -312,9 +331,11 @@ export default function Categories() {
       setCategoryClusterList(newCategoryClusterList);
       dispatch(setAppCategoryClusterList([newCategoryCluster, ...appState.categoryClusterList]));
       dispatch(showNotification('success', apiMessage[res.messages[0]]));
+      dispatch(setPageLoading(false));
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
+        dispatch(setPageLoading(false));
       }
     }
   }
@@ -462,18 +483,19 @@ export default function Categories() {
           ))
           }
 
-          <Box pt={3}>
-            <Button
+          <Box mt={2}>
+            <ButtonWithLoading
               fullWidth
               className={classes.btnLoadMoreCategoryCluster}
+              text="Xem thêm nhóm lĩnh vực"
               variant="contained"
               size="large"
               color="primary"
+              progressColor="#fff"
+              loading={btnLoadMoreCategoryClusterLoading}
               disabled={disableBtnLoadMoreCategoryCluster}
               onClick={() => setCategoryClusterListPage(categoryClusterListPage + 1)}
-            >
-              Xem thêm nhóm lĩnh vực
-            </Button>
+            />
           </Box>
 
           {selectedCategory && (

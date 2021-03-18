@@ -1,7 +1,8 @@
-import { Box, Button, Fab, Tooltip } from '@material-ui/core';
+import { Box, Fab, Tooltip } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/styles';
 import { lecturerApi } from 'api';
+import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import Course from 'components/Course/Course';
 import CourseListEmpty from 'components/CourseListEmpty/CourseListEmpty';
 import CourseListLoading from 'components/CourseListLoading/CourseListLoading';
@@ -25,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   btnAddCourse: {
     position: 'absolute',
     zIndex: 10,
-    right: '3%',
+    right: '3.5%',
     top: '1.5625rem',
     ...theme.palette.primary.gradient
   },
@@ -52,9 +53,11 @@ const InChargeCourses = () => {
   const [lecturerCourseListLoading, setLecturerCourseListLoading] = useState(true);
 
   const [disableBtnLoadMoreCourse, setDisableBtnLoadMoreCourse] = useState(false);
+  const [btnLoadMoreCourseLoading, setBtnLoadMoreCourseLoading] = useState(false);
 
   const getAllLecturerCourses = async (page) => {
     setDisableBtnLoadMoreCourse(true);
+    setBtnLoadMoreCourseLoading(true);
     try {
       const res = await lecturerApi.getCourses(page, limit);
       const lecturerCourses = res.data.entries.map(item => ({
@@ -73,10 +76,12 @@ const InChargeCourses = () => {
       }
 
       setLecturerCourseListLoading(false);
+      setBtnLoadMoreCourseLoading(false);
     } catch (error) {
       if (error.messages && error.messages.length > 0) {
         dispatch(showNotification('error', apiMessage[error.messages[0]]));
         setLecturerCourseListLoading(false);
+        setBtnLoadMoreCourseLoading(false);
       }
     }
   }
@@ -128,17 +133,18 @@ const InChargeCourses = () => {
           {lecturerCourseList.length === 0 && <CourseListEmpty />}
           {lecturerCourseList.length > 0 && (
             <Box mt={2}>
-              <Button
+              <ButtonWithLoading
                 fullWidth
+                progressColor="#fff"
+                text="Xem thêm khóa học"
                 className={classes.btnLoadMoreCourse}
                 variant="contained"
                 size="large"
                 color="primary"
                 onClick={handleClickBtnLoadMoreCourse}
                 disabled={disableBtnLoadMoreCourse}
-              >
-                Xem thêm khóa học
-              </Button>
+                loading={btnLoadMoreCourseLoading}
+              />
             </Box>
           )}
         </div>
