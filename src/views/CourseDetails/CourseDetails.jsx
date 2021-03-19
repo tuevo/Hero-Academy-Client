@@ -25,7 +25,7 @@ import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import CourseMultiCarousel from 'components/CourseMultiCarousel/CourseMultiCarousel';
 import { VideoPlayer } from 'components/VideoPlayer';
 import { apiMessage } from 'constants/api-message.constant';
-import { availablePages } from 'constants/global.constant';
+import { availablePages, STATUS } from 'constants/global.constant';
 import { userRole } from 'constants/user-role.constant';
 import ScrollbarContext from 'contexts/ScrollbarContext';
 import * as moment from 'moment';
@@ -761,8 +761,14 @@ const CourseDetails = () => {
                     <span className={`${classes.label} ${classes.label__bestSeller}`} style={{ marginRight: 5 }}>Đăng ký nhiều</span>
                   )}
                   {course.isFinished ? (
-                    <span className={`${classes.label} ${classes.label__new}`} style={{ marginRight: 12 }}>Đã hoàn thành</span>
-                  ) : (<span className={`${classes.label} ${classes.label__unfinished}`} style={{ marginRight: 12 }}>Chưa hoàn thành</span>)}
+                    <Tooltip title={STATUS.COURSE.FINISHED}>
+                      <span className={`${classes.label} ${classes.label__new}`} style={{ marginRight: 12 }}>Đã hoàn thành</span>
+                    </Tooltip>
+                  ) : (
+                      <Tooltip title={STATUS.COURSE.UNFINISHED}>
+                        <span className={`${classes.label} ${classes.label__unfinished}`} style={{ marginRight: 12 }}>Chưa hoàn thành</span>
+                      </Tooltip>
+                    )}
 
                   <b><span>{`${Math.floor(course.averageRating)}.${(course.averageRating - Math.floor(course.averageRating)) * 10}`}</span></b>
                 </Typography>

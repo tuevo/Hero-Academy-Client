@@ -10,6 +10,7 @@ import { format } from 'timeago.js';
 import './Course.style.scss';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import clsx from 'clsx';
+import { STATUS } from 'constants/global.constant';
 
 const styles = {
   "display": "-webkit-box",
@@ -132,7 +133,7 @@ const Course = ({ data, type }) => {
                         {data.categoryCluster ? data.categoryCluster.categories[0].name.toUpperCase() : 'KHÔNG XÁC ĐỊNH'}
                       </Typography>
                       <Box mt={0.25} ml={1}>
-                        <Tooltip title={data.isFinished ? 'Đã hoàn thành' : 'Chưa hoàn thành'}>
+                        <Tooltip title={data.isFinished ? STATUS.COURSE.FINISHED : STATUS.COURSE.UNFINISHED}>
                           <CheckCircleIcon className={clsx(classes.finishStatusIcon, {
                             [classes.finishStatusIcon__finished]: data.isFinished,
                             [classes.finishStatusIcon__unfinished]: !data.isFinished
@@ -224,7 +225,7 @@ const Course = ({ data, type }) => {
                     <Box mx={0.5}><Typography variant="body2">•</Typography></Box>
                     <Typography variant="body2">{data.categoryCluster ? data.categoryCluster.categories[0].name.toUpperCase() : 'KHÔNG XÁC ĐỊNH'}</Typography>
                     <Box mt={0.25} ml={1}>
-                      <Tooltip title={data.isFinished ? 'Đã hoàn thành' : 'Chưa hoàn thành'}>
+                      <Tooltip title={data.isFinished ? STATUS.COURSE.FINISHED : STATUS.COURSE.UNFINISHED}>
                         <CheckCircleIcon className={clsx(classes.finishStatusIcon, {
                           [classes.finishStatusIcon__finished]: data.isFinished,
                           [classes.finishStatusIcon__unfinished]: !data.isFinished

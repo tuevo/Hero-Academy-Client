@@ -9,7 +9,7 @@ import { homeApi } from 'api';
 import Course from 'components/Course/Course';
 import CourseMultiCarousel from 'components/CourseMultiCarousel/CourseMultiCarousel';
 import { apiMessage } from 'constants/api-message.constant';
-import { APP_LOGO_IMAGE, APP_NAME, APP_SLOGAN, availablePages } from 'constants/global.constant';
+import { APP_LOGO_IMAGE, APP_NAME, APP_SLOGAN, availablePages, STATUS } from 'constants/global.constant';
 import React, { forwardRef, useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,6 +22,8 @@ import { format } from 'timeago.js';
 import clsx from 'clsx';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import CategoryIcon from '@material-ui/icons/Category';
+import BorderColorIcon from '@material-ui/icons/BorderColor';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -133,6 +135,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(3)
   },
   popularCategories: {
+    position: 'relative',
     minHeight: '37.5rem',
     width: '100%',
     padding: theme.spacing(4, 0, 4, 0),
@@ -202,7 +205,10 @@ const useStyles = makeStyles(theme => ({
   },
   bulletIcon: {
     color: theme.palette.background.carouselBullet
-  }
+  },
+  icon: {
+    color: theme.palette.icon
+  },
 }));
 
 const CustomRouterLink = forwardRef((props, ref) => (
@@ -289,7 +295,8 @@ const Home = () => {
       <main className={`${classes.main} animate__animated animate__fadeIn`}>
         <div className={classes.featuredCourses}>
           <Box display="flex" alignItems="center">
-            <StarIcon color="primary" className={`${classes.starIcon} ${classes.featuredCoursesCarouselTitleIcon}`} />
+            {/* <StarIcon color="primary" className={`${classes.starIcon} ${classes.featuredCoursesCarouselTitleIcon}`} /> */}
+            <EmojiEventsIcon color="primary" className={`${classes.starIcon} ${classes.featuredCoursesCarouselTitleIcon}`} />
             <Box display="flex" justifyContent="space-between" style={{ width: '100%' }}>
               <Typography variant="h4" className={classes.featuredCourses__title}><b>Khóa học nổi bật trong tuần qua</b></Typography>
               <Box display="flex" alignItems="center">
@@ -313,7 +320,7 @@ const Home = () => {
                             <Box display="flex">
                               <Typography variant="body2" color="inherit" gutterBottom>{c.categoryCluster.categories[0].name.toUpperCase()}</Typography>
                               <Box ml={1}>
-                                <Tooltip title={c.isFinished ? 'Đã hoàn thành' : 'Chưa hoàn thành'}>
+                                <Tooltip title={c.isFinished ? STATUS.COURSE.FINISHED : STATUS.COURSE.UNFINISHED}>
                                   <CheckCircleIcon className={clsx(classes.finishStatusIcon, {
                                     [classes.finishStatusIcon__finished]: c.isFinished,
                                     [classes.finishStatusIcon__unfinished]: !c.isFinished
@@ -386,7 +393,7 @@ const Home = () => {
         </div>
 
         <div className={`${classes.section} ${classes.highestViewCourses}`}>
-          <Typography variant="h4" className={classes.highestViewCourses__title}><b>Khóa học được xem nhiều <span className={`${classes.label} ${classes.label__hot}`}>HOT</span></b></Typography>
+          <Typography variant="h4" className={classes.highestViewCourses__title}><b>🔥 Khóa học được xem nhiều <span className={`${classes.label} ${classes.label__hot}`}>HOT</span></b></Typography>
           <div className={classes.highestViewCoursesCarousel}>
             <CourseMultiCarousel courses={data.coursesListWithTheMostViews || []} />
           </div>
@@ -396,7 +403,7 @@ const Home = () => {
           <Grid container spacing={1}>
             <Grid item xs={9}>
               <div className={classes.newCourses}>
-                <Typography variant="h4" className={classes.newCourses__title}><b>Khóa học mới <span className={`${classes.label} ${classes.label__new}`}>NEW</span></b></Typography>
+                <Typography variant="h4" className={classes.newCourses__title}><b>✨ Khóa học mới <span className={`${classes.label} ${classes.label__new}`}>NEW</span></b></Typography>
                 {(data.ListOfLatestCourses || []).map(c => (
                   <div key={c._id} className={classes.newCourses__item}>
                     <Course data={c} type="stretch" />
@@ -406,12 +413,12 @@ const Home = () => {
             </Grid>
             <Grid item xs={3}>
               <div className={classes.popularCategories}>
-                <Box display="flex" alignItems="center" pl={3} pb={1.5}>
-                  <EmojiEventsIcon color="primary" className={`${classes.starIcon} ${classes.featuredCoursesCarouselTitleIcon}`} />
-                  <Typography variant="h6" className={classes.popularCategories__title}><b>Lĩnh vực được đăng ký nhiều</b></Typography>
+                <Box display="flex" alignItems="center" pl={4} pb={1.5}>
+                  {/* <CategoryIcon color="primary" className={`${classes.starIcon} ${classes.featuredCoursesCarouselTitleIcon}`} /> */}
+                  <Typography variant="h5" className={classes.popularCategories__title}><b>Lĩnh vực được đăng ký nhiều</b></Typography>
                 </Box>
                 <List component="div" disablePadding>
-                  {data.mostRegisteredCategory.map(c => (
+                  {data.mostRegisteredCategory.slice(0, 5).map((c, i) => (
                     <ListItem
                       disableGutters
                       key={c._id}
@@ -422,15 +429,25 @@ const Home = () => {
                         to={c.href}
                       >
                         <Box display="flex" alignItems="center" justifyContent="space-between" style={{ width: '100%' }}>
-                          <Typography
-                            variant="body2"
-                            color="textPrimary"
-                          >
-                            {c.name}
-                          </Typography>
-                          <Typography variant="body2">
-                            <NumberFormat value={c.totalRegistration} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt'} />
-                          </Typography>
+                          <Box display="flex" flexDirection="column">
+                            <Typography
+                              variant="h6"
+                              color="textPrimary"
+                              gutterBottom
+                            >
+                              {c.name}
+                            </Typography>
+                            <Box display="flex" alignItems="center">
+                              <Typography variant="body2">
+                                <NumberFormat value={c.totalRegistration} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} suffix={' lượt đăng ký'} />
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <Box>
+                            <Typography variant="body2">
+                              <span className={`${classes.label} ${classes.label__hot}`}>HOT</span>
+                            </Typography>
+                          </Box>
                         </Box>
                       </ButtonBase>
                     </ListItem>

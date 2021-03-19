@@ -14,6 +14,16 @@ import {
   Users as UsersView,
 } from 'views';
 
+export const APP_NAME = 'Hero Academy';
+export const APP_SLOGAN = 'Cung cấp khóa học online chất lượng cao';
+export const APP_LOGO_IMAGE = 'https://cdn.iconscout.com/icon/free/png-256/graduation-cap-1519981-1287612.png';
+export const STATUS = {
+  COURSE: {
+    FINISHED: 'Khóa học đã được giảng viên cập nhật đầy đủ nội dung.',
+    UNFINISHED: 'Khóa học chưa được giảng viên cập nhật đầy đủ nội dung.'
+  }
+}
+
 export const availablePages = {
   HOME: {
     _id: 1,
@@ -132,7 +142,3 @@ export const availablePages = {
     icon: AccountCircleIcon
   }
 };
-
-export const APP_NAME = 'Hero Academy';
-export const APP_SLOGAN = 'Cung cấp khóa học online chất lượng cao';
-export const APP_LOGO_IMAGE = 'https://cdn.iconscout.com/icon/free/png-256/graduation-cap-1519981-1287612.png';
