@@ -5,7 +5,7 @@ const currentDarkMode = localStorage.getItem(localStorageItems.DARK_MODE.name);
 const urlParams = new URLSearchParams(window.location.search);
 
 const initialStates = {
-  darkMode: currentDarkMode ? (currentDarkMode === 'true') : false,
+  darkMode: currentDarkMode ? (currentDarkMode === 'true') : true,
   isLoading: false,
   notification: {
     type: '',
