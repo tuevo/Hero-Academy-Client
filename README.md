@@ -13,15 +13,33 @@
 
 - Create `.env` file at `root` directory to setup environment variables:
 
-	```
-	PORT=5000
-	REACT_APP_API_URL=http://localhost:3500/api
-	REACT_APP_CLOUDINARY_CLOUD_NAME=dcpiiafc6
-	```
+	+ For development
+
+		```
+		PORT=5000
+		REACT_APP_API_URL=http://localhost:3500/api
+		REACT_APP_CLOUDINARY_CLOUD_NAME=dcpiiafc6
+		```
+
+	+ For staging
+
+		```
+		PORT=5000
+		REACT_APP_API_URL=https://online-academy-test.herokuapp.com/api
+		REACT_APP_CLOUDINARY_CLOUD_NAME=dcpiiafc6
+		```
+
+	+ For production
+
+		```
+		PORT=5000
+		REACT_APP_API_URL=https://online-academy-production.herokuapp.com/api
+		REACT_APP_CLOUDINARY_CLOUD_NAME=dcpiiafc6
+		```		
 
 - Start the server: `npm run start` or `yarn start`
 
-- Views are on: `localhost:5000`
+- View locally on: `localhost:5000`
 
 ## Documentation
 

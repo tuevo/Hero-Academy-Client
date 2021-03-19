@@ -60,5 +60,7 @@ export const apiMessage = {
   CATEGORY_CLUSTER_ALREADY_EXISTS_REGISTERED_COURSE: 'Không thể xóa nhóm lĩnh vực đang có khóa học',
   DELETE_CATEGORY_CLUSTER_SUCCESSFULLY: 'Xóa nhóm lĩnh vực thành công',
   BLOCK_USER_SUCCESSFULLY: 'Khóa tài khoản thành công',
-  UNBLOCK_USER_SUCCESSFULLY: 'Mở khóa tài khoản thành công'
+  UNBLOCK_USER_SUCCESSFULLY: 'Mở khóa tài khoản thành công',
+  IMAGE_FILE_ARE_LARGER_THAN_10MB: 'Kích thước ảnh vượt quá 10MB',
+  VIDEO_FILE_ARE_LARGER_THAN_100MB: 'Kích thước video vượt quá 100MB'
 }
