@@ -18,7 +18,7 @@
 		```
 		PORT=5000
 		REACT_APP_API_URL=http://localhost:3500/api
-		REACT_APP_CLOUDINARY_CLOUD_NAME=dcpiiafc6
+		REACT_APP_CLOUDINARY_CLOUD_NAME=dye8sx2yk
 		```
 
 	+ For staging
@@ -26,7 +26,7 @@
 		```
 		PORT=5000
 		REACT_APP_API_URL=https://online-academy-test.herokuapp.com/api
-		REACT_APP_CLOUDINARY_CLOUD_NAME=dcpiiafc6
+		REACT_APP_CLOUDINARY_CLOUD_NAME=dye8sx2yk
 		```
 
 	+ For production
