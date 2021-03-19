@@ -85,9 +85,8 @@ const useStyles = makeStyles(theme => ({
   },
   featuredCoursesCarousel: {
     ...theme.palette.card,
-    marginTop: theme.spacing(4),
+    marginTop: theme.spacing(3),
     overflow: 'hidden',
-    borderRadius: '1.875rem',
     boxShadow: 'none'
   },
   featuredCoursesCarouselItem: {
@@ -293,10 +292,10 @@ const Home = () => {
             <StarIcon color="primary" className={`${classes.starIcon} ${classes.featuredCoursesCarouselTitleIcon}`} />
             <Box display="flex" justifyContent="space-between" style={{ width: '100%' }}>
               <Typography variant="h4" className={classes.featuredCourses__title}><b>Khóa học nổi bật trong tuần qua</b></Typography>
-              <Box pr={2} display="flex" alignItems="center">
+              <Box display="flex" alignItems="center">
                 <Box mr={1}><FiberManualRecordIcon color="secondary" /></Box>
                 <Box mr={1}><FiberManualRecordIcon className={classes.bulletIcon} /></Box>
-                <Box><FiberManualRecordIcon className={classes.bulletIcon} /></Box>
+                <Box mr={1}><FiberManualRecordIcon className={classes.bulletIcon} /></Box>
               </Box>
             </Box>
           </Box>
@@ -412,7 +411,7 @@ const Home = () => {
                   <Typography variant="h6" className={classes.popularCategories__title}><b>Lĩnh vực được đăng ký nhiều</b></Typography>
                 </Box>
                 <List component="div" disablePadding>
-                  {(data.mostRegisteredCategory.slice(0, 5)).map(c => (
+                  {data.mostRegisteredCategory.map(c => (
                     <ListItem
                       disableGutters
                       key={c._id}
